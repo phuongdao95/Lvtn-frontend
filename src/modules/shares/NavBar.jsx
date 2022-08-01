@@ -173,7 +173,7 @@ const NavBar = () => {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}
                     >
-                        MUI
+                        EMS
                     </Typography>
                     <Search>
                         <SearchIconWrapper>
