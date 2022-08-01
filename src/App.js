@@ -1,10 +1,8 @@
-function App() {
+import NavBar from "./modules/shares/NavBar";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-				Hello
-      </header>
-    </div>
+    <NavBar />
   );
 }
 
