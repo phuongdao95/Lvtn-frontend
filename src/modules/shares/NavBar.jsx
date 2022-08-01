@@ -84,6 +84,9 @@ const NavBar = (props) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
 
+    const newEmails = 6;
+    const newNotifies = 13;
+
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
         <Menu
@@ -191,17 +194,17 @@ const NavBar = (props) => {
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
+                        <IconButton size="large" aria-label="show new mails" color="inherit">
+                            <Badge badgeContent={newEmails} color="error">
                                 <MailIcon />
                             </Badge>
                         </IconButton>
                         <IconButton
                             size="large"
-                            aria-label="show 17 new notifications"
+                            aria-label="show new notifications"
                             color="inherit"
                         >
-                            <Badge badgeContent={17} color="error">
+                            <Badge badgeContent={newNotifies} color="error">
                                 <NotificationsIcon />
                             </Badge>
                         </IconButton>
