@@ -56,12 +56,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-const NavBar = () => {
+const NavBar = (props) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+    const handleSideBarOpen = () => {
+        props.onOpenSideBar();
+    };
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -158,15 +162,16 @@ const NavBar = () => {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
+                    {!props.open && <IconButton
                         size="large"
                         edge="start"
                         color="inherit"
                         aria-label="open drawer"
                         sx={{ mr: 2 }}
+                        onClick={handleSideBarOpen}
                     >
                         <MenuIcon />
-                    </IconButton>
+                    </IconButton>}
                     <Typography
                         variant="h6"
                         noWrap
