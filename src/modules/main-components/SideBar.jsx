@@ -10,8 +10,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import { Link } from 'react-router-dom';
+
+import HomeIcon from '@mui/icons-material/Home';
+import PersonIcon from '@mui/icons-material/Person';
+import ContactsIcon from '@mui/icons-material/Contacts';
 
 const drawerWidth = 240;
 
@@ -32,6 +35,24 @@ const SideBar = (props) => {
         props.onCloseSideBar();
     };
 
+    const routes = [
+        {
+            link: "/",
+            text: "Home",
+            icon: <HomeIcon />
+        },
+        {
+            link: "/user-info",
+            text: "User Info",
+            icon: <PersonIcon />
+        },
+        {
+            link: "/about-us",
+            text: "About us",
+            icon: <ContactsIcon />
+        }
+    ]
+
     return (
         <Drawer
             sx={{
@@ -51,32 +72,25 @@ const SideBar = (props) => {
                     {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
             </DrawerHeader>
+
             <Divider />
+
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
+                {routes.map((route, index) => (
+                    <Link key={index} to={route.link}>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    {route.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={route.text} />
+                            </ListItemButton>
+                        </ListItem>
+                    </Link>
                 ))}
             </List>
+
             <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
         </Drawer>
     )
 }
