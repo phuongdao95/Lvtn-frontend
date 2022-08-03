@@ -77,7 +77,7 @@ const SideBar = (props) => {
 
             <List>
                 {routes.map((route, index) => (
-                    <Link key={index} to={route.link}>
+                    <Link key={index} to={route.link} style={{ textDecoration: 'none', color: 'inherit' }}>
                         <ListItem disablePadding>
                             <ListItemButton>
                                 <ListItemIcon>
