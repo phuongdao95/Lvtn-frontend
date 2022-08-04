@@ -10,9 +10,13 @@ export default function TeamItem({ name, avatar, leader, area, members }) {
         padding: 3,
         cursor: "pointer",
         border: 1,
+        gap: 1.25,
+        minWidth: 150,
         borderColor: blue[400],
+        color: grey[700],
         "&:hover": {
-          background: blue[200],
+          background: blue[500],
+          color: "white",
           boxShadow: 5,
           transition: "200ms ease-in-out",
         },
@@ -24,21 +28,20 @@ export default function TeamItem({ name, avatar, leader, area, members }) {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
+          gap: 2,
         }}
       >
-        <Typography variant="h6">Marketing</Typography>
+        <Typography variant="h5">Marketing</Typography>
       </Box>
 
       <Box>
-        <Typography sx={{ fontWeight: 600, fontSize: 17, color: grey[800] }}>
+        <Typography sx={{ fontWeight: 600, fontSize: 17, color: "inherit" }}>
           Area
         </Typography>
         <Typography>Product</Typography>
       </Box>
       <Box>
-        <Typography sx={{ fontWeight: 600, fontSize: 17, color: grey[800] }}>
-          Leader
-        </Typography>
+        <Typography sx={{ fontWeight: 600, fontSize: 17 }}>Leader</Typography>
         <Box
           sx={{
             display: "flex",
@@ -48,7 +51,22 @@ export default function TeamItem({ name, avatar, leader, area, members }) {
           }}
         >
           <Avatar sx={{ width: 24, height: 24 }} />
-          <Typography>Tang Minh Nhat</Typography>
+        </Box>
+      </Box>
+
+      <Box>
+        <Typography sx={{ fontWeight: 600, fontSize: 17 }}>Members</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 0.25,
+          }}
+        >
+          <Avatar sx={{ width: 24, height: 24 }} />
+          <Avatar sx={{ width: 24, height: 24 }} />
+          <Avatar sx={{ width: 24, height: 24 }} />
         </Box>
       </Box>
     </Paper>
