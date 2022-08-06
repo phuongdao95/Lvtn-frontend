@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
-import WorkflowCard from '../WorkflowCard';
+import WorkflowCard from './WorkflowCard';
 
 
 const flows = [

@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { CardActionArea, Divider } from '@mui/material';
-import Icon from '@mui/material/Icon';
 
 const WorkflowCard = ({ title, content, name = "", isConfig = true }) => {
     return (

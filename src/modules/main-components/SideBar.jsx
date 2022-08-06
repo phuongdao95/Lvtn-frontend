@@ -64,7 +64,7 @@ const SideBar = (props) => {
             icon: <ThumbUpAltIcon />
         },
         {
-            link: "/my-requests",
+            link: "/approve-workflows/my-requests",
             text: "My Requests",
             icon: <HourglassTopIcon />
         }
