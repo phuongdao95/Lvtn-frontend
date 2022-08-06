@@ -1,17 +1,12 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { grey } from "@mui/material/colors";
-import { DepartmentDetailPopup } from "./components/DepartmentDetailPopup/DepartmentDetailPopup";
 import TabList from "./components/TabList/TabList";
 import MenuButton from "./components/MenuButton/MenuButton";
 
 export function AccountsAndRolesPage() {
   return (
     <Box>
-      {/* <CreateDepartmentPopup /> */}
-      {/* <CreateTeamPopup /> */}
-      {<DepartmentDetailPopup />}
-
       <Box
         sx={{
           display: "flex",
@@ -26,14 +21,14 @@ export function AccountsAndRolesPage() {
           fontWeight={500}
           color={grey[800]}
         >
-          Cơ cấu tổ chức
+          Accounts and roles
         </Typography>
 
         <MenuButton
           text={"Thao tác"}
           menu={[
-            { clickHandler: () => {}, text: "Create department" },
-            { clickHandler: () => {}, text: "Create team" },
+            { text: "Tạo mới account", handler: () => {} },
+            { text: "Tạo mới role", handler: () => {} },
           ]}
         />
       </Box>
