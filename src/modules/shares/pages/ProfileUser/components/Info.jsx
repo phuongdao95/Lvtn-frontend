@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, InputLabel, MenuItem, Select, FormControl  } from '@mui/material';
 import { Box } from '@mui/system';
 import EditIcon from '@mui/icons-material/Edit';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -12,6 +12,14 @@ const Info = () => {
     const [value, setValue] = React.useState(new Date());
     const [isRead, setIsRead] = React.useState(true);
     const [isSave, setIsSave] = React.useState(false);
+    const [sex, setSex] = React.useState('male');
+    const [role, setRole] = React.useState('employee');
+    const handleChangeSex = (event) => {
+        setSex(event.target.value);
+    };
+    const handleChangeRole = (event) => {
+        setRole(event.target.value);
+    };
     const handleChange = (newValue) => {
         setValue(newValue);
     };
@@ -57,7 +65,7 @@ const Info = () => {
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DesktopDatePicker
                                 label="Ngày sinh"
-                                readOnly
+                                readOnly={isRead}
                                 inputFormat="dd/MM/yyyy"
                                 value={value}
                                 onChange={handleChange}
@@ -89,15 +97,20 @@ const Info = () => {
                         />
                     </Grid>
                     <Grid item xs={6}>
-                        <TextField
-                            id="input1"
+                        <FormControl >
+                        <InputLabel id="sex-label">Giới tính</InputLabel>
+                        <Select
+                            labelId="sex-label"
+                            id="sex"
+                            value={sex}
                             label="Giới tính"
-                            defaultValue="Nam"
-                            InputProps={{
-                                readOnly: isRead,
-                            }}
-                            variant="standard"
-                        />
+                            onChange={handleChangeSex}
+                            inputProps={{ readOnly: isRead }}
+                        >
+                        <MenuItem value={'male'}>Nam</MenuItem>
+                        <MenuItem value={'female'}>Nữ</MenuItem>
+                        </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item xs={6}>
                         <TextField
@@ -122,15 +135,20 @@ const Info = () => {
                         />
                     </Grid>
                     <Grid item xs={6}>
-                        <TextField
-                            id="input1"
+                        <FormControl>
+                        <InputLabel id="role">Chức vụ</InputLabel>
+                        <Select
+                            labelId="role"
+                            id="select-role"
+                            value={role}
                             label="Chức vụ"
-                            defaultValue="Nhân viên"
-                            InputProps={{
-                                readOnly: isRead,
-                            }}
-                            variant="standard"
-                        />
+                            onChange={handleChangeRole}
+                            inputProps={{ readOnly: isRead }}
+                        >
+                        <MenuItem value={'employee'}>Nhân viên</MenuItem>
+                        <MenuItem value={'management'}>Quản lý</MenuItem>
+                        </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item xs={6}>
                         <TextField
