@@ -8,6 +8,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -47,22 +49,27 @@ const columns = [
         label: 'Số điện thoại',
         minWidth: 170,
     },
+    {
+        id: 'action',
+        label: '',
+        minWidth: 170,
+    },
 ];
 
-const createData = (name, sex, role, birth, address, mail, phone) => {
-    return { name, sex, role, birth, address, mail, phone };
+const createData = (id, name, sex, role, birth, address, mail, phone) => {
+    return { id, name, sex, role, birth, address, mail, phone };
 }
 
 const rows = [
-    createData('Nguyễn Văn A', 'Nam', 'Nhân viên', '01/01/2000', '32 Nguyễn Phú Thọ',
+    createData('01', 'Nguyễn Văn A', 'Nam', 'Nhân viên', '01/01/2000', '32 Nguyễn Phú Thọ',
         'a.nguyenvan@gmail.com', '0947852361'),
-    createData('Nguyễn Văn A', 'Nam', 'Nhân viên', '01/01/2000', '32 Nguyễn Phú Thọ',
+    createData('02', 'Nguyễn Văn A', 'Nam', 'Nhân viên', '01/01/2000', '32 Nguyễn Phú Thọ',
          'a.nguyenvan@gmail.com', '0947852361'),
-    createData('Nguyễn Văn A', 'Nam', 'Nhân viên', '01/01/2000', '32 Nguyễn Phú Thọ',
+    createData('03', 'Nguyễn Văn A', 'Nam', 'Nhân viên', '01/01/2000', '32 Nguyễn Phú Thọ',
          'a.nguyenvan@gmail.com', '0947852361'),
-    createData('Nguyễn Văn A', 'Nam', 'Nhân viên', '01/01/2000', '32 Nguyễn Phú Thọ',
+    createData('04', 'Nguyễn Văn A', 'Nam', 'Nhân viên', '01/01/2000', '32 Nguyễn Phú Thọ',
          'a.nguyenvan@gmail.com', '0947852361'),
-    createData('Nguyễn Văn A', 'Nam', 'Nhân viên', '01/01/2000', '32 Nguyễn Phú Thọ',
+    createData('05', 'Nguyễn Văn A', 'Nam', 'Nhân viên', '01/01/2000', '32 Nguyễn Phú Thọ',
          'a.nguyenvan@gmail.com', '0947852361'),
 ];
 
@@ -77,6 +84,10 @@ const TableUser = () => {
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
+    };
+
+    const switchUserInfo = (row) => {
+        console.log('hello' + JSON.stringify(row));
     };
 
     return (
@@ -105,11 +116,22 @@ const TableUser = () => {
                         {columns.map((column) => {
                         const value = row[column.id];
                         return (
+                            <>
+                            {column.id === 'action' ? 
+                            <TableCell>
+                                <Link to={`/user-info/${row.id}`}>
+                                    <Button variant="outlined" onClick={() => switchUserInfo(row)}>                                    
+                                        Chi tiết
+                                    </Button>
+                                </Link>
+                            </TableCell> : 
                             <TableCell key={column.id} align={column.align}>
                             {column.format && typeof value === 'number'
                                 ? column.format(value)
-                                : value}
+                                : value}    
                             </TableCell>
+                            }
+                            </>
                         );
                         })}
                     </TableRow>
