@@ -9,11 +9,11 @@ const ConfigNghiPhep = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
                         <InputLabel>La nghi dai ngay neu so ngay nghi lon hon (ngay)</InputLabel>
-                        <TextField type="number" sx={{ width: "100%" }}></TextField>
+                        <TextField type="number" fullWidth></TextField>
                     </Grid>
                     <Grid item xs={6}>
                         <InputLabel>Cho phep nghi qua toi da (ngay)</InputLabel>
-                        <TextField type="number" InputLabelProps={{ shrink: true }} sx={{ width: "100%" }}></TextField>
+                        <TextField type="number" fullWidth></TextField>
                     </Grid>
                 </Grid>
             </Card>
