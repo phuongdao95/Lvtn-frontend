@@ -13,7 +13,6 @@ const UserNghiPhep = () => {
     };
 
     return (
-
         <Card sx={{ padding: 5, mt: 5 }}>
             <Grid container spacing={2}>
                 <Grid item xs={6}>
