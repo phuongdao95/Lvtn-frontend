@@ -79,7 +79,7 @@ const SideBar = (props) => {
             icon: <HourglassTopIcon />
         },
         {
-            link: "/approve-workflows/config-nghi-thai-san",
+            link: "/approve-workflows/user-nghi-thai-san",
             text: "Nghi Thai San",
             icon: <HourglassTopIcon />
         },
