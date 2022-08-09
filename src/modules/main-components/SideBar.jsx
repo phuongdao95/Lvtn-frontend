@@ -67,6 +67,26 @@ const SideBar = (props) => {
             link: "/approve-workflows/my-requests",
             text: "My Requests",
             icon: <HourglassTopIcon />
+        },
+        {
+            link: "/approve-workflows/user-nghi-phep",
+            text: "Nghi Phep",
+            icon: <HourglassTopIcon />
+        },
+        {
+            link: "/approve-workflows/config-nghi-phep",
+            text: "Nghi Phep Config",
+            icon: <HourglassTopIcon />
+        },
+        {
+            link: "/approve-workflows/config-nghi-thai-san",
+            text: "Nghi Thai San",
+            icon: <HourglassTopIcon />
+        },
+        {
+            link: "/approve-workflows/config-nghi-thai-san",
+            text: "Nghi Thai San Config",
+            icon: <HourglassTopIcon />
         }
     ];
 
