@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router";
-import { Test1, Test2, Test3 } from "../approve-workflow/Test";
+
 import WorkFlows from "../approve-workflow/user/WorkFlows";
 import MyRequests from "../approve-workflow/view-requests/MyRequests";
 
@@ -10,13 +10,16 @@ import ConfigNghiThaiSan from "../approve-workflow/nghi-thai-san/ConfigNghiThaiS
 import UserNghiPhep from "../approve-workflow/nghi-phep/UserNghiPhep";
 import UserNghiThaiSan from "../approve-workflow/nghi-thai-san/UserNghiThaiSan";
 
+import ProfileUser from "../shares/pages/ProfileUser/ProfileUser";
+import ListUsers from "../shares/pages/ListUsers/ListUsers";
+
 const MainContent = () => {
 
     return (
         <Routes>
-            <Route path="/" element={<Test1 />} />
-            <Route path="/user-info" element={<Test2 />} />
-            <Route path="/about-us" element={<Test3 />} />
+            <Route path="/user-info" element={<ProfileUser />} />
+            <Route path="/user-info/:id" element={<ProfileUser />} />
+
             <Route path="/approve-workflows" element={<WorkFlows />} />
             <Route path="/approve-workflows/my-requests" element={<MyRequests />} />
 
@@ -27,8 +30,8 @@ const MainContent = () => {
             <Route exact path="/approve-workflows/config-nghi-phep" element={<ConfigNghiPhep />} />
             <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
 
-
-        </Routes>
+            <Route path="/list-users" element={<ListUsers />} />
+        </Routes >
     );
 
 }
