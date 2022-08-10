@@ -11,10 +11,14 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Link } from 'react-router-dom';
+import Chip from '@mui/material/Chip';
 
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import ContactsIcon from '@mui/icons-material/Contacts';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import HourglassTopIcon from '@mui/icons-material/HourglassTop';
 
 const drawerWidth = 240;
 
@@ -51,7 +55,40 @@ const SideBar = (props) => {
             text: "About us",
             icon: <ContactsIcon />
         }
-    ]
+    ];
+
+    const awItems = [
+        {
+            link: "/approve-workflows",
+            text: "Approve Workflows",
+            icon: <ThumbUpAltIcon />
+        },
+        {
+            link: "/approve-workflows/my-requests",
+            text: "My Requests",
+            icon: <HourglassTopIcon />
+        },
+        {
+            link: "/approve-workflows/user-nghi-phep",
+            text: "Nghi Phep",
+            icon: <HourglassTopIcon />
+        },
+        {
+            link: "/approve-workflows/config-nghi-phep",
+            text: "Nghi Phep Config",
+            icon: <HourglassTopIcon />
+        },
+        {
+            link: "/approve-workflows/user-nghi-thai-san",
+            text: "Nghi Thai San",
+            icon: <HourglassTopIcon />
+        },
+        {
+            link: "/approve-workflows/config-nghi-thai-san",
+            text: "Nghi Thai San Config",
+            icon: <HourglassTopIcon />
+        }
+    ];
 
     return (
         <Drawer
@@ -73,7 +110,9 @@ const SideBar = (props) => {
                 </IconButton>
             </DrawerHeader>
 
-            <Divider />
+            <Divider>
+                <Chip icon={<ManageAccountsIcon />} label="Account" variant="outlined" />
+            </Divider>
 
             <List>
                 {routes.map((route, index) => (
@@ -90,7 +129,25 @@ const SideBar = (props) => {
                 ))}
             </List>
 
-            <Divider />
+            <Divider>
+                <Chip icon={<ThumbUpAltIcon />} label="Approve Workflow" variant="outlined" />
+            </Divider>
+
+            <List>
+                {awItems.map((item, index) => (
+                    <Link key={index} to={item.link} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    {item.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={item.text} />
+                            </ListItemButton>
+                        </ListItem>
+                    </Link>
+                ))}
+            </List>
+
         </Drawer>
     )
 }
