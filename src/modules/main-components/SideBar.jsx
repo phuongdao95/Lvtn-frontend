@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import ContactsIcon from '@mui/icons-material/Contacts';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
 
 const drawerWidth = 240;
 
@@ -50,6 +51,11 @@ const SideBar = (props) => {
             link: "/about-us",
             text: "About us",
             icon: <ContactsIcon />
+        },
+        {
+            link: "/timekeeping",
+            text: "Timekeeping",
+            icon: <FactCheckIcon />
         }
     ]
 
