@@ -1,8 +1,9 @@
 import { Route, Routes } from "react-router";
 import { Test1, Test3 } from "../approve-workflow/Test";
 import ProfileUser from "../shares/pages/ProfileUser/ProfileUser";
-import ListUsers from "../shares/pages/ListUsers/ListUsers";import Timekeeping from "../shares/timekeeping/Timekeeping";
-import TimekeepingRegister from "../shares/timekeeping/TimekeepingRegister";
+import ListUsers from "../shares/pages/ListUsers/ListUsers";
+import Timekeeping from "../shares/pages/timekeeping/Timekeeping";
+import TimekeepingRegister from "../shares/pages/timekeeping/TimekeepingRegister";
 
 const MainContent = () => {
 

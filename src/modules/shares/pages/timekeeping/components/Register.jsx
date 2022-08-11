@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, TextField } from '@mui/material';
+import { Box, Button, Card, CardContent, TextField, Grid, ButtonGroup } from '@mui/material';
 import React from 'react';
 
 const Register = () => {
@@ -15,7 +15,6 @@ const Register = () => {
                         my: 'auto',
                         p: 1,
                         borderRadius: 2,
-                        textAlign: 'center',
                         fontSize: '1.8rem',
                         fontWeight: '700',
                         bgcolor: 'info.main',
@@ -23,22 +22,50 @@ const Register = () => {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                        <form>
-                            <TextField 
-                                type="text"
-                                label="ID"
-                                variant="outlined"
-                            />
-                            <TextField 
-                                type="text"
-                                label="Họ và tên"
-                                variant="outlined"
-                            />
-                            <Button variant="contained" color="primary">
-                                save
-                            </Button>
-                        </form>
-                    </Box>    
+                        Register image
+                    </Box>
+                    <Box 
+                        component="form"
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            '& .MuiTextField-root': { m: 1, width: '25ch' },
+                        }}>
+                        <Grid container spacing={2} sx={{ p: 2}}>
+                            <form>
+                            <Grid item xs={12}>
+                                <TextField 
+                                    required
+                                    type="text"
+                                    label="ID"
+                                    variant="outlined"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField 
+                                    type="text"
+                                    label="Họ và tên"
+                                    variant="outlined"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <ButtonGroup sx={{
+                                    '& > *': {
+                                    m: 1,
+                                    },
+                                }}>
+                                    <Button variant="contained" color="error">
+                                        cancel
+                                    </Button>
+                                    <Button variant="contained" color="primary">
+                                        save
+                                    </Button>                                    
+                                </ButtonGroup>
+                            </Grid>
+                            </form>
+                        </Grid>
+                    </Box>
                 </CardContent>
             </Card>
         </div>
