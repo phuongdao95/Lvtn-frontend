@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { Grid, TextField, Card, InputLabel } from "@mui/material";
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { Grid, Card, InputLabel } from "@mui/material";
 import ControlledSwitches from '../../shares/common/ControlledSwitches';
+import ComponentDatePicker from '../../shares/common/ComponentDatePicker';
 
 const UserNghiThaiSan = () => {
-    const [value, setValue] = React.useState(
-        new Date('2014-08-18T21:11:54'),
-    );
+    // const [value, setValue] = React.useState(
+    //     new Date('2014-08-18T21:11:54'),
+    // );
 
-    const handleChange = (newValue) => {
-        setValue(newValue);
-    };
+    // const handleChange = (newValue) => {
+    //     setValue(newValue);
+    // };
 
     return (
         <Card sx={{ padding: 5, mt: 5 }}>
@@ -26,13 +26,7 @@ const UserNghiThaiSan = () => {
                 </Grid>
 
                 <Grid item xs={4}>
-                    <InputLabel>Nghi tu ngay</InputLabel>
-                    <DesktopDatePicker
-                        inputFormat="MM/dd/yyyy"
-                        value={value}
-                        onChange={handleChange}
-                        renderInput={(params) => <TextField {...params} fullWidth />}
-                    />
+                    <ComponentDatePicker label='Nghi tu ngay' date={new Date()} isReadOnly={false} />
                 </Grid>
             </Grid>
         </Card>

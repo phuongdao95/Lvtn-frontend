@@ -3,13 +3,11 @@ import Grid from '@mui/material/Grid';
 import { Button, TextField, InputLabel, MenuItem, Select, FormControl  } from '@mui/material';
 import { Box } from '@mui/system';
 import EditIcon from '@mui/icons-material/Edit';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import ComponentDatePicker from '../../../common/ComponentDatePicker';
 
 const Info = () => {
-    const [value, setValue] = React.useState(new Date());
+    // const [value, setValue] = React.useState(new Date());
     const [isRead, setIsRead] = React.useState(true);
     const [isSave, setIsSave] = React.useState(false);
     const [sex, setSex] = React.useState('male');
@@ -20,9 +18,9 @@ const Info = () => {
     const handleChangeRole = (event) => {
         setRole(event.target.value);
     };
-    const handleChange = (newValue) => {
-        setValue(newValue);
-    };
+    // const handleChange = (newValue) => {
+    //     setValue(newValue);
+    // };
     const handleEdit = () => {
         setIsRead(!isRead);
         setIsSave(!isSave);
@@ -62,16 +60,8 @@ const Info = () => {
                         />
                     </Grid>
                     <Grid item xs={6}>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DesktopDatePicker
-                                label="Ngày sinh"
-                                readOnly={isRead}
-                                inputFormat="dd/MM/yyyy"
-                                value={value}
-                                onChange={handleChange}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-                        </LocalizationProvider>
+                        <ComponentDatePicker label='Ngày sinh' date={new Date()} isReadOnly={isRead}>                                
+                        </ComponentDatePicker>
                     </Grid>
                     
                     <Grid item xs={6}>
