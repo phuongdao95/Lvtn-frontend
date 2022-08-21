@@ -1,0 +1,38 @@
+import React from "react";
+import { Box } from "@mui/system";
+import { Tabs, Tab } from "@mui/material";
+import { grey } from "@mui/material/colors";
+import TabPanel from "./TabPanel";
+import a11yProps from "./a11Props";
+
+export default function TabList() {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (_, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box sx={{ width: "100%", color: "white" }}>
+      <Box sx={{ borderBottom: 1, borderColor: grey[400] }}>
+        <Tabs indicatorColor="primary" value={value} onChange={handleChange}>
+          <Tab
+            label="Deduction"
+            sx={{
+              textTransform: "capitalize",
+              color: grey[800],
+            }}
+            {...a11yProps(0)}
+          />
+          <Tab
+            label="Allowance"
+            sx={{ textTransform: "capitalize", color: grey[800] }}
+            {...a11yProps(1)}
+          />
+        </Tabs>
+      </Box>
+      <TabPanel value={value} index={0}></TabPanel>
+      <TabPanel value={value} index={1}></TabPanel>
+    </Box>
+  );
+}
