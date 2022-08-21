@@ -55,12 +55,9 @@ const Register = () => {
                                     m: 1,
                                     },
                                 }}>
-                                    <Button variant="contained" color="error">
-                                        cancel
-                                    </Button>
                                     <Button variant="contained" color="primary">
                                         save
-                                    </Button>                                    
+                                    </Button>
                                 </ButtonGroup>
                             </Grid>
                             </form>
