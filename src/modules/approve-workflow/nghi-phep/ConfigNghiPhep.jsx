@@ -1,7 +1,13 @@
 import { Grid, TextField, Card, InputLabel } from "@mui/material";
 import ApproveComponent from "../../shares/ApproveComponent";
+import * as employeeService from "../../../client/employeeService";
+import axios from 'axios';
 
 const ConfigNghiPhep = () => {
+    employeeService.getAllUsers()
+        .then(res => console.log(res));
+    console.log(axios.get("https://localhost:7115/api/user"));
+
     return (
         <>
             <ApproveComponent />
