@@ -14,8 +14,14 @@ const columns = [
   },
 
   {
-    field: "fullName",
-    headerName: "Full name",
+    field: "firstName",
+    headerName: "First name",
+    width: 150,
+  },
+
+  {
+    field: "lastName",
+    headerName: "Last name",
     width: 150,
   },
 
@@ -53,7 +59,8 @@ const columns = [
 const rows = new Array(30).fill(0).map((value, index, array) => ({
   id: index,
   employeeCode: "012345678",
-  fullName: "Nguyen Van A",
+  firstName: "A",
+  lastName: "Nguyen Van",
   role: "Admin",
   baseSalary: "10909000",
   bankName: "ACB",

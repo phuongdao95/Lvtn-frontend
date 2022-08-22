@@ -6,7 +6,7 @@ import SalaryList from "./SalaryList/SalaryList";
 
 export default function ManageSalaryPage() {
   return (
-    <Box>
+    <Box sx={{ padding: 2, background: "white" }}>
       <Box
         sx={{
           display: "flex",
