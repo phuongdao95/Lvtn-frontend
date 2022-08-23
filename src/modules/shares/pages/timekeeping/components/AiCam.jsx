@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import { Box, Card, CardContent, CardActions, Grid, ButtonGroup, Button } from '@mui/material';
 //import * as faceApi from 'face-api.js';
-import axios from 'axios';
+import * as aiService from '../../../../../client/aiService';
 
 const AiCam = () => {
     let [isHasPic, setIsHasPic] = useState(false);
@@ -25,7 +25,6 @@ const AiCam = () => {
             });
     };
     const takePicture = () => {
-        console.log('take pic ' + videoRef.current.width);
         setIsHasPic(true);
         const width = 700;
         const height = width / (16 / 9);
@@ -33,36 +32,32 @@ const AiCam = () => {
         let photo = photoRef.current;
         photo.width = width;
         photo.height = height;
+
         let ctx = photo.getContext('2d');
         ctx.drawImage(video, 0, 0, width, height);
-        // test save image
+        
         var image = photo.toDataURL("image/png").replace("image/png", "image/octet-stream");
-        console.log(JSON.stringify(image));
         // post image to server
-        axios.post({
-            baseURL: 'https://localhost:7115/api/UploadImage',
-            headers: {
-                "accept": "*/*",
-                "Content-Type": "application/json"
-            },
-            data: {
-                idUser: "123",
-                imageName: "Phuong",
-                imageData: image,
-            },
-            timeout: 1000
-        })
+        const data = {
+            idUser: "123",
+            imageName: "Phuong",
+            imageData: image,
+        };
+        //call api
+        aiService.uploadImage(data)
         .then(res => {
-            console.log('respose' + res);
+            console.log('respose' + JSON.stringify(res));
         })
-        .catch(error => console.log('respose error ' + error));
+        .catch(error => console.log('respose error ' + JSON.stringify(error)));
     }
+
     const clearPicture = () => {
         setIsHasPic(false);
         let photo = photoRef.current;
         let ctx = photo.getContext('2d');
         ctx.clearRect(0,0,photo.width,photo.height);
     }
+
     return (
         <Box sx={{
             mx: 'auto',
