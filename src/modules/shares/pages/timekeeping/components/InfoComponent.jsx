@@ -1,5 +1,5 @@
-import { Box, Card, CardContent } from '@mui/material';
-import React from 'react';
+import { Box, Card, CardContent, Button } from '@mui/material';
+import React, {useState} from 'react';
 const DAY = ['Sun', 'Mon', 'Tus', 'Wes', 'Thu', 'Fri', 'Sar'];
 const MONTH = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const padTo2Digits = num => {
@@ -19,7 +19,7 @@ const formatDate = date => {
         + ' ' +
         padTo2Digits(date.getDate())
         + ', ' + 
-        date.getFullYear()        
+        date.getFullYear()
     );
 }
 
@@ -42,9 +42,13 @@ const welcome = (
         Dao Thanh Phuong.
     </Box>
 );
-const InfoComponent = () => {
+const InfoComponent = ({takePicture}) => {
     const currTime = new Date();
     const format = formatDate(currTime);
+    const [isRecognized, setIsRecognized] = useState(false);
+    const clickTakePicture = () => {
+        setIsRecognized(takePicture());
+    }
     return (
         <div style={{paddingTop: 40}}>
             <Card sx={{
@@ -53,8 +57,19 @@ const InfoComponent = () => {
                 textAlign: 'center'
                 }}>
                 <CardContent>
+                    {(isRecognized) ? 
+                    <>
                     {format}
                     {welcome}
+                    </>
+                    :
+                    <Button variant="contained" 
+                        onClick={clickTakePicture}
+                        color="primary">
+                        Check
+                    </Button>
+                    }
+                    
                 </CardContent>
             </Card>
         </div>

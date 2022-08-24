@@ -1,7 +1,8 @@
 import { Box, Button, Card, CardContent, TextField, Grid, ButtonGroup } from '@mui/material';
 import React from 'react';
 
-const Register = () => {
+const Register = ({takePicture}) => {
+
     return (
         <div style={{paddingTop: 40}}>
             <Card sx={{
@@ -55,7 +56,9 @@ const Register = () => {
                                     m: 1,
                                     },
                                 }}>
-                                    <Button variant="contained" color="primary">
+                                    <Button variant="contained" 
+                                        onClick={takePicture}
+                                        color="primary">
                                         save
                                     </Button>
                                 </ButtonGroup>
