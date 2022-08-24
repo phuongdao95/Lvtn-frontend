@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, Button } from '@mui/material';
-import React, {useState} from 'react';
+import React from 'react';
 const DAY = ['Sun', 'Mon', 'Tus', 'Wes', 'Thu', 'Fri', 'Sar'];
 const MONTH = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const padTo2Digits = num => {
@@ -30,33 +30,38 @@ const welcome = (
         p: 1,
         borderRadius: 2,
         textAlign: 'center',
-        fontSize: '1.8rem',
-        fontWeight: '700',
         bgcolor: 'info.main',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        width: 'auto',
+        height: 'auto'
     }}>
         Welcome!
         <br></br> 
         Dao Thanh Phuong.
     </Box>
 );
-const InfoComponent = ({takePicture}) => {
+const InfoComponent = ({takePicture, isRecognized}) => {
     const currTime = new Date();
     const format = formatDate(currTime);
-    const [isRecognized, setIsRecognized] = useState(false);
     const clickTakePicture = () => {
-        setIsRecognized(takePicture());
+        takePicture();
     }
     return (
-        <div style={{paddingTop: 40}}>
+        <Box sx={{
+            mx: 'auto',
+            py: 1,
+            minWidth: 200,
+        }}>
             <Card sx={{
                 mx: 'auto',
-                py: 20,
-                textAlign: 'center'
+                textAlign: 'center',
+            }}>
+                <CardContent sx={{
+                    maxWidth: "100%",
+                    height: "auto",
                 }}>
-                <CardContent>
                     {(isRecognized) ? 
                     <>
                     {format}
@@ -69,10 +74,9 @@ const InfoComponent = ({takePicture}) => {
                         Check
                     </Button>
                     }
-                    
                 </CardContent>
             </Card>
-        </div>
+        </Box>
     );
 }
 

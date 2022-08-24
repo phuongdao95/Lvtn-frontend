@@ -23,24 +23,19 @@ const AiCam = ({videoRef, photoRef}) => {
     return (
         <Box sx={{
             mx: 'auto',
-            py: 5,
+            py: 1,
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
         }}>
-            <Card sx={{
-                maxWidth: 700,
-                minWidth: 200,
-            }}>
-                <CardContent sx={{
-                    bgcolor: 'primary.main'
-                }}>
-                    Face recognition
-                </CardContent>
+            <Card>
                 <CardContent>
                     <canvas style={{display: "none"}} ref={photoRef}></canvas>
-                    <video ref={videoRef} ></video>
+                    <video ref={videoRef} style={{
+                        "maxWidth": "100%",
+                        height: "auto",
+                    }} ></video>
                 </CardContent>
             </Card>
         </Box>

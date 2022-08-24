@@ -4,20 +4,25 @@ import React from 'react';
 const Register = ({takePicture}) => {
 
     return (
-        <div style={{paddingTop: 40}}>
+        <Box sx={{
+            mx: 'auto',
+            py: 1,
+            minWidth: 200,
+        }}>
             <Card sx={{
                 mx: 'auto',
-                py: 20,
-                textAlign: 'center'
+                textAlign: 'center',
                 }}>
-                <CardContent>
+                <CardContent sx={{
+                    maxWidth: "100%",
+                    height: "auto",
+                }}>
                     <Box sx={{
                         mx: 'auto',
                         my: 'auto',
                         p: 1,
                         borderRadius: 2,
-                        fontSize: '1.8rem',
-                        fontWeight: '700',
+                        fontWeight: '300',
                         bgcolor: 'info.main',
                         display: 'flex',
                         justifyContent: 'center',
@@ -31,10 +36,9 @@ const Register = ({takePicture}) => {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            '& .MuiTextField-root': { m: 1, width: '25ch' },
+                            '& .MuiTextField-root': { m: 1, width: 'auto' },
                         }}>
                         <Grid container spacing={2} sx={{ p: 2}}>
-                            <form>
                             <Grid item xs={12}>
                                 <TextField 
                                     required
@@ -63,12 +67,11 @@ const Register = ({takePicture}) => {
                                     </Button>
                                 </ButtonGroup>
                             </Grid>
-                            </form>
                         </Grid>
                     </Box>
                 </CardContent>
             </Card>
-        </div>
+        </Box>
     );
 }
 

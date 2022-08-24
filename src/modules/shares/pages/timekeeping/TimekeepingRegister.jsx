@@ -29,19 +29,19 @@ const TimekeepingRegister = () => {
         };
         console.log(data);
         //call api
-        aiService.uploadImage(data)
+        aiService.register(data)
         .then(res => {
             console.log('respose' + JSON.stringify(res));
         })
         .catch(error => console.log('respose error ' + JSON.stringify(error)));
     }
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
-                <Grid xs={8}>
+        <Box sx={{flexGrow: 1}}>
+            <Grid container spacing={1} >
+                <Grid item xs={12} sm={8} md={8}>
                     <AiCam videoRef={videoRef} photoRef={photoRef} />
                 </Grid>
-                <Grid xs={4}>
+                <Grid item xs={12} sm={4} md={4}>
                     <Register takePicture={clickTakePicture} />
                 </Grid>
             </Grid>

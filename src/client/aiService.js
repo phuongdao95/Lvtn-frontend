@@ -10,6 +10,11 @@ export const uploadImage = (data) =>
     .then((res) => res)
     .catch(error => error);
 
-export const recognize = () => {
-    console.log('recognize');
+export const register = (data) => {
+    api.post(
+        `${BASE_PATH}/UploadImage/Register`,
+        data,
+    )
+    .then((res) => res)
+    .catch(error => error);
 }
