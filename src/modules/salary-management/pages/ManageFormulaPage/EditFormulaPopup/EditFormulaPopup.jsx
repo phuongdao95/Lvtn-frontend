@@ -1,16 +1,12 @@
-import { Box } from "@mui/system";
-import { TextField, Typography } from "@mui/material";
-import { grey } from "@mui/material/colors";
 import { Popup } from "../../../components/Popup/Popup";
+import { Box, Typography, TextField } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
-
-export default function EditPopup({
-  submitHandler = () => { },
-  cancelHandler = () => { } }) {
+export default function EditFormula({ primaryAction = () => { }, secondaryAction = () => { } }) {
   return <Popup
-    title={"Edit salary info"}
-    primaryAction={{ text: "Submit", handler: submitHandler }}
-    secondaryAction={{ text: "Cancel", handler: cancelHandler }}
+    title={"Edit Formula"}
+    primaryAction={{ text: "Submit", handler: primaryAction }}
+    secondaryAction={{ text: "Cancel", handler: secondaryAction }}
   >
     <Box sx={{ padding: 2, display: "flex", flexDirection: "column" }}>
       <Box sx={{ padding: 1, display: "flex", flexDirection: "row", gap: 2 }}>
@@ -18,46 +14,16 @@ export default function EditPopup({
           <Typography
             sx={{ fontWeight: "bold", color: grey[700], fontSize: 14 }}
           >
-            First name
+            Name
           </Typography>
-          <TextField size="small" fullWidth InputProps={{
-            readOnly: true
-          }}
-          />
+          <TextField size="small" fullWidth />
         </Box>
 
         <Box sx={{ flex: 1 }}>
           <Typography
             sx={{ fontWeight: "bold", color: grey[700], fontSize: 14 }}
           >
-            Employee code
-          </Typography>
-          <TextField size="small" fullWidth InputProps={{
-            readOnly: true
-          }}
-          />
-        </Box>
-      </Box>
-
-      <Box sx={{ display: "flex" }}>
-        <Box sx={{ flex: 1, padding: 1 }}>
-          <Typography
-            sx={{ fontWeight: "bold", color: grey[700], fontSize: 14 }}
-          >
-            Role
-          </Typography>
-
-          <TextField size="small" fullWidth InputProps={{
-            readOnly: true
-          }}
-          />
-        </Box>
-
-        <Box sx={{ flex: 1, padding: 1 }}>
-          <Typography
-            sx={{ fontWeight: "bold", color: grey[700], fontSize: 14 }}
-          >
-            Last name
+            Input variables
           </Typography>
           <TextField size="small" fullWidth />
         </Box>
@@ -68,7 +34,7 @@ export default function EditPopup({
           <Typography
             sx={{ fontWeight: "bold", color: grey[700], fontSize: 14 }}
           >
-            Base Salary
+            Type
           </Typography>
           <TextField size="small" fullWidth />
         </Box>
@@ -77,18 +43,18 @@ export default function EditPopup({
           <Typography
             sx={{ fontWeight: "bold", color: grey[700], fontSize: 14 }}
           >
-            Working Schedule
+            Datatype
           </Typography>
           <TextField size="small" fullWidth />
         </Box>
-      </Box>
 
+      </Box>
       <Box sx={{ display: "flex" }}>
         <Box sx={{ flex: 1, padding: 1 }}>
           <Typography
             sx={{ fontWeight: "bold", color: grey[700], fontSize: 14 }}
           >
-            Bank name
+            Define
           </Typography>
           <TextField size="small" fullWidth />
         </Box>
@@ -97,7 +63,7 @@ export default function EditPopup({
           <Typography
             sx={{ fontWeight: "bold", color: grey[700], fontSize: 14 }}
           >
-            Bank number
+            Description
           </Typography>
           <TextField size="small" fullWidth />
         </Box>
@@ -105,4 +71,5 @@ export default function EditPopup({
 
     </Box>
   </Popup>
+
 }

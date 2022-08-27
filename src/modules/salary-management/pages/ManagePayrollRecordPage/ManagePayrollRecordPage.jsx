@@ -10,7 +10,7 @@ export default function ManagePayrollRecordList() {
   const [month, setMonth] = useState("08/2022");
 
   return (
-    <Box>
+    <Box sx={{ padding: 2, background: 'white' }}>
       <Box
         sx={{
           display: "flex",
@@ -34,15 +34,16 @@ export default function ManagePayrollRecordList() {
             text={"Related Pages"}
             variant="outlined"
             menu={[
-              { clickHandler: () => {}, text: "Salary" },
-              { clickHandler: () => {}, text: "Bonus" },
+              { clickHandler: () => { }, text: "Salary" },
+              { clickHandler: () => { }, text: "Bonus" },
             ]}
           />
           <MenuButton
             text={"Thao tác"}
             menu={[
-              { clickHandler: () => {}, text: "Send payslip" },
-              { clickHandler: () => {}, text: "Export to excel" },
+              { clickHandler: () => { }, text: "Calculate payslip" },
+              { clickHandler: () => { }, text: "Send payslip" },
+              { clickHandler: () => { }, text: "Export to excel" },
             ]}
           />
         </Box>

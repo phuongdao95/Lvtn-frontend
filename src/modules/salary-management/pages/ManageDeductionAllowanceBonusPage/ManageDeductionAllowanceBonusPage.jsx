@@ -1,15 +1,15 @@
 import { Box } from "@mui/system";
 import { Typography, Select, MenuItem } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import MenuButton from "../../components/MenuButton/MenuButton";
-import TabList from "../../components/TabList/TabList";
 import { useState } from "react";
+import MenuButton from "../../components/MenuButton/MenuButton";
 import AllowanceList from "./AllowanceList/AllowanceList";
 import BonusList from "./BonusList/BonusList";
 import DeductionList from "./DeductionList/DeductionList";
 
 export default function ManageDeductionAllowanceBonusPage() {
   const [dataGridIndex, setDataGridIndex] = useState("allowance list");
+  const [isCreateDABPopupOpen, setIsCreateDABPopupOpen] = useState();
 
   const handleChangeDataGrid = (event) => {
     setDataGridIndex(event.target.value);
@@ -27,7 +27,7 @@ export default function ManageDeductionAllowanceBonusPage() {
   };
 
   return (
-    <Box>
+    <Box sx={{ background: "white", padding: 2 }}>
       <Box
         sx={{
           display: "flex",
@@ -51,16 +51,16 @@ export default function ManageDeductionAllowanceBonusPage() {
             text={"Related Pages"}
             variant="outlined"
             menu={[
-              { clickHandler: () => {}, text: "Salary" },
-              { clickHandler: () => {}, text: "Bonus" },
+              { clickHandler: () => { }, text: "Salary" },
+              { clickHandler: () => { }, text: "Bonus" },
             ]}
           />
           <MenuButton
             text={"Thao tác"}
             menu={[
-              { clickHandler: () => {}, text: "Create new" },
-              { clickHandler: () => {}, text: "Import from excel" },
-              { clickHandler: () => {}, text: "Export to pdf" },
+              { clickHandler: () => { }, text: "Create new" },
+              { clickHandler: () => { }, text: "Import from excel" },
+              { clickHandler: () => { }, text: "Export to pdf" },
             ]}
           />
         </Box>

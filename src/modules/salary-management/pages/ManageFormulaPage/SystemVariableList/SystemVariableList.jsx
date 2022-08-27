@@ -22,6 +22,7 @@ export default function SystemVariableList() {
         width: 500,
         maxHeight: 600,
         overflow: "auto",
+
       }}
     >
       <Typography

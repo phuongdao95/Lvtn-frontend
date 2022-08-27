@@ -6,6 +6,7 @@ import { grey, blue } from "@mui/material/colors";
 function DepartmentItem({ name, manager }) {
   return (
     <Paper
+    as
       sx={{
         maxWidth: 200,
         minWidth: 160,

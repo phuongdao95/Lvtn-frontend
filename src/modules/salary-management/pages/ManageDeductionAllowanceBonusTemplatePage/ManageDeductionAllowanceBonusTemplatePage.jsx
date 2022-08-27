@@ -5,9 +5,11 @@ import { useState } from "react";
 import MenuButton from "../../components/MenuButton/MenuButton";
 import AllowanceTemplateList from "./components/AllowanceTemplateList/AllowanceTemplateList";
 import BonusTemplateList from "./components/BonusTemplateList/BonusTemplateList";
+import CreateTemplatePopup from "./components/CreateTemplatePopup/CreateTemplatePopup";
 
-export default function ManageDeductionAllowanceBonusPage() {
+export default function ManageDeductionAllowanceBonusTemplatePage() {
   const [dataGridIndex, setDataGridIndex] = useState("allowance list");
+  const [isCreateTemplatePopupOpen, setIsCreateTemplatePopupOpen] = useState(false);
 
   const handleChangeDataGrid = (event) => {
     setDataGridIndex(event.target.value);
@@ -20,12 +22,12 @@ export default function ManageDeductionAllowanceBonusPage() {
       case "bonus template list":
         return <BonusTemplateList />;
       case "deduction template list":
-        return <Box></Box>
+        return <BonusTemplateList />;
     }
   };
 
   return (
-    <Box>
+    <Box sx={{ background: "white", padding: 2 }}>
       <Box
         sx={{
           display: "flex",
@@ -41,7 +43,7 @@ export default function ManageDeductionAllowanceBonusPage() {
           fontWeight={500}
           color={grey[800]}
         >
-          Thông tin deduction / allowance / bonus
+          Thông tin deduction / allowance / bonus template
         </Typography>
 
         <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
@@ -49,16 +51,16 @@ export default function ManageDeductionAllowanceBonusPage() {
             text={"Related Pages"}
             variant="outlined"
             menu={[
-              { clickHandler: () => {}, text: "Salary" },
-              { clickHandler: () => {}, text: "Bonus" },
+              { clickHandler: () => { }, text: "Salary" },
+              { clickHandler: () => { }, text: "Bonus" },
             ]}
           />
           <MenuButton
             text={"Thao tác"}
             menu={[
-              { clickHandler: () => {}, text: "Create new" },
-              { clickHandler: () => {}, text: "Import from excel" },
-              { clickHandler: () => {}, text: "Export to pdf" },
+              { clickHandler: () => setIsCreateTemplatePopupOpen(true), text: "Create new" },
+              { clickHandler: () => { }, text: "Import from excel" },
+              { clickHandler: () => { }, text: "Export to pdf" },
             ]}
           />
         </Box>
@@ -87,6 +89,11 @@ export default function ManageDeductionAllowanceBonusPage() {
         </Box>
 
         {getDataGrid(dataGridIndex)}
+
+        {isCreateTemplatePopupOpen && <CreateTemplatePopup
+          primaryAction={() => { }}
+          secondaryAction={() => setIsCreateTemplatePopupOpen(false)}
+        />}
       </Box>
     </Box>
   );
