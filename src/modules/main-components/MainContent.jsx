@@ -20,6 +20,9 @@ import ManagePayrollRecordPage from "../salary-management/pages/ManagePayrollRec
 import MyPayslipPage from "../salary-management/pages/MyPayslipPage/MyPayslipPage";
 
 
+import Timekeeping from "../shares/pages/timekeeping/Timekeeping";
+import TimekeepingRegister from "../shares/pages/timekeeping/TimekeepingRegister";
+
 const MainContent = () => {
 
     return (
@@ -36,6 +39,8 @@ const MainContent = () => {
 
             <Route exact path="/approve-workflows/config-nghi-phep" element={<ConfigNghiPhep />} />
             <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
+            <Route path="/timekeeping" element={<Timekeeping />} />
+            <Route path="/timekeeping/register" element={<TimekeepingRegister />} />
 
             <Route path="/list-users" element={<ListUsers />} />
 
