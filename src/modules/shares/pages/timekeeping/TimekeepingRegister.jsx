@@ -8,7 +8,7 @@ const TimekeepingRegister = () => {
     const videoRef = useRef(null);
     const photoRef = useRef(null);
 
-    const clickTakePicture = () => {
+    const clickTakePicture = (inputId, inputName) => {
         console.log('register from timekeepingregister');
         const width = 700;
         const height = width / (16 / 9);
@@ -16,19 +16,23 @@ const TimekeepingRegister = () => {
         let photo = photoRef.current;
         photo.width = width;
         photo.height = height;
-
-        let ctx = photo.getContext('2d');
-        ctx.drawImage(video, 0, 0, width, height);
-        
-        var image = photo.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        let listImage = [];
+        for(var i = 0; i < 10; i++) {
+            let ctx = photo.getContext('2d');
+            ctx.drawImage(video, 0, 0, width, height);
+            var image = photo.toDataURL("image/png");
+            listImage.push(image);
+            setTimeout(() => {
+            }, 100);
+        }
         // get data image
         const data = {
-            idUser: "123",
-            imageName: "Phuong",
-            imageData: image,
+            idUser: inputId,
+            imageName: inputName,
+            imageData: listImage,
         };
         console.log(data);
-        //call api
+        // call api
         aiService.register(data)
         .then(res => {
             console.log('respose' + JSON.stringify(res));
