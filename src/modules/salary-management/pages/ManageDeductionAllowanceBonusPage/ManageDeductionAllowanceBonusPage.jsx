@@ -2,10 +2,14 @@ import { Box } from "@mui/system";
 import { Typography, Select, MenuItem } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useState } from "react";
+
 import MenuButton from "../../components/MenuButton/MenuButton";
 import AllowanceList from "./AllowanceList/AllowanceList";
 import BonusList from "./BonusList/BonusList";
 import DeductionList from "./DeductionList/DeductionList";
+
+import { useFetchListDAB } from "../../../../client/dabService";
+import { useDebugValue } from "react";
 
 export default function ManageDeductionAllowanceBonusPage() {
   const [dataGridIndex, setDataGridIndex] = useState("allowance list");
@@ -14,6 +18,10 @@ export default function ManageDeductionAllowanceBonusPage() {
   const handleChangeDataGrid = (event) => {
     setDataGridIndex(event.target.value);
   };
+
+  const { isPending, isError, isSuccess, data } = useFetchListDAB();
+
+  useDebugValue(data);
 
   const getDataGrid = (index) => {
     switch (index) {

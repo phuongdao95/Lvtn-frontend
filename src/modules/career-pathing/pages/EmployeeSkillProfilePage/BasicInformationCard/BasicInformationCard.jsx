@@ -27,7 +27,7 @@ export default function BasicInformationCard() {
         <Typography>27</Typography>
       </Box>
 
-      <Box>
+      <Box >
         <Typography>Email</Typography>
         <Typography>lnva@gmail.com</Typography>
       </Box>

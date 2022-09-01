@@ -2,7 +2,7 @@ import { Popup } from "../../../components/Popup/Popup";
 import { Box, Typography, TextField } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
-export default function EditFormula({ primaryAction = () => { }, secondaryAction = () => { } }) {
+export default function EditFormula({ primaryAction, secondaryAction }) {
   return <Popup
     title={"Edit Formula"}
     primaryAction={{ text: "Submit", handler: primaryAction }}

@@ -16,7 +16,6 @@ const rows = new Array(30).fill(0).map((value, index, array) => ({
 }));
 
 export default function AllowanceTemplateList() {
-  const [isCreatePopupOpen, setIsCreatePopupOpen] = React.useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = React.useState(false);
 
   const columns = React.useMemo(() => [

@@ -1,13 +1,15 @@
 import { Box } from "@mui/system";
 import { Typography, Select, MenuItem } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
 import { grey } from "@mui/material/colors";
 import { useState } from "react";
 import MenuButton from "../../components/MenuButton/MenuButton";
 import PayrollList from "./PayrollList/PayrollList";
+import { useFetchListPayslip } from "../../../../client/payslipService";
 
 export default function ManagePayrollRecordList() {
   const [month, setMonth] = useState("08/2022");
+
+  const { method, isPending, isError, isSuccess } = useFetchListPayslip();
 
   return (
     <Box sx={{ padding: 2, background: 'white' }}>
