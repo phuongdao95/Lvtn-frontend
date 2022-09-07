@@ -78,7 +78,7 @@ const InfoComponent = ({takePicture}) => {
                     <Button variant="contained" 
                         onClick={clickTakePicture}
                         color="primary">
-                        Check
+                        Chấm công
                     </Button>}
                 </CardContent>
             </Card>

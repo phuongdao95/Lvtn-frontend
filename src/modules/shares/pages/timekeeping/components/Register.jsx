@@ -38,7 +38,7 @@ const Register = ({takePicture}) => {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                        Register image
+                        Đăng ký hình ảnh
                     </Box>
                     <Box 
                         component="form"
@@ -76,7 +76,7 @@ const Register = ({takePicture}) => {
                                     <Button variant="contained" 
                                         onClick={clickSave}
                                         color="primary">
-                                        save
+                                        Lưu
                                     </Button>
                                 </ButtonGroup>
                             </Grid>

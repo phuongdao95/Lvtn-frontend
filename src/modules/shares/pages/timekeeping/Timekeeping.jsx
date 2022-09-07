@@ -1,56 +1,29 @@
-import React, {useRef} from 'react';
-import {Box, Grid} from '@mui/material';
-import InfoComponent from './components/InfoComponent';
-import AiCam from './components/AiCam';
-import * as aiService from '../../../../client/aiService';
+import { Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import { grey } from "@mui/material/colors";
+import TabList from "./components/TabList";
 
-const Timekeeping = () => {
-    const videoRef = useRef(null);
-    const photoRef = useRef(null);
-    const clickTakePicture = (done) => {
-        console.log('recognize from timekeeping');
-        const width = 700;
-        const height = width / (16 / 9);
-        let video = videoRef.current;
-        let photo = photoRef.current;
-        photo.width = width;
-        photo.height = height;
-
-        let ctx = photo.getContext('2d');
-        ctx.drawImage(video, 0, 0, width, height);
-        
-        var image = photo.toDataURL("image/png");
-        // get data image
-        const data = {
-            idUser: "123",
-            imageName: "Dao Thanh Phuong",
-            imageData: [image],
-        };
-        //call api
-        aiService.uploadImage(data)
-        .then(res => {
-            console.log('respose ' + JSON.stringify(res));
-            done();
-            return true;
-        })
-        .catch(error => {
-            console.log('respose error ' + JSON.stringify(error));
-            return false;
-        });
-    }
-
+export default function Timekeeping() {
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={1}>
-                <Grid item xs={12} sm={8} md={8}>
-                    <AiCam videoRef={videoRef} photoRef={photoRef} />
-                </Grid>
-                <Grid item xs={12} sm={4} md={4}>
-                    <InfoComponent takePicture={clickTakePicture} />
-                </Grid>
-            </Grid>
+    <Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+          }}
+        >
+          <Typography
+            fontSize={30}
+            textTransform={"capitalize"}
+            fontWeight={500}
+            color={grey[800]}
+          >
+            Chấm công
+          </Typography>
         </Box>
+        <TabList />
+    </Box>
     );
 }
-
-export default Timekeeping;

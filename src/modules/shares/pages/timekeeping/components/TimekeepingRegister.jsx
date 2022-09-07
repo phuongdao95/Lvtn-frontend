@@ -1,8 +1,8 @@
 import React, {useRef} from 'react';
 import {Box, Grid} from '@mui/material';
-import Register from './components/Register';
-import AiCam from './components/AiCam';
-import * as aiService from '../../../../client/aiService';
+import Register from './Register';
+import AiCam from './AiCam';
+import * as aiService from '../../../../../client/aiService';
 
 const TimekeepingRegister = () => {
     const videoRef = useRef(null);
@@ -23,7 +23,7 @@ const TimekeepingRegister = () => {
             var image = photo.toDataURL("image/png");
             listImage.push(image);
             setTimeout(() => {
-            }, 100);
+            }, 200);
         }
         // get data image
         const data = {
@@ -31,11 +31,12 @@ const TimekeepingRegister = () => {
             imageName: inputName,
             imageData: listImage,
         };
-        console.log(data);
         // call api
         aiService.register(data)
         .then(res => {
-            console.log('respose' + JSON.stringify(res));
+            // console.log('respose ' + JSON.stringify(res));
+            console.log('respose ' + res.data + ' ' + res.statusText + ' ' + res.status);
+            alert('Thành công!');
         })
         .catch(error => console.log('respose error ' + JSON.stringify(error)));
     }

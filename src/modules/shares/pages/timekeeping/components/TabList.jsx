@@ -6,8 +6,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { grey } from "@mui/material/colors";
 
-import Timekeeping from '../Timekeeping';
-import TimekeepingRegister from '../TimekeepingRegister';
+import Timekeeping from './TimekeepingRecognizer';
+import TimekeepingRegister from './TimekeepingRegister';
 
 const TabPanel = props => {
     const { children, value, index, ...other } = props;
@@ -58,8 +58,8 @@ const TabList = () => {
                 onChange={handleChange} 
                 aria-label="tabs list for timekeeping"
             >
-                <Tab label="Recognize Face" {...a11yProps(0)} />
-                <Tab label="Registe Face" {...a11yProps(1)} />
+                <Tab label="Nhận diện khuôn mặt" {...a11yProps(0)} />
+                <Tab label="Đăng ký hình ảnh" {...a11yProps(1)} />
             </Tabs>
         </Box>
         <TabPanel value={value} index={0}>

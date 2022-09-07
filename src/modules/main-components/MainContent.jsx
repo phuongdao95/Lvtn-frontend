@@ -13,7 +13,7 @@ import UserNghiThaiSan from "../approve-workflow/nghi-thai-san/UserNghiThaiSan";
 import ProfileUser from "../shares/pages/ProfileUser/ProfileUser";
 import ListUsers from "../shares/pages/ListUsers/ListUsers";
 
-import Timekeeping2 from "../shares/pages/timekeeping/Timekeeping2";
+import Timekeeping from "../shares/pages/timekeeping/Timekeeping";
 
 const MainContent = () => {
 
@@ -31,7 +31,7 @@ const MainContent = () => {
 
             <Route exact path="/approve-workflows/config-nghi-phep" element={<ConfigNghiPhep />} />
             <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
-            <Route path="/timekeeping" element={<Timekeeping2 />} />
+            <Route path="/timekeeping" element={<Timekeeping />} />
 
             <Route path="/list-users" element={<ListUsers />} />
         </Routes >
