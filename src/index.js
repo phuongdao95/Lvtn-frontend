@@ -8,8 +8,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-  <LocalizationProvider dateAdapter={AdapterDateFns}>
-    <App />
-  </LocalizationProvider>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <App />
+    </LocalizationProvider>
   </BrowserRouter>
 );
