@@ -5,8 +5,10 @@ import MenuButton from "../../components/MenuButton/MenuButton";
 import SalaryList from "./SalaryList/SalaryList";
 
 export default function ManageSalaryPage() {
+
+
   return (
-    <Box>
+    <Box sx={{ padding: 2, background: "white" }}>
       <Box
         sx={{
           display: "flex",
@@ -30,15 +32,19 @@ export default function ManageSalaryPage() {
             text={"Related Pages"}
             variant="outlined"
             menu={[
-              { clickHandler: () => {}, text: "Deduction & allowance" },
-              { clickHandler: () => {}, text: "Bonuss" },
+              { clickHandler: () => { }, text: "Deduction & allowance" },
+              { clickHandler: () => { }, text: "Bonuss" },
             ]}
           />
           <MenuButton
             text={"Thao tác"}
             menu={[
-              { clickHandler: () => {}, text: "Import from excel" },
-              { clickHandler: () => {}, text: "Export to pdf" },
+              {
+                clickHandler: () => {
+                },
+                text: "Import from excel"
+              },
+              { clickHandler: () => { }, text: "Export to pdf" },
             ]}
           />
         </Box>

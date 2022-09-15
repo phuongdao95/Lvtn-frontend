@@ -12,6 +12,13 @@ import UserNghiThaiSan from "../approve-workflow/nghi-thai-san/UserNghiThaiSan";
 
 import ProfileUser from "../shares/pages/ProfileUser/ProfileUser";
 import ListUsers from "../shares/pages/ListUsers/ListUsers";
+import ManageFormulaPage from "../salary-management/pages/ManageFormulaPage/ManageFormulaPage";
+import ManageSalaryPage from "../salary-management/pages/ManageSalaryPage/ManageSalaryPage";
+import ManageDeductionAllowanceBonusPage from "../salary-management/pages/ManageDeductionAllowanceBonusPage/ManageDeductionAllowanceBonusPage";
+import ManageDeductionAllowanceBonusTemplatePage from "../salary-management/pages/ManageDeductionAllowanceBonusTemplatePage/ManageDeductionAllowanceBonusTemplatePage";
+import ManagePayrollRecordPage from "../salary-management/pages/ManagePayrollRecordPage/ManagePayrollRecordPage";
+import MyPayslipPage from "../salary-management/pages/MyPayslipPage/MyPayslipPage";
+
 
 import Timekeeping from "../shares/pages/timekeeping/Timekeeping";
 import TimekeepingRegister from "../shares/pages/timekeeping/TimekeepingRegister";
@@ -36,6 +43,15 @@ const MainContent = () => {
             <Route path="/timekeeping/register" element={<TimekeepingRegister />} />
 
             <Route path="/list-users" element={<ListUsers />} />
+
+            <Route path="/list-users" element={<ListUsers />} />
+
+            <Route path="/formula" element={<ManageFormulaPage />} />
+            <Route path="/salary" element={<ManageSalaryPage />} />
+            <Route path="/payslip" element={<MyPayslipPage />} />
+            <Route path="/payroll" element={<ManagePayrollRecordPage />} />
+            <Route path="/deduction-allowance-bonus" element={<ManageDeductionAllowanceBonusPage />} />
+            <Route path="/deduction-allowance-bonus-template" element={<ManageDeductionAllowanceBonusTemplatePage />} />
         </Routes >
     );
 

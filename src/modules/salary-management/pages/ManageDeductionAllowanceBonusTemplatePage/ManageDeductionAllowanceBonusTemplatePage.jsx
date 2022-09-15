@@ -2,35 +2,27 @@ import { Box } from "@mui/system";
 import { Typography, Select, MenuItem } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useState } from "react";
-
 import MenuButton from "../../components/MenuButton/MenuButton";
-import AllowanceList from "./AllowanceList/AllowanceList";
-import BonusList from "./BonusList/BonusList";
-import DeductionList from "./DeductionList/DeductionList";
+import AllowanceTemplateList from "./components/AllowanceTemplateList/AllowanceTemplateList";
+import BonusTemplateList from "./components/BonusTemplateList/BonusTemplateList";
+import CreateTemplatePopup from "./components/CreateTemplatePopup/CreateTemplatePopup";
 
-import { useFetchListDAB } from "../../../../client/dabService";
-import { useDebugValue } from "react";
-
-export default function ManageDeductionAllowanceBonusPage() {
+export default function ManageDeductionAllowanceBonusTemplatePage() {
   const [dataGridIndex, setDataGridIndex] = useState("allowance list");
-  const [isCreateDABPopupOpen, setIsCreateDABPopupOpen] = useState();
+  const [isCreateTemplatePopupOpen, setIsCreateTemplatePopupOpen] = useState(false);
 
   const handleChangeDataGrid = (event) => {
     setDataGridIndex(event.target.value);
   };
 
-  const { isPending, isError, isSuccess, data } = useFetchListDAB();
-
-  useDebugValue(data);
-
   const getDataGrid = (index) => {
     switch (index) {
-      case "allowance list":
-        return <AllowanceList />;
-      case "bonus list":
-        return <BonusList />;
-      case "deduction list":
-        return <DeductionList />;
+      case "allowance template list":
+        return <AllowanceTemplateList />;
+      case "bonus template list":
+        return <BonusTemplateList />;
+      case "deduction template list":
+        return <BonusTemplateList />;
     }
   };
 
@@ -51,7 +43,7 @@ export default function ManageDeductionAllowanceBonusPage() {
           fontWeight={500}
           color={grey[800]}
         >
-          Thông tin deduction / allowance / bonus
+          Thông tin deduction / allowance / bonus template
         </Typography>
 
         <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
@@ -66,7 +58,7 @@ export default function ManageDeductionAllowanceBonusPage() {
           <MenuButton
             text={"Thao tác"}
             menu={[
-              { clickHandler: () => { }, text: "Create new" },
+              { clickHandler: () => setIsCreateTemplatePopupOpen(true), text: "Create new" },
               { clickHandler: () => { }, text: "Import from excel" },
               { clickHandler: () => { }, text: "Export to pdf" },
             ]}
@@ -90,13 +82,18 @@ export default function ManageDeductionAllowanceBonusPage() {
             size="small"
             onChange={handleChangeDataGrid}
           >
-            <MenuItem value={"deduction list"}>Deduction</MenuItem>
-            <MenuItem value={"allowance list"}>Allowance</MenuItem>
-            <MenuItem value={"bonus list"}>Bonus</MenuItem>
+            <MenuItem value={"deduction template list"}>Deduction</MenuItem>
+            <MenuItem value={"allowance template list"}>Allowance</MenuItem>
+            <MenuItem value={"bonus template list"}>Bonus</MenuItem>
           </Select>
         </Box>
 
         {getDataGrid(dataGridIndex)}
+
+        {isCreateTemplatePopupOpen && <CreateTemplatePopup
+          primaryAction={() => { }}
+          secondaryAction={() => setIsCreateTemplatePopupOpen(false)}
+        />}
       </Box>
     </Box>
   );

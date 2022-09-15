@@ -1,13 +1,17 @@
+import React from "react";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import MenuButton from "../../components/MenuButton/MenuButton";
+import CreateFormulaPopup from "./CreateFormulaPopup/CreateFormulaPopup";
 import FormulaList from "./FormulaList/FormulaList";
 import SystemVariableList from "./SystemVariableList/SystemVariableList";
 
 export default function ManageFormulaPage() {
+  const [isCreateFormulaPopupOpen, setIsCreateFormulaPopupOpen] = React.useState(false);
+
   return (
-    <Box>
+    <Box sx={{ background: 'white', padding: 2 }}>
       <Box
         sx={{
           display: "flex",
@@ -31,15 +35,14 @@ export default function ManageFormulaPage() {
             text={"Related Pages"}
             variant="outlined"
             menu={[
-              { clickHandler: () => {}, text: "Deduction & allowance" },
-              { clickHandler: () => {}, text: "Bonuss" },
+              { clickHandler: () => { }, text: "Create formula" },
+              { clickHandler: () => { }, text: "Bonuss" },
             ]}
           />
           <MenuButton
             text={"Thao tác"}
             menu={[
-              { clickHandler: () => {}, text: "Import from excel" },
-              { clickHandler: () => {}, text: "Export to pdf" },
+              { clickHandler: () => { setIsCreateFormulaPopupOpen(true) }, text: "Create new formula" },
             ]}
           />
         </Box>
@@ -48,6 +51,8 @@ export default function ManageFormulaPage() {
         <FormulaList />
 
         <SystemVariableList />
+
+        {isCreateFormulaPopupOpen && <CreateFormulaPopup primaryAction={() => { }} secondaryAction={() => setIsCreateFormulaPopupOpen(false)} />}
       </Box>
     </Box>
   );

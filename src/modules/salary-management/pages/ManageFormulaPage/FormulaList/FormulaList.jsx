@@ -1,14 +1,28 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import { Button, Chip } from "@mui/material";
 import Box from "@mui/material/Box";
-import { Chip } from "@mui/material";
+import EditFormulaPopup from "./../EditFormulaPopup/EditFormulaPopup";
 
-const columns = [
+
+const rows = new Array(30).fill(0).map((value, index, array) => ({
+  id: index,
+  name: `formula_${index}`,
+  displayName: `Formula ${index}`,
+  inputVariables: [],
+  type: "Formula",
+  dataType: "Number",
+  define: "variable_1 + variable_2 * variable_1 - variable_2",
+  description: "A formula",
+}));
+
+const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
   {
     field: "name",
     headerName: "Name",
     width: 150,
   },
+
 
   {
     field: "displayName",
@@ -48,20 +62,23 @@ const columns = [
     headerName: "Description",
     width: 150,
   },
+
+  {
+    field: "action",
+    headerName: "Action",
+    renderCell: () => {
+      return <Button onClick={onEditBtnClick}>
+        Edit
+      </Button>
+    }
+  }
 ];
 
-const rows = new Array(30).fill(0).map((value, index, array) => ({
-  id: index,
-  name: `formula_${index}`,
-  displayName: `Formula ${index}`,
-  inputVariables: [],
-  type: "Formula" /**Can be Variable as well  */,
-  dataType: "Number" /**Can be Text, Number, Boolean */,
-  define: "variable_1 + variable_2 * variable_1 - variable_2",
-  description: "A formula",
-}));
-
 export default function FormulaList() {
+  const [isEditFormulaPopupOpen, setIsEditFormulaPopupOpen] = React.useState(false);
+
+  const columns = React.useMemo(() => getColumnConfig({ onEditBtnClick: () => setIsEditFormulaPopupOpen(true) }), []);
+
   return (
     <Box sx={{ height: 600, width: "100%" }}>
       <DataGrid
@@ -72,6 +89,10 @@ export default function FormulaList() {
         checkboxSelection
         disableSelectionOnClick
       />
+
+      {isEditFormulaPopupOpen &&
+        <EditFormulaPopup primaryAction={() => { }} secondaryAction={() => setIsEditFormulaPopupOpen(false)} />
+      }
     </Box>
   );
 }

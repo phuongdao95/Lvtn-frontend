@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { green, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import { Box } from "@mui/system";
 
 export default function SystemVariable({
