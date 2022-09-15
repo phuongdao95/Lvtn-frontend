@@ -125,7 +125,7 @@ export default function SalaryList() {
                         color="info"
                     />}
                 searchSection={<SearchField />}
-                dropdownFilterSection={<></>}
+                dropdownFilterSection={<Select />}
                 searchButtonSection={<SearchButton />}
             />
         </Fragment>

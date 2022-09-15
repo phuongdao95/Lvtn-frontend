@@ -27,14 +27,13 @@ import UserList from "../../modules/administration/pages/UserList";
 import RoleList from "../../modules/administration/pages/RoleList/RoleList";
 import DepartmentList from "../../modules/administration/pages/DepartmentList";
 import TeamList from "../../modules/administration/pages/TeamList";
-
+import Login from "../../modules/shares/pages/Login";
 import AccountsAndRolesPage from "../../modules/shares/pages/AccountsAndRolesPage/AccountsAndRolesPage";
-
 
 export default function Routings() {
     return <Routes>
-        <Route path="/user-info" element={<ProfileUser />} />
-        <Route path="/user-info/:id" element={<ProfileUser />} />
+        <Route path="login" element={<Login />} />
+
 
         <Route path="/approve-workflows" element={<WorkFlows />} />
         <Route path="/approve-workflows/my-requests" element={<MyRequests />} />
@@ -65,6 +64,7 @@ export default function Routings() {
         <Route path="/dab-template" element={<DABTemplateList />} />
         <Route path="/formula" element={<FormulaList />} />
 
+        {/* <Route path="play_ground" element={<BasicTable />} /> */}
 
 
         {/* Legacy components */}

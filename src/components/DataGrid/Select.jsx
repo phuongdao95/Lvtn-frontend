@@ -1,9 +1,9 @@
 import { Select as MuiSelect, MenuItem } from "@mui/material"
 
-export default function Select() {
+export default function Select({ options, values, ...rest }) {
     return <MuiSelect
+        {...rest}
         value={10}
-        label="Age"
         size="small"
     >
         <MenuItem value={10}>Ten</MenuItem>

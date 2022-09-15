@@ -24,7 +24,6 @@ const getColumnConfig = () => [
         width: 250,
     },
 
-
     {
         field: "description",
         headerName: "Description",

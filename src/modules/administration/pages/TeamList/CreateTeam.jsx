@@ -2,7 +2,6 @@ import { Fragment } from "react";
 import { Box } from "@mui/system";
 import Dialog from "../../../../components/Dialog";
 import Label from "../../../../components/DialogForm/Label";
-import OneColumnBox from "../../../../components/DialogForm/OneColumnBox"
 import TwoColumnBox from "../../../../components/DialogForm/TwoColumnBox";
 import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
