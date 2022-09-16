@@ -10,21 +10,24 @@ const TimekeepingRegister = () => {
 
     const clickTakePicture = (inputId, inputName) => {
         console.log('register from timekeepingregister');
-        const width = 700;
-        const height = width / (16 / 9);
         let video = videoRef.current;
         let photo = photoRef.current;
+        const width = 700; 
         photo.width = width;
+        const height = width / (16 / 9);
         photo.height = height;
         let listImage = [];
-        for(var i = 0; i < 10; i++) {
+        var i, image;
+
+        for(i = 0; i < 20; i++) {
             let ctx = photo.getContext('2d');
             ctx.drawImage(video, 0, 0, width, height);
-            var image = photo.toDataURL("image/png");
+            image = photo.toDataURL("image/png");
             listImage.push(image);
             setTimeout(() => {
-            }, 200);
+            }, 100);
         }
+
         // get data image
         const data = {
             idUser: inputId,

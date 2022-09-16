@@ -4,7 +4,7 @@ import { grey } from "@mui/material/colors";
 import TabList from "./components/TabList/TabList";
 import MenuButton from "./components/MenuButton/MenuButton";
 
-export function AccountsAndRolesPage() {
+export default function AccountsAndRolesPage() {
   return (
     <Box>
       <Box

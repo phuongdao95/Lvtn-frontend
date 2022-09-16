@@ -13,13 +13,13 @@ const columns = [
   {
     field: "displayName",
     headerName: "Display Name",
-    width: 250,
+    width: 150,
   },
 
   {
     field: "inputVariables",
     headerName: "Input variables",
-    flex: 1,
+    width: 150,
     renderCell: (params) => {
       return (
         <Box>

@@ -9,13 +9,12 @@ const Timekeeping = () => {
     const photoRef = useRef(null);
     const clickTakePicture = (done) => {
         console.log('recognize from timekeeping');
-        const width = 700;
-        const height = width / (16 / 9);
         let video = videoRef.current;
         let photo = photoRef.current;
+        const width = 700; 
         photo.width = width;
+        const height = width / (16 / 9);
         photo.height = height;
-
         let ctx = photo.getContext('2d');
         ctx.drawImage(video, 0, 0, width, height);
         
@@ -29,9 +28,7 @@ const Timekeeping = () => {
         //call api
         aiService.uploadImage(data)
         .then(res => {
-            //console.log('respose ' + JSON.stringify(res));
-            console.log('respose ' + res.data + ' ' + res.statusText + ' ' + res.status);
-            // if (res.status === 200 && res.data !== 'not found') {
+            console.log('respose ' + res.data + ' ' + res.statusText + ' ' + res.status)
             if (res.status === 200) {
                 done();
             }
