@@ -13,8 +13,8 @@ import ProfileUser from "../../modules/shares/pages/ProfileUser/ProfileUser";
 import ListUsers from "../../modules/shares/pages/ListUsers/ListUsers";
 import MyPayslipPage from "../../modules/salary-management/pages/MyPayslipPage/MyPayslipPage";
 
-import Timekeeping from "../../modules/shares/pages/timekeeping/Timekeeping";
-import TimekeepingRegister from "../../modules/shares/pages/timekeeping/TimekeepingRegister";
+import Timekeeping from "../../modules/check-day/pages/Timekeeping";
+
 import DABList from "../../modules/salary-management/pages/DABList/DABList";
 import DABTemplateList from "../../modules/salary-management/pages/DABTemplateList/DABTemplateList";
 import FormulaList from "../../modules/salary-management/pages/FormulaList/FormulaList";
@@ -43,8 +43,8 @@ export default function Routings() {
 
         <Route exact path="/approve-workflows/config-nghi-phep" element={<ConfigNghiPhep />} />
         <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
-        <Route path="/timekeeping" element={<Timekeeping />} />
-        <Route path="/timekeeping/register" element={<TimekeepingRegister />} />
+
+        <Route path="/check-in" element={<Timekeeping />} />
 
         <Route path="/list-users" element={<ListUsers />} />
 
