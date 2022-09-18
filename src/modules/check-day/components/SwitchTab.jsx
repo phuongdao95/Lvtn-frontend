@@ -8,6 +8,7 @@ import a11Props from '../../../components/TabList/a11Props'
 
 import Recognize from './Recognize';
 import Register from './RegisterImage';
+import HistoryCheck from './HistoryCheck';
 
 const SwitchTab = () => {
     const tabList = (value, handleChange) => {
@@ -17,8 +18,9 @@ const SwitchTab = () => {
                 onChange={handleChange} 
                 aria-label="tabs list for timekeeping"
             >
-                <Tab label="Nhận diện khuôn mặt" {...a11Props(0)} />
+                <Tab label="Chấm công" {...a11Props(0)} />
                 <Tab label="Đăng ký hình ảnh" {...a11Props(1)} />
+                <Tab label="Bảng công" {...a11Props(2)} />
             </Tabs>
         </Box>
     }
@@ -29,6 +31,11 @@ const SwitchTab = () => {
         </TabPanel>
         <TabPanel value={value} index={1}>
             <Register />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+            <HistoryCheck selectedDate={new Date()} 
+                textColor={'#000000'}
+            />
         </TabPanel>
     </>}
     return (
