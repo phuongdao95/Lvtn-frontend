@@ -14,6 +14,7 @@ import ListUsers from "../../modules/shares/pages/ListUsers/ListUsers";
 import MyPayslipPage from "../../modules/salary-management/pages/MyPayslipPage/MyPayslipPage";
 
 import Timekeeping from "../../modules/check-day/pages/Timekeeping";
+import VirtualSpace from "../../modules/virtual-space/pages/VirtualSpace";
 
 import DABList from "../../modules/salary-management/pages/DABList/DABList";
 import DABTemplateList from "../../modules/salary-management/pages/DABTemplateList/DABTemplateList";
@@ -45,6 +46,7 @@ export default function Routings() {
         <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
 
         <Route path="/check-in" element={<Timekeeping />} />
+        <Route path="/virtual-space" element={<VirtualSpace />} />
 
         <Route path="/list-users" element={<ListUsers />} />
 

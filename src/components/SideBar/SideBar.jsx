@@ -20,6 +20,7 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
+import WorkIcon from '@mui/icons-material/Work';
 
 const drawerWidth = 240;
 
@@ -43,23 +44,28 @@ const SideBar = (props) => {
     const routes = [
         {
             link: "/",
-            text: "Home",
+            text: "Trang chủ",
             icon: <HomeIcon />
         },
         {
             link: "/user-info",
-            text: "User Info",
+            text: "Thông tin cá nhân",
             icon: <PersonIcon />
         },
         {
             link: "/about-us",
-            text: "About us",
+            text: "Về chúng tôi",
             icon: <ContactsIcon />
         },
         {
             link: "/check-in",
-            text: "Timekeeping",
+            text: "Chấm công",
             icon: <FactCheckIcon />
+        },
+        {
+            link: "/virtual-space",
+            text: "Môi trường ảo",
+            icon: <WorkIcon />
         }
     ];
 
