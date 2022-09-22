@@ -4,15 +4,13 @@ import { IconButton } from '@mui/material';
 import { TextField } from '@mui/material';
 
 
-export default function SearchField(props) {
+export default function SearchField({ ...props }) {
     return (
         <TextField
             size='small'
-            maxWidth={400}
+            placeholder='Tìm kiếm'
             id="standard-bare"
             variant="outlined"
-            placeholder='Search something'
-            defaultValue="How can we help"
             InputProps={{
                 endAdornment: (
                     <IconButton>
@@ -20,6 +18,7 @@ export default function SearchField(props) {
                     </IconButton>
                 ),
             }}
+            {...props}
         />
     );
 }

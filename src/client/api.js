@@ -6,20 +6,18 @@ const api = axios.create({
     baseURL: BASE_URL
 });
 
-/*
-api.interceptors.request.use((onRequestSuccess) => {
-    // TODO: add Token to request
-    // Fake Token
-    const authorizationToken = "SomeToken";
-    
-    if (authorizationToken) {
-        onRequestSuccess.headers = {
-            ...onRequestSuccess.headers,
-            'Authorization': authorizationToken
-        };
+api.interceptors.request.use(async (config) => {
+    const localStorage = window?.localStorage;
+    const jwt = localStorage.getItem("jwt_token");
+
+    if (jwt) {
+        config.headers = {
+            ...config.headers,
+            authorization: `Bearer ${jwt}`
+        }
     }
-    return onRequestSuccess;
-});
-*/
+
+    return config;
+}, (err) => Promise.reject(err));
 
 export default api;

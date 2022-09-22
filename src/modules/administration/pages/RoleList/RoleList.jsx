@@ -5,11 +5,8 @@ import MenuButton from "../../../../components/DataGrid/MenuButton";
 import SearchField from "../../../../components/SearchField";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
 
-const rows = new Array(30).fill(0).map((value, index, array) => ({
-    id: index,
-    name: `Role ${index}`,
-    description: `Test description ${index}`,
-}));
+import { useFetchListRole } from "../../../../client/roleService";
+import { useNavigate } from "react-router";
 
 const getColumnConfig = () => [
     {
@@ -33,13 +30,29 @@ const getColumnConfig = () => [
 
 
 export default function RoleList() {
+    const navigate = useNavigate();
+
+    const {
+        isPending,
+        isSuccess,
+        isError,
+        data: response,
+        method: fetchDepartmentList
+    } = useFetchListRole();
+
     return (
         <Fragment>
             <DataGridLayout
                 title={"Danh sách chức vụ"}
                 datagridSection={
                     <DataGrid
-                        rows={rows}
+                        onPageChange={(nextPageIndex) => {
+                            const limit = 8;
+                            fetchDepartmentList((nextPageIndex) * limit, limit)
+                        }}
+                        rowCount={response?.total ?? 0}
+                        paginationMode="server"
+                        rows={response?.data ?? []}
                         columns={getColumnConfig()}
                         isError={false}
                         isLoading={false}
@@ -61,6 +74,7 @@ export default function RoleList() {
                         text={"Liên kết liên quan"}
                         menu={
                             [
+                                { text: "Danh sách người dùng", handler: () => { } },
                                 { text: "Danh sách nhóm", handler: () => { } },
                                 { text: "Danh sách quyền", handler: () => { } },
                                 { text: "Danh sách team", handler: () => { } },

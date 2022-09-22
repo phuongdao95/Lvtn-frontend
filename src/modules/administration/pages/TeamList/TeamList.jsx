@@ -1,9 +1,11 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import DataGridLayout from "../../../../layouts/DataGridLayout";
 import DataGrid from "../../../../components/DataGrid";
 import MenuButton from "../../../../components/DataGrid/MenuButton";
 import SearchField from "../../../../components/SearchField";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
+import { useFetchListTeam } from "../../../../client/teamService";
+import { useNavigate } from "react-router";
 
 const rows = new Array(30).fill(0).map((value, index, array) => ({
     id: index,
@@ -34,17 +36,33 @@ const getColumnConfig = () => [
 
 
 export default function TeamList() {
+    const navigate = useNavigate();
+
+    const {
+        isPending,
+        isSuccess,
+        isError,
+        data: response,
+        method: fetchTeamList
+    } = useFetchListTeam();
+
     return (
         <Fragment>
             <DataGridLayout
                 title={"Danh sách team"}
                 datagridSection={
                     <DataGrid
-                        rows={rows}
+                        onPageChange={(nextPageIndex) => {
+                            const limit = 8;
+                            fetchTeamList((nextPageIndex) * limit, limit)
+                        }}
+                        rowCount={response?.total ?? 0}
+                        paginationMode="server"
+                        rows={response?.data ?? []}
                         columns={getColumnConfig()}
-                        isError={false}
-                        isLoading={false}
-                        isSuccess={false}
+                        isError={isError}
+                        isLoading={isPending}
+                        isSuccess={isSuccess}
                     />
                 }
                 primaryButtonSection={
@@ -62,10 +80,31 @@ export default function TeamList() {
                         text={"Liên kết liên quan"}
                         menu={
                             [
-                                { text: "Danh sách nhóm", handler: () => { } },
-                                { text: "Danh sách quyền", handler: () => { } },
-                                { text: "Danh sách team", handler: () => { } },
-                                { text: "Danh sách người dùng", handler: () => { } },
+                                {
+                                    text: "Danh sách nhóm", handler: () => {
+                                        navigate("/group")
+                                    }
+                                },
+                                {
+                                    text: "Danh sách quyền", handler: () => {
+                                        navigate("/permission")
+                                    }
+                                },
+                                {
+                                    text: "Danh sách người dùng", handler: () => {
+                                        navigate("/user");
+                                    }
+                                },
+                                {
+                                    text: "Danh sách các cục", handler: () => {
+                                        navigate("/department");
+                                    }
+                                },
+                                {
+                                    text: "Danh sách chức vụ", handler: () => {
+                                        navigate("/role");
+                                    }
+                                },
                             ]
                         }
                         variant="outlined"
