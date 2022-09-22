@@ -57,7 +57,7 @@ const SideBar = (props) => {
             icon: <ContactsIcon />
         },
         {
-            link: "/timekeeping",
+            link: "/check-in",
             text: "Timekeeping",
             icon: <FactCheckIcon />
         }
