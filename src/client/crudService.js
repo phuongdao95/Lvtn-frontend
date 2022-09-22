@@ -40,7 +40,7 @@ export const getUseCreateResourceFunction =
                 console.log(err);
                 setIsError(true);
             } finally {
-                setIsPending(true);
+                setIsPending(false);
             }
         }
 
@@ -59,7 +59,7 @@ export const getUseUpdateResourceFunction =
                 console.log(err);
                 setIsError(true);
             } finally {
-                setIsPending(true);
+                setIsPending(false);
             }
         }
 
@@ -69,24 +69,33 @@ export const getUseUpdateResourceFunction =
 
 export const getUseFetchListResourceFunction =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsPending, setIsSuccess, setData }, pathPrefix) => {
-        useEffect(() => {
-            (async function () {
-                try {
-                    const response = await api.get(pathPrefix, {});
-                    if (response.data) {
-                        setData(response.data);
-                        setIsSuccess(true);
-                    } else {
-                        setIsError(true);
-                    }
-                } catch (err) {
-                    console.log(err);
-                    setIsError(true);
-                } finally {
-                    setIsPending(true);
+        const fetchList = async function (offset = 0, limit = 8, query) {
+            setIsError(false);
+            setIsPending(true);
+            setIsSuccess(false);
+
+            try {
+                const params = !query ? { offset, limit } : { offset, limit, query: encodeURIComponent(query) }
+                const response = await api.get(pathPrefix, {
+                    params
+                });
+                if (response.data) {
+                    setData(response.data);
+                    setIsSuccess(true);
                 }
-            })();
+            } catch (err) {
+                console.log(err);
+                setIsError(true);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        useEffect(() => {
+            fetchList();
         }, []);
+
+        return fetchList;
     });
 
 
@@ -101,7 +110,7 @@ export const getUseDeleteResourceFunction =
                 console.log(err);
                 setIsError(true);
             } finally {
-                setIsPending(true);
+                setIsPending(false);
             }
         }
 
@@ -111,23 +120,22 @@ export const getUseDeleteResourceFunction =
 
 export const getUseFetchOneResourceFunction =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsPending, setIsSuccess, setData }, pathPrefix) => {
-        useEffect(() => {
-            (async function () {
-                try {
-                    const response = await api.get(pathPrefix, {});
-                    if (response.data) {
-                        setData(response.data);
-                        setIsSuccess(true);
-                    } else {
-                        setIsSuccess(false);
-                        setIsError(true);
-                    }
-                } catch (err) {
-                    console.log(err);
-                    setIsError(true);
-                } finally {
-                    setIsPending(true);
+        const fetchOneResource = async (id) => {
+            try {
+                const path = `${pathPrefix}/${id}`
+                const response = await api.get(path, {});
+                if (response.data) {
+                    setData(response.data);
+                    setIsSuccess(true);
                 }
-            })();
-        }, []);
+            } catch (err) {
+                console.log(err);
+                setIsSuccess(false);
+                setIsError(true);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        return fetchOneResource;
     });

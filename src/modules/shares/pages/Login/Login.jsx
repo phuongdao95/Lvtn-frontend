@@ -11,32 +11,44 @@ import { grey } from '@mui/material/colors';
 import { useFormik } from "formik";
 
 import * as yup from "yup";
+import { useLogin } from '../../../../client/autheticationService';
+import { useNavigate } from 'react-router';
 
 const validationSchema = yup.object({
-    email: yup
-        .string("Enter your email")
-        .email('Enter a valid email')
-        .required('Email is required'),
+    username: yup
+        .string("Enter your username")
+        .min(5, 'Username should be of minimum 5 characters length')
+        .required('Username is required'),
     password: yup
         .string("Enter your password")
-        .min(8, 'Password should be of minimum 8 characters length')
+        .min(5, 'Password should be of minimum 5 characters length')
         .required('Password is required'),
 })
 
 const theme = createTheme();
 
 export default function Login() {
+    const { method: login, isPending, isError, isSuccess } =
+        useLogin();
+
+    const navigate = useNavigate();
+
     const formik = useFormik({
         initialValues: {
-            email: "",
+            username: "",
             password: "",
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log(JSON.stringify(values, null, 2))
-            /** do contact with server at this place */
+            login(values.username, values.password);
         }
     })
+
+    React.useEffect(() => {
+        if (isSuccess) {
+            navigate("/user");
+        }
+    }, [isSuccess])
 
     return (
         <ThemeProvider theme={theme}>
@@ -58,6 +70,7 @@ export default function Login() {
                     <Typography component="h1" variant="h6" mb={4}>
                         Sign in
                     </Typography>
+
                     <Box component="form"
                         onSubmit={formik.handleSubmit}
                         noValidate
@@ -67,14 +80,15 @@ export default function Login() {
                             flexDirection: "column",
                             gap: 2.
                         }}>
+
                         <TextField
-                            id="email"
-                            name="email"
-                            label="Email"
-                            value={formik.values.email}
+                            id="username"
+                            name="username"
+                            label="Username"
+                            value={formik.values.username}
                             onChange={formik.handleChange}
-                            error={formik.touched.email && Boolean(formik.errors.email)}
-                            helperText={formik.touched.email && formik.errors.email}
+                            error={formik.touched.username && Boolean(formik.errors.username)}
+                            helperText={formik.touched.username && formik.errors.username}
                         />
 
                         <TextField
@@ -90,12 +104,14 @@ export default function Login() {
 
                         <Button
                             type="submit"
+                            onClick={(e) => { formik.handleSubmit(e); }}
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
                             Sign In
                         </Button>
+
                         <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
