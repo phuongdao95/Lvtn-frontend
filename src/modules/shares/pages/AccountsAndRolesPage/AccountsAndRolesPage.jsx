@@ -3,8 +3,9 @@ import { Box } from "@mui/system";
 import { grey } from "@mui/material/colors";
 import TabList from "./components/TabList/TabList";
 import MenuButton from "./components/MenuButton/MenuButton";
+import CreateAccountPopup from "./components/CreateAccountPopup/CreateAccountPopup";
 
-export function AccountsAndRolesPage() {
+export default function AccountsAndRolesPage() {
   return (
     <Box>
       <Box
@@ -27,8 +28,8 @@ export function AccountsAndRolesPage() {
         <MenuButton
           text={"Thao tác"}
           menu={[
-            { text: "Tạo mới account", handler: () => {} },
-            { text: "Tạo mới role", handler: () => {} },
+            { text: "Tạo mới account", handler: () => { } },
+            { text: "Tạo mới role", handler: () => { } },
           ]}
         />
       </Box>

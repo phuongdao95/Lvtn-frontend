@@ -11,3 +11,12 @@ export const useFetchListPayslip = getUseFetchListResourceFunction(PATH_PREFIX);
 export const useFetchOnePayslip = getUseFetchOneResourceFunction(PATH_PREFIX);
 
 export const useUpdatePayslip = getUseUpdateResourceFunction(PATH_PREFIX);
+
+export const useGeneratePayslip = function () {
+    return;
+}
+
+export const useSendPayslip = function () {
+    return;
+}
+
