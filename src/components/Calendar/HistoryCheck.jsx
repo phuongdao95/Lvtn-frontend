@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Paper, Button, Typography, IconButton } from "@mui/material";
+import { Paper, Button, Typography, IconButton, Box } from "@mui/material";
 import * as dateFns from "date-fns";
 import DisplayMonth from "./DisplayMonth";
 import DisplayDate from "./DisplayDate";
@@ -55,13 +55,18 @@ const HistoryCheck = (props) => {
                     minHeight: "5%"
                 }}
             >
-                <IconButton onClick={() => onChevronClick(true)}>
-                    <ChevronLeftIcon />
-                </IconButton>
-                <Button onClick={() => modeChange()}>{header}</Button>
-                <IconButton onClick={() => onChevronClick(false)}>
-                    <ChevronRightIcon />
-                </IconButton>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                }}>
+                    <IconButton onClick={() => onChevronClick(true)}>
+                        <ChevronLeftIcon />
+                    </IconButton>
+                    <Button onClick={() => modeChange()}>{header}</Button>
+                    <IconButton onClick={() => onChevronClick(false)}>
+                        <ChevronRightIcon />
+                    </IconButton>
+                </Box>
             </Paper>
         );
     }
@@ -89,13 +94,18 @@ const HistoryCheck = (props) => {
                     minHeight: "5%"
                 }}
             >
-            <IconButton onClick={() => yearChevronClick(true)}>
-                <ChevronLeftIcon />
-            </IconButton>
-            <Button onClick={() => modeChange()}>{header}</Button>
-            <IconButton onClick={() => yearChevronClick(false)}>
-                <ChevronRightIcon />
-            </IconButton>
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+            }}>
+                <IconButton onClick={() => yearChevronClick(true)}>
+                    <ChevronLeftIcon />
+                </IconButton>
+                <Button onClick={() => modeChange()}>{header}</Button>
+                <IconButton onClick={() => yearChevronClick(false)}>
+                    <ChevronRightIcon />
+                </IconButton>
+            </Box>
             </Paper>
         );
     };
@@ -214,6 +224,7 @@ const HistoryCheck = (props) => {
                     modal={props.modal}
                     selectedDate={state.selectedDate}
                     light={textColor}
+                    tableCell={props.tableCell}
                 />
             );
         } else if (state.mode === 1) {

@@ -112,9 +112,7 @@ const DisplayDate = props => {
             <TableHead>
                 <TableRow>
                 {weekdays.map(day => (
-                    <TableCell key={day.id}>
-                    <Typography align="center">{day.day}</Typography>
-                    </TableCell>
+                    props.tableCell(day)
                 ))}
                 </TableRow>
             </TableHead>

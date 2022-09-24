@@ -14,7 +14,7 @@ import * as dateFns from "date-fns";
 const DisplayYear = props => {
     let today = new Date();
     const currentYearDateFNS = dateFns.getYear(today);
-    const dateYearFormat = "YYYY";
+    const dateYearFormat = "yyyy";
     let pastYears = dateFns.addYears(props.year, -9);
     let futureYears = dateFns.addYears(props.year, 2);
     let yearStart = parseInt(dateFns.format(pastYears, dateYearFormat));
