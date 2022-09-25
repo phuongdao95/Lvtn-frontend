@@ -1,3 +1,4 @@
+import { LinearProgress } from "@mui/material";
 import { Box } from "@mui/system";
 import { DataGrid as MuiDataGrid } from "@mui/x-data-grid";
 
@@ -14,12 +15,16 @@ export default function DataGrid({
 }) {
     return <Box sx={{ height: height }}>
         <MuiDataGrid
+            components={{
+                LoadingOverlay: LinearProgress
+            }}
             rows={rows}
             columns={columns}
             loading={isLoading}
             pageSize={pageSize}
             rowsPerPageOptions={rowsPerPageOptions}
             {...rest}
+            
         />
     </Box>
 }

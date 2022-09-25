@@ -19,4 +19,5 @@ export const useCreateDAB = getUseCreateResourceFunction(PATH_PREFIX);
 export const useDeleteDAB = getUseDeleteResourceFunction(PATH_PREFIX);
 
 
-
+/**Post localhost:8080/task */
+export const useCreateTask = getUseFetchListResourceFunction(PATH_PREFIX);

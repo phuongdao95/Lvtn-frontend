@@ -9,7 +9,6 @@ import ConfigNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/Conf
 import UserNghiPhep from "../../modules/approve-workflow/nghi-phep/UserNghiPhep";
 import UserNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/UserNghiThaiSan";
 
-import ProfileUser from "../../modules/shares/pages/ProfileUser/ProfileUser";
 import ListUsers from "../../modules/shares/pages/ListUsers/ListUsers";
 import MyPayslipPage from "../../modules/salary-management/pages/MyPayslipPage/MyPayslipPage";
 
@@ -17,7 +16,6 @@ import Timekeeping from "../../modules/check-day/pages/Timekeeping";
 import VirtualSpace from "../../modules/virtual-space/pages/VirtualSpace";
 
 import DABList from "../../modules/salary-management/pages/DABList/DABList";
-import DABTemplateList from "../../modules/salary-management/pages/DABTemplateList/DABTemplateList";
 import FormulaList from "../../modules/salary-management/pages/FormulaList/FormulaList";
 import SalaryList from "../../modules/salary-management/pages/SalaryList";
 import Payroll from "../../modules/salary-management/pages/PayRoll";
@@ -28,14 +26,10 @@ import UserList from "../../modules/administration/pages/UserList";
 import RoleList from "../../modules/administration/pages/RoleList/RoleList";
 import DepartmentList from "../../modules/administration/pages/DepartmentList";
 import TeamList from "../../modules/administration/pages/TeamList";
-import Login from "../../modules/shares/pages/Login";
 import AccountsAndRolesPage from "../../modules/shares/pages/AccountsAndRolesPage/AccountsAndRolesPage";
 
 export default function Routings() {
     return <Routes>
-        <Route path="login" element={<Login />} />
-
-
         <Route path="/approve-workflows" element={<WorkFlows />} />
         <Route path="/approve-workflows/my-requests" element={<MyRequests />} />
 
@@ -63,7 +57,6 @@ export default function Routings() {
         <Route path="/payslip" element={<MyPayslipPage />} />
         <Route path="/payroll" element={<Payroll />} />
         <Route path="/dab" element={<DABList />} />
-        <Route path="/dab-template" element={<DABTemplateList />} />
         <Route path="/formula" element={<FormulaList />} />
 
         {/* <Route path="play_ground" element={<BasicTable />} /> */}

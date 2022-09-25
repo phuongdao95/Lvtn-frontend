@@ -3,10 +3,7 @@ import { blue } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import Header from "./Header";
 
-const DEFAULT_ACTION = {
-    text: "",
-    handler: () => { }
-}
+const DEFAULT_ACTION = null;
 
 export default function Dialog({
     title,
@@ -41,15 +38,25 @@ export default function Dialog({
             </Box>
 
             <DialogActions>
-                <Button onClick={tertiaryAction.handler} autoFocus>
-                    {tertiaryAction.text}
-                </Button>
-                <Button onClick={secondaryAction.handler}>
-                    {secondaryAction.text}
-                </Button>
-                <Button onClick={primaryAction.handler} autoFocus variant="contained">
-                    {primaryAction.text}
-                </Button>
+                {
+                    tertiaryAction &&
+                    <Button onClick={tertiaryAction.handler} autoFocus>
+                        {tertiaryAction.text}
+                    </Button>   
+                }
+                {
+                    secondaryAction &&
+                    <Button onClick={secondaryAction.handler}>
+                        {secondaryAction.text}
+                    </Button>
+                }
+
+                {
+                    primaryAction &&
+                    <Button onClick={primaryAction.handler} autoFocus variant="contained">
+                        {primaryAction.text}
+                    </Button>
+                }
             </DialogActions>
         </MuiDialog>
     );
