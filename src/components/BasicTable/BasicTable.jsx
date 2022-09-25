@@ -7,14 +7,14 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-export default function BasicTable({ rows, columns }) {
+export default function BasicTable({ rows, columns, maxHeight = '300px' }) {
     return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} >
-                <TableHead>
+        <TableContainer component={Paper} sx={{ maxHeight }}>
+            <Table >
+                <TableHead >
                     <TableRow>
                         {columns.map(({ headerName, ...rest }) =>
-                            <TableCell {...rest}>{headerName}</TableCell>
+                            <TableCell {...rest} key={headerName} >{headerName}</TableCell>
                         )}
                     </TableRow>
                 </TableHead>
@@ -25,7 +25,7 @@ export default function BasicTable({ rows, columns }) {
                             sx={{ border: 0 }}
                         >
                             {columns.map(({ field, headerName, ...rest }) =>
-                                <TableCell key={row[field]} {...rest}>
+                                <TableCell key={headerName} {...rest}>
                                     {row[field]}
                                 </TableCell>
                             )}

@@ -1,9 +1,9 @@
 import { Box } from "@mui/system";
 
 export default function DialogForm({ children }) {
-    return <form>
+    return <Box>
         <Box>
             {children}
         </Box>
-    </form>;
+    </Box>;
 }

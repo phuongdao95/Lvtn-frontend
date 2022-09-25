@@ -6,12 +6,7 @@ import SearchField from "../../../../components/SearchField";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
 import { useFetchListTeam } from "../../../../client/teamService";
 import { useNavigate } from "react-router";
-
-const rows = new Array(30).fill(0).map((value, index, array) => ({
-    id: index,
-    name: `Team ${index}`,
-    description: `Test description ${index}`,
-}));
+import CreateTeam from "./CreateTeam";
 
 const getColumnConfig = () => [
     {
@@ -36,6 +31,9 @@ const getColumnConfig = () => [
 
 
 export default function TeamList() {
+    const [isCreateTeamOpen, setIsCreateTeamOpen] = React.useState(false);
+    const [isEditTeamOpen, setIsEditTeamOpen] = React.useState(false);
+
     const navigate = useNavigate();
 
     const {
@@ -48,6 +46,11 @@ export default function TeamList() {
 
     return (
         <Fragment>
+            {isCreateTeamOpen && <CreateTeam
+                closeDialogCb={() => setIsCreateTeamOpen(false)}
+            />}
+
+
             <DataGridLayout
                 title={"Danh sách team"}
                 datagridSection={
@@ -70,7 +73,11 @@ export default function TeamList() {
                         text={"Thao tác"}
                         menu={
                             [
-                                { text: "Tạo mới", handler: () => { } }
+                                {
+                                    text: "Tạo mới Team", handler: () => {
+                                        setIsCreateTeamOpen(true);
+                                    }
+                                }
                             ]
                         }
                     />

@@ -21,7 +21,8 @@ export default function Dialog({
                 "& .MuiDialog-container": {
                     "& .MuiPaper-root": {
                         width: "100%",
-                        maxWidth: "680px",  // Set your width here
+                        maxWidth: "680px",
+                        overflow: 'visible'
                     },
                 },
             }}
@@ -42,7 +43,7 @@ export default function Dialog({
                     tertiaryAction &&
                     <Button onClick={tertiaryAction.handler} autoFocus>
                         {tertiaryAction.text}
-                    </Button>   
+                    </Button>
                 }
                 {
                     secondaryAction &&
