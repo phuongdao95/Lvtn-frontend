@@ -6,6 +6,7 @@ import SearchField from "../../../../components/SearchField";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
 import { useNavigate } from "react-router";
 import { useFetchListDepartment } from "../../../../client/departmentService";
+import CreateDepartment from "./CreateDepartment";
 
 const getColumnConfig = () => [
     {
@@ -40,8 +41,11 @@ const getColumnConfig = () => [
 ];
 
 
-export default function UserList() {
+export default function DepartmentList() {
     const navigate = useNavigate();
+
+    const [isCreateDepartmentOpen, setIsCreateDepartmentOpen] = React.useState(false);
+    const [isEditDepartmentOpen, setIsEditDepartmentOpen] = React.useState(false);
 
     const {
         isPending,
@@ -51,8 +55,14 @@ export default function UserList() {
         method: fetchDepartmentList
     } = useFetchListDepartment();
 
+    // const {
+    //     method: fetchTeams
+    // } = useFetchTeamListWithoutDepartment();
+
     return (
         <Fragment>
+            {isCreateDepartmentOpen && <CreateDepartment closeDialogCb={
+                () => setIsCreateDepartmentOpen(false)} />}
             <DataGridLayout
                 title={"Danh sách department"}
                 datagridSection={
@@ -76,11 +86,10 @@ export default function UserList() {
                         menu={
                             [
                                 {
-                                    text: "Tạo mới", handler: () => { }
+                                    text: "Tạo mới Department", handler: () => {
+                                        setIsCreateDepartmentOpen(true);
+                                    }
                                 },
-                                {
-                                    text: "Xuất Excel", handler: () => { }
-                                }
                             ]
                         }
                     />

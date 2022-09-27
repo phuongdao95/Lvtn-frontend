@@ -13,13 +13,3 @@ export const useCreateDepartment =
 
 export const useUpdateDepartment =
     getUseUpdateResourceFunction(PATH_PREFIX);
-
-// export const useAddOneTeam =
-//     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending }) => {
-//         return;
-//     });
-
-// export const useRemoveOneTeam =
-//     getPendingErrorSuccessApiPatternFunction((setIsError, setIsSuccess, setIsPending) => {
-//         return;
-//     });

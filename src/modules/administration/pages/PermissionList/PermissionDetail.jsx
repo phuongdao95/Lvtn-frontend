@@ -20,9 +20,9 @@ export default function PermissionDetail({ closeDialogCb, permissionId }) {
 
     const formik = useFormik({
         initialValues: {
-            id: null,
-            name: null,
-            description: null,
+            id: "",
+            name: "",
+            description: "",
         },
     })
 

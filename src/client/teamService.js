@@ -1,3 +1,4 @@
+import api from "./api";
 import {
     getPendingErrorSuccessApiPatternFunction,
     getUseCreateResourceFunction,
@@ -20,7 +21,37 @@ export const useCreateTeam =
 export const useUpdateTeam =
     getUseUpdateResourceFunction(PATH_PREFIX);
 
-export const useAddOneUser =
-    getPendingErrorSuccessApiPatternFunction(async ({ setIsError, setIsSuccess, setData }) => {
-        ;
-    })(PATH_PREFIX);
+export const useFetchTeamListWithoutDepartment =
+    getPendingErrorSuccessApiPatternFunction(
+        ({
+            setIsError,
+            setIsPending,
+            setIsSuccess,
+            setData }, pathPrefix
+        ) => {
+            const fetchList = async () => {
+                setIsError(false);
+                setIsSuccess(false);
+                setIsPending(true);
+
+                try {
+                    const response = await api.get(pathPrefix, {
+                        params: {
+                            type: "no_department",
+                            limit: 9999,
+                            offset: 0
+                        }
+                    });
+
+                    if (response.data) {
+                        setData(response.data);
+                    }
+
+
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            return fetchList;
+        })(PATH_PREFIX);
