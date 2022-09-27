@@ -95,7 +95,7 @@ const VirtualSpace = () => {
     }
     return (
     <Fragment>
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', position: 'relative' }}>
             <Box sx={{
                 bgcolor: '#1A1A50',
                 borderRadius: 3,
@@ -127,7 +127,7 @@ const VirtualSpace = () => {
                     ))}
                 </List>
             </Box>
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <Box component="main" sx={{ flexGrow: 1, p: 3, position: 'relative' }}>
                 <Box>
                     <Incorporate itemsNormal={data} />
                 </Box>
@@ -140,9 +140,9 @@ const VirtualSpace = () => {
                         tableCell={tableCell}
                     />
                 </Box>
+                <CreateTask />
             </Box>
         </Box>
-        <CreateTask />
         <Chatbox />
     </Fragment>
     )
