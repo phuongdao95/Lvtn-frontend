@@ -1,9 +1,13 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Box, Card, CardContent } from '@mui/material';
 
 const Aicam = ({videoRef, photoRef}) => {
+    let videoStream = null;
     useEffect(() => {
         getVideo();
+        return () => {
+            stopVideo();
+        }
     }, [videoRef]);
     const getVideo = () => {
         navigator.mediaDevices
@@ -13,12 +17,20 @@ const Aicam = ({videoRef, photoRef}) => {
             .then((stream) => {
                 let video = videoRef.current;
                 video.srcObject = stream;
+                videoStream = stream;
                 video.play();
             })
             .catch((err) => {
                 console.error(err);
             });
     };
+    const stopVideo = () => {
+        videoStream.getVideoTracks().forEach((track: any) => {
+            if (track.readyState === "live") {
+                track.stop();
+            }
+        });
+    }
 
     return (
         <Box sx={{
