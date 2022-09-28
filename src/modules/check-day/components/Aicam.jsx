@@ -25,11 +25,13 @@ const Aicam = ({videoRef, photoRef}) => {
             });
     };
     const stopVideo = () => {
-        videoStream.getVideoTracks().forEach((track: any) => {
-            if (track.readyState === "live") {
-                track.stop();
-            }
-        });
+        if (videoStream) {
+            videoStream.getVideoTracks().forEach((track: any) => {
+                if (track.readyState === "live") {
+                    track.stop();
+                }
+            });
+        }
     }
 
     return (

@@ -1,5 +1,6 @@
-import { Box, Card, CardContent, Button } from '@mui/material';
+import { Box, Card, CardContent, Button, FormControl, MenuItem, Select } from '@mui/material';
 import React, {useState} from 'react';
+
 const DAY = ['Sun', 'Mon', 'Tus', 'Wes', 'Thu', 'Fri', 'Sar'];
 const MONTH = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const padTo2Digits = num => {
@@ -43,18 +44,76 @@ const welcome = name => {
         {name}
     </Box>
 )};
+// data sample 
+const listType = [
+    {
+        "Id" : 1,
+        "Name" : "Ngày bình thường",
+        "StartTime" : "8:00",
+        "EndTime" : "17:00", 
+        "Coefficient" : 1,
+    },
+    {
+        "Id" : 2,
+        "Name" : "OT",
+        "StartTime" : "19:00",
+        "EndTime" : "20:00", 
+        "Coefficient" : 2,
+    },
+]
 const Info = ({takePicture}) => {
     const currTime = new Date();
     const format = formatDate(currTime);
     const [recognized, setRecognized] = useState(false);
     const [name, setName] = useState('');
+    const [value, setValue] = useState(listType[0].Id);
+
     const welcomeText = welcome(name);
+
     const clickTakePicture = () => {
         takePicture(() => {
             setName('Dao Thanh Phuong');
             setRecognized(true);
         });
     }
+    const handleChange = (event) => {
+        setValue(event.target.value);
+    };
+
+    const groupButton = () => {
+        return (
+        <>
+        <FormControl sx={{ m: 3, width: 200 }}>
+            {/* <FormLabel id="demo-row-radio-buttons-group-label">Loại công</FormLabel>  */}
+            <Select
+                row
+                displayEmpty
+                value={value}
+                onChange={handleChange}
+            >
+                {listType.map((item, index) => (
+                    <MenuItem value={item.Id} key={index} >{item.Name}</MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+        <Button variant="contained" 
+            onClick={clickTakePicture}
+            // disabled={value ? true : false}
+            color="primary"
+            sx={{ display: 'flex-block', mt: 2, mr: 1 }}>
+            Chấm giờ vào
+        </Button>
+        <Button variant="contained" 
+            onClick={clickTakePicture}
+            // disabled={value ? true : false}
+            color="secondary"
+            sx={{ display: 'flex-block', mt: 2, ml: 1 }}>
+            Chấm giờ ra
+        </Button>
+        </>
+        );
+    }
+
     return (
         <Box sx={{
             mx: 'auto',
@@ -74,12 +133,7 @@ const Info = ({takePicture}) => {
                         {format}
                         {welcomeText}
                     </>
-                    :
-                    <Button variant="contained" 
-                        onClick={clickTakePicture}
-                        color="primary">
-                        Chấm công
-                    </Button>}
+                    :   <>{groupButton()}</>}
                 </CardContent>
             </Card>
         </Box>

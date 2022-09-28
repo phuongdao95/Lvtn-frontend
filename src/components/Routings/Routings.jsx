@@ -16,6 +16,10 @@ import Timekeeping from "../../modules/check-day/pages/Timekeeping";
 import VirtualSpace from "../../modules/virtual-space/pages/VirtualSpace";
 import TableConfig from "../../modules/settings/virtual-space-config/TableConfig/TableConfig";
 import LabelConfig from "../../modules/settings/virtual-space-config/LabelConfig/LabelConfig";
+import TypeWorkDayConfig from "../../modules/settings/check-day-config/TypeWorkDayConfig/TypeWorkDayConfig";
+import RulesWorkDayConfig from "../../modules/settings/check-day-config/RulesWorkDayConfig/RulesWorkDayConfig";
+import PunishWorkDayConfig from "../../modules/settings/check-day-config/PunishWorkDayConfig/PunishWorkDayConfig";
+import HolidayConfig from "../../modules/settings/check-day-config/HolidayConfig/HolidayConfig";
 
 import DABList from "../../modules/salary-management/pages/DABList/DABList";
 import FormulaList from "../../modules/salary-management/pages/FormulaList/FormulaList";
@@ -45,7 +49,10 @@ export default function Routings() {
         <Route path="/virtual-space" element={<VirtualSpace />} />
         <Route path="/virtual-space-config/table" element={<TableConfig />} />
         <Route path="/virtual-space-config/label" element={<LabelConfig />} />
-        
+        <Route path="/check-day-config/type-work-day" element={<TypeWorkDayConfig />} />
+        <Route path="/check-day-config/rules-work-day" element={<RulesWorkDayConfig />} />
+        <Route path="/check-day-config/punish-work-day" element={<PunishWorkDayConfig />} />
+        <Route path="/check-day-config/holiday" element={<HolidayConfig />} />
 
         <Route path="/list-users" element={<ListUsers />} />
 
