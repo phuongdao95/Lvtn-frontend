@@ -2,8 +2,6 @@ import React, {useState, Fragment} from 'react';
 import DataGridLayout from '../../../../layouts/DataGridLayout';
 import DataGrid from '../../../../components/DataGrid/DataGrid';
 import MenuButton from "../../../../components/DataGrid/MenuButton";
-import SearchField from "../../../../components/SearchField";
-import SearchButton from "../../../../components/DataGrid/SearchButton";
 import ActionButtonContainer from "../../../../components/DataGrid/ActionButtonContainer";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
 import { useNavigate } from "react-router";
@@ -52,9 +50,9 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
         field: "action",
         headerName: "Action",
         width: 300,
-        renderCell: () => {
+        renderCell: (e) => {
             return <ActionButtonContainer>
-                <ActionButton onClick={onEditBtnClick}>
+                <ActionButton onClick={() => onEditBtnClick(e.id)}>
                     Edit
                 </ActionButton>
                 <ActionButton onClick={onDeleteBtnClick}>
@@ -66,20 +64,26 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
 
 ];
 const TypeWorkDayConfig = () => {
-    const [isCreateOpen, setIsCreateOpen] = React.useState(false);
-    const [isEditOpen, setIsEditOpen] = React.useState(false);
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [activeId, setActiveId] = useState('');
+    // let activeId = '';
     const navigate = useNavigate();
+    const handleColumn = (id) => {
+        setIsEditOpen(true); 
+        setActiveId(id);
+    }
     return (
         <Fragment>
-            <Create open={isCreateOpen} setOpen={setIsCreateOpen} />
-            <Update open={isEditOpen} setOpen={setIsEditOpen} />
+            {isCreateOpen && <Create setOpen={setIsCreateOpen} />}
+            {isEditOpen && <Update setOpen={setIsEditOpen} id={activeId}/>}
             <DataGridLayout
                 title={"Danh sách ca làm việc"}
                 datagridSection={
                     <DataGrid
                         rows={rows}
                         columns={getColumnConfig({
-                            onEditBtnClick: () => setIsEditOpen(true)
+                            onEditBtnClick: (id) => handleColumn(id)
                         })}
                         isError={false}
                         isLoading={false}

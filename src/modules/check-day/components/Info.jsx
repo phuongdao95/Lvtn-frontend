@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Button, FormControl, MenuItem, Select } from '@mui/material';
+import { Box, Card, CardContent, Button, ButtonGroup, FormControl, MenuItem, Select } from '@mui/material';
 import React, {useState} from 'react';
 
 const DAY = ['Sun', 'Mon', 'Tus', 'Wes', 'Thu', 'Fri', 'Sar'];
@@ -96,20 +96,22 @@ const Info = ({takePicture}) => {
                 ))}
             </Select>
         </FormControl>
-        <Button variant="contained" 
-            onClick={clickTakePicture}
-            // disabled={value ? true : false}
-            color="primary"
-            sx={{ display: 'flex-block', mt: 2, mr: 1 }}>
-            Chấm giờ vào
-        </Button>
-        <Button variant="contained" 
-            onClick={clickTakePicture}
-            // disabled={value ? true : false}
-            color="secondary"
-            sx={{ display: 'flex-block', mt: 2, ml: 1 }}>
-            Chấm giờ ra
-        </Button>
+        <ButtonGroup >
+            <Button variant="contained" 
+                onClick={clickTakePicture}
+                // disabled={value ? true : false}
+                color="primary"
+                sx={{ display: 'flex-block', mt: 2, mr: 1, width: "auto" }}>
+                Chấm giờ vào
+            </Button>
+            <Button variant="contained" 
+                onClick={clickTakePicture}
+                // disabled={value ? true : false}
+                color="secondary"
+                sx={{ display: 'flex-block', mt: 2, ml: 1, width: "auto" }}>
+                Chấm giờ ra
+            </Button>
+        </ButtonGroup>
         </>
         );
     }

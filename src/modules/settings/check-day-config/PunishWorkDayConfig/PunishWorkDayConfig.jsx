@@ -13,8 +13,8 @@ import Update from './Update';
 const rows = new Array(30).fill(0).map((value, index, array) => ({
     id: index,
     name: `Hình phạt tiền ${index}`,
-    money: "20.000 VND",
-    workDaySubtract: "Trừ 0,5h công",
+    money: "20.000",
+    workDaySubtract: "0,5",
     detail: "",
 }));
 const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
@@ -32,13 +32,13 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
 
     {
         field: "money",
-        headerName: "Phạt tiền",
+        headerName: "Phạt tiền (VND)",
         width: 200,
     },
 
     {
         field: "workDaySubtract",
-        headerName: "Trừ công",
+        headerName: "Trừ công (giờ)",
         width: 250,
     },
 
@@ -52,9 +52,9 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
         field: "action",
         headerName: "Action",
         width: 300,
-        renderCell: () => {
+        renderCell: (e) => {
             return <ActionButtonContainer>
-                <ActionButton onClick={onEditBtnClick}>
+                <ActionButton onClick={() => onEditBtnClick(e.id)}>
                     Edit
                 </ActionButton>
                 <ActionButton onClick={onDeleteBtnClick}>
@@ -66,20 +66,25 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
 
 ];
 const PunishWorkDayConfig = () => {
-    const [isCreateOpen, setIsCreateOpen] = React.useState(false);
-    const [isEditOpen, setIsEditOpen] = React.useState(false);
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [activeId, setActiveId] = useState('');
     const navigate = useNavigate();
+    const handleColumn = (id) => {
+        setIsEditOpen(true); 
+        setActiveId(id);
+    }
     return (
         <Fragment>
-            <Create open={isCreateOpen} setOpen={setIsCreateOpen} />
-            <Update open={isEditOpen} setOpen={setIsEditOpen} />
+            {isCreateOpen && <Create setOpen={setIsCreateOpen} />}
+            {isEditOpen && <Update setOpen={setIsEditOpen} id={activeId}/>}
             <DataGridLayout
                 title={"Danh sách hình phạt"}
                 datagridSection={
                     <DataGrid
                         rows={rows}
                         columns={getColumnConfig({
-                            onEditBtnClick: () => setIsEditOpen(true)
+                            onEditBtnClick: (id) => handleColumn(id)
                         })}
                         isError={false}
                         isLoading={false}
