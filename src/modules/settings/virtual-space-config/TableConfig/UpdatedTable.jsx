@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
@@ -15,7 +15,7 @@ const style = {
     borderRadius: 2,
 };
 
-const ModalDay = ({open, setOpen, date}) => {
+const UpdateTable = ({open, setOpen}) => {
     const handleClose = () => setOpen(false);
     return (
         <div>
@@ -27,7 +27,7 @@ const ModalDay = ({open, setOpen, date}) => {
         >
             <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-                {date}
+                {"Cập nhật"}
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 {"Heleod"}
@@ -37,4 +37,4 @@ const ModalDay = ({open, setOpen, date}) => {
         </div>
     );
 }
-export default ModalDay;
+export default UpdateTable;

@@ -11,16 +11,13 @@ import {
     CardContent
 } from "@mui/material";
 import * as dateFns from "date-fns";
-import ModalDay from './ModalDay';
 
-const HistoryCheck = props => {
+const DisplayDate = props => {
     const [open, setOpen] = useState(false);
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [date, setDate] = useState('')
     const onDateClick = (str) => {
         setOpen(true);
-        setTitle(str);
-        setContent(<h1>heleod</h1>);
+        setDate(str);
     }
     
     const today = new Date();
@@ -87,7 +84,7 @@ const HistoryCheck = props => {
                             style={
                             dateFns.isSameMonth(day, monthStart)
                                 ? {
-                                    color: props.textColor
+                                    color: props.light
                                 }
                                 : {
                                     color: "#9C9999 "
@@ -110,14 +107,12 @@ const HistoryCheck = props => {
     }
 
     return (<>
-        <ModalDay open={open} setOpen={setOpen} title={title} content={content} />
+        {props.modal({open, setOpen, date})}
         <Table style={{ height: "90%" }}>
             <TableHead>
                 <TableRow>
                 {weekdays.map(day => (
-                    <TableCell key={day.id}>
-                    <Typography align="center">{day.day}</Typography>
-                    </TableCell>
+                    props.tableCell(day)
                 ))}
                 </TableRow>
             </TableHead>
@@ -127,4 +122,4 @@ const HistoryCheck = props => {
     );
 };
 
-export default HistoryCheck;
+export default DisplayDate;
