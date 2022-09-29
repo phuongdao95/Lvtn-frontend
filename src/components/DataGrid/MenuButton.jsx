@@ -16,8 +16,6 @@ export default function MenuButton({ text, menu, variant = "contained" }) {
         setAnchorElement(event.currentTarget);
     };
 
-    console.log(menu);
-
     return (
         <Box>
             <Button
