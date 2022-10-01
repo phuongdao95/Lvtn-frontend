@@ -40,8 +40,8 @@ export const useLogin =
     })('api/token');
 
 
-export const useLogout = () => {
-    const logout = async () => {
+export const useLogOut = () => {
+    const logOut = (callback) => {
         const jwt = window.localStorage.getItem('jwt_token');
         if (jwt) {
             /**Simply remove the jwt token */
@@ -50,7 +50,9 @@ export const useLogout = () => {
             window.localStorage.removeItem('name');
             window.localStorage.removeItem('username');
         }
+
+        callback();
     }
 
-    return { logout };
+    return { logOut };
 }
