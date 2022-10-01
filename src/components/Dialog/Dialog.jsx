@@ -34,7 +34,7 @@ export default function Dialog({
                 </Header>
             </DialogTitle>
 
-            <Box sx={{ padding: 2 }}>
+            <Box sx={{ padding: 2, overflowY: 'auto' }}>
                 {children}
             </Box>
 

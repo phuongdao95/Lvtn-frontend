@@ -8,7 +8,7 @@ import ActionButtonContainer from "../../../../components/DataGrid/ActionButtonC
 import ActionButton from "../../../../components/DataGrid/ActionButton";
 import { useNavigate } from "react-router";
 import CreatedLabel from './CreatedLabel';
-import UpdateLabel from './UpdatedLabel';
+import UpdatedLabel from './UpdatedLabel';
 
 const rows = new Array(30).fill(0).map((value, index, array) => ({
     id: index,
@@ -52,9 +52,9 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
         field: "action",
         headerName: "Action",
         width: 300,
-        renderCell: () => {
+        renderCell: (e) => {
             return <ActionButtonContainer>
-                <ActionButton onClick={onEditBtnClick}>
+                <ActionButton onClick={() => onEditBtnClick(e.id)}>
                     Edit
                 </ActionButton>
                 <ActionButton onClick={onDeleteBtnClick}>
@@ -66,20 +66,25 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
 
 ];
 const LabelConfig = () => {
-    const [isCreateOpen, setIsCreateOpen] = React.useState(false);
-    const [isEditOpen, setIsEditOpen] = React.useState(false);
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [activeId, setActiveId] = useState('');
     const navigate = useNavigate();
+    const handleColumn = (id) => {
+        setIsEditOpen(true); 
+        setActiveId(id);
+    }
     return (
         <Fragment>
-            <CreatedLabel open={isCreateOpen} setOpen={setIsCreateOpen} />
-            <UpdateLabel open={isEditOpen} setOpen={setIsEditOpen} />
+            {isCreateOpen && <CreatedLabel setOpen={setIsCreateOpen} />}
+            {isEditOpen && <UpdatedLabel setOpen={setIsEditOpen} id={activeId}/>}
             <DataGridLayout
                 title={"Danh sách nhãn"}
                 datagridSection={
                     <DataGrid
                         rows={rows}
                         columns={getColumnConfig({
-                            onEditBtnClick: () => setIsEditOpen(true)
+                            onEditBtnClick: (id) => handleColumn(id)
                         })}
                         isError={false}
                         isLoading={false}

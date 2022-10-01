@@ -1,40 +1,86 @@
-import React from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import React, {Fragment, useState, useEffect} from 'react';
+import {Box} from '@mui/system'
+import Dialog from "../../../../components/Dialog";
+import Label from "../../../../components/DialogForm/Label";
+import OneColumnBox from "../../../../components/DialogForm/OneColumnBox";
+import TextField from "../../../../components/DialogForm/TextField";
+import DialogForm from "../../../../components/DialogForm";
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: '#FBF8F8',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 2,
-};
+import { useFormik } from "formik";
+import * as yup from "yup";
 
-const UpdateLabel = ({open, setOpen}) => {
+const validationSchema = yup.object({
+    name: yup
+        .string("Tên bị bỏ trống")
+        .required("Nhập tên"),
+    description: yup
+        .string(""),
+})
+
+const UpdatedLabel = ({setOpen, id}) => {
     const handleClose = () => setOpen(false);
+    useEffect(() => {
+        let items = {
+            name: 'Nhan ' + id,
+            description: "mo ta",
+        };
+        formik.setValues({...items});
+    }, [])
+    const formik = useFormik({
+        initialValues: {
+            name: "",
+            description: "",
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            console.log(values);
+        }
+    })
+
     return (
-        <div>
-        <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-        >
-            <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-                {"Cập nhật"}
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                {"Heleod"}
-            </Typography>
+    <Dialog
+        primaryAction={{
+            text: "Cập nhật",
+            handler: () => { formik.submitForm(); },
+        }}
+        secondaryAction={{
+            text: "Hủy",
+            handler: handleClose
+        }}
+        title="Cập nhật"
+    >
+        <DialogForm>
+            <Box component="form" onSubmit={formik.handleSubmit}>
+                <OneColumnBox
+                    slot={
+                        <Fragment>
+                            <Label text={"Tên"} required />
+                            <TextField id="name"
+                                name="name"
+                                value={formik.values.name}
+                                onChange={formik.handleChange}
+                                error={formik.touched.name && Boolean(formik.errors.name)}
+                                helperText={formik.touched.name && formik.errors.name}
+                            />
+                        </Fragment>
+                    }
+                />
+
+                <OneColumnBox
+                    slot={
+                        <Fragment>
+                            <Label text={"Mô tả"} required />
+                            <TextField id="description"
+                                name="description"
+                                value={formik.values.description}
+                                onChange={formik.handleChange}
+                            />
+                        </Fragment>
+                    }
+                />
             </Box>
-        </Modal>
-        </div>
+        </DialogForm>
+    </Dialog >
     );
 }
-export default UpdateLabel;
+export default UpdatedLabel;

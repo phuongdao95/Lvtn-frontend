@@ -8,7 +8,7 @@ import ActionButtonContainer from "../../../../components/DataGrid/ActionButtonC
 import ActionButton from "../../../../components/DataGrid/ActionButton";
 import { useNavigate } from "react-router";
 import CreatedTable from './CreatedTable';
-import UpdateTable from './UpdatedTable';
+import UpdatedTable from './UpdatedTable';
 
 const rows = new Array(30).fill(0).map((value, index, array) => ({
     id: index,
@@ -59,9 +59,9 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
         field: "action",
         headerName: "Action",
         width: 300,
-        renderCell: () => {
+        renderCell: (e) => {
             return <ActionButtonContainer>
-                <ActionButton onClick={onEditBtnClick}>
+                <ActionButton onClick={() => onEditBtnClick(e.id)}>
                     Edit
                 </ActionButton>
                 <ActionButton onClick={onDeleteBtnClick}>
@@ -75,18 +75,23 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
 const TableConfig = () => {
     const [isCreateOpen, setIsCreateOpen] = React.useState(false);
     const [isEditOpen, setIsEditOpen] = React.useState(false);
+    const [activeId, setActiveId] = useState('');
     const navigate = useNavigate();
+    const handleColumn = (id) => {
+        setIsEditOpen(true); 
+        setActiveId(id);
+    }
     return (
         <Fragment>
-            <CreatedTable open={isCreateOpen} setOpen={setIsCreateOpen} />
-            <UpdateTable open={isEditOpen} setOpen={setIsEditOpen} />
+            {isCreateOpen && <CreatedTable setOpen={setIsCreateOpen} />}
+            {isEditOpen && <UpdatedTable setOpen={setIsEditOpen} id={activeId}/>}
             <DataGridLayout
                 title={"Danh sách bảng"}
                 datagridSection={
                     <DataGrid
                         rows={rows}
                         columns={getColumnConfig({
-                            onEditBtnClick: () => setIsEditOpen(true)
+                            onEditBtnClick: (id) => handleColumn(id)
                         })}
                         isError={false}
                         isLoading={false}
