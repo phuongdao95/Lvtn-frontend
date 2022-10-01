@@ -124,7 +124,7 @@ export default function UserList() {
                         menu={
                             [
                                 {
-                                    text: "Tạo mới",
+                                    text: "Tạo mới người dùng",
                                     handler: () => {
                                         setIsCreateUserOpen(true);
                                     }

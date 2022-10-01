@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Box, Chip, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import DataGridLayout from "../../../../layouts/DataGridLayout";
 import DataGrid from "../../../../components/DataGrid";
 import MenuButton from "../../../../components/DataGrid/MenuButton";
@@ -9,79 +9,187 @@ import SearchButton from "../../../../components/DataGrid/SearchButton";
 import CreateFormula from "./CreateFormula";
 import EditFormula from "./EditFormula";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
+import { useNavigate } from "react-router";
+import CreateVariable from "./CreateVariable";
+import { useFetchListFormula } from "../../../../client/formulaService";
+import { useFetchListVariable } from "../../../../client/variableService";
 
-const rows = new Array(30).fill(0).map((value, index, array) => ({
-    id: index,
-    name: `formula_${index}`,
-    displayName: `Formula ${index}`,
-    inputVariables: [],
-    type: "Formula",
-    dataType: "Number",
-    define: "variable_1 + variable_2 * variable_1 - variable_2",
-    description: "A formula",
-}));
+const rows = [];
 
-const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
+const getFormulaColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
     {
-        field: "name",
-        headerName: "Name",
+        field: "id",
+        headerName: "Id",
         width: 150,
     },
-
+    {
+        field: "name",
+        headerName: "Tên",
+        width: 150,
+    },
 
     {
         field: "displayName",
-        headerName: "Display Name",
-        width: 250,
-    },
-
-
-    {
-        field: "type",
-        headerName: "Type",
-        width: 150,
+        headerName: "Tên hiển thị",
+        width: 200,
     },
 
     {
         field: "define",
-        headerName: "Define",
-        width: 150,
+        headerName: "Định nghĩa",
+        width: 200,
     },
 
     {
         field: "description",
-        headerName: "Description",
-        width: 150,
+        headerName: "Mô tả",
+        width: 250,
     },
 
     {
         field: "action",
         headerName: "Action",
+        width: 200,
         renderCell: () => {
-            return <ActionButton onClick={onEditBtnClick}>
-                Edit
-            </ActionButton>
+            return <Box sx={{ display: "flex", gap: 1 }}>
+                <ActionButton onClick={onEditBtnClick}>
+                    Edit
+                </ActionButton>
+                <ActionButton onClick={onDeleteBtnClick}>
+                    Delete
+                </ActionButton>
+            </Box>
         }
     }
 ];
 
+const getVariableColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
+    {
+        field: "id",
+        headerName: "Id",
+        width: 150,
+    },
+    {
+        field: "name",
+        headerName: "Tên",
+        width: 150,
+    },
+
+    {
+        field: "displayName",
+        headerName: "Tên hiển thị",
+        width: 200,
+    },
+
+    {
+        field: "value",
+        headerName: "Giá trị",
+        width: 200,
+    },
+
+    {
+        field: "description",
+        headerName: "Mô tả",
+        width: 250,
+    },
+
+    {
+        field: "dataType",
+        headerName: "Kiểu",
+        width: 100,
+    },
+
+    {
+        field: "action",
+        headerName: "Action",
+        width: 200,
+        renderCell: () => {
+            return <Box sx={{ display: "flex", gap: 1 }}>
+                <ActionButton onClick={onEditBtnClick}>
+                    Sửa
+                </ActionButton>
+                <ActionButton onClick={onDeleteBtnClick}>
+                    Xóa
+                </ActionButton>
+            </Box>
+        }
+    }
+]
+
+const getColumnConfig = (option, { onFormulaEdit, onFormulaDelete, onVariableEdit, onVariableDelete }) => {
+    switch (option) {
+        case "Công thức":
+            return getFormulaColumnConfig(onFormulaEdit, onFormulaDelete);
+        case "Biến":
+            return getVariableColumnConfig(onVariableEdit, onVariableDelete);
+        default:
+            return getFormulaColumnConfig(onFormulaEdit, onFormulaDelete);
+    }
+}
 
 export default function FormulaList() {
+    const navigate = useNavigate();
+
+    const [id, setId] = React.useState(null);
+
+    const [rows, setRows] = React.useState([]);
+    const [variableList, setVariableList] = React.useState([]);
+    const [formulaList, setFormulaList] = React.useState([]);
+    const [systemVariableList, setSystemVariableList] = React.useState([]);
+
+    const [dataGridOption, setDataGridOption] = React.useState("Công thức");
+
     const [isCreateFormulaOpen, setIsCreateFormulaOpen] = React.useState(false);
     const [isEditFormulaOpen, setIsEditFormulaOpen] = React.useState(false);
+
+    const [isCreateVariableOpen, setIsCreateVariableOpen] = React.useState(false);
+    const [isEditVariableOpen, setIsEditVariableOpen] = React.useState(false);
+
+    const {
+        isSuccess: isFetchListFormulaSuccess,
+        data: fetchedFormulaList,
+    } = useFetchListFormula();
+    const {
+        isSuccess: isFetchListVariableSuccess,
+        data: fetchedVariableList,
+    } = useFetchListVariable();
+
+    React.useEffect(() => {
+        if (isFetchListFormulaSuccess) {
+            setFormulaList(fetchedFormulaList.data);
+            setRows(fetchedFormulaList.data);
+        }
+    }, [isFetchListFormulaSuccess])
+
+    React.useEffect(() => {
+        if (isFetchListVariableSuccess) {
+            setVariableList(fetchedVariableList.data);
+        }
+    }, [isFetchListVariableSuccess])
 
     return (
         <Fragment>
             {isCreateFormulaOpen && <CreateFormula closeDialogCb={() => setIsCreateFormulaOpen(false)} />}
-            {isEditFormulaOpen && <EditFormula closeDialogCb={() => setIsEditFormulaOpen(false)} />}
+            {isCreateVariableOpen && <CreateVariable closeDialogCb={() => setIsCreateVariableOpen(false)} />}
+            {isEditFormulaOpen && <EditFormula closeDialogCb={() => {
+                setId(null);
+                setIsEditFormulaOpen(false);
+            }} />}
+            {isEditVariableOpen && <EditFormula closeDialogCb={() => {
+                setId(null);
+                setIsEditVariableOpen(false);
+            }} />}
 
             <DataGridLayout
-                title={"Công thức, input và constant"}
+                title={"Công thức, biến và biến hệ thống"}
                 datagridSection={
                     <DataGrid
                         rows={rows}
-                        columns={getColumnConfig({
-                            onEditBtnClick: () => setIsEditFormulaOpen(true)
+                        columns={getColumnConfig(dataGridOption, {
+                            onFormulaDelete: () => { },
+                            onFormulaEdit: () => { setIsEditFormulaOpen(true) },
+                            onVariableDelete: () => { },
+                            onVariableEdit: () => { setIsEditVariableOpen(true) }
                         })}
                         isError={false}
                         isLoading={false}
@@ -93,8 +201,8 @@ export default function FormulaList() {
                         text={"Thao tác"}
                         menu={
                             [
-                                { text: "Tạo mới", handler: () => setIsCreateFormulaOpen(true) },
-                                { text: "Xuất bảng excel", handler: () => { } },
+                                { text: "Tạo mới công thức", handler: () => setIsCreateFormulaOpen(true) },
+                                { text: "Tạo mới biến", handler: () => setIsCreateVariableOpen(true) },
                             ]
                         }
                         variant="contained"
@@ -104,12 +212,44 @@ export default function FormulaList() {
                 secondaryButtonSection={
                     <MenuButton
                         text={"Liên kết liên quan"}
-                        menu={[{ text: "Danh sách template", handler: () => { } }]}
+                        menu={[{
+                            text: "Danh sách Lương thưởng, Khấu trừ", handler: () => {
+
+                            }
+                        }]}
                         variant="outlined"
                         color="info"
                     />}
-                searchSection={<SearchField />}
-                dropdownFilterSection={<Select />}
+                searchSection={
+                    <SearchField
+
+                    />
+                }
+                dropdownFilterSection={<Select
+                    options={[
+                        {
+                            label: "Công thức",
+                            handler: () => {
+                                setRows(formulaList);
+                                setDataGridOption("Công thức");
+                            }
+                        },
+                        {
+                            label: "Biến",
+                            handler: () => {
+                                setRows(variableList);
+                                setDataGridOption("Biến");
+                            }
+                        },
+                        {
+                            label: "Biến hệ thống",
+                            handler: () => {
+                                setDataGridOption("Biến hệ thống");
+                            }
+                        }
+                    ]}
+                    value={dataGridOption}
+                />}
                 searchButtonSection={<SearchButton />}
             />
         </Fragment>

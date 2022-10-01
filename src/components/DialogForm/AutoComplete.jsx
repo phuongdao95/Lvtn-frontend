@@ -6,18 +6,17 @@ export default function AutoComplete({
     name,
     value,
     onChange,
-    getOptionLabel,
-    isOptionEqualToValue,
+    getOptionLabel = (option) => option.name,
+    isOptionEqualToValue = (option, value) => option.id === value.id,
 }) {
 
     return <MuiAutoComplete
         fullWidth
         getOptionLabel={getOptionLabel}
         isOptionEqualToValue={isOptionEqualToValue}
-        disablePortal
         id={id}
         name={name}
-        options={options}
+        options={[...options, { id: null, name: "" }]}
         onChange={onChange}
         value={value}
         renderInput={(params) => <TextField {...params} size="small" />}

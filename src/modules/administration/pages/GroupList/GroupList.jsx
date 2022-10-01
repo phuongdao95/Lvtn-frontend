@@ -9,16 +9,9 @@ import ActionButton from "../../../../components/DataGrid/ActionButton";
 
 import CreateGroup from "./CreateGroup";
 import EditGroup from "./EditGroup";
+import { useFetchListGroup } from "../../../../client/groupService";
 
-const rows = new Array(30).fill(0).map((value, index, array) => ({
-    id: index,
-    name: `Group ${index}`,
-    description: `Test description ${index}`,
-    created: "01/01/2022",
-    creator: "Minh Nhat",
-    modified: "08/08/2022",
-    modifier: "Minh Nhat",
-}));
+
 
 const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
     {
@@ -87,6 +80,14 @@ export default function GroupList() {
     const [isCreateGroupOpen, setIsCreateGroupOpen] = React.useState(false);
     const [isEditGroupOpen, setIsEditGroupOpen] = React.useState(false);
 
+    const {
+        isPending,
+        isSuccess,
+        isError,
+        data: fetchedGroups
+    } = useFetchListGroup();
+
+
     return (
         <Fragment>
             {isCreateGroupOpen && <CreateGroup closeDialogCb={() => setIsCreateGroupOpen(false)} />}
@@ -96,7 +97,7 @@ export default function GroupList() {
                 title={"Danh sách nhóm"}
                 datagridSection={
                     <DataGrid
-                        rows={rows}
+                        rows={fetchedGroups}
                         columns={getColumnConfig({
                             onEditBtnClick: () => setIsEditGroupOpen(true)
                         })}
