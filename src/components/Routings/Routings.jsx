@@ -13,6 +13,9 @@ import ListUsers from "../../modules/shares/pages/ListUsers/ListUsers";
 import MyPayslipPage from "../../modules/salary-management/pages/MyPayslipPage/MyPayslipPage";
 
 import Timekeeping from "../../modules/check-day/pages/Timekeeping";
+import Registe from "../../modules/check-day/pages/Registe";
+import CheckIn from "../../modules/check-day/pages/CheckIn";
+import Calendar from "../../modules/check-day/pages/Calendar";
 import VirtualSpace from "../../modules/virtual-space/pages/VirtualSpace";
 import TableConfig from "../../modules/settings/virtual-space-config/TableConfig/TableConfig";
 import LabelConfig from "../../modules/settings/virtual-space-config/LabelConfig/LabelConfig";
@@ -46,6 +49,11 @@ export default function Routings() {
         <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
 
         <Route path="/check-in" element={<Timekeeping />} />
+        <Route path="/check-in-2" element={<CheckIn />} />
+        {/* <Route path="/check-out" element={<Timekeeping />} /> */}
+        <Route path="/registe-image" element={<Registe />} />
+        <Route path="/calendar" element={<Calendar />} />
+
         <Route path="/virtual-space" element={<VirtualSpace />} />
         <Route path="/virtual-space-config/table" element={<TableConfig />} />
         <Route path="/virtual-space-config/label" element={<LabelConfig />} />
