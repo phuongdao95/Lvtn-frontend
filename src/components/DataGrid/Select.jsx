@@ -1,13 +1,20 @@
 import { Select as MuiSelect, MenuItem } from "@mui/material"
 
-export default function Select({ options, values, ...rest }) {
+export default function Select({ options = [], value = null, ...rest }) {
     return <MuiSelect
         {...rest}
-        value={10}
         size="small"
+        value={value}
     >
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
+        {options.map((option) =>
+            <MenuItem key={option.label} value={option.label}
+                onClick={option.handler}
+                onChange={(event) => {
+                    console.log(event.target.value)
+                }}
+            >
+                {option.label}
+            </MenuItem>)
+        }
     </MuiSelect>
 }

@@ -10,8 +10,6 @@ import UserNghiPhep from "../../modules/approve-workflow/nghi-phep/UserNghiPhep"
 import UserNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/UserNghiThaiSan";
 
 import ListUsers from "../../modules/shares/pages/ListUsers/ListUsers";
-import MyPayslipPage from "../../modules/salary-management/pages/MyPayslipPage/MyPayslipPage";
-
 import Timekeeping from "../../modules/check-day/pages/Timekeeping";
 import VirtualSpace from "../../modules/virtual-space/pages/VirtualSpace";
 import TableConfig from "../../modules/settings/virtual-space-config/TableConfig/TableConfig";
@@ -24,7 +22,6 @@ import HolidayConfig from "../../modules/settings/check-day-config/HolidayConfig
 import DABList from "../../modules/salary-management/pages/DABList/DABList";
 import FormulaList from "../../modules/salary-management/pages/FormulaList/FormulaList";
 import SalaryList from "../../modules/salary-management/pages/SalaryList";
-import Payroll from "../../modules/salary-management/pages/PayRoll";
 
 import GroupList from "../../modules/administration/pages/GroupList/GroupList";
 import PermissionList from "../../modules/administration/pages/PermissionList/PermissionList";
@@ -33,6 +30,8 @@ import RoleList from "../../modules/administration/pages/RoleList/RoleList";
 import DepartmentList from "../../modules/administration/pages/DepartmentList";
 import TeamList from "../../modules/administration/pages/TeamList";
 import AccountsAndRolesPage from "../../modules/shares/pages/AccountsAndRolesPage/AccountsAndRolesPage";
+import PayrollList from "../../modules/salary-management/pages/PayRollList/PayrollList.jsx";
+import EditPayroll from "../../modules/salary-management/pages/PayRollList/EditPayroll";
 
 export default function Routings() {
     return <Routes>
@@ -66,13 +65,10 @@ export default function Routings() {
 
         {/* Salary Management Module */}
         <Route path="/salary" element={<SalaryList />} />
-        <Route path="/payslip" element={<MyPayslipPage />} />
-        <Route path="/payroll" element={<Payroll />} />
         <Route path="/dab" element={<DABList />} />
         <Route path="/formula" element={<FormulaList />} />
-
-        {/* <Route path="play_ground" element={<BasicTable />} /> */}
-
+        <Route path="/payroll/:id" element={<EditPayroll />} />
+        <Route path="/payroll" element={<PayrollList />} />
 
         {/* Legacy components */}
         <Route path="/account-role" element={<AccountsAndRolesPage />} />

@@ -14,21 +14,39 @@ import { useCreateTeam, useFetchTeamListWithoutDepartment } from "../../../../cl
 import { useFetchListUserWhoIsManager } from "../../../../client/userService";
 
 import * as yup from "yup";
+import { useCreateDepartment } from "../../../../client/departmentService";
 
 export default function CreateDepartment({ closeDialogCb }) {
     const [teamOptions, setTeamOptions] = React.useState([]);
     const [managerOptions, setManagerOptions] = React.useState([]);
+
+    const {
+        isSuccess: isCreateSuccess,
+        method: createDepartment
+    } = useCreateDepartment();
 
     const formik = useFormik({
         initialValues: {
             name: "",
             description: "",
             teams: [],
-            parentDepartment: "",
+            parentDepartment: {},
             manager: { id: null, name: "" },
         },
         onSubmit: (values) => {
+            const teamIds = values.teams.map(team => team.id);
+            const parentDepartmentId = values.parentDepartment.id;
+            const managerId = values.manager.id;
 
+            const { teams, parentDepartment, manager,
+                ...rest } = values;
+
+            createDepartment({
+                ...rest,
+                teamIds,
+                managerId,
+                parentDepartmentId,
+            })
         }
     })
 
@@ -43,11 +61,6 @@ export default function CreateDepartment({ closeDialogCb }) {
         method: fetchManager,
     } = useFetchListUserWhoIsManager();
 
-    const {
-        isSuccess: isCreateSuccess,
-        method: createDepartment
-    } = useCreateTeam();
-
     React.useEffect(() => {
         fetchTeams();
     }, []);
@@ -59,7 +72,7 @@ export default function CreateDepartment({ closeDialogCb }) {
 
             setTeamOptions(teamOptions);
         }
-    }, [isFetchSuccess])
+    }, [fetchedTeams])
 
     React.useEffect(() => {
         fetchManager();
@@ -74,6 +87,7 @@ export default function CreateDepartment({ closeDialogCb }) {
             setManagerOptions(managers)
         }
     }, [fetchedManagers])
+
 
     return <Dialog
         primaryAction={{
@@ -126,7 +140,6 @@ export default function CreateDepartment({ closeDialogCb }) {
                             options={teamOptions}
                             value={formik.values.teams}
                             onChange={(event, value) => {
-                                console.log(value);
                                 formik.setFieldValue("teams", value)
                             }}
                         />

@@ -9,7 +9,6 @@ export default function SearchField({ ...props }) {
         <TextField
             size='small'
             placeholder='Tìm kiếm'
-            id="standard-bare"
             variant="outlined"
             InputProps={{
                 endAdornment: (

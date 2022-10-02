@@ -9,13 +9,45 @@ import CreateDAB from "./CreateDAB";
 import EditDAB from "./EditDAB";
 
 import { useCreateDAB, useFetchListDAB } from "../../../../client/dabService";
+import { useNavigate } from "react-router";
 
+const columns = [
+  {
+    field: "id",
+    headerName: "id",
+    width: 150,
+  },
+  {
+    field: "name",
+    headerName: "Tên",
+    width: 150,
+  },
+  {
+    field: "formula",
+    headerName: "Công thức",
+    width: 250,
+  },
+  {
+    field: "salaryDeltaType",
+    headerName: "Loại",
+    width: 150,
+  },
+  {
+    field: "description",
+    headerName: "Mô tả",
+    width: 150,
+  }
+  
+];
 
 const rows = [];
-const columns = [];
-
 
 export default function DABList() {
+  const navigate = useNavigate();
+
+  const [rows, setRows] = React.useState([]);
+  const [dataGridOption, setDataGridOption] = React.useState("Khấu trừ");
+
   const [isCreateDABOpen, setIsCreateDABOpen] = React.useState(false);
   const [isEditDABOpen, setIsEditDABOpen] = React.useState(true);
 
@@ -27,12 +59,15 @@ export default function DABList() {
   } = useCreateDAB();
 
   const {
-    method: fetchListDAB,
-    isPending: isFetchPending,
+    data: fetchedDAB,
     isSuccess: isfetchSuccess,
-    isError: isFetchError,
   } = useFetchListDAB();
 
+  React.useEffect(() => {
+    if (isfetchSuccess) {
+      setRows(fetchedDAB.data)
+    }
+  }, [isfetchSuccess]);
 
   return (
     <Fragment>
@@ -67,8 +102,7 @@ export default function DABList() {
             text={"Thao tác"}
             menu={
               [
-                { text: "Tạo mới", handler: () => setIsCreateDABOpen(true) },
-                { text: "Xuất bảng excel", handler: () => { } },
+                { text: "Tạo mới  ", handler: () => setIsCreateDABOpen(true) },
               ]
             }
             variant="contained"
@@ -78,12 +112,46 @@ export default function DABList() {
         secondaryButtonSection={
           <MenuButton
             text={"Liên kết liên quan"}
-            menu={[{ text: "Danh sách template", handler: () => { } }]}
+            menu={[
+              {
+                text: "Danh sách Payroll", handler: () => {
+                  navigate("/payroll");
+                }
+              },
+              {
+                text: "Công thức và biến phụ thuộc",
+                handler: () => {
+                  navigate("/formula")
+                }
+              },
+            ]}
             variant="outlined"
             color="info"
           />}
         searchSection={<SearchField />}
-        dropdownFilterSection={<Select />}
+        dropdownFilterSection={
+          <Select
+            options={[
+              {
+                label: "Khấu trừ", handler: () => {
+                  setDataGridOption("Khấu trừ")
+                }
+              },
+              {
+                label: "Phụ cấp",
+                handler: () => {
+                  setDataGridOption("Phụ cấp");
+                }
+              },
+              {
+                label: "Lương thưởng", handler: () => {
+                  setDataGridOption("Lương thưởng");
+                }
+              },
+            ]}
+            value={dataGridOption}
+          />
+        }
         searchButtonSection={<SearchButton />}
       />
     </Fragment>
