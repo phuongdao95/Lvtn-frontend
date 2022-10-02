@@ -11,18 +11,30 @@ import AutoCompleteMultiple from "../../../../components/DialogForm/AutoComplete
 
 import { useFormik } from "formik";
 import { useFetchListUserWithNoTeam } from "../../../../client/userService";
+import { useCreateTeam } from "../../../../client/teamService";
+import { useFetchListDepartment } from "../../../../client/departmentService";
+import AutoComplete from "../../../../components/DialogForm/AutoComplete";
 
 
 export default function CreateTeam({ closeDialogCb }) {
     const [userOptions, setUserOptions] = React.useState([]);
+    const [departmentOptions, setDepartmentOptions] = React.useState([]);
 
     const {
-        isPending,
+        data: fetchedDepartments,
+        method: fetchDepartments,
+    } = useFetchListDepartment();
+
+    const {
         isSuccess,
-        isError,
         method: fetchUsers,
         data: fetchedUsers
     } = useFetchListUserWithNoTeam();
+
+    const {
+        isSuccess: isCreateSuccess,
+        method: createTeam,
+    } = useCreateTeam();
 
     React.useEffect(() => {
         fetchUsers();
@@ -40,14 +52,38 @@ export default function CreateTeam({ closeDialogCb }) {
         initialValues: {
             name: "",
             description: "",
-            leader: "",
+            leader: { id: null, name: "" },
             members: [],
-            department: "",
+            department: { id: null, name: "" },
         },
         onSubmit: (values) => {
+            const memberIds = values.members.data.map((member) => ({ id: member.id }))
+            const leaderId = values.leader.id;
+            const departmentId = values.department.id;
 
+            const { leader, members, department, ...formData } = values;
+
+            createTeam({
+                ...formData,
+                memberIds,
+                leaderId,
+                departmentId
+            });
         }
     })
+
+    React.useEffect(() => {
+        fetchDepartments();
+    }, []);
+
+    React.useEffect(() => {
+        if (fetchedDepartments) {
+            const departmentOptions = fetchedDepartments.data
+                .map((department) => ({ id: department.id, name: department.name }));
+
+            setDepartmentOptions(departmentOptions);
+        }
+    }, [fetchedDepartments])
 
     return <Dialog
         primaryAction={{
@@ -78,11 +114,12 @@ export default function CreateTeam({ closeDialogCb }) {
                     secondSlot={
                         <Fragment>
                             <Label text={"Department"} />
-                            <TextField
+                            <AutoComplete
                                 id="department"
                                 name="department"
                                 value={formik.values.department}
-                                onChange={formik.handleChange}
+                                options={departmentOptions}
+                                onChange={(event, value) => formik.setFieldValue("department", value)}
                             />
                         </Fragment>
                     }
@@ -92,11 +129,12 @@ export default function CreateTeam({ closeDialogCb }) {
                     firstSlot={
                         <Fragment>
                             <Label text={"Leader"} />
-                            <TextField
+                            <AutoComplete
                                 id="leader"
                                 name="leader"
+                                options={userOptions}
                                 value={formik.values.leader}
-                                onChange={formik.handleChange}
+                                onChange={(event, value) => formik.setFieldValue("leader", value)}
                             />
                         </Fragment>
                     }

@@ -180,18 +180,10 @@ const NavBar = (props) => {
                         noWrap
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}
+                        fontStyle={"italic"}
                     >
-                        EMS
+                        Hệ Thống Quản Lý Nhân Viên
                     </Typography>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton size="large" aria-label="show new mails" color="inherit">

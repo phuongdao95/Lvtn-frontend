@@ -1,60 +1,62 @@
 import { Fragment } from "react";
 import { Box } from "@mui/system";
+
 import Dialog from "../../../../components/Dialog";
 import Label from "../../../../components/DialogForm/Label";
 import OneColumnBox from "../../../../components/DialogForm/OneColumnBox"
 import TwoColumnBox from "../../../../components/DialogForm/TwoColumnBox";
 import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
+import Select from "../../../../components/DialogForm/Select";
 
-import { useCreateFormula } from "../../../../client/formulaService";
+import { useCreateVariable } from "../../../../client/variableService";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
 const validationSchema = yup.object().shape({
-    name: yup.string()
-        .required()
-        .matches(/[_a-zA-Z][_a-zA-Z0-9]{0,30}/, "Tên hiển thị phải hiển thị chuẩn"),
+    name: yup.string().required(),
     displayName: yup.string().required(),
-    define: yup.string().required(),
-    description: yup.string()
+    value: yup.string().required(),
+    describe: yup.string()
 });
 
-export default function CreateFormula({ closeDialogCb }) {
+export default function CreateVariable({ closeDialogCb, id }) {
     const {
-        method: createFormula
-    } = useCreateFormula();
+        isSuccess: isCreateVariableSuccess,
+        method: createVariable,
+    } = useCreateVariable();
 
     const formik = useFormik({
         initialValues: {
             name: "",
             displayName: "",
-            define: "",
+            value: "",
+            dataType: "number",
             description: "",
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            createFormula(values);
+            createVariable(values)
         }
     })
 
     return <Dialog
         primaryAction={{
             text: "Submit",
-            handler: () => { formik.handleSubmit() },
+            handler: () => { formik.submitForm(); },
         }}
         secondaryAction={{
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Tạo mới công thức"
+        title="Tạo mới biến"
     >
         <DialogForm>
             <Box>
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Tên"} />
+                            <Label text={"Tên công thức"} />
                             <TextField
                                 id="name"
                                 name="name"
@@ -81,17 +83,37 @@ export default function CreateFormula({ closeDialogCb }) {
                     }
                 />
 
+                <TwoColumnBox
+                    firstSlot={<Fragment>
+                        <Label text={"Datatype"} />
+                        <Select
+                            id="dataType"
+                            name="dataType"
+                            menu={[
+                                { label: "Boolean", value: "boolean" },
+                                { label: "Number", value: "number" },
+                                { label: "Text", value: "text" },
+                                { label: "Datetime", value: "datetime" }]}
+                            value={formik.values.dataType}
+                            onChange={formik.handleChange}
+                        />
+                    </Fragment>}
+
+                    secondSlot={<Fragment>
+                    </Fragment>}
+                />
+
                 <OneColumnBox
                     slot={
                         <Fragment>
                             <Label text={"Định nghĩa"} />
                             <TextField
-                                id="define"
-                                name="define"
-                                value={formik.values.define}
+                                id="value"
+                                name="value"
                                 onChange={formik.handleChange}
-                                error={formik.touched.define && Boolean(formik.errors.define)}
-                                helperText={formik.touched.define && formik.errors.define}
+                                value={formik.values.value}
+                                error={formik.touched.value && Boolean(formik.errors.value)}
+                                helperText={formik.touched.value && formik.errors.value}
                             />
                         </Fragment>
                     }
@@ -100,15 +122,8 @@ export default function CreateFormula({ closeDialogCb }) {
                 <OneColumnBox
                     slot={
                         <Fragment>
-                            <Label text={"Mô tả"} />
-                            <TextField
-                                id="description"
-                                name="description"
-                                value={formik.values.description}
-                                onChange={formik.handleChange}
-                                error={formik.touched.description && Boolean(formik.errors.description)}
-                                helperText={formik.touched.description && formik.errors.description}
-                            />
+                            <Label text={"Description"} />
+                            <TextField />
                         </Fragment>
                     }
                 />

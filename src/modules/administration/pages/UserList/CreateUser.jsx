@@ -79,6 +79,7 @@ export default function CreateUser({ closeDialogCb }) {
             userName: "",
             password: "",
             citizenId: "",
+            address: "",
             name: "",
             gender: "",
             email: "",
