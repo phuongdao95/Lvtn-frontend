@@ -100,7 +100,7 @@ const RulesWorkDayConfig = () => {
                         menu={
                             [
                                 { text: "Danh sách ca làm việc", handler: () => { 
-                                    navigate("/check-day-config/type-work-day"); 
+                                    navigate("/check-day-config/type-work-shift-day"); 
                                 } },
                                 { text: "Danh sách hình phạt", handler: () => { 
                                     navigate("/check-day-config/punish-work-day"); 

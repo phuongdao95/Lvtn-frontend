@@ -131,17 +131,29 @@ const SideBar = (props) => {
             onClick: () => { },
             subItems: [
                 {
-                    text: "Check In",
-                    onClick: () => { }
+                    text: "Chấm công",
+                    onClick: () => {
+                        navigate("/check-in")
+                    }
                 },
                 {
-                    text: "Check Out",
-                    onClick: () => { }
+                    text: "Đăng ký hình ảnh",
+                    onClick: () => {
+                        navigate("/registe-image")
+                    }
                 },
                 {
                     text: "Lịch biểu",
-                    onClick: () => { }
-                }
+                    onClick: () => {
+                        navigate("/calendar")
+                    }
+                },
+                {
+                    text: "Chọn ca làm",
+                    onClick: () => {
+                        navigate("/select-type-work-shift")
+                    }
+                },
             ]
         },
 
@@ -149,7 +161,14 @@ const SideBar = (props) => {
             text: "Cài đặt",
             icon: <Settings style={{ color: textColor }} />,
             onClick: () => { },
-            subItems: []
+            subItems: [
+                {
+                    text: "Cài đặt chấm công",
+                    onClick: () => {
+                        navigate("/check-day-config/type-work-shift-day")
+                    }
+                },
+            ]
         }
 
     ];

@@ -11,6 +11,7 @@ import Update from './Update';
 const rows = new Array(30).fill(0).map((value, index, array) => ({
     id: index,
     name: `Ca ${index}`,
+    dateOfWeek: 'Thứ 2',
     startTime: "8:00",
     endTime: "17:00",
     coefficient: 1,
@@ -29,9 +30,15 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
     },
 
     {
+        field: "dateOfWeek",
+        headerName: "Ngày trong tuần",
+        width: 250,
+    },
+
+    {
         field: "startTime",
         headerName: "Giờ vào",
-        width: 250,
+        width: 150,
     },
 
     {
