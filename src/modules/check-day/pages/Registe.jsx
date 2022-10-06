@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Box } from "@mui/system";
-import Register from '../components/RegisterImage';
+import RegisterImage from '../components/RegisterImage';
 import { Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
@@ -32,7 +32,7 @@ export default function Registe() {
                     </Typography>
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
-                    <Register />
+                    <RegisterImage />
                 </Box>
             </Box>
         </Box >

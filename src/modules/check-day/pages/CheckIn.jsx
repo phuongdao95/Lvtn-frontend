@@ -1,15 +1,20 @@
-import React, { Fragment, useRef } from 'react';
-import Recognize from '../components/RegisterImage';
+import React, { Fragment, useRef, useState } from 'react';
 import { Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import {Box, Grid} from '@mui/material';
 import Info from '../components/Info';
 import Aicam from '../components/Aicam';
 import * as aiService from '../../../client/aiService';
+import Snackbar from '../../../components/Snackbar/Snackbar';
 
 export default function CheckIn() {
     const videoRef = useRef(null);
     const photoRef = useRef(null);
+    const [state, setState] = useState({
+        open: false,
+        type: 'info',
+        message: '',
+    });
     const clickTakePicture = (done) => {
         console.log('recognize from timekeeping');
         let video = videoRef.current;
@@ -24,21 +29,36 @@ export default function CheckIn() {
         var image = photo.toDataURL("image/png");
         // get data image
         const data = {
-            idUser: "123",
-            imageName: "Dao Thanh Phuong",
+            imageName: window.localStorage.getItem('user_id'),
             imageData: [image],
         };
         //call api
         aiService.uploadImage(data)
         .then(res => {
-            console.log('respose ' + res.data + ' ' + res.statusText + ' ' + res.status)
-            if (res.status === 200) {
+            console.log('respose ' + res.data + ' ' + res.status)
+            if (res.data == window.localStorage.getItem('user_id')) {
                 done();
+                setState({
+                    type: 'success',
+                    message: 'Chấm công thành công',
+                    open: true,
+                })
+                return true;
             }
+            setState({
+                type: 'warning',
+                message: 'Thất bại! Xin hãy thử lại!',
+                open: true,
+            })
             return true;
         })
         .catch(error => {
             console.log('respose error ' + JSON.stringify(error));
+            setState({
+                type: 'error',
+                message: 'Không thể nhận diện khuôn mặt!',
+                open: true,
+            })
             return false;
         });
     }
@@ -46,6 +66,7 @@ export default function CheckIn() {
 
     return (
     <Fragment>
+        <Snackbar state={state} close={() => setState({...state, open: false})} />
         <Box sx={{
             padding: 2,
             background: 'white'

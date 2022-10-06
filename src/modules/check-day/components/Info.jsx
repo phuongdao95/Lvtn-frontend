@@ -72,7 +72,7 @@ const Info = ({takePicture}) => {
 
     const clickTakePicture = () => {
         takePicture(() => {
-            setName('Dao Thanh Phuong');
+            setName(window.localStorage.getItem('name'));
             setRecognized(true);
         });
     }

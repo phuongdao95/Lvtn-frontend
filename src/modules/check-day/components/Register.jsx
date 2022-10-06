@@ -5,13 +5,14 @@ const Register = ({takePicture}) => {
     const inputIdRef = useRef('');
     const inputNameRef = useRef('');
     const clickSave = () => {
-        if (!inputIdRef.current.value){
-            inputIdRef.current.focus();
-        } else if (!inputNameRef.current.value) {
-            inputNameRef.current.focus();
-        } else {
-            takePicture(inputIdRef.current.value, inputNameRef.current.value);
-        }
+        // if (!inputIdRef.current.value){
+        //     inputIdRef.current.focus();
+        // } else if (!inputNameRef.current.value) {
+        //     inputNameRef.current.focus();
+        // } else {
+        //     takePicture(inputIdRef.current.value, inputNameRef.current.value);
+        // }
+        takePicture();
     }
     return (
         <Box sx={{
