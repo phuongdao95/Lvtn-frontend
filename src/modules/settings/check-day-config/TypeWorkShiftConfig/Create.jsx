@@ -15,36 +15,39 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+import { useCreate } from "../../../../client/workingShiftEvent";
+import dayjs from 'dayjs';
+
 import { useFormik } from "formik";
 import * as yup from "yup";
 
 const listDateOfWeek = [
     {
-        id: 0,
+        id: 1,
         name: "Thứ hai",
     },
     {
-        id: 1,
+        id: 2,
         name: "Thứ ba",
     },
     {
-        id: 2,
+        id: 3,
         name: "Thứ tư",
     },
     {
-        id: 3,
+        id: 4,
         name: "Thứ năm",
     },
     {
-        id: 4,
+        id: 5,
         name: "Thứ sáu",
     },
     {
-        id: 5,
+        id: 6,
         name: "Thứ bảy",
     },
     {
-        id: 6,
+        id: 0,
         name: "Chủ nhật",
     },
 ]
@@ -74,7 +77,9 @@ const Create = ({setOpen}) => {
         validationSchema: validationSchema,
         onSubmit: (values) => {
             console.log(values);
-            console.log(values.startTime.valueOf()); // timestamp
+            console.log(values.startTime.toISOString()); // timestamp
+            console.log(dayjs(values.startTime.toISOString()).get('day')); // get day of week
+            console.log(dayjs(values.startTime.toISOString()).set('day', 1)); //set day of week
         }
     })
 

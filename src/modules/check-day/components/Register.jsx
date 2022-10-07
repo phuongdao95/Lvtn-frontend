@@ -5,13 +5,6 @@ const Register = ({takePicture}) => {
     const inputIdRef = useRef('');
     const inputNameRef = useRef('');
     const clickSave = () => {
-        // if (!inputIdRef.current.value){
-        //     inputIdRef.current.focus();
-        // } else if (!inputNameRef.current.value) {
-        //     inputNameRef.current.focus();
-        // } else {
-        //     takePicture(inputIdRef.current.value, inputNameRef.current.value);
-        // }
         takePicture();
     }
     return (
@@ -50,24 +43,6 @@ const Register = ({takePicture}) => {
                             '& .MuiTextField-root': { m: 1, width: 'auto' },
                         }}>
                         <Grid container spacing={2} sx={{ p: 2}}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    inputRef={inputIdRef}
-                                    required
-                                    type="text"
-                                    label="ID"
-                                    variant="outlined"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    inputRef={inputNameRef}
-                                    required
-                                    type="text"
-                                    label="Họ và tên"
-                                    variant="outlined"
-                                />
-                            </Grid>
                             <Grid item xs={12}>
                                 <ButtonGroup sx={{
                                     '& > *': {

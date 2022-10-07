@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Button, ButtonGroup, FormControl, MenuItem, Select } from '@mui/material';
+import { Box, Card, CardContent, Button, ButtonGroup, FormControl, MenuItem, Select, Grid } from '@mui/material';
 import React, {useState} from 'react';
 
 const DAY = ['Sun', 'Mon', 'Tus', 'Wes', 'Thu', 'Fri', 'Sar'];
@@ -83,35 +83,45 @@ const Info = ({takePicture}) => {
     const groupButton = () => {
         return (
         <>
-        <FormControl sx={{ m: 3, width: 200 }}>
-            {/* <FormLabel id="demo-row-radio-buttons-group-label">Loại công</FormLabel>  */}
-            <Select
-                row
-                displayEmpty
-                value={value}
-                onChange={handleChange}
-            >
-                {listType.map((item, index) => (
-                    <MenuItem value={item.Id} key={index} >{item.Name}</MenuItem>
-                ))}
-            </Select>
-        </FormControl>
-        <ButtonGroup >
-            <Button variant="contained" 
-                onClick={clickTakePicture}
-                // disabled={value ? true : false}
-                color="primary"
-                sx={{ display: 'flex-block', mt: 2, mr: 1, width: "auto" }}>
-                Chấm giờ vào
-            </Button>
-            <Button variant="contained" 
-                onClick={clickTakePicture}
-                // disabled={value ? true : false}
-                color="secondary"
-                sx={{ display: 'flex-block', mt: 2, ml: 1, width: "auto" }}>
-                Chấm giờ ra
-            </Button>
-        </ButtonGroup>
+        <Grid container spacing={2} sx={{ p: 2}}>
+            <Grid item xs={12}>
+                <FormControl sx={{ m: 3, width: 200 }}>
+                    {/* <FormLabel id="demo-row-radio-buttons-group-label">Loại công</FormLabel>  */}
+                    <Select
+                        row
+                        displayEmpty
+                        value={value}
+                        onChange={handleChange}
+                    >
+                        {listType.map((item, index) => (
+                            <MenuItem value={item.Id} key={index} >{item.Name}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+                <ButtonGroup sx={{
+                    '& > *': {
+                    m: 1,
+                    },
+                }}>
+                    <Button variant="contained" 
+                        onClick={clickTakePicture}
+                        // disabled={value ? true : false}
+                        color="primary"
+                        sx={{ display: 'flex-block', mt: 2, mr: 1, width: "auto" }}>
+                        Chấm giờ vào
+                    </Button>
+                    <Button variant="contained" 
+                        onClick={clickTakePicture}
+                        // disabled={value ? true : false}
+                        color="secondary"
+                        sx={{ display: 'flex-block', mt: 2, ml: 1, width: "auto" }}>
+                        Chấm giờ ra
+                    </Button>
+                </ButtonGroup>
+            </Grid>
+        </Grid>
         </>
         );
     }
