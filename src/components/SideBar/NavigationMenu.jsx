@@ -15,6 +15,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import { blue, blueGrey, grey } from '@mui/material/colors';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from '@mui/material';
 import { AddAlarm, AttachMoney, Settings } from '@mui/icons-material';
@@ -124,6 +125,19 @@ const SideBar = (props) => {
             subItems: []
         },
 
+        {
+            text: "Môi trường ảo",
+            icon: <AssignmentIcon style={{ color: textColor }} />,
+            onClick: () => { },
+            subItems: [
+                {
+                    text: "Task",
+                    onClick: () => {
+                        navigate("/virtual-space")
+                    }
+                },
+            ]
+        },
 
         {
             text: "Chấm công",
@@ -131,17 +145,29 @@ const SideBar = (props) => {
             onClick: () => { },
             subItems: [
                 {
-                    text: "Check In",
-                    onClick: () => { }
+                    text: "Chấm công",
+                    onClick: () => {
+                        navigate("/check-in")
+                    }
                 },
                 {
-                    text: "Check Out",
-                    onClick: () => { }
+                    text: "Đăng ký hình ảnh",
+                    onClick: () => {
+                        navigate("/registe-image")
+                    }
                 },
                 {
                     text: "Lịch biểu",
-                    onClick: () => { }
-                }
+                    onClick: () => {
+                        navigate("/calendar")
+                    }
+                },
+                {
+                    text: "Chọn ca làm",
+                    onClick: () => {
+                        navigate("/select-type-work-shift")
+                    }
+                },
             ]
         },
 
@@ -149,7 +175,20 @@ const SideBar = (props) => {
             text: "Cài đặt",
             icon: <Settings style={{ color: textColor }} />,
             onClick: () => { },
-            subItems: []
+            subItems: [
+                {
+                    text: "Cài đặt chấm công",
+                    onClick: () => {
+                        navigate("/check-day-config/type-work-shift-day")
+                    }
+                },
+                {
+                    text: "Cài đặt môi trường ảo",
+                    onClick: () => {
+                        navigate("/virtual-space-config/table")
+                    }
+                },
+            ]
         }
 
     ];

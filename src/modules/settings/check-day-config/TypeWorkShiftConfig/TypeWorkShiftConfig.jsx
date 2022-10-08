@@ -1,4 +1,4 @@
-import React, {useState, Fragment} from 'react';
+import React, {useState, Fragment, useEffect} from 'react';
 import DataGridLayout from '../../../../layouts/DataGridLayout';
 import DataGrid from '../../../../components/DataGrid/DataGrid';
 import MenuButton from "../../../../components/DataGrid/MenuButton";
@@ -7,14 +7,10 @@ import ActionButton from "../../../../components/DataGrid/ActionButton";
 import { useNavigate } from "react-router";
 import Create from './Create';
 import Update from './Update';
+import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 
-const rows = new Array(30).fill(0).map((value, index, array) => ({
-    id: index,
-    name: `Ca ${index}`,
-    startTime: "8:00",
-    endTime: "17:00",
-    coefficient: 1,
-}));
+import { useFetchList, useDelete } from "../../../../client/workingShiftEvent";
+
 const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
     {
         field: "id",
@@ -29,9 +25,15 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
     },
 
     {
+        field: "dateOfWeek",
+        headerName: "Ngày trong tuần",
+        width: 250,
+    },
+
+    {
         field: "startTime",
         headerName: "Giờ vào",
-        width: 250,
+        width: 150,
     },
 
     {
@@ -50,12 +52,12 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
         field: "action",
         headerName: "Action",
         width: 300,
-        renderCell: (e) => {
+        renderCell: ({id}) => {
             return <ActionButtonContainer>
-                <ActionButton onClick={() => onEditBtnClick(e.id)}>
+                <ActionButton onClick={() => onEditBtnClick(id)}>
                     Edit
                 </ActionButton>
-                <ActionButton onClick={onDeleteBtnClick}>
+                <ActionButton onClick={() => onDeleteBtnClick(id)}>
                     Delete
                 </ActionButton>
             </ActionButtonContainer >
@@ -63,31 +65,74 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
     },
 
 ];
-const TypeWorkDayConfig = () => {
+const TypeWorkShiftConfig = () => {
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [activeId, setActiveId] = useState('');
     // let activeId = '';
+    const {
+        isPending,
+        isSuccess,
+        isError,
+        data: response,
+        method: fetchList
+    } = useFetchList();
+    const {
+        isSuccess: isDeleteSuccess,
+        isPending: isDeletePending,
+        method: deleteId
+    } = useDelete();
+
+    useEffect(() => {
+        if (isDeleteSuccess) {
+            fetchList();
+        }
+    }, [isDeleteSuccess])
+
     const navigate = useNavigate();
-    const handleColumn = (id) => {
-        setIsEditOpen(true); 
-        setActiveId(id);
-    }
     return (
         <Fragment>
             {isCreateOpen && <Create setOpen={setIsCreateOpen} />}
             {isEditOpen && <Update setOpen={setIsEditOpen} id={activeId}/>}
+            {isDeleteOpen &&
+                <ConfirmDialog
+                    title={"Xác nhận"}
+                    message="Bạn có muốn xóa mục này?"
+                    cancelAction={{
+                        text: "Hủy",
+                        handler: () => {
+                            setActiveId(null);
+                            setIsDeleteOpen(false)
+                        },
+                    }}
+                    confirmAction={{
+                        text: "Đồng ý",
+                        handler: () => {
+                            setIsDeleteOpen(false);
+                            setActiveId(null);
+                            deleteId(activeId);
+                        }
+                    }}
+                />}
             <DataGridLayout
                 title={"Danh sách ca làm việc"}
                 datagridSection={
                     <DataGrid
-                        rows={rows}
+                        rows={response?.data ?? []}
                         columns={getColumnConfig({
-                            onEditBtnClick: (id) => handleColumn(id)
+                            onEditBtnClick: (id) => {
+                                setActiveId(id);
+                                setIsEditOpen(true);
+                            },
+                            onDeleteBtnClick: (id) => {
+                                setActiveId(id);
+                                setIsDeleteOpen(true);
+                            }
                         })}
-                        isError={false}
-                        isLoading={false}
-                        isSuccess={false}
+                        isError={isError}
+                        isLoading={isPending}
+                        isSuccess={isSuccess}
                     />
                 }
                 primaryButtonSection={
@@ -126,4 +171,4 @@ const TypeWorkDayConfig = () => {
         </Fragment>
     );
 }
-export default TypeWorkDayConfig;
+export default TypeWorkShiftConfig;

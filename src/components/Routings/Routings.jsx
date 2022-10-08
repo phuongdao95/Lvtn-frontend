@@ -11,6 +11,9 @@ import UserNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/UserNg
 
 import ListUsers from "../../modules/shares/pages/ListUsers/ListUsers";
 import Timekeeping from "../../modules/check-day/pages/Timekeeping";
+import Registe from "../../modules/check-day/pages/Registe";
+import CheckIn from "../../modules/check-day/pages/CheckIn";
+import Calendar from "../../modules/check-day/pages/Calendar";
 import VirtualSpace from "../../modules/virtual-space/pages/VirtualSpace";
 import TableConfig from "../../modules/settings/virtual-space-config/TableConfig/TableConfig";
 import LabelConfig from "../../modules/settings/virtual-space-config/LabelConfig/LabelConfig";
@@ -18,6 +21,8 @@ import TypeWorkDayConfig from "../../modules/settings/check-day-config/TypeWorkD
 import RulesWorkDayConfig from "../../modules/settings/check-day-config/RulesWorkDayConfig/RulesWorkDayConfig";
 import PunishWorkDayConfig from "../../modules/settings/check-day-config/PunishWorkDayConfig/PunishWorkDayConfig";
 import HolidayConfig from "../../modules/settings/check-day-config/HolidayConfig/HolidayConfig";
+import TypeWorkShiftConfig from "../../modules/settings/check-day-config/TypeWorkShiftConfig/TypeWorkShiftConfig";
+import SelectTypeWorkShift from "../../modules/check-day/pages/SelectTypeWorkShift"
 
 import DABList from "../../modules/salary-management/pages/DABList/DABList";
 import FormulaList from "../../modules/salary-management/pages/FormulaList/FormulaList";
@@ -44,7 +49,13 @@ export default function Routings() {
         <Route exact path="/approve-workflows/config-nghi-phep" element={<ConfigNghiPhep />} />
         <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
 
-        <Route path="/check-in" element={<Timekeeping />} />
+        <Route path="/check-in-2" element={<Timekeeping />} />
+        <Route path="/check-in" element={<CheckIn />} />
+        {/* <Route path="/check-out" element={<Timekeeping />} /> */}
+        <Route path="/registe-image" element={<Registe />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/select-type-work-shift" element={<SelectTypeWorkShift />} />
+
         <Route path="/virtual-space" element={<VirtualSpace />} />
         <Route path="/virtual-space-config/table" element={<TableConfig />} />
         <Route path="/virtual-space-config/label" element={<LabelConfig />} />
@@ -52,6 +63,7 @@ export default function Routings() {
         <Route path="/check-day-config/rules-work-day" element={<RulesWorkDayConfig />} />
         <Route path="/check-day-config/punish-work-day" element={<PunishWorkDayConfig />} />
         <Route path="/check-day-config/holiday" element={<HolidayConfig />} />
+        <Route path="/check-day-config/type-work-shift-day" element={<TypeWorkShiftConfig />} />
 
         <Route path="/list-users" element={<ListUsers />} />
 

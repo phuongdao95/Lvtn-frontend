@@ -2,7 +2,7 @@ import React, {Fragment, useState} from 'react';
 import Chatbox from '../../../components/Chatbox/Chatbox';
 import Incorporate from '../components/Incorporate';
 import Card from '../components/Card';
-import { Typography, Box, Grid, TableCell, CssBaseline, AppBar, Toolbar, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Typography, Box, Grid, TableCell, CssBaseline, AppBar, Toolbar, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Button } from '@mui/material';
 import HistoryCheck from '../../../components/Calendar/HistoryCheck'
 import ModalDay from '../components/ModalDay';
 import TaskIcon from '@mui/icons-material/Task';
@@ -127,21 +127,40 @@ const VirtualSpace = () => {
                     ))}
                 </List>
             </Box>
-            <Box component="main" sx={{ flexGrow: 1, p: 3, position: 'relative' }}>
-                <Box>
-                    <Incorporate itemsNormal={data} />
-                </Box>
-                <Box sx={{
-                    pt: 5,
-                }} >
-                    <HistoryCheck selectedDate={new Date()} 
-                        textColor={'#000000'}
-                        modal={ModalDay}
-                        tableCell={tableCell}
-                    />
-                </Box>
+            {/* <Box component="main" sx={{ flexGrow: 1, p: 3, position: 'relative' }}> */}
+            <Grid container spacing={2} sx={{ m: 2}}>
+                <Grid item xs={11}>
+                    <Box>
+                        <Incorporate itemsNormal={data} />
+                    </Box>
+                </Grid>
+                <Grid item xs={1}>
+                    <Button variant="contained" 
+                        // onClick={clickTakePicture}
+                        // disabled={value ? true : false}
+                        color="primary"
+                        sx={{ 
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        Lưu 
+                    </Button>
+                </Grid>
+                <Grid item xs={2} sx={{height: 2}}></Grid>
+                <Grid item xs={12}>
+                    <Box>
+                        <HistoryCheck selectedDate={new Date()} 
+                            textColor={'#000000'}
+                            modal={ModalDay}
+                            tableCell={tableCell}
+                        />
+                    </Box>
+                </Grid>
                 <CreateTask />
-            </Box>
+            </Grid>
+            {/* </Box> */}
         </Box>
         <Chatbox />
     </Fragment>

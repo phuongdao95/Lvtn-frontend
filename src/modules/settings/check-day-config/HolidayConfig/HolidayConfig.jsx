@@ -38,9 +38,9 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
         field: "action",
         headerName: "Action",
         width: 300,
-        renderCell: () => {
+        renderCell: (e) => {
             return <ActionButtonContainer>
-                <ActionButton onClick={onEditBtnClick}>
+                <ActionButton onClick={() => onEditBtnClick(e.id)}>
                     Edit
                 </ActionButton>
                 <ActionButton onClick={onDeleteBtnClick}>
@@ -52,20 +52,25 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
 
 ];
 const HolidayConfig = () => {
-    const [isCreateOpen, setIsCreateOpen] = React.useState(false);
-    const [isEditOpen, setIsEditOpen] = React.useState(false);
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [activeId, setActiveId] = useState('');
     const navigate = useNavigate();
+    const handleColumn = (id) => {
+        setIsEditOpen(true); 
+        setActiveId(id);
+    }
     return (
         <Fragment>
-            <Create open={isCreateOpen} setOpen={setIsCreateOpen} />
-            <Update open={isEditOpen} setOpen={setIsEditOpen} />
+            {isCreateOpen && <Create setOpen={setIsCreateOpen} />}
+            {isEditOpen && <Update setOpen={setIsEditOpen} id={activeId}/>}
             <DataGridLayout
                 title={"Danh sách ngày lễ"}
                 datagridSection={
                     <DataGrid
                         rows={rows}
                         columns={getColumnConfig({
-                            onEditBtnClick: () => setIsEditOpen(true)
+                            onEditBtnClick: (id) => handleColumn(id)
                         })}
                         isError={false}
                         isLoading={false}
@@ -90,7 +95,7 @@ const HolidayConfig = () => {
                         menu={
                             [
                                 { text: "Danh sách ca làm việc", handler: () => { 
-                                    navigate("/check-day-config/type-work-day"); 
+                                    navigate("/check-day-config/type-work-shift-day"); 
                                 } },
                                 { text: "Danh sách luật chấm công", handler: () => { 
                                     navigate("/check-day-config/rules-work-day"); 
