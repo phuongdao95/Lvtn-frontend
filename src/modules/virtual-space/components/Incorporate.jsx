@@ -77,7 +77,6 @@ const Incorporate = (props) => {
             <Box sx={{
                 display: 'flex',
                 overflow: 'auto',
-                width: 900
             }}>
                 {Object.keys(items).map((item, index) => (
                     <Box key={index}

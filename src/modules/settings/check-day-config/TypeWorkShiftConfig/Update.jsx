@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import {Box} from '@mui/system'
 import Dialog from "../../../../components/Dialog";
 import Label from "../../../../components/DialogForm/Label";
@@ -9,11 +9,45 @@ import DialogForm from "../../../../components/DialogForm";
 
 import { TextField as MuiTextField } from '@mui/material';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 import { useFormik } from "formik";
 import * as yup from "yup";
+
+const listDateOfWeek = [
+    {
+        id: 0,
+        name: "Thứ hai",
+    },
+    {
+        id: 1,
+        name: "Thứ ba",
+    },
+    {
+        id: 2,
+        name: "Thứ tư",
+    },
+    {
+        id: 3,
+        name: "Thứ năm",
+    },
+    {
+        id: 4,
+        name: "Thứ sáu",
+    },
+    {
+        id: 5,
+        name: "Thứ bảy",
+    },
+    {
+        id: 6,
+        name: "Chủ nhật",
+    },
+]
 
 const validationSchema = yup.object({
     name: yup
@@ -27,34 +61,44 @@ const validationSchema = yup.object({
         .required("Nhập giờ nghỉ"),
 })
 
-const Create = ({setOpen}) => {
+const Update = ({setOpen, id}) => {
     const handleClose = () => setOpen(false);
+    useEffect(() => {
+        let items = {
+            name: 'Ca ' + id,
+            dateOfWeek: 'Thứ ba',
+            startTime: new Date(),
+            endTime: new Date(),
+            coefficient: 2,
+        };
+        formik.setValues({...items});
+    }, []);
     const formik = useFormik({
         initialValues: {
             name: "",
+            dateOfWeek: "",
             startTime: '',
             endTime: '',
             coefficient: 1,
         },
-        validationSchema: validationSchema,
+        // validationSchema: validationSchema,
         onSubmit: (values) => {
             console.log(values);
             console.log(values.startTime.valueOf()); // timestamp
-            console.log(values.startTime.format('HH:mm:ss')); // string of time
         }
     })
 
     return (
     <Dialog
         primaryAction={{
-            text: "Tạo mới",
+            text: "Cập nhật",
             handler: () => { formik.submitForm(); },
         }}
         secondaryAction={{
             text: "Hủy",
             handler: handleClose
         }}
-        title="Tạo ca làm việc mới"
+        title="Cập nhật"
     >
         <DialogForm>
             <Box component="form" onSubmit={formik.handleSubmit}>
@@ -73,11 +117,38 @@ const Create = ({setOpen}) => {
                     }
                 />
 
+                <OneColumnBox
+                    slot={
+                        <Fragment>
+                            <Label text={"Ngày trong tuần"} />
+                            <Select id="dateOfWeek"
+                                name="dateOfWeek"
+                                value={formik.values.dateOfWeek}
+                                onChange={(event, value) => {
+                                    formik.setFieldValue("dateOfWeek", event.target.value);
+                                }}
+                                error={formik.touched.dateOfWeek && Boolean(formik.errors.dateOfWeek)}
+                                helperText={formik.touched.dateOfWeek && formik.errors.dateOfWeek}
+                                size='small'
+                            >
+                                {listDateOfWeek.map((item, index) => (
+                                    <MenuItem
+                                        key={index}
+                                        value={item.name}
+                                    >
+                                        {item.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </Fragment>
+                    }
+                />
+
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
                             <Label text={"Giờ vào"} required />
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
                                 <TimePicker
                                     value={formik.values.startTime}
                                     onChange={(newValue) => {
@@ -88,14 +159,15 @@ const Create = ({setOpen}) => {
                                     error={formik.touched.startTime && Boolean(formik.errors.startTime)}
                                     helperText={formik.touched.startTime && formik.errors.startTime}
                                     />}
+                                    size='small'
                                 />
-                            </LocalizationProvider>
+                            {/* </LocalizationProvider> */}
                         </Fragment>
                     }
                     secondSlot={
                         <Fragment>
                             <Label text={"Giờ nghỉ"} required />
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
                                 <TimePicker
                                     value={formik.values.endTime}
                                     onChange={(newValue) => {
@@ -107,7 +179,7 @@ const Create = ({setOpen}) => {
                                     helperText={formik.touched.endTime && formik.errors.endTime}
                                     />}
                                 />
-                            </LocalizationProvider>
+                            {/* </LocalizationProvider> */}
                         </Fragment>
                     }
                 />
@@ -129,4 +201,4 @@ const Create = ({setOpen}) => {
     </Dialog >
     );
 }
-export default Create;
+export default Update;
