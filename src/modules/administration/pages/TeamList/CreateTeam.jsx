@@ -32,7 +32,6 @@ export default function CreateTeam({ closeDialogCb }) {
     } = useFetchListUserWithNoTeam();
 
     const {
-        isSuccess: isCreateSuccess,
         method: createTeam,
     } = useCreateTeam();
 
@@ -57,11 +56,13 @@ export default function CreateTeam({ closeDialogCb }) {
             department: { id: null, name: "" },
         },
         onSubmit: (values) => {
-            const memberIds = values.members.data.map((member) => ({ id: member.id }))
+            const memberIds = values.members.map((member) => (member.id))
             const leaderId = values.leader.id;
             const departmentId = values.department.id;
 
             const { leader, members, department, ...formData } = values;
+
+            console.log(memberIds)
 
             createTeam({
                 ...formData,
@@ -88,7 +89,9 @@ export default function CreateTeam({ closeDialogCb }) {
     return <Dialog
         primaryAction={{
             text: "Submit",
-            handler: () => { },
+            handler: () => {
+                formik.submitForm();
+            },
         }}
         secondaryAction={{
             text: "Cancel",

@@ -1,5 +1,5 @@
 import api from "./api";
-import { getPendingErrorSuccessApiPatternFunction, getUseCreateResourceFunction, getUseFetchListResourceFunction, getUseFetchOneResourceFunction, getUseUpdateResourceFunction } from "./crudService";
+import { getPendingErrorSuccessApiPatternFunction, getUseCreateResourceFunction, getUseDeleteResourceFunction, getUseFetchListResourceFunction, getUseFetchOneResourceFunction, getUseUpdateResourceFunction } from "./crudService";
 
 const PATH_PREFIX = 'api/user';
 
@@ -14,6 +14,9 @@ export const useCreateUser =
 
 export const useUpdateUser =
     getUseUpdateResourceFunction(PATH_PREFIX);
+
+export const useDeleteUser = 
+    getUseDeleteResourceFunction(PATH_PREFIX);
 
 export const useFetchListUserWithNoTeam =
     getPendingErrorSuccessApiPatternFunction(({

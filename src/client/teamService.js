@@ -4,7 +4,8 @@ import {
     getUseCreateResourceFunction,
     getUseFetchOneResourceFunction,
     getUseFetchListResourceFunction,
-    getUseUpdateResourceFunction
+    getUseUpdateResourceFunction,
+    getUseDeleteResourceFunction
 } from "./crudService";
 
 const PATH_PREFIX = 'api/team'
@@ -20,6 +21,9 @@ export const useCreateTeam =
 
 export const useUpdateTeam =
     getUseUpdateResourceFunction(PATH_PREFIX);
+
+export const useDeleteTeam = 
+    getUseDeleteResourceFunction(PATH_PREFIX);
 
 export const useFetchTeamListWithoutDepartment =
     getPendingErrorSuccessApiPatternFunction(

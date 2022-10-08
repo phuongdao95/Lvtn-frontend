@@ -15,7 +15,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
-import { blue, blueGrey, grey } from '@mui/material/colors';
+import { blue, blueGrey, grey, lightBlue } from '@mui/material/colors';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from '@mui/material';
 import { AddAlarm, AttachMoney, Settings } from '@mui/icons-material';
 import NavigationItem from './NavigationItem';
@@ -83,11 +83,12 @@ const SideBar = (props) => {
                     }
                 },
                 {
-                    text: "Quản lý Nhóm",
+                    text: "Quản lý Team",
                     onClick: () => {
-                        navigate("/role");
+                        navigate("/team");
                     }
-                }
+                },
+                
             ]
         },
 
@@ -113,7 +114,13 @@ const SideBar = (props) => {
                     onClick: () => { 
                         navigate("/my-dab")
                     }
-                }
+                },
+                {
+                    text: "Danh sách Payroll",
+                    onClick: () => {
+                        navigate("/payroll")
+                    }
+                },
             ]
         },
 
@@ -127,6 +134,26 @@ const SideBar = (props) => {
 
         {
             text: "Chấm công",
+            icon: <AddAlarm style={{ color: textColor }} />,
+            onClick: () => { },
+            subItems: [
+                {
+                    text: "Check In",
+                    onClick: () => { }
+                },
+                {
+                    text: "Check Out",
+                    onClick: () => { }
+                },
+                {
+                    text: "Lịch biểu",
+                    onClick: () => { }
+                }
+            ]
+        },
+
+        {
+            text: "Virtual Space",
             icon: <AddAlarm style={{ color: textColor }} />,
             onClick: () => { },
             subItems: [
@@ -162,7 +189,7 @@ const SideBar = (props) => {
                 '& .MuiDrawer-paper': {
                     width: drawerWidth,
                     boxSizing: 'border-box',
-                    background: grey[300],
+                    background: lightBlue[100],
                     color: textColor,
                 },
             }}

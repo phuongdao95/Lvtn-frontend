@@ -1,25 +1,16 @@
-export default function InfoDialog(status = "success") {
-    switch (status) {
-        case "success":
-            return <Dialog title={title}
-                primaryAction={confirmAction}
-                secondaryAction={cancelAction}
-            >
-                <Typography>{message}</Typography>
-            </Dialog>;
-        case "info":
-            return <Dialog title={title}
-                primaryAction={confirmAction}
-                secondaryAction={cancelAction}
-            >
-                <Typography>{message}</Typography>
-            </Dialog>;
-        case "failure":
-            return <Dialog title={title}
-                primaryAction={confirmAction}
-                secondaryAction={cancelAction}
-            >
-                <Typography>{message}</Typography>
-            </Dialog>;
-    }
+import { Typography } from "@mui/material";
+import Dialog from "./Dialog";
+
+
+export default function InfoDialog({
+    title,
+    message,
+    closeDialogCb = () => { }
+}) {
+
+    return <Dialog title={title}
+        secondaryAction={{ text: "Close", handler: closeDialogCb }}
+    >
+        <Typography>{message}</Typography>
+    </Dialog>;
 }

@@ -28,7 +28,6 @@ export default function EditUser({ closeDialogCb, userId }) {
     const [teams, setTeams] = React.useState([]);
     const [roles, setRoles] = React.useState([]);
 
-    console.log(userId);
 
     const {
         data: fetchedUser,
@@ -56,7 +55,7 @@ export default function EditUser({ closeDialogCb, userId }) {
             gender: "",
             email: "",
             birthday: dayjs('2000-01-01'),
-            baseSalary: "",
+            baseSalary: 0,
             bankName: "",
             bankBranch: "",
             accountName: "",
@@ -270,9 +269,9 @@ export default function EditUser({ closeDialogCb, userId }) {
                         firstSlot={
                             <Fragment>
                                 <Label text={"Tiền lương"} />
-                                <TextField id="gender"
-                                    name="gender"
-                                    value={formik.values.name}
+                                <TextField id="baseSalary"
+                                    name="baseSalary"
+                                    value={formik.values.baseSalary}
                                     onChange={formik.handleChange} />
                             </Fragment>
                         }
@@ -281,9 +280,9 @@ export default function EditUser({ closeDialogCb, userId }) {
                             <Fragment>
                                 <Label text={"Tên ngân hàng"} />
                                 <TextField
-                                    id="birthday"
-                                    name="birthday"
-                                    value={formik.values.description}
+                                    id="bankName"
+                                    name="bankName"
+                                    value={formik.values.bankName}
                                     onChange={formik.handleChange}
                                 />
                             </Fragment>
@@ -294,9 +293,9 @@ export default function EditUser({ closeDialogCb, userId }) {
                         firstSlot={
                             <Fragment>
                                 <Label text={"Tên chi nhánh"} />
-                                <TextField id="gender"
-                                    name="gender"
-                                    value={formik.values.name}
+                                <TextField id="bankBranch"
+                                    name="bankBranch"
+                                    value={formik.values.bankBranch}
                                     onChange={formik.handleChange} />
                             </Fragment>
                         }
@@ -305,9 +304,9 @@ export default function EditUser({ closeDialogCb, userId }) {
                             <Fragment>
                                 <Label text={"Tên tài khoản"} />
                                 <TextField
-                                    id="birthday"
-                                    name="birthday"
-                                    value={formik.values.description}
+                                    id="accountName"
+                                    name="accountName"
+                                    value={formik.values.accountName}
                                     onChange={formik.handleChange}
                                 />
                             </Fragment>

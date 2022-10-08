@@ -98,7 +98,7 @@ export default function CreateUser({ closeDialogCb }) {
             const teamId = values?.team.id;
             const roleId = values?.role.id;
 
-            createUser({ ...values, teamId, roleId });
+            createUser({ ...values, teamId, roleId, sex: values.gender });
         }
     })
 

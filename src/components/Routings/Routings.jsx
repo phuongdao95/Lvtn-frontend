@@ -32,6 +32,10 @@ import TeamList from "../../modules/administration/pages/TeamList";
 import AccountsAndRolesPage from "../../modules/shares/pages/AccountsAndRolesPage/AccountsAndRolesPage";
 import PayrollList from "../../modules/salary-management/pages/PayRollList/PayrollList.jsx";
 import EditPayroll from "../../modules/salary-management/pages/PayRollList/EditPayroll";
+import UserProfile from "../../modules/shares/pages/UserProfile/UserProfile";
+import MyDABs from "../../modules/salary-management/pages/MyDABs/MyDABs";
+import FormulaVariable from "../../modules/salary-management/pages/FormulaVariable/FormulaVariable";
+import { Group } from "@mui/icons-material";
 
 export default function Routings() {
     return <Routes>
@@ -62,13 +66,19 @@ export default function Routings() {
         <Route path="/permission" element={<PermissionList />} />
         <Route path="/department" element={<DepartmentList />} />
         <Route path="/team" element={<TeamList />} />
+        <Route path="/group" element={<Group />} />
 
         {/* Salary Management Module */}
         <Route path="/salary" element={<SalaryList />} />
         <Route path="/dab" element={<DABList />} />
         <Route path="/formula" element={<FormulaList />} />
+        <Route path="/formula-variable" element={<FormulaVariable />} />
         <Route path="/payroll/:id" element={<EditPayroll />} />
         <Route path="/payroll" element={<PayrollList />} />
+        <Route path="/my-dab" element={<MyDABs />} />
+
+        {/** Shared module */}
+        <Route path="/my-profile" element={<UserProfile />} />
 
         {/* Legacy components */}
         <Route path="/account-role" element={<AccountsAndRolesPage />} />
