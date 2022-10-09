@@ -8,15 +8,40 @@ import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
 
 import { useCreateDAB } from "../../../../client/dabService";
+import * as yup from 'yup';
+import { useFormik } from "formik/dist";
+import dayjs from "dayjs";
 
+const validationSchema = yup.object().shape({
+    name: yup.string().required(),
+    type: yup.object().shape({
+        name: yup.string(),
+        value: yup.string()
+    }),
+    fromMonth: yup.date().required(),
+    toMonth: yup.date().required()
+});
 
 export default function CreateDAB({ closeDialogCb }) {
     const { } = useCreateDAB();
 
+    const formik = useFormik({
+        initialValues: {
+            name: "",
+            type: { name: "Khấu trừ", value: "Deduction" },
+            fromMonth: dayjs(),
+            toMonth: dayjs().subtract(1, 'month'),
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            console.log(values);
+        }
+    })
+
     return <Dialog
         primaryAction={{
             text: "Submit",
-            handler: () => { },
+            handler: () => { formik.handleSubmit() },
         }}
         secondaryAction={{
             text: "Cancel",
@@ -30,7 +55,12 @@ export default function CreateDAB({ closeDialogCb }) {
                     firstSlot={
                         <Fragment>
                             <Label text={"Name"} />
-                            <TextField />
+                            <TextField
+                                id="name"
+                                name="name"
+                                value={formik.values.name}
+                                onChange={formik.handleChange}
+                            />
                         </Fragment>
                     }
 
@@ -70,7 +100,7 @@ export default function CreateDAB({ closeDialogCb }) {
                 <OneColumnBox
                     slot={
                         <Fragment>
-                            <Label text={"Apply list"} />
+                            <Label text={""} />
                             <TextField />
                         </Fragment>
                     }

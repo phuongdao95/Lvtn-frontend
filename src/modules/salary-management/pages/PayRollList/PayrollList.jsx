@@ -117,12 +117,10 @@ export default function PayrollList() {
                         menu={
                             [
                                 {
-                                    text: "Tạo mới", handler: () => {
+                                    text: "Tạo mới Payroll", handler: () => {
                                         setIsCreatePayrollOpen(true);
                                     }
                                 },
-                                { text: "Gửi payslip", handler: () => { } },
-                                { text: "Xuất bảng excel", handler: () => { } },
                             ]
                         }
                         variant="contained"

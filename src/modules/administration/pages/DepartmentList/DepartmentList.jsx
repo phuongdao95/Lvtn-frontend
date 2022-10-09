@@ -1,14 +1,20 @@
 import React, { Fragment } from "react";
+import { Box } from "@mui/system";
 import DataGridLayout from "../../../../layouts/DataGridLayout";
 import DataGrid from "../../../../components/DataGrid";
 import MenuButton from "../../../../components/DataGrid/MenuButton";
 import SearchField from "../../../../components/SearchField";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
-import { useNavigate } from "react-router";
-import { useFetchListDepartment } from "../../../../client/departmentService";
 import CreateDepartment from "./CreateDepartment";
+import ActionButton from "../../../../components/DataGrid/ActionButton";
+import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
+import EditDepartment from "./EditDepartment";
+import InfoDialog from "../../../../components/Dialog/InfoDialog";
 
-const getColumnConfig = () => [
+import { useNavigate } from "react-router";
+import { useFetchListDepartment, useDeleteDepartment } from "../../../../client/departmentService";
+
+const getColumnConfig = (openEditCb, openDeleteCb) => [
     {
         field: "id",
         headerName: "Id",
@@ -37,15 +43,45 @@ const getColumnConfig = () => [
         field: "description",
         headerName: "Description",
         width: 300,
+    },
+
+    {
+        field: "action",
+        headerName: "Action",
+        width: 200,
+        renderCell: ({ id }) => {
+            return <Box sx={{ display: "flex", gap: 1 }}>
+                <ActionButton onClick={() => openEditCb(id)}>
+                    Edit
+                </ActionButton>
+                <ActionButton onClick={() => openDeleteCb(id)}>
+                    Delete
+                </ActionButton>
+            </Box >
+        }
     }
 ];
 
 
+const initialDialogState = {
+    title: "",
+    message: "",
+    confirmAction: () => { }
+}
+
 export default function DepartmentList() {
+    const [departmentId, setDepartmentId] = React.useState(null);
+
     const navigate = useNavigate();
 
     const [isCreateDepartmentOpen, setIsCreateDepartmentOpen] = React.useState(false);
     const [isEditDepartmentOpen, setIsEditDepartmentOpen] = React.useState(false);
+    const [isDeleteDepartmentOpen, setIsDeleteDepartmentOpen] = React.useState(false);
+
+    const [isInfoDialogOpen, setIsInfoDialogOpen] = React.useState(false);
+    const [infoDialogMessage, setInfoDialogMessage] = React.useState({
+        initialDialogState
+    })
 
     const {
         isPending,
@@ -55,14 +91,68 @@ export default function DepartmentList() {
         method: fetchDepartmentList
     } = useFetchListDepartment();
 
-    // const {
-    //     method: fetchTeams
-    // } = useFetchTeamListWithoutDepartment();
+    const resetDialogState = () => setInfoDialogMessage(initialDialogState)
+
+    const {
+        isSuccess: isDeleteSuccess,
+        isError: isDeleteError,
+        method: deleteDepartment,
+    } = useDeleteDepartment();
+
+    React.useEffect(() => {
+        if (isDeleteSuccess) {
+            fetchDepartmentList();
+        }
+        if (isDeleteError) {
+            setInfoDialogMessage({
+                title: 'Error',
+                message: 'Có lỗi xảy ra. Không thể xóa được item'
+            });
+            setIsInfoDialogOpen(true);
+        }
+    }, [isDeleteSuccess, isDeleteError])
+
 
     return (
         <Fragment>
             {isCreateDepartmentOpen && <CreateDepartment closeDialogCb={
                 () => setIsCreateDepartmentOpen(false)} />}
+
+            {isEditDepartmentOpen && <EditDepartment
+                closeDialogCb={() => setIsEditDepartmentOpen(false)}
+                departmentId={departmentId}
+            />}
+
+            {isDeleteDepartmentOpen &&
+                <ConfirmDialog
+                    title={"Confirm"}
+                    message="Bạn có muốn xóa chức vụ này"
+                    cancelAction={{
+                        text: "Cancel",
+                        handler: () => {
+                            setDepartmentId(null);
+                            setIsDeleteDepartmentOpen(false)
+                        },
+                    }}
+                    confirmAction={{
+                        text: "Confirm",
+                        handler: () => {
+                            setIsDeleteDepartmentOpen(false);
+                            setDepartmentId(null);
+                            deleteDepartment(departmentId);
+                        }
+                    }}
+                />}
+
+            {isInfoDialogOpen && <InfoDialog
+                title={infoDialogMessage.title}
+                message={infoDialogMessage.message}
+                closeDialogCb={() => {
+                    setIsInfoDialogOpen(false);
+                    resetDialogState();
+                }}
+            />}
+
             <DataGridLayout
                 title={"Danh sách department"}
                 datagridSection={
@@ -74,7 +164,16 @@ export default function DepartmentList() {
                         rowCount={response?.total ?? 0}
                         paginationMode="server"
                         rows={response?.data ?? []}
-                        columns={getColumnConfig()}
+                        columns={getColumnConfig(
+                            (id) => {
+                                setDepartmentId(id);
+                                setIsEditDepartmentOpen(true);
+                            },
+                            (id) => {
+                                setDepartmentId(id);
+                                setIsDeleteDepartmentOpen(true);
+                            }
+                        )}
                         isError={isError}
                         isLoading={isPending}
                         isSuccess={isSuccess}

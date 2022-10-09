@@ -11,8 +11,6 @@ import CreateGroup from "./CreateGroup";
 import EditGroup from "./EditGroup";
 import { useFetchListGroup } from "../../../../client/groupService";
 
-
-
 const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
     {
         field: "id",
@@ -31,30 +29,6 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
         field: "description",
         headerName: "Description",
         width: 150,
-    },
-
-    {
-        field: "created",
-        headerName: "Created",
-        width: 150,
-    },
-
-    {
-        field: "creator",
-        headerName: "Creator",
-        width: 150,
-    },
-
-    {
-        field: "modified",
-        headerName: "Modified",
-        width: 150,
-    },
-
-    {
-        field: "modifier",
-        headerName: "Modifier",
-        width: 150
     },
 
     {
@@ -81,12 +55,16 @@ export default function GroupList() {
     const [isEditGroupOpen, setIsEditGroupOpen] = React.useState(false);
 
     const {
-        isPending,
-        isSuccess,
-        isError,
+        isSuccess: isFetchSuccess,
         data: fetchedGroups
     } = useFetchListGroup();
 
+
+    React.useEffect(() => {
+        if (isFetchSuccess) {
+            console.log(fetchedGroups);
+        }
+    }, [isFetchSuccess])
 
     return (
         <Fragment>
@@ -97,7 +75,7 @@ export default function GroupList() {
                 title={"Danh sách nhóm"}
                 datagridSection={
                     <DataGrid
-                        rows={fetchedGroups}
+                        rows={fetchedGroups.data || []}
                         columns={getColumnConfig({
                             onEditBtnClick: () => setIsEditGroupOpen(true)
                         })}

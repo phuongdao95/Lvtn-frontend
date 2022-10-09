@@ -17,4 +17,3 @@ export const useUpdateDAB = getUseUpdateResourceFunction(PATH_PREFIX);
 export const useCreateDAB = getUseCreateResourceFunction(PATH_PREFIX);
 
 export const useDeleteDAB = getUseDeleteResourceFunction(PATH_PREFIX);
-

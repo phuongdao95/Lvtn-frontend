@@ -14,6 +14,8 @@ import { useCreatePayroll } from "../../../../client/payrollService";
 import dayjs from "dayjs";
 import * as yup from "yup";
 import OneColumnBox from "../../../../components/DialogForm/OneColumnBox";
+import { MonthPicker, YearPicker } from "@mui/x-date-pickers";
+import Select from "../../../../components/DialogForm/Select";
 
 const validationSchema = yup.object().shape({
     name: yup.string().required(),
@@ -21,6 +23,14 @@ const validationSchema = yup.object().shape({
     fromDate: yup.date().required(),
     toDate: yup.date().required(),
 });
+
+function generateYears() {
+    return Array.from({ length: 200 }, (_, i) => i + 2020)
+}
+
+function generateMonths() {
+    return Array.from({ length: 12 }, (_, i) => i + 1);
+}
 
 export default function CreatePayroll({ closeDialogCb }) {
     const navigate = useNavigate();
@@ -32,6 +42,8 @@ export default function CreatePayroll({ closeDialogCb }) {
         initialValues: {
             name: "",
             description: "",
+            month: 10,
+            year: 2022,
             fromDate: dayjs().subtract(1, 'month'),
             toDate: dayjs(),
         },
@@ -78,26 +90,29 @@ export default function CreatePayroll({ closeDialogCb }) {
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Từ ngày"} />
-                            <DatePicker id="fromDate"
-                                name="fromDate"
-                                value={formik.values.fromDate}
-                                onChange={(value) => formik.setFieldValue("fromDate", value)}
-                                error={formik.touched.fromDate && Boolean(formik.errors.fromDate)}
-                                helperText={formik.touched.fromDate && formik.errors.fromDate}
+                            <Label text={"Tháng"} />
+                            <Select
+                                value={formik.values.month}
+                                onChange={(event) => {
+                                    formik.setFieldValue("month", event.target.value);
+                                }}
+                                menu={[
+                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+                                ].map((value) => ({ label: `Tháng ${value}`, value: value }))}
                             />
                         </Fragment>
                     }
 
                     secondSlot={
                         <Fragment>
-                            <Label text={"Đến ngày"} />
-                            <DatePicker id="toDate"
-                                name="toDate"
-                                onChange={(value) => { formik.setFieldValue("toDate", value) }}
-                                value={formik.values.toDate}
-                                error={formik.touched.toDate && Boolean(formik.errors.toDate)}
-                                helperText={formik.touched.toDate && formik.errors.toDate}
+                            <Label text={"Năm"} />
+                            <Select
+                                value={formik.values.year}
+                                onChange={(event) => {
+                                    formik.setFieldValue("year", event.target.value)
+                                }}
+                                menu={generateYears().map((value) =>
+                                    ({ label: `Năm ${value}`, value: value }))}
                             />
                         </Fragment>
                     }

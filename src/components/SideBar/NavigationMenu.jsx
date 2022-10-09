@@ -84,11 +84,12 @@ const SideBar = (props) => {
                     }
                 },
                 {
-                    text: "Quản lý Nhóm",
+                    text: "Quản lý Team",
                     onClick: () => {
-                        navigate("/role");
+                        navigate("/team");
                     }
-                }
+                },
+                
             ]
         },
 
@@ -114,7 +115,13 @@ const SideBar = (props) => {
                     onClick: () => { 
                         navigate("/my-dab")
                     }
-                }
+                },
+                {
+                    text: "Danh sách Payroll",
+                    onClick: () => {
+                        navigate("/payroll")
+                    }
+                },
             ]
         },
 
@@ -172,6 +179,26 @@ const SideBar = (props) => {
         },
 
         {
+            text: "Virtual Space",
+            icon: <AddAlarm style={{ color: textColor }} />,
+            onClick: () => { },
+            subItems: [
+                {
+                    text: "Check In",
+                    onClick: () => { }
+                },
+                {
+                    text: "Check Out",
+                    onClick: () => { }
+                },
+                {
+                    text: "Lịch biểu",
+                    onClick: () => { }
+                }
+            ]
+        },
+
+        {
             text: "Cài đặt",
             icon: <Settings style={{ color: textColor }} />,
             onClick: () => { },
@@ -201,7 +228,7 @@ const SideBar = (props) => {
                 '& .MuiDrawer-paper': {
                     width: drawerWidth,
                     boxSizing: 'border-box',
-                    background: grey[300],
+                    background: lightBlue[100],
                     color: textColor,
                 },
             }}
