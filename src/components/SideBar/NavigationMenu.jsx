@@ -2,22 +2,16 @@ import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { blue, blueGrey, grey } from '@mui/material/colors';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from '@mui/material';
+import { grey, lightBlue } from '@mui/material/colors';
 import { AddAlarm, AttachMoney, Settings } from '@mui/icons-material';
 import NavigationItem from './NavigationItem';
 
@@ -89,7 +83,7 @@ const SideBar = (props) => {
                         navigate("/team");
                     }
                 },
-                
+
             ]
         },
 
@@ -112,7 +106,7 @@ const SideBar = (props) => {
                 },
                 {
                     text: "Khấu trừ, Phụ cấp, Thưởng của tôi",
-                    onClick: () => { 
+                    onClick: () => {
                         navigate("/my-dab")
                     }
                 },
@@ -138,11 +132,17 @@ const SideBar = (props) => {
             onClick: () => { },
             subItems: [
                 {
-                    text: "Task",
+                    text: "Bảng công việc",
                     onClick: () => {
                         navigate("/virtual-space")
                     }
                 },
+                {
+                    text: "Danh sách Bảng",
+                    onClick: () => {
+                        
+                    }
+                }
             ]
         },
 
@@ -175,26 +175,6 @@ const SideBar = (props) => {
                         navigate("/select-type-work-shift")
                     }
                 },
-            ]
-        },
-
-        {
-            text: "Virtual Space",
-            icon: <AddAlarm style={{ color: textColor }} />,
-            onClick: () => { },
-            subItems: [
-                {
-                    text: "Check In",
-                    onClick: () => { }
-                },
-                {
-                    text: "Check Out",
-                    onClick: () => { }
-                },
-                {
-                    text: "Lịch biểu",
-                    onClick: () => { }
-                }
             ]
         },
 

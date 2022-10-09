@@ -96,7 +96,7 @@ export default function AccountMenu() {
                     Settings
                 </MenuItem>
                 <MenuItem onClick={() => {
-                    logOut(() => navigate("/login"));
+                    logOut(() => navigate("/"));
                 }}>
                     <ListItemIcon>
                         <Logout fontSize="small" />

@@ -1,3 +1,3 @@
 export default function CreateSalaryGroup() { 
-    return;
+    return <div></div>;
 }
