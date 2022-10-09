@@ -43,30 +43,6 @@ export default function DataGridLayout({
                 </Box>
             </Box>
 
-            <Box sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: 1.5,
-            }}>
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: 1.5,
-                }}>
-                    {dropdownFilterSection}
-                    {searchSection}
-                    {searchButtonSection}
-                </Box>
-
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: 1.5,
-                }}>
-                    {actionSection}
-                </Box>
-            </Box>
-
         </Box>
         <Box>
             {datagridSection}

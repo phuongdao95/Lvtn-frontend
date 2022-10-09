@@ -59,6 +59,7 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
         }
     }
 ]
+
 export default function VariableList() {
     const [variables, setVariables] = React.useState([]);
 
