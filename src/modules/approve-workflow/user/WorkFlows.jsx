@@ -5,50 +5,64 @@ import WorkflowCard from './WorkflowCard';
 
 const flows = [
     {
-        title: 'Nghi phep',
-        content: 'Nhan vien bam chon tao request nghi phep',
-        link: 'nghi-phep'
+        title: 'Nghỉ phép',
+        content: 'Tạo request cho việc nghỉ phép',
+        link: 'nghi-phep',
+        icon: 'notifications_off'
     },
     {
-        title: 'Nghi thai san',
-        content: 'Nhan vien bam chon tao request nghi thai san',
-        link: 'nghi-thai-san'
+        title: 'Nghỉ thai sản',
+        content: 'Tạo request nghỉ thai sản dành cho nữ sản phụ hoặc nam có vợ là sản phụ',
+        link: 'nghi-thai-san',
+        icon: 'family_restroom'
     },
     {
-        title: 'I am a big title',
-        content: 'I am listening to the best music of all time!!!!!!'
+        title: 'Thăng cấp trong career path',
+        content: 'Tạo request để thay đổi trong con đường sự nghiệp (career path)',
+        link: '',
+        icon: 'route'
     },
     {
-        title: 'I am a big title',
-        content: 'I am listening to the best music of all time!!!!!!'
+        title: 'Yêu cầu trợ giúp Helpdesk',
+        content: 'Tạo request khi cần trợ giúp về thiết bị, phần mềm,... nhằm hỗ trợ công việc',
+        link: '',
+        icon: 'help_center'
     },
     {
-        title: 'I am a big title',
-        content: 'I am listening to the best music of all time!!!!!!'
+        title: 'Hoàn chi phí, Cấp phí',
+        content: 'Tạo request khi cần phải hoàn lại hoặc cấp chi phí cho nhân viên',
+        link: '',
+        icon: 'monetization_on'
     },
     {
-        title: 'I am a big title',
-        content: 'I am listening to the best music of all time!!!!!!'
+        title: 'Work from home',
+        content: 'Tạo request để yêu cầu được làm việc từ xa',
+        link: '',
+        icon: 'online_prediction'
     },
     {
-        title: 'I am a big title',
-        content: 'I am listening to the best music of all time!!!!!!'
+        title: 'Nâng cao kỹ năng',
+        content: 'Tạo request khi có yêu cầu cần phải nâng cao trình độ',
+        link: '',
+        icon: 'local_library'
     },
     {
-        title: 'I am a big title',
-        content: 'I am listening to the best music of all time!!!!!!'
+        title: 'Ứng lương',
+        content: 'Tạo request khi cần phải ứng trước lương',
+        link: '',
+        icon: 'price_change'
     },
     {
-        title: 'I am a big title',
-        content: 'I am listening to the best music of all time!!!!!!'
+        title: 'Điểm danh thủ công',
+        content: 'Tạo request khi chấm công bằng khuôn mặt gặp trục trặc',
+        link: '',
+        icon: 'where_to_vote'
     },
     {
-        title: 'I am a big title',
-        content: 'I am listening to the best music of all time!!!!!!'
-    },
-    {
-        title: 'I am a big title',
-        content: 'I am listening to the best music of all time!!!!!!'
+        title: 'Tăng ca',
+        content: 'Tạo request khi leader của team hoặc department cần nhân viên tăng ca',
+        link: '',
+        icon: 'more_time'
     }
 ]
 
@@ -58,7 +72,7 @@ const WorkFlows = () => {
             {
                 flows.map((flow, index) =>
                     <Grid item={true} xs={4} key={index}>
-                        <WorkflowCard title={flow.title} content={flow.content} name={flow.name} link={flow.link} />
+                        <WorkflowCard title={flow.title} content={flow.content} icon={flow.icon} link={flow.link} />
                     </Grid>
                 )
             }
