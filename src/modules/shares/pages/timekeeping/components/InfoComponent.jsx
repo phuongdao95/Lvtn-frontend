@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, Button } from '@mui/material';
-import React from 'react';
+import React, {useState} from 'react';
 const DAY = ['Sun', 'Mon', 'Tus', 'Wes', 'Thu', 'Fri', 'Sar'];
 const MONTH = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const padTo2Digits = num => {
@@ -23,7 +23,8 @@ const formatDate = date => {
     );
 }
 
-const welcome = (
+const welcome = name => {
+    return (
     <Box sx={{
         mx: 'auto',
         my: 'auto',
@@ -39,14 +40,20 @@ const welcome = (
     }}>
         Welcome!
         <br></br> 
-        Dao Thanh Phuong.
+        {name}
     </Box>
-);
-const InfoComponent = ({takePicture, isRecognized}) => {
+)};
+const InfoComponent = ({takePicture}) => {
     const currTime = new Date();
     const format = formatDate(currTime);
+    const [recognized, setRecognized] = useState(false);
+    const [name, setName] = useState('');
+    const welcomeText = welcome(name);
     const clickTakePicture = () => {
-        takePicture();
+        takePicture(() => {
+            setName('Dao Thanh Phuong');
+            setRecognized(true);
+        });
     }
     return (
         <Box sx={{
@@ -62,18 +69,17 @@ const InfoComponent = ({takePicture, isRecognized}) => {
                     maxWidth: "100%",
                     height: "auto",
                 }}>
-                    {(isRecognized) ? 
+                    {recognized ? 
                     <>
-                    {format}
-                    {welcome}
+                        {format}
+                        {welcomeText}
                     </>
                     :
                     <Button variant="contained" 
                         onClick={clickTakePicture}
                         color="primary">
-                        Check
-                    </Button>
-                    }
+                        Chấm công
+                    </Button>}
                 </CardContent>
             </Card>
         </Box>

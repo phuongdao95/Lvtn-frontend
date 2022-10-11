@@ -1,8 +1,18 @@
 import { Box, Button, Card, CardContent, TextField, Grid, ButtonGroup } from '@mui/material';
-import React from 'react';
+import React, {useRef} from 'react';
 
 const Register = ({takePicture}) => {
-
+    const inputIdRef = useRef('');
+    const inputNameRef = useRef('');
+    const clickSave = () => {
+        if (!inputIdRef.current.value){
+            inputIdRef.current.focus();
+        } else if (!inputNameRef.current.value) {
+            inputNameRef.current.focus();
+        } else {
+            takePicture(inputIdRef.current.value, inputNameRef.current.value);
+        }
+    }
     return (
         <Box sx={{
             mx: 'auto',
@@ -28,7 +38,7 @@ const Register = ({takePicture}) => {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                        Register image
+                        Đăng ký hình ảnh
                     </Box>
                     <Box 
                         component="form"
@@ -40,7 +50,8 @@ const Register = ({takePicture}) => {
                         }}>
                         <Grid container spacing={2} sx={{ p: 2}}>
                             <Grid item xs={12}>
-                                <TextField 
+                                <TextField
+                                    inputRef={inputIdRef}
                                     required
                                     type="text"
                                     label="ID"
@@ -49,6 +60,8 @@ const Register = ({takePicture}) => {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField 
+                                    inputRef={inputNameRef}
+                                    required
                                     type="text"
                                     label="Họ và tên"
                                     variant="outlined"
@@ -61,9 +74,9 @@ const Register = ({takePicture}) => {
                                     },
                                 }}>
                                     <Button variant="contained" 
-                                        onClick={takePicture}
+                                        onClick={clickSave}
                                         color="primary">
-                                        save
+                                        Lưu
                                     </Button>
                                 </ButtonGroup>
                             </Grid>

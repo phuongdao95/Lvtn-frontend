@@ -5,10 +5,12 @@ import Box from '@mui/material/Box';
 import TabLayout from '../../../layouts/TabLayout'
 import {TabPanel} from '../../../components/TabList/TabPanel'
 import a11Props from '../../../components/TabList/a11Props'
+import HistoryCheck from '../../../components/Calendar/HistoryCheck';
+import { TableCell, Typography } from '@mui/material';
 
 import Recognize from './Recognize';
 import Register from './RegisterImage';
-import HistoryCheck from './HistoryCheck';
+import ModalDay from './ModalDay';
 
 const SwitchTab = () => {
     const tabList = (value, handleChange) => {
@@ -24,6 +26,13 @@ const SwitchTab = () => {
             </Tabs>
         </Box>
     }
+    const tableCell = (day) => {
+        return (
+            <TableCell key={day.id}>
+                <Typography align="center">{day.day}</Typography>
+            </TableCell>
+        )
+    }
     const listTabPanel= (value) => {
     return <>
         <TabPanel value={value} index={0}>
@@ -35,6 +44,8 @@ const SwitchTab = () => {
         <TabPanel value={value} index={2}>
             <HistoryCheck selectedDate={new Date()} 
                 textColor={'#000000'}
+                modal={ModalDay}
+                tableCell={tableCell}
             />
         </TabPanel>
     </>}

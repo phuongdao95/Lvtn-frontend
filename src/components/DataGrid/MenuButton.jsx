@@ -16,8 +16,6 @@ export default function MenuButton({ text, menu, variant = "contained" }) {
         setAnchorElement(event.currentTarget);
     };
 
-    console.log(menu);
-
     return (
         <Box>
             <Button
@@ -38,7 +36,7 @@ export default function MenuButton({ text, menu, variant = "contained" }) {
                     onClose={handleCloseMenu}
                 >
                     {menu.map((item) => (
-                        <MenuItem key={item.text} onClick={() => { item.handler(); handleCloseMenu(); }}>
+                        <MenuItem sx={{maxWidth: '200px'}} key={item.text} onClick={() => { item.handler(); handleCloseMenu(); }}>
                             {item.text}
                         </MenuItem>
                     ))}

@@ -1,14 +1,19 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {Box, Grid} from '@mui/material';
 import Register from './Register';
 import Aicam from './Aicam';
 import * as aiService from '../../../client/aiService';
+import Snackbar from '../../../components/Snackbar/Snackbar';
 
 const RegisterImage = () => {
     const videoRef = useRef(null);
     const photoRef = useRef(null);
-
-    const clickTakePicture = (inputId, inputName) => {
+    const [state, setState] = useState({
+        open: false,
+        type: 'info',
+        message: '',
+    });
+    const clickTakePicture = () => {
         console.log('register from timekeepingregister');
         let video = videoRef.current;
         let photo = photoRef.current;
@@ -24,14 +29,11 @@ const RegisterImage = () => {
             ctx.drawImage(video, 0, 0, width, height);
             image = photo.toDataURL("image/png");
             listImage.push(image);
-            setTimeout(() => {
-            }, 100);
         }
 
         // get data image
         const data = {
-            idUser: inputId,
-            imageName: inputName,
+            imageName: window.localStorage.getItem('user_id'),
             imageData: listImage,
         };
         // call api
@@ -39,12 +41,25 @@ const RegisterImage = () => {
         .then(res => {
             // console.log('respose ' + JSON.stringify(res));
             console.log('respose ' + res.data + ' ' + res.statusText + ' ' + res.status);
-            alert('Thành công!');
+            setState({
+                type: 'success',
+                message: 'Đăng ký thành công',
+                open: true,
+            })
+
         })
-        .catch(error => console.log('respose error ' + JSON.stringify(error)));
+        .catch(error => {
+            console.log('respose error ' + JSON.stringify(error))
+            setState({
+                type: 'error',
+                message: 'Thất bại!! Xin hãy thử lại!',
+                open: true,
+            })
+        });
     }
     return (
         <Box sx={{flexGrow: 1}}>
+            <Snackbar state={state} close={() => setState({...state, open: false})} />
             <Grid container spacing={1} >
                 <Grid item xs={12} sm={8} md={8}>
                     <Aicam videoRef={videoRef} photoRef={photoRef} />

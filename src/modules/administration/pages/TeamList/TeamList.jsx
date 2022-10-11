@@ -1,19 +1,20 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
+import { Box } from "@mui/system";
+
 import DataGridLayout from "../../../../layouts/DataGridLayout";
 import DataGrid from "../../../../components/DataGrid";
 import MenuButton from "../../../../components/DataGrid/MenuButton";
 import SearchField from "../../../../components/SearchField";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
-import { useFetchListTeam } from "../../../../client/teamService";
+import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
+import ActionButton from "../../../../components/DataGrid/ActionButton";
+import CreateTeam from "./CreateTeam";
+
+import { useFetchListTeam, useDeleteTeam } from "../../../../client/teamService";
 import { useNavigate } from "react-router";
+import EditTeam from "./EditTeam";
 
-const rows = new Array(30).fill(0).map((value, index, array) => ({
-    id: index,
-    name: `Team ${index}`,
-    description: `Test description ${index}`,
-}));
-
-const getColumnConfig = () => [
+const getColumnConfig = (openEditRoleCb, openDeleteRoleCb) => [
     {
         field: "id",
         headerName: "Id",
@@ -32,10 +33,33 @@ const getColumnConfig = () => [
         headerName: "Description",
         width: 600,
     },
+
+    {
+        field: "action",
+        headerName: "Action",
+        width: 200,
+        renderCell: ({ id }) => {
+            return <Box sx={{ display: "flex", gap: 1 }}>
+                <ActionButton onClick={() => openEditRoleCb(id)}>
+                    Edit
+                </ActionButton>
+                <ActionButton onClick={() => openDeleteRoleCb(id)}>
+                    Delete
+                </ActionButton>
+            </Box >
+        }
+    }
+
 ];
 
 
 export default function TeamList() {
+    const [teamId, setTeamId] = React.useState(false);
+
+    const [isCreateTeamOpen, setIsCreateTeamOpen] = React.useState(false);
+    const [isEditTeamOpen, setIsEditTeamOpen] = React.useState(false);
+    const [isDeleteTeamOpen, setIsDeleteTeamOpen] = React.useState(false);
+
     const navigate = useNavigate();
 
     const {
@@ -46,8 +70,51 @@ export default function TeamList() {
         method: fetchTeamList
     } = useFetchListTeam();
 
+    const {
+        isSuccess: isDeleteSuccess,
+        method: deleteTeam
+    } = useDeleteTeam();
+
+    React.useEffect(() => {
+        if (isDeleteSuccess) {
+            fetchTeamList();
+        }
+    }, [isDeleteSuccess])
+
+
+
     return (
         <Fragment>
+            {isCreateTeamOpen && <CreateTeam
+                closeDialogCb={() => setIsCreateTeamOpen(false)}
+            />}
+
+            {isEditTeamOpen && <EditTeam 
+                closeDialogCb={() => setIsEditTeamOpen(false)}
+                teamId={teamId}
+            />}
+
+            {isDeleteTeamOpen &&
+                <ConfirmDialog
+                    title={"Confirm"}
+                    message="Bạn có muốn xóa chức vụ này"
+                    cancelAction={{
+                        text: "Cancel",
+                        handler: () => {
+                            setTeamId(null);
+                            setIsDeleteTeamOpen(false)
+                        },
+                    }}
+                    confirmAction={{
+                        text: "Confirm",
+                        handler: () => {
+                            setIsDeleteTeamOpen(false);
+                            setTeamId(null);
+                            deleteTeam(teamId);
+                        }
+                    }}
+                />}
+
             <DataGridLayout
                 title={"Danh sách team"}
                 datagridSection={
@@ -59,7 +126,15 @@ export default function TeamList() {
                         rowCount={response?.total ?? 0}
                         paginationMode="server"
                         rows={response?.data ?? []}
-                        columns={getColumnConfig()}
+                        columns={getColumnConfig(
+                            (id) => {
+                                setTeamId(id);
+                                setIsEditTeamOpen(true);
+                            },
+                            (id) => {
+                                setTeamId(id);
+                                setIsDeleteTeamOpen(true);
+                            })}
                         isError={isError}
                         isLoading={isPending}
                         isSuccess={isSuccess}
@@ -70,7 +145,11 @@ export default function TeamList() {
                         text={"Thao tác"}
                         menu={
                             [
-                                { text: "Tạo mới", handler: () => { } }
+                                {
+                                    text: "Tạo mới Team", handler: () => {
+                                        setIsCreateTeamOpen(true);
+                                    }
+                                }
                             ]
                         }
                     />

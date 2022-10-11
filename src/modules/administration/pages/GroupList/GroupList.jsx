@@ -9,16 +9,7 @@ import ActionButton from "../../../../components/DataGrid/ActionButton";
 
 import CreateGroup from "./CreateGroup";
 import EditGroup from "./EditGroup";
-
-const rows = new Array(30).fill(0).map((value, index, array) => ({
-    id: index,
-    name: `Group ${index}`,
-    description: `Test description ${index}`,
-    created: "01/01/2022",
-    creator: "Minh Nhat",
-    modified: "08/08/2022",
-    modifier: "Minh Nhat",
-}));
+import { useFetchListGroup } from "../../../../client/groupService";
 
 const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
     {
@@ -38,30 +29,6 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
         field: "description",
         headerName: "Description",
         width: 150,
-    },
-
-    {
-        field: "created",
-        headerName: "Created",
-        width: 150,
-    },
-
-    {
-        field: "creator",
-        headerName: "Creator",
-        width: 150,
-    },
-
-    {
-        field: "modified",
-        headerName: "Modified",
-        width: 150,
-    },
-
-    {
-        field: "modifier",
-        headerName: "Modifier",
-        width: 150
     },
 
     {
@@ -87,6 +54,18 @@ export default function GroupList() {
     const [isCreateGroupOpen, setIsCreateGroupOpen] = React.useState(false);
     const [isEditGroupOpen, setIsEditGroupOpen] = React.useState(false);
 
+    const {
+        isSuccess: isFetchSuccess,
+        data: fetchedGroups
+    } = useFetchListGroup();
+
+
+    React.useEffect(() => {
+        if (isFetchSuccess) {
+            console.log(fetchedGroups);
+        }
+    }, [isFetchSuccess])
+
     return (
         <Fragment>
             {isCreateGroupOpen && <CreateGroup closeDialogCb={() => setIsCreateGroupOpen(false)} />}
@@ -96,7 +75,7 @@ export default function GroupList() {
                 title={"Danh sách nhóm"}
                 datagridSection={
                     <DataGrid
-                        rows={rows}
+                        rows={fetchedGroups.data || []}
                         columns={getColumnConfig({
                             onEditBtnClick: () => setIsEditGroupOpen(true)
                         })}

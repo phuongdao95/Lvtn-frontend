@@ -32,6 +32,9 @@ export const getPendingErrorSuccessApiPatternFunction = (fn) => (pathPrefix) => 
 export const getUseCreateResourceFunction =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsPending, setIsSuccess }, pathPrefix) => {
         const createResource = async (formData) => {
+            setIsError(false);
+            setIsPending(true);
+            setIsSuccess(false);
             try {
                 const path = pathPrefix;
                 await api.post(path, formData);
@@ -69,13 +72,15 @@ export const getUseUpdateResourceFunction =
 
 export const getUseFetchListResourceFunction =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsPending, setIsSuccess, setData }, pathPrefix) => {
-        const fetchList = async function (offset = 0, limit = 8, query) {
+        const fetchList = async function (offset = 0, limit = 8, query, type = "name") {
             setIsError(false);
             setIsPending(true);
             setIsSuccess(false);
 
             try {
-                const params = !query ? { offset, limit } : { offset, limit, query: encodeURIComponent(query) }
+                const params = !query ? { offset, limit }
+                    : { offset, limit, query: encodeURIComponent(query), type }
+
                 const response = await api.get(pathPrefix, {
                     params
                 });
@@ -102,6 +107,10 @@ export const getUseFetchListResourceFunction =
 export const getUseDeleteResourceFunction =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsPending, setIsSuccess, setMethod }, pathPrefix) => {
         const deleteResource = async (id) => {
+            setIsError(false);
+            setIsPending(true);
+            setIsSuccess(false);
+
             try {
                 const path = `${pathPrefix}/${id}`
                 await api.delete(path, {});

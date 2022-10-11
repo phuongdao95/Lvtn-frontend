@@ -4,7 +4,8 @@ import React from "react";
 import MuiAppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
 import NavBar from "../components/NavBar";
-import SideBar from "../components/SideBar";
+import NavigationMenu from "../components/SideBar/NavigationMenu";
+import { blueGrey, grey } from "@mui/material/colors";
 
 const drawerWidth = 240;
 
@@ -34,9 +35,9 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
             duration: theme.transitions.duration.leavingScreen,
         }),
         marginLeft: `-${drawerWidth}px`,
+        background: blueGrey[100],
         marginTop: "60px",
-        backgroundColor: "#e6e6e6",
-        height: "100vh",
+        height: "calc(100vh - 60px)",
         ...(open && {
             transition: theme.transitions.create("margin", {
                 easing: theme.transitions.easing.easeOut,
@@ -58,7 +59,8 @@ export default function MainLayout({ children }) {
         <AppBar open={open}>
             <NavBar onOpenSideBar={() => setOpen(true)} open={open} />
         </AppBar>
-        <SideBar onCloseSideBar={() => setOpen(false)} open={open} />
+
+        <NavigationMenu onCloseSideBar={() => setOpen(false)} open={open} />
         <Main open={open}>
             {children}
         </Main>
