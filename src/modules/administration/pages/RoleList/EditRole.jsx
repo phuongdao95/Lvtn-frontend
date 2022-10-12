@@ -179,8 +179,11 @@ export default function EditRole({ closeDialogCb, roleId }) {
         },
         onSubmit: (values) => {
             const pMap = permisisonMap;
-            const pList = pMap.reduce((acc, current) => [...acc, current]);
-            const formData = { permisisonList: pList, ...values };
+            const pList = Object.entries(pMap).reduce((acc, [key, value]) => {
+                return value ? [...acc, key] : [...acc];
+            }, [])
+
+            const formData = { permissionNames: pList, ...values };
             editRole(roleId, formData);
         }
     })

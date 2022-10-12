@@ -1,7 +1,7 @@
 import React from "react";
 import { ListItem, ListItemButton, ListItemText, ListItemIcon } from "@mui/material";
 import { Fragment } from "react";
-import { blueGrey, grey } from "@mui/material/colors";
+import { blueGrey, grey, lightBlue } from "@mui/material/colors";
 
 export default function NavigationItem({ icon, text, onClick, subItems }) {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -11,7 +11,7 @@ export default function NavigationItem({ icon, text, onClick, subItems }) {
         <ListItem disablePadding onClick={(event) => {
             toggleOpen();
         }} sx={{
-            background: grey[300]
+            background: lightBlue[100]
         }}>
             <ListItemButton>
                 <ListItemIcon>

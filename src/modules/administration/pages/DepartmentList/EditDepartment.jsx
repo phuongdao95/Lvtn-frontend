@@ -6,50 +6,101 @@ import OneColumnBox from "../../../../components/DialogForm/OneColumnBox"
 import TwoColumnBox from "../../../../components/DialogForm/TwoColumnBox";
 import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
+import AutoCompleteMultiple from "../../../../components/DialogForm/AutoCompleteMultiple";
+import AutoComplete from "../../../../components/DialogForm/AutoComplete";
 
 import { useFormik } from "formik";
-import { useCreateTeam, useFetchTeamListWithoutDepartment } from "../../../../client/teamService";
-import AutoCompleteMultiple from "../../../../components/DialogForm/AutoCompleteMultiple";
+import { useFetchTeamListWithoutDepartment } from "../../../../client/teamService";
+import { useFetchListUserWhoIsManager } from "../../../../client/userService";
 
+import { useUpdateDepartment, useFetchOneDepartment } from "../../../../client/departmentService";
 
 export default function EditDepartment({ closeDialogCb, departmentId }) {
     const [teamOptions, setTeamOptions] = React.useState([]);
+    const [managerOptions, setManagerOptions] = React.useState([]);
+
+    const {
+        isSuccess: isFetchOneSuccess,
+        method: fetchOneDepartment,
+        data: oneDepartment,
+    } = useFetchOneDepartment();
+
+    const {
+        method: updateDepartment
+    } = useUpdateDepartment();
 
     const formik = useFormik({
         initialValues: {
             name: "",
             description: "",
             teams: [],
-            parentDepartment: "",
-            manager: "",
+            parentDepartment: { id: null, name: "" },
+            manager: { id: null, name: "" },
         },
         onSubmit: (values) => {
+            const teamIds = values.teams.map(team => team.id);
+            const parentDepartmentId = values.parentDepartment.id;
+            const managerId = values.manager.id;
 
+            const { teams, parentDepartment, manager,
+                ...rest } = values;
+
+            updateDepartment({
+                ...rest,
+                teamIds,
+                managerId,
+                parentDepartmentId,
+            })
         }
     })
 
     const {
-        isSuccess: isFetchSuccess,
         data: fetchedTeams,
         method: fetchTeams,
     } = useFetchTeamListWithoutDepartment();
 
     const {
-        isSuccess: isCreateSuccess,
-        method: createDepartment
-    } = useCreateTeam();
+        data: fetchedManagers,
+        method: fetchManager,
+    } = useFetchListUserWhoIsManager();
 
     React.useEffect(() => {
         fetchTeams();
     }, []);
 
     React.useEffect(() => {
+        fetchOneDepartment(departmentId);
+    })
+
+    React.useEffect(() => {
+        if (isFetchOneSuccess) {
+            console.log(oneDepartment);
+        }
+    }, [isFetchOneSuccess])
+
+    React.useEffect(() => {
         if (fetchedTeams) {
             const teamOptions = fetchedTeams.data
                 .map((team) => ({ id: team.id, name: team.name }))
-            setTeamOptions(teamOptions)
+
+            setTeamOptions(teamOptions);
         }
-    }, [isFetchSuccess])
+    }, [fetchedTeams])
+
+    React.useEffect(() => {
+        fetchManager();
+    }, [])
+
+    React.useEffect(() => {
+        if (fetchedManagers) {
+            const managers = fetchedManagers.data.map((manager) => ({
+                id: manager.id, name: manager.name
+            }));
+
+            setManagerOptions(managers)
+        }
+    }, [fetchedManagers])
+
 
     return <Dialog
         primaryAction={{
@@ -60,7 +111,7 @@ export default function EditDepartment({ closeDialogCb, departmentId }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Tạo mới Department"
+        title="Chỉnh sửa Department"
     >
         <DialogForm>
             <Box component="form" onSubmit={formik.handleSubmit}>
@@ -79,29 +130,17 @@ export default function EditDepartment({ closeDialogCb, departmentId }) {
                     secondSlot={
                         <Fragment>
                             <Label text={"Manager"} />
-                            <TextField
-                                id="description"
-                                value={formik.values.description}
-                                onChange={formik.handleChange}
+                            <AutoComplete
+                                id="manager"
+                                name="manager"
+                                options={managerOptions}
+                                getOptionLabel={(option) => option.name}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                value={formik.values.manager}
+                                onChange={(event, value) => {
+                                    formik.setFieldValue("manager", value);
+                                }}
                             />
-                        </Fragment>
-                    }
-                />
-
-                <TwoColumnBox
-                    firstSlot={
-                        <Fragment>
-                            <Label text={"Parent Department"} />
-                            <TextField id="name"
-                                name="name"
-                                value={formik.values.name}
-                                onChange={formik.handleChange}
-                            />
-                        </Fragment>
-                    }
-
-                    secondSlot={
-                        <Fragment>
                         </Fragment>
                     }
                 />
@@ -114,9 +153,20 @@ export default function EditDepartment({ closeDialogCb, departmentId }) {
                             options={teamOptions}
                             value={formik.values.teams}
                             onChange={(event, value) => {
-                                console.log(value);
                                 formik.setFieldValue("teams", value)
                             }}
+                        />
+                    </Fragment>}
+                />
+
+                <OneColumnBox
+                    slot={<Fragment>
+                        <Label text={"Description"} />
+                        <TextField
+                            id="description"
+                            name="description"
+                            value={formik.values.description}
+                            onChange={formik.handleChange}
                         />
                     </Fragment>}
                 />

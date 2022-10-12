@@ -5,12 +5,14 @@ import MenuButton from "../../../../components/DataGrid/MenuButton";
 import SearchField from "../../../../components/SearchField";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
-
-import { useFetchListUser } from "../../../../client/userService";
-import { useNavigate } from "react-router";
-import { Box } from "@mui/system";
+import InfoDialog from "../../../../components/Dialog/InfoDialog";
+import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 import CreateUser from "./CreateUser";
 import EditUser from "./EditUser";
+
+import { useFetchListUser, useDeleteUser } from "../../../../client/userService";
+import { useNavigate } from "react-router";
+import { Box } from "@mui/system";
 
 const getColumnConfig = (openEditCb, openDeleteCb) => [
     {
@@ -71,6 +73,12 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
     }
 ];
 
+const initialDialogState = {
+    title: "",
+    message: "",
+    confirmAction: () => { }
+}
+
 
 
 export default function UserList() {
@@ -80,6 +88,32 @@ export default function UserList() {
     const [isEditUserOpen, setIsEditUserOpen] = React.useState(false);
     const [isDeleteUserOpen, setIsDeleteUserOpen] = React.useState(false);
 
+    const [isInfoDialogOpen, setIsInfoDialogOpen] = React.useState(false);
+    const [infoDialogMessage, setInfoDialogMessage] = React.useState({
+        initialDialogState
+    })
+
+    const resetDialogState = () => setInfoDialogMessage(initialDialogState)
+
+    const {
+        isSuccess: isDeleteSuccess,
+        isError: isDeleteError,
+        method: deleteUser,
+    } = useDeleteUser();
+
+    React.useEffect(() => {
+        if (isDeleteSuccess) {
+            fetchUserList();
+        }
+        if (isDeleteError) { 
+            setInfoDialogMessage({
+                title: 'Error',
+                message: 'Có lỗi xảy ra. Không thể xóa được item'
+            });
+            setIsInfoDialogOpen(true);
+        }
+    }, [isDeleteSuccess, isDeleteError])
+
     const {
         isPending,
         isSuccess,
@@ -88,10 +122,60 @@ export default function UserList() {
         method: fetchUserList
     } = useFetchListUser();
 
+    React.useEffect(() => {
+        if (isError) {
+            setInfoDialogMessage({
+                title: 'Error',
+                message: 'Có lỗi xảy ra từ server, xin vui lòng load lại trang hoặc đăng nhập với quyền cao hơn'
+            });
+            setIsInfoDialogOpen(true);
+        }
+    }, [isError]);
+
     return (
         <Fragment>
-        {isCreateUserOpen && <CreateUser closeDialogCb={() => setIsCreateUserOpen(false)} />}
-            {isEditUserOpen && <EditUser closeDialogCb={() => setIsEditUserOpen(false)} userId={userId} />}
+            {isCreateUserOpen && <CreateUser
+                closeDialogCb={
+                    () => setIsCreateUserOpen(false)}
+                createSuccessCb={() => {
+                    setIsCreateUserOpen(false);
+                    fetchUserList()
+                }} />}
+            {isEditUserOpen &&
+                <EditUser closeDialogCb={
+                    () => setIsEditUserOpen(false)}
+                    userId={userId} />}
+
+            {isDeleteUserOpen &&
+                <ConfirmDialog
+                    title={"Confirm"}
+                    message="Bạn có muốn xóa chức vụ này"
+                    cancelAction={{
+                        text: "Cancel",
+                        handler: () => {
+                            setUserId(null);
+                            setIsDeleteUserOpen(false)
+                        },
+                    }}
+                    confirmAction={{
+                        text: "Confirm",
+                        handler: () => {
+                            setIsDeleteUserOpen(false);
+                            setUserId(null);
+                            deleteUser(userId);
+                        }
+                    }}
+                />}
+
+
+            {isInfoDialogOpen && <InfoDialog
+                title={infoDialogMessage.title}
+                message={infoDialogMessage.message}
+                closeDialogCb={() => {
+                    setIsInfoDialogOpen(false);
+                    resetDialogState();
+                }}
+            />}
 
             <DataGridLayout
                 title={"Danh sách nhân viên"}

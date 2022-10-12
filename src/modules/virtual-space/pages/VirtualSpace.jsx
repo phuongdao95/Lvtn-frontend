@@ -1,7 +1,6 @@
 import React, {Fragment, useState} from 'react';
 import Chatbox from '../../../components/Chatbox/Chatbox';
 import Incorporate from '../components/Incorporate';
-import Card from '../components/Card';
 import { Typography, Box, Grid, TableCell, CssBaseline, AppBar, Toolbar, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Button } from '@mui/material';
 import HistoryCheck from '../../../components/Calendar/HistoryCheck'
 import ModalDay from '../components/ModalDay';

@@ -10,10 +10,9 @@ import AutoCompleteMultiple from "../../../../components/DialogForm/AutoComplete
 import AutoComplete from "../../../../components/DialogForm/AutoComplete";
 
 import { useFormik } from "formik";
-import { useCreateTeam, useFetchTeamListWithoutDepartment } from "../../../../client/teamService";
+import { useFetchTeamListWithoutDepartment } from "../../../../client/teamService";
 import { useFetchListUserWhoIsManager } from "../../../../client/userService";
 
-import * as yup from "yup";
 import { useCreateDepartment } from "../../../../client/departmentService";
 
 export default function CreateDepartment({ closeDialogCb }) {
@@ -21,7 +20,6 @@ export default function CreateDepartment({ closeDialogCb }) {
     const [managerOptions, setManagerOptions] = React.useState([]);
 
     const {
-        isSuccess: isCreateSuccess,
         method: createDepartment
     } = useCreateDepartment();
 
@@ -30,7 +28,7 @@ export default function CreateDepartment({ closeDialogCb }) {
             name: "",
             description: "",
             teams: [],
-            parentDepartment: {},
+            parentDepartment: { id: null, name: "" },
             manager: { id: null, name: "" },
         },
         onSubmit: (values) => {
@@ -51,7 +49,6 @@ export default function CreateDepartment({ closeDialogCb }) {
     })
 
     const {
-        isSuccess: isFetchSuccess,
         data: fetchedTeams,
         method: fetchTeams,
     } = useFetchTeamListWithoutDepartment();
@@ -142,6 +139,18 @@ export default function CreateDepartment({ closeDialogCb }) {
                             onChange={(event, value) => {
                                 formik.setFieldValue("teams", value)
                             }}
+                        />
+                    </Fragment>}
+                />
+
+                <OneColumnBox
+                    slot={<Fragment>
+                        <Label text={"Description"} />
+                        <TextField
+                            id="description"
+                            name="description"
+                            value={formik.values.description}
+                            onChange={formik.handleChange}
                         />
                     </Fragment>}
                 />

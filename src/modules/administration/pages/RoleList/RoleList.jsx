@@ -56,11 +56,10 @@ export default function RoleList() {
 
     const {
         isSuccess: isDeleteSuccess,
-        isPending: isDeletePending,
         method: deleteRole
     } = useDeleteRole();
 
-    const [roleId, setRoleId] = useState(null);
+    const [roleId, setRoleId] = React.useState(null);
 
     const [isDeleteRolePopupOpen, setIsDeleteRolePopupOpen] = React.useState(false);
     const [isCreateRolePopupOpen, setIsCreateRolePopupOpen] = React.useState(false);

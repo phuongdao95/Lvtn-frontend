@@ -1,159 +1,55 @@
 import React, { Fragment } from "react";
-import DataGridLayout from "../../../../layouts/DataGridLayout";
-import DataGrid from "../../../../components/DataGrid";
-import SearchField from "../../../../components/SearchField";
-import Select from "../../../../components/DataGrid/Select";
-import SearchButton from "../../../../components/DataGrid/SearchButton";
+import DataGridTabLayout from "../../../../layouts/DataGridTabLayout";
 import MenuButton from "../../../../components/DataGrid/MenuButton";
+import DeductionList from "./DeductionList";
+import AllowanceList from "./AllowanceList";
+import BonusList from "./BonusList";
 import CreateDAB from "./CreateDAB";
-import EditDAB from "./EditDAB";
-
-import { useCreateDAB, useFetchListDAB } from "../../../../client/dabService";
-import { useNavigate } from "react-router";
-
-const columns = [
-  {
-    field: "id",
-    headerName: "id",
-    width: 150,
-  },
-  {
-    field: "name",
-    headerName: "Tên",
-    width: 150,
-  },
-  {
-    field: "formula",
-    headerName: "Công thức",
-    width: 250,
-  },
-  {
-    field: "salaryDeltaType",
-    headerName: "Loại",
-    width: 150,
-  },
-  {
-    field: "description",
-    headerName: "Mô tả",
-    width: 150,
-  }
-  
-];
-
-const rows = [];
 
 export default function DABList() {
-  const navigate = useNavigate();
-
-  const [rows, setRows] = React.useState([]);
-  const [dataGridOption, setDataGridOption] = React.useState("Khấu trừ");
-
   const [isCreateDABOpen, setIsCreateDABOpen] = React.useState(false);
-  const [isEditDABOpen, setIsEditDABOpen] = React.useState(true);
 
-  const {
-    method: deleteDAB,
-    isPending: isDeletePending,
-    isSuccess: isDeleteSuccess,
-    isError: isDeleteError
-  } = useCreateDAB();
-
-  const {
-    data: fetchedDAB,
-    isSuccess: isfetchSuccess,
-  } = useFetchListDAB();
-
-  React.useEffect(() => {
-    if (isfetchSuccess) {
-      setRows(fetchedDAB.data)
-    }
-  }, [isfetchSuccess]);
-
-  return (
-    <Fragment>
-      {isCreateDABOpen &&
-        <CreateDAB
-          closeDialogCb={
-            () => setIsCreateDABOpen(false)
-          }
-        />}
-      {isEditDABOpen &&
-        <EditDAB
-          closeDialogCb={
-            () => setIsEditDABOpen(false)
-          }
-        />
+  return <Fragment>
+    {isCreateDABOpen && <CreateDAB closeDialogCb={() => setIsCreateDABOpen(false)} />}
+    <DataGridTabLayout
+      title={"Khấu trừ, phụ cấp và thưởng"}
+      primaryButtonSection={<MenuButton
+        text={"Thao tác"}
+        menu={
+          [
+            {
+              text: "Tạo mới khấu trừ, phụ cấp, thưởng",
+              handler: () => {
+                setIsCreateDABOpen(true)
+              }
+            },
+          ]
+        }
+        variant="contained"
+        color="info"
+      />}
+      secondaryButtonSection={
+        <Fragment></Fragment>
       }
-
-
-      <DataGridLayout
-        title={"Khấu trừ, phụ cấp và lương thưởng"}
-        datagridSection={
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            isError={false}
-            isLoading={false}
-            isSuccess={false}
-          />
-        }
-        primaryButtonSection={
-          <MenuButton
-            text={"Thao tác"}
-            menu={
-              [
-                { text: "Tạo mới  ", handler: () => setIsCreateDABOpen(true) },
-              ]
-            }
-            variant="contained"
-            color="info"
-          />
-        }
-        secondaryButtonSection={
-          <MenuButton
-            text={"Liên kết liên quan"}
-            menu={[
-              {
-                text: "Danh sách Payroll", handler: () => {
-                  navigate("/payroll");
-                }
-              },
-              {
-                text: "Công thức và biến phụ thuộc",
-                handler: () => {
-                  navigate("/formula")
-                }
-              },
-            ]}
-            variant="outlined"
-            color="info"
-          />}
-        searchSection={<SearchField />}
-        dropdownFilterSection={
-          <Select
-            options={[
-              {
-                label: "Khấu trừ", handler: () => {
-                  setDataGridOption("Khấu trừ")
-                }
-              },
-              {
-                label: "Phụ cấp",
-                handler: () => {
-                  setDataGridOption("Phụ cấp");
-                }
-              },
-              {
-                label: "Lương thưởng", handler: () => {
-                  setDataGridOption("Lương thưởng");
-                }
-              },
-            ]}
-            value={dataGridOption}
-          />
-        }
-        searchButtonSection={<SearchButton />}
-      />
-    </Fragment>
-  );
+      tabSections={
+        [
+          {
+            index: 0,
+            label: "Khấu trừ",
+            dataGrid: <DeductionList />,
+          },
+          {
+            index: 1,
+            label: "Phụ cấp",
+            dataGrid: <AllowanceList />,
+          },
+          {
+            index: 2,
+            label: "Thưởng",
+            dataGrid: <BonusList />
+          }
+        ]
+      }
+    />;
+  </Fragment>
 }

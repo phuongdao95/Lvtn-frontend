@@ -115,10 +115,6 @@ export default function CreateRole({ closeDialogCb }) {
     const [permisisonMap, setPermissionMap] = useState(getDefaultPermissionInitialState());
 
     const {
-        isPending,
-        isSuccess,
-        isError,
-        data: submitResponse,
         method: createRole
     } = useCreateRole();
 
@@ -136,7 +132,7 @@ export default function CreateRole({ closeDialogCb }) {
                 return value ? [...acc, key] : [...acc];
             }, [])
 
-            const formData = { permissionList: pList, ...values };
+            const formData = { permissionNames: pList, ...values };
             createRole(formData);
         }
     })

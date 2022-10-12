@@ -14,7 +14,6 @@ import Timekeeping from "../../modules/check-day/pages/Timekeeping";
 import Registe from "../../modules/check-day/pages/Registe";
 import CheckIn from "../../modules/check-day/pages/CheckIn";
 import Calendar from "../../modules/check-day/pages/Calendar";
-import VirtualSpace from "../../modules/virtual-space/pages/VirtualSpace";
 import TableConfig from "../../modules/settings/virtual-space-config/TableConfig/TableConfig";
 import LabelConfig from "../../modules/settings/virtual-space-config/LabelConfig/LabelConfig";
 import TypeWorkDayConfig from "../../modules/settings/check-day-config/TypeWorkDayConfig/TypeWorkDayConfig";
@@ -37,6 +36,13 @@ import TeamList from "../../modules/administration/pages/TeamList";
 import AccountsAndRolesPage from "../../modules/shares/pages/AccountsAndRolesPage/AccountsAndRolesPage";
 import PayrollList from "../../modules/salary-management/pages/PayRollList/PayrollList.jsx";
 import EditPayroll from "../../modules/salary-management/pages/PayRollList/EditPayroll";
+import UserProfile from "../../modules/shares/pages/UserProfile/UserProfile";
+import MyDABs from "../../modules/salary-management/pages/MyDABs/MyDABs";
+import FormulaVariable from "../../modules/salary-management/pages/FormulaVariable/FormulaVariable";
+import { Group } from "@mui/icons-material";
+import BoardDetail from "../../modules/virtual-space/pages/BoardDetail";
+import BoardList from "../../modules/virtual-space/pages/BoardList";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 export default function Routings() {
     return <Routes>
@@ -56,9 +62,11 @@ export default function Routings() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/select-type-work-shift" element={<SelectTypeWorkShift />} />
 
-        <Route path="/virtual-space" element={<VirtualSpace />} />
-        <Route path="/virtual-space-config/table" element={<TableConfig />} />
-        <Route path="/virtual-space-config/label" element={<LabelConfig />} />
+        <Route path="/virtual-space/" element={<BoardDetail />} />
+        <Route path="/virtual-space/board" element={<BoardList />} />
+        <Route path="/virtual-space/table-config" element={<TableConfig />} />
+        <Route path="/virtual-space/label-config" element={<LabelConfig />} />
+
         <Route path="/check-day-config/type-work-day" element={<TypeWorkDayConfig />} />
         <Route path="/check-day-config/rules-work-day" element={<RulesWorkDayConfig />} />
         <Route path="/check-day-config/punish-work-day" element={<PunishWorkDayConfig />} />
@@ -68,21 +76,35 @@ export default function Routings() {
         <Route path="/list-users" element={<ListUsers />} />
 
         {/* Administration module */}
-        <Route path="/user" element={<UserList />} />
-        <Route path="/role" element={<RoleList />} />
+
+        <Route path="/user" element={
+            <ProtectedRoute>
+                <UserList />
+            </ProtectedRoute>
+        } />
+
+        <Route path="/role" element={
+            <ProtectedRoute>
+                <RoleList />
+            </ProtectedRoute>
+        } />
         <Route path="/group" element={<GroupList />} />
         <Route path="/permission" element={<PermissionList />} />
         <Route path="/department" element={<DepartmentList />} />
         <Route path="/team" element={<TeamList />} />
+        <Route path="/group" element={<Group />} />
 
         {/* Salary Management Module */}
         <Route path="/salary" element={<SalaryList />} />
         <Route path="/dab" element={<DABList />} />
+        <Route path="/my-dab" element={<MyDABs />} />
         <Route path="/formula" element={<FormulaList />} />
-        <Route path="/payroll/:id" element={<EditPayroll />} />
+        <Route path="/formula-variable" element={<FormulaVariable />} />
         <Route path="/payroll" element={<PayrollList />} />
+        <Route path="/payroll/:id" element={<EditPayroll />} />
 
-        {/* Legacy components */}
-        <Route path="/account-role" element={<AccountsAndRolesPage />} />
+        {/** Shared module */}
+        <Route path="/my-profile" element={<UserProfile />} />
+
     </Routes>
 }
