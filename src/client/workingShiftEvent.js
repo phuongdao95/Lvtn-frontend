@@ -24,3 +24,44 @@ export const useUpdate =
 
 export const useDelete =
     getUseDeleteResourceFunction(PATH_PREFIX);
+
+export const useGetByUser =
+    getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
+        const fetchByUser = async (userId) => {
+            try {
+                const response = await api.get(`${pathPrefix}/${userId}`);
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+            } catch (err) {
+                console.error(err);
+                setIsSuccess(false);
+                setIsError(true);
+            } finally {
+                setIsPending(false);
+            }
+        }
+        return fetchByUser;
+    })('workingshift/user');
+
+export const useUpdateSelected =
+    getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
+        const updateSelected = async (userId, activeId) => {
+            try {
+                const params = { userId: parseInt(userId) };
+                const response = await api.put(pathPrefix, activeId, { params });
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+            } catch (err) {
+                console.error(err);
+                setIsSuccess(false);
+                setIsError(true);
+            } finally {
+                setIsPending(false);
+            }
+        }
+        return updateSelected;
+    })('workingshift/user');

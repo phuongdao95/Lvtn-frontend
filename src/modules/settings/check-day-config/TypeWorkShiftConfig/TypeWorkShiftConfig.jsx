@@ -10,7 +10,37 @@ import Update from './Update';
 import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 
 import { useFetchList, useDelete } from "../../../../client/workingShiftEvent";
-
+import dayjs from 'dayjs';
+const listDateOfWeek = [
+    {
+        id: 1,
+        name: "Thứ hai",
+    },
+    {
+        id: 2,
+        name: "Thứ ba",
+    },
+    {
+        id: 3,
+        name: "Thứ tư",
+    },
+    {
+        id: 4,
+        name: "Thứ năm",
+    },
+    {
+        id: 5,
+        name: "Thứ sáu",
+    },
+    {
+        id: 6,
+        name: "Thứ bảy",
+    },
+    {
+        id: 0,
+        name: "Chủ nhật",
+    },
+]
 const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
     {
         field: "id",
@@ -43,9 +73,15 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
     },
 
     {
-        field: "coefficient",
-        headerName: "Hệ số lương",
+        field: "formula",
+        headerName: "Công thức",
         width: 150,
+    },
+
+    {
+        field: "description",
+        headerName: "Mô tả",
+        width: 250,
     },
 
     {
@@ -70,6 +106,7 @@ const TypeWorkShiftConfig = () => {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [activeId, setActiveId] = useState('');
+    const [data, setData] = useState([]);
     // let activeId = '';
     const {
         isPending,
@@ -89,12 +126,33 @@ const TypeWorkShiftConfig = () => {
             fetchList();
         }
     }, [isDeleteSuccess])
+    useEffect(() => {
+        if (isSuccess) {
+            let lst = [];
+            response.data.map((item, index) => {
+                let data = {
+                    id: item.id,
+                    name: item.name,
+                    startTime: dayjs(item.startTime).format('h:mm a'),
+                    endTime: dayjs(item.endTime).format('h:mm a'),
+                    description: item.description,
+                    dateOfWeek: listDateOfWeek[dayjs(item.startTime).get('day')].name,
+                };
+                lst.push(data);
+            });
+            setData(lst);
+        }
+    }, [isSuccess])
+
+    const done = () => {
+        fetchList();
+    }
 
     const navigate = useNavigate();
     return (
         <Fragment>
-            {isCreateOpen && <Create setOpen={setIsCreateOpen} />}
-            {isEditOpen && <Update setOpen={setIsEditOpen} id={activeId}/>}
+            {isCreateOpen && <Create setOpen={setIsCreateOpen} done={done} />}
+            {isEditOpen && <Update setOpen={setIsEditOpen} id={activeId} done={done} />}
             {isDeleteOpen &&
                 <ConfirmDialog
                     title={"Xác nhận"}
@@ -119,7 +177,7 @@ const TypeWorkShiftConfig = () => {
                 title={"Danh sách ca làm việc"}
                 datagridSection={
                     <DataGrid
-                        rows={response?.data ?? []}
+                        rows={data}
                         columns={getColumnConfig({
                             onEditBtnClick: (id) => {
                                 setActiveId(id);
@@ -140,7 +198,9 @@ const TypeWorkShiftConfig = () => {
                         text={"Thao tác"}
                         menu={
                             [
-                                { text: "Tạo mới", handler: () => setIsCreateOpen(true) },
+                                { text: "Tạo mới", handler: () => {
+                                    setIsCreateOpen(true)
+                                } },
                             ]
                         }
                         variant="contained"
@@ -152,12 +212,12 @@ const TypeWorkShiftConfig = () => {
                         text={"Liên kết liên quan"}
                         menu={
                             [
-                                { text: "Danh sách luật chấm công", handler: () => { 
-                                    navigate("/check-day-config/rules-work-day"); 
-                                } },
-                                { text: "Danh sách hình phạt", handler: () => { 
-                                    navigate("/check-day-config/punish-work-day"); 
-                                } },
+                                // { text: "Danh sách luật chấm công", handler: () => { 
+                                //     navigate("/check-day-config/rules-work-day"); 
+                                // } },
+                                // { text: "Danh sách hình phạt", handler: () => { 
+                                //     navigate("/check-day-config/punish-work-day"); 
+                                // } },
                                 { text: "Danh sách ngày lễ", handler: () => { 
                                     navigate("/check-day-config/holiday"); 
                                 } },
