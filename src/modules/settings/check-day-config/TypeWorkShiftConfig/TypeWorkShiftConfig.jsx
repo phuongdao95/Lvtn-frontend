@@ -10,7 +10,12 @@ import Update from './Update';
 import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 
 import { useFetchList, useDelete } from "../../../../client/workingShiftEvent";
+import {useFetchListFormula} from "../../../../client/formulaService.js";
 import dayjs from 'dayjs';
+const lookUp = (id, lst) => {
+    let re = lst.filter(item => parseInt(id, 10) === item.id);
+    return re && re[0] ? re[0] : null;
+}
 const listDateOfWeek = [
     {
         id: 1,
@@ -107,6 +112,7 @@ const TypeWorkShiftConfig = () => {
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [activeId, setActiveId] = useState('');
     const [data, setData] = useState([]);
+    const [lstFormula, setLstFormula] = useState([]);
     // let activeId = '';
     const {
         isPending,
@@ -120,6 +126,16 @@ const TypeWorkShiftConfig = () => {
         isPending: isDeletePending,
         method: deleteId
     } = useDelete();
+    const {
+        isSuccess: isFetchListFormulaSuccess,
+        data: fetchedFormulaList,
+    } = useFetchListFormula();
+    // useEffect(() => {
+    //     if (isFetchListFormulaSuccess) {
+    //         setLstFormula(fetchedFormulaList.data);
+    //         console.log(fetchedFormulaList.data);
+    //     }
+    // }, [isFetchListFormulaSuccess])
 
     useEffect(() => {
         if (isDeleteSuccess) {
@@ -127,8 +143,9 @@ const TypeWorkShiftConfig = () => {
         }
     }, [isDeleteSuccess])
     useEffect(() => {
-        if (isSuccess) {
+        if (isSuccess && isFetchListFormulaSuccess) {
             let lst = [];
+            let lstFormula = fetchedFormulaList.data;
             response.data.map((item, index) => {
                 let data = {
                     id: item.id,
@@ -136,7 +153,8 @@ const TypeWorkShiftConfig = () => {
                     startTime: dayjs(item.startTime).format('h:mm a'),
                     endTime: dayjs(item.endTime).format('h:mm a'),
                     description: item.description,
-                    dateOfWeek: listDateOfWeek[dayjs(item.startTime).get('day')].name,
+                    dateOfWeek: listDateOfWeek[dayjs(item.startTime).get('day') - 1 >= 0 ? dayjs(item.startTime).get('day') - 1 : 6].name,
+                    formula: lookUp(item.formula, lstFormula) != null ? lookUp(item.formula, lstFormula).displayName : null,
                 };
                 lst.push(data);
             });

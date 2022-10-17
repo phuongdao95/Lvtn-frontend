@@ -15,7 +15,7 @@ export default function CheckIn() {
         type: 'info',
         message: '',
     });
-    const clickTakePicture = (done) => {
+    const clickTakePicture = (form, done) => {
         console.log('recognize from timekeeping');
         let video = videoRef.current;
         let photo = photoRef.current;
@@ -31,7 +31,9 @@ export default function CheckIn() {
         const data = {
             imageName: window.localStorage.getItem('user_id'),
             imageData: [image],
+            dto: form,
         };
+        console.log(data);
         //call api
         aiService.uploadImage(data)
         .then(res => {

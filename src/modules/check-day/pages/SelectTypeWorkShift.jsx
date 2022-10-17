@@ -117,7 +117,7 @@ const SelectTypeWorkShift = () => {
                     startTime: dayjs(item.startTime).format('h:mm a'),
                     endTime: dayjs(item.endTime).format('h:mm a'),
                     description: item.description,
-                    dateOfWeek: listDateOfWeek[dayjs(item.startTime).get('day')].name,
+                    dateOfWeek: listDateOfWeek[dayjs(item.startTime).get('day') - 1 >= 0 ? dayjs(item.startTime).get('day') - 1 : 6].name,
                 };
                 lst.push(data);
                 if (item.isCheck) {

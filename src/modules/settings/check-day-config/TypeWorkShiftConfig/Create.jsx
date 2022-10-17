@@ -16,12 +16,16 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import { useCreate } from "../../../../client/workingShiftEvent";
+import {useFetchListFormula} from "../../../../client/formulaService.js";
 import dayjs from 'dayjs';
 import Snackbar from '../../../../components/Snackbar/Snackbar';
 
 import { useFormik } from "formik";
 import * as yup from "yup";
-
+const lookUp = (id, lst) => {
+    let re = lst.filter(item => parseInt(id, 10) === item.id);
+    return re && re[0] ? re[0] : null;
+}
 const listDateOfWeek = [
     {
         id: 1,
@@ -67,6 +71,7 @@ const validationSchema = yup.object({
 
 const Create = ({setOpen, done}) => {
     const handleClose = () => setOpen(false);
+    const [lstFormula, setLstFormula] = useState([]);
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -75,20 +80,19 @@ const Create = ({setOpen, done}) => {
             endTime: '',
             description: '',
             breakHours: 0,
-            formula: 'formula_1',
+            formula: 1,
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
             const offset = new Date().getTimezoneOffset();
             let startTime = dayjs(values.startTime.toISOString()).set('day', values.dateOfWeek).add(-offset, 'minute');
             let endTime = dayjs(values.endTime.toISOString()).set('day', values.dateOfWeek).add(-offset, 'minute');
-            console.log(offset);
             const form = {
                 name: values.name,
                 description: values.description,
                 startTime: startTime.toISOString(),
                 endTime: endTime.toISOString(),
-                formula: 'formula_1',
+                formula: values.formula.toString(),
             };
             console.log(form);
             create(form);
@@ -102,6 +106,15 @@ const Create = ({setOpen, done}) => {
         data: submitResponse,
         method: create
     } = useCreate();
+    const {
+        isSuccess: isFetchListFormulaSuccess,
+        data: fetchedFormulaList,
+    } = useFetchListFormula();
+    useEffect(() => {
+        if (isFetchListFormulaSuccess) {
+            setLstFormula(fetchedFormulaList.data);
+        }
+    }, [isFetchListFormulaSuccess])
 
     useEffect(() => {
         if (isSuccess) {
@@ -157,8 +170,8 @@ const Create = ({setOpen, done}) => {
                     }
                 />
 
-                <TwoColumnBox
-                    firstSlot={
+                <OneColumnBox
+                    slot={
                         <Fragment>
                             <Label text={"Ngày trong tuần"} />
                             <Select id="dateOfWeek"
@@ -181,17 +194,6 @@ const Create = ({setOpen, done}) => {
                                     </MenuItem>
                                 ))}
                             </Select>
-                        </Fragment>
-                    }
-                    secondSlot={
-                        <Fragment>
-                            <Label text={"Số giờ nghỉ"} />
-                            <TextField id="breakHours"
-                                name="breakHours"
-                                type='number'
-                                value={formik.values.breakHours}
-                                onChange={formik.handleChange}
-                            />
                         </Fragment>
                     }
                 />
@@ -238,12 +240,26 @@ const Create = ({setOpen, done}) => {
                     slot={
                         <Fragment>
                             <Label text={"Công thức"} />
-                            <TextField id="formula"
+                            <Select id="formula"
                                 name="formula"
-                                type='text'
                                 value={formik.values.formula}
-                                onChange={formik.handleChange}
-                            />
+                                onChange={(event, value) => {
+                                    formik.setFieldValue("formula", event.target.value);
+                                }}
+                                error={formik.touched.formula && Boolean(formik.errors.formula)}
+                                helperText={formik.touched.formula && formik.errors.formula}
+                                size='small'
+                                sx={{minWidth: '300px'}}
+                            >
+                                {lstFormula.map((item, index) => (
+                                    <MenuItem
+                                        key={index}
+                                        value={item.id}
+                                    >
+                                        {item.displayName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
                         </Fragment>
                     }
                 />
