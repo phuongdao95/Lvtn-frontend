@@ -69,6 +69,7 @@ const DisplayDate = props => {
                             }
                     }
                     >
+                    {props.cardContent ? props.cardContent(day, today, formattedDate, monthStart, props.light) : 
                     <CardContent>
                         {dateFns.isSameDay(day, today) ? (
                         <Typography
@@ -94,7 +95,7 @@ const DisplayDate = props => {
                             {formattedDate}
                         </Typography>
                         )}
-                    </CardContent>
+                    </CardContent>}
                     </Card>
                 </CardActionArea>
                 </TableCell>

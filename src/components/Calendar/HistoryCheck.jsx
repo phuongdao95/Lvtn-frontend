@@ -225,6 +225,7 @@ const HistoryCheck = (props) => {
                     selectedDate={state.selectedDate}
                     light={textColor}
                     tableCell={props.tableCell}
+                    cardContent={props.cardContent}
                 />
             );
         } else if (state.mode === 1) {

@@ -43,4 +43,23 @@ export const useUpdate =
 export const useDelete =
     getUseDeleteResourceFunction(PATH_PREFIX);
 
-
+export const useFetchListByUser =
+getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
+    const fetchList = async (userId, selectedDate) => {
+        try {
+            const params = { selectedDate: selectedDate };
+            const response = await api.get(`${pathPrefix}/${userId}`, {params});
+            if (response.data) {
+                setData(response.data);
+            }
+            setIsSuccess(true);
+        } catch (err) {
+            console.error(err);
+            setIsSuccess(false);
+            setIsError(true);
+        } finally {
+            setIsPending(false);
+        }
+    }
+    return fetchList;
+})('api/workingShiftTimekeeping/getAllByUser');
