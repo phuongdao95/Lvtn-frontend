@@ -1,43 +1,35 @@
 import * as React from 'react';
-import { Grid, TextField, Card, InputLabel } from "@mui/material";
-import ControlledSwitches from '../../shares/common/ControlledSwitches';
+import { Grid, TextField, InputLabel } from "@mui/material";
 import ComponentDatePicker from '../../shares/common/ComponentDatePicker';
 
-const UserNghiPhep = () => {
-    // const [value, setValue] = React.useState(
-    //     new Date('2014-08-18T21:11:54'),
-    // );
+import ApproveItemPage from '../../shares/pages/Approve/ApproveItemPage';
 
-    // const handleChange = (newValue) => {
-    //     setValue(newValue);
-    // };
+const NghiPhepContent = () => (
+    <Grid container spacing={2}>
+        <Grid item xs={6}>
+            <InputLabel>Số ngày nghỉ phép còn lại (ngày)</InputLabel>
+            <TextField fullWidth disabled size='small' defaultValue="4"></TextField>
+        </Grid>
+
+        <Grid item xs={6}>
+            <InputLabel>Lý do xin phép</InputLabel>
+            <TextField fullWidth placeholder="Vì lý do..." multiline maxRows={4} size="small"></TextField>
+        </Grid>
+
+        <Grid item xs={3}>
+            <ComponentDatePicker label='Nghỉ từ ngày' date={new Date()} isReadOnly={false} />
+        </Grid>
+        <Grid item xs={3}>
+            <ComponentDatePicker label='Nghỉ đến ngày' date={new Date()} isReadOnly={false} />
+        </Grid>
+    </Grid>
+);
+
+
+const UserNghiPhep = () => {
 
     return (
-        <Card sx={{ padding: 5, mt: 5 }}>
-            <Grid container spacing={2}>
-                <Grid item xs={6}>
-                    <InputLabel>So ngay nghi phep con lai (ngay)</InputLabel>
-                    <TextField type="number" fullWidth></TextField>
-                </Grid>
-
-                <Grid item xs={6}>
-                    <InputLabel>Ly do xin nghi phep</InputLabel>
-                    <TextField fullWidth placeholder="Vi ly do..."></TextField>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <ComponentDatePicker label='Nghi tu ngay' date={new Date()} isReadOnly={false} />
-                </Grid>
-                <Grid item xs={3}>
-                    <ComponentDatePicker label='Nghi den ngay' date={new Date()} isReadOnly={false} />
-                </Grid>
-
-                <Grid item xs={6}>
-                    <InputLabel>Nghi khong luong</InputLabel>
-                    <ControlledSwitches />
-                </Grid>
-            </Grid>
-        </Card>
+        <ApproveItemPage content={<NghiPhepContent />} />
     );
 }
 
