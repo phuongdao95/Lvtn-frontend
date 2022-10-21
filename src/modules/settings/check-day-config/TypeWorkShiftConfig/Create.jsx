@@ -92,7 +92,7 @@ const Create = ({setOpen, done}) => {
                 description: values.description,
                 startTime: startTime.toISOString(),
                 endTime: endTime.toISOString(),
-                formula: values.formula.toString(),
+                formulaName: values.formula.toString(),
             };
             console.log(form);
             create(form);
@@ -254,7 +254,7 @@ const Create = ({setOpen, done}) => {
                                 {lstFormula.map((item, index) => (
                                     <MenuItem
                                         key={index}
-                                        value={item.id}
+                                        value={item.name}
                                     >
                                         {item.displayName}
                                     </MenuItem>

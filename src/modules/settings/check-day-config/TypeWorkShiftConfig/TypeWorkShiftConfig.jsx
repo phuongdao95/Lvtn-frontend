@@ -13,7 +13,7 @@ import { useFetchList, useDelete } from "../../../../client/workingShiftEvent";
 import {useFetchListFormula} from "../../../../client/formulaService.js";
 import dayjs from 'dayjs';
 const lookUp = (id, lst) => {
-    let re = lst.filter(item => parseInt(id, 10) === item.id);
+    let re = lst.filter(item => id === item.name);
     return re && re[0] ? re[0] : null;
 }
 const listDateOfWeek = [
@@ -154,7 +154,8 @@ const TypeWorkShiftConfig = () => {
                     endTime: dayjs(item.endTime).format('h:mm a'),
                     description: item.description,
                     dateOfWeek: listDateOfWeek[dayjs(item.startTime).get('day') - 1 >= 0 ? dayjs(item.startTime).get('day') - 1 : 6].name,
-                    formula: lookUp(item.formula, lstFormula) != null ? lookUp(item.formula, lstFormula).displayName : null,
+                    formula: lookUp(item.formulaName, lstFormula) != null ? lookUp(item.formulaName, lstFormula).displayName : null,
+                    // formula: item.formulaName,
                 };
                 lst.push(data);
             });

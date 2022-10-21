@@ -118,7 +118,7 @@ const Update = ({setOpen, id, done}) => {
                 dateOfWeek: dayjs(fetchedResponse.startTime).get('day'),
                 startTime: dayjs(fetchedResponse.startTime),
                 endTime: dayjs(fetchedResponse.endTime),
-                formula: parseInt(fetchedResponse.formula),
+                formula: fetchedResponse.formulaName,
                 description: fetchedResponse.description,
             }
             formik.setValues({...item});
@@ -133,7 +133,7 @@ const Update = ({setOpen, id, done}) => {
             endTime: '',
             description: '',
             breakHours: 0,
-            formula: 1,
+            formula: '',
         },
         // validationSchema: validationSchema,
         onSubmit: (values) => {
@@ -145,7 +145,7 @@ const Update = ({setOpen, id, done}) => {
                 description: values.description,
                 startTime: startTime.toISOString(),
                 endTime: endTime.toISOString(),
-                formula: values.formula.toString(),
+                formulaName: values.formula.toString(),
             };
             console.log(form);
             update(id, form);
@@ -296,7 +296,7 @@ const Update = ({setOpen, id, done}) => {
                                 {lstFormula.map((item, index) => (
                                     <MenuItem
                                         key={index}
-                                        value={item.id}
+                                        value={item.name}
                                     >
                                         {item.displayName}
                                     </MenuItem>
