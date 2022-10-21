@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 
 export default function Segment({ children, title }) {
     return <Box>
-        <Typography>
+        <Typography sx={{ fontSize: '18px', fontWeight: 'semibold' }}>
             {title}
         </Typography>
         <Box>

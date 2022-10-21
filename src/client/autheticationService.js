@@ -98,6 +98,14 @@ export const hasLoggedIn = () => {
     return !!window.localStorage.getItem('user_id');
 }
 
+export const getCurrentUserId = () => {
+    if (!window || !window.localStorage) {
+        return false;
+    }
+
+    return window.localStorage.getItem('user_id');
+}
+
 export const isAllowedToVisitRoute = (pathname) => {
     if (!window && !window.localStorage) {
         return false;

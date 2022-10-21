@@ -3,14 +3,14 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import { Droppable } from "react-beautiful-dnd";
 
-import ListItem from "./TaskColumnItem";
+import TaskColumnItem from "./TaskColumnItem";
 
 const columnHeader = {
     textTransform: 'uppercase',
     marginBottom: '20px'
 }
 
-const DraggableElement = ({ prefix, elements }) => (
+const TaskColumn = ({ prefix, elements }) => (
     <Box sx={{
         position: 'relative',
         maxHeight: '65vh',
@@ -36,7 +36,7 @@ const DraggableElement = ({ prefix, elements }) => (
                     minWidth: '200px',
                 }}>
                     {elements.map((item, index) => (
-                        <ListItem key={item.id} item={item} index={index} />
+                        <TaskColumnItem key={item.id} item={item} index={index} />
                     ))}
                     {provided.placeholder}
                 </Box>
@@ -45,4 +45,4 @@ const DraggableElement = ({ prefix, elements }) => (
     </Box>
 );
 
-export default DraggableElement;
+export default TaskColumn;

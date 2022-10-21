@@ -5,10 +5,15 @@ import DataGrid from "../../../../components/DataGrid";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
 import SearchField from "../../../../components/DataGrid/SearchField";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
+import EditFormula from "./EditFormula"
 
-import { useFetchListFormula } from "../../../../client/formulaService";
+import {
+    useFetchListFormula,
+    useEditFormula
+} from "../../../../client/formulaService";
+import { set } from "date-fns/esm";
 
-const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
+const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
     {
         field: "id",
         headerName: "Id",
@@ -42,12 +47,12 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
         field: "action",
         headerName: "Action",
         width: 200,
-        renderCell: () => {
+        renderCell: ({ id }) => {
             return <Box sx={{ display: "flex", gap: 1 }}>
-                <ActionButton onClick={onEditBtnClick}>
+                <ActionButton onClick={() => onEditBtnClick(id)}>
                     Edit
                 </ActionButton>
-                <ActionButton onClick={onDeleteBtnClick}>
+                <ActionButton onClick={() => onDeleteBtnClick(id)}>
                     Delete
                 </ActionButton>
             </Box>
@@ -57,6 +62,10 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
 
 export default function FormulaList() {
     const [formulas, setFormulas] = React.useState([]);
+    const [formulaId, setFormulaId] = React.useState(null);
+    const [variableId, setVariableId] = React.useState(null);
+    const [isEditFormulaOpen, setIsEditFormulaOpen] = React.useState(false);
+    const [isDeleteFormulaOpen, setIsDeleteFormulaOpen] = React.useState(false);
 
     const {
         isSuccess: isFetchListFormulaSuccess,
@@ -80,11 +89,25 @@ export default function FormulaList() {
             <SearchButton />
         </Box>
 
+        {isEditFormulaOpen &&
+            <EditFormula formulaId={formulaId}
+                closeDialogCb={() => setIsEditFormulaOpen(false)} />}
+
+        {isDeleteFormulaOpen &&
+            <div></div>
+        }
+
         <DataGrid
             rows={formulas}
             columns={getColumnConfig(
-                (id) => { console.log(id) },
-                (id) => { console.log(id) })
+                (id) => {
+                    setFormulaId(id);
+                    setIsEditFormulaOpen(true);
+                },
+                (id) => {
+                    setFormulaId(id);
+                    setIsDeleteFormulaOpen(true);
+                })
             }
             height={500} />
     </Box>;

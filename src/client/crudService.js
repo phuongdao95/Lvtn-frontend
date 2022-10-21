@@ -11,12 +11,14 @@ import api from "./api";
  * @ data: The data returned from calling the hook.
  */
 export const getPendingErrorSuccessApiPatternFunction = (fn) => (pathPrefix) => () => {
-    const [isPending, setIsPending] = useState(true);
+    const [isPending, setIsPending] = useState(false);
     const [isError, setIsError] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-    const [data, setData] = useState(false);
+    const [data, setData] = useState(null);
 
-    const method = fn({ setIsError, setIsPending, setIsSuccess, setData }, pathPrefix);
+    const getData = () => data;
+
+    const method = fn({ setIsError, setIsPending, setIsSuccess, setData, getData }, pathPrefix);
 
     return {
         method,
@@ -54,12 +56,17 @@ export const getUseCreateResourceFunction =
 export const getUseUpdateResourceFunction =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsPending, setIsSuccess, setMethod }, pathPrefix) => {
         const updateResource = async (id, formData) => {
+            setIsError(false);
+            setIsPending(true);
+            setIsSuccess(false);
+
             try {
                 const path = `${pathPrefix}/${id}`;
                 await api.put(path, formData);
                 setIsSuccess(true);
             } catch (err) {
                 console.log(err);
+                setIsSuccess(false);
                 setIsError(true);
             } finally {
                 setIsPending(false);

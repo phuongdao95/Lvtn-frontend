@@ -14,12 +14,16 @@ import { useFetchTeamListWithoutDepartment } from "../../../../client/teamServic
 import { useFetchListUserWhoIsManager } from "../../../../client/userService";
 
 import { useCreateDepartment } from "../../../../client/departmentService";
+import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
-export default function CreateDepartment({ closeDialogCb }) {
+export default function CreateDepartment({ reloadList, closeDialogCb }) {
     const [teamOptions, setTeamOptions] = React.useState([]);
     const [managerOptions, setManagerOptions] = React.useState([]);
 
     const {
+        isPending,
+        isSuccess,
+        isError,
         method: createDepartment
     } = useCreateDepartment();
 
@@ -49,16 +53,23 @@ export default function CreateDepartment({ closeDialogCb }) {
     })
 
     const {
+        isPending: isFetchTeamsPending,
+        isSuccess: isFetchTeamsSuccess,
+        isError: isFetchTeamError,
         data: fetchedTeams,
         method: fetchTeams,
     } = useFetchTeamListWithoutDepartment();
 
     const {
+        isPending: isFetchManagersPending,
+        isSuccess: isFetchManagersSuccess,
+        isError: isFetchManagersError,
         data: fetchedManagers,
         method: fetchManager,
     } = useFetchListUserWhoIsManager();
 
     React.useEffect(() => {
+        fetchManager();
         fetchTeams();
     }, []);
 
@@ -72,10 +83,6 @@ export default function CreateDepartment({ closeDialogCb }) {
     }, [fetchedTeams])
 
     React.useEffect(() => {
-        fetchManager();
-    }, [])
-
-    React.useEffect(() => {
         if (fetchedManagers) {
             const managers = fetchedManagers.data.map((manager) => ({
                 id: manager.id, name: manager.name
@@ -84,6 +91,13 @@ export default function CreateDepartment({ closeDialogCb }) {
             setManagerOptions(managers)
         }
     }, [fetchedManagers])
+
+    React.useEffect(() => {
+        if (isSuccess) {
+            reloadList();
+            closeDialogCb();
+        }
+    }, [isSuccess])
 
 
     return <Dialog
@@ -98,6 +112,11 @@ export default function CreateDepartment({ closeDialogCb }) {
         title="Tạo mới Department"
     >
         <DialogForm>
+            <LoadingOverlay isLoading={
+                isPending ||
+                isFetchTeamsPending ||
+                isFetchManagersPending} />
+                
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <TwoColumnBox
                     firstSlot={
@@ -133,6 +152,8 @@ export default function CreateDepartment({ closeDialogCb }) {
                     slot={<Fragment>
                         <Label text={"Teams"} />
                         <AutoCompleteMultiple
+                            id="teams"
+                            name="teams"
                             getOptionLabel={(option) => option.name}
                             options={teamOptions}
                             value={formik.values.teams}

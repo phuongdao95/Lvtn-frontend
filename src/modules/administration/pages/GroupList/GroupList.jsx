@@ -75,7 +75,7 @@ export default function GroupList() {
                 title={"Danh sách nhóm"}
                 datagridSection={
                     <DataGrid
-                        rows={fetchedGroups.data || []}
+                        rows={fetchedGroups?.data || []}
                         columns={getColumnConfig({
                             onEditBtnClick: () => setIsEditGroupOpen(true)
                         })}

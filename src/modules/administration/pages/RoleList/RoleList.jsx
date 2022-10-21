@@ -11,7 +11,6 @@ import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 
 import { useDeleteRole, useFetchListRole } from "../../../../client/roleService";
 import { Box } from "@mui/material";
-import { useState } from "react";
 import CreateRole from "./CreateRole";
 import EditRole from "./EditRole";
 
@@ -54,16 +53,16 @@ const getColumnConfig = (openEditRoleCb, openDeleteRoleCb) => [
 export default function RoleList() {
     const navigate = useNavigate();
 
-    const {
-        isSuccess: isDeleteSuccess,
-        method: deleteRole
-    } = useDeleteRole();
-
     const [roleId, setRoleId] = React.useState(null);
 
     const [isDeleteRolePopupOpen, setIsDeleteRolePopupOpen] = React.useState(false);
     const [isCreateRolePopupOpen, setIsCreateRolePopupOpen] = React.useState(false);
     const [isEditRolePopupOpen, setIsEditRolePopupOpen] = React.useState(false);
+
+    const {
+        isSuccess: isDeleteSuccess,
+        method: deleteRole
+    } = useDeleteRole();
 
     const {
         isPending,

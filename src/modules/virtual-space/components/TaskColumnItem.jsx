@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Avatar, Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { lightBlue } from "@mui/material/colors";
+import { grey, lightBlue } from "@mui/material/colors";
+import TaskDetail from "../pages/TaskDetail";
 
 const cardFooter = {
     width: '100%',
@@ -12,41 +13,60 @@ const cardFooter = {
 }
 
 const TaskColumnItem = ({ item, index }) => {
-    const randomHeader = "This is a header";
+    const [isTaskDetailOpen, setIsTaskDetailOpen] = React.useState(false);
 
     return (
-        <Draggable draggableId={item.id} index={index}>
-            {(provided, snapshot) => {
-                return (
-                    <Box sx={{
-                        padding: 2,
-                        minWidth: '220px',
-                        background: 'white',
-                        border: '1px solid black',
-                        borderLeft: `6px solid ${lightBlue[500]}`
-                    }}
-                        ref={provided.innerRef}
-                        snapshot={snapshot}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                    >
-                        <Typography sx={{ fontWeight: 500 }}>
-                            {randomHeader}
-                        </Typography>
-                        <Box sx={cardFooter}>
-                            <span>{item.content}</span>
+        <Fragment>
+            {isTaskDetailOpen &&
+                <TaskDetail taskId={item.id} closeCb={() => { setIsTaskDetailOpen(false) }} />
+            }
+            <Draggable draggableId={`${item.id}`} index={index}>
+                {(provided, snapshot) => {
+                    return (
+                        <Fragment>
+                            <Box sx={{
+                                padding: 2,
+                                minWidth: '220px',
+                                background: 'white',
+                                border: '1px solid black',
+                                borderLeft: `6px solid ${lightBlue[500]}`
+                            }}
+                                ref={provided.innerRef}
+                                snapshot={snapshot}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                            >
+                                <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, marginBottom: 1 }}>
+                                    <Typography sx={{ fontWeight: 'bold', fontSize: '15px' }}>
+                                        {item.id}
+                                    </Typography>
+                                    <Typography sx={{ fontWeight: 500, fontSize: '15px', color: grey[700] }}>
+                                        {item.name}
+                                    </Typography>
+                                </Box>
 
-                            <Avatar />
-                        </Box>
-                        <Button size="small" onClick={() => {
-                            console.log("hello");
-                        }}>
-                            View Detail
-                        </Button>
-                    </Box>
-                );
-            }}
-        </Draggable>
+                                <Box sx={{ marginBottom: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: .7 }}>
+                                        <Avatar sx={{ width: 28, height: 28 }} />
+                                        <Typography sx={{ marginTop: .4 }}>
+                                            {item.inChargeName}
+                                        </Typography>
+                                    </Box>
+                                    <Typography sx={{ fontWeight: 'bold' }}>
+                                        {item.point}
+                                    </Typography>
+                                </Box>
+
+
+                                <Button size="small" onClick={() => setIsTaskDetailOpen(true)} >
+                                    View Detail
+                                </Button>
+                            </Box>
+                        </Fragment>
+                    );
+                }}
+            </Draggable>
+        </Fragment>
     );
 };
 

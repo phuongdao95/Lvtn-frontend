@@ -9,8 +9,14 @@ import ActionButton from "../../../../components/DataGrid/ActionButton";
 
 import { useFetchListPayroll } from "../../../../client/payrollService";
 import CreatePayroll from "./CreatePayroll";
+import { useNavigate } from "react-router";
 
-const columns = [
+const getColumnConfig = (openDetailCb) => [
+    {
+        field: "id",
+        headerName: "Id",
+        width: 100,
+    },
     {
         field: "name",
         headerName: "Name",
@@ -70,9 +76,9 @@ const columns = [
         field: "action",
         headerName: "Action",
         width: 300,
-        renderCell: () => {
+        renderCell: ({ id }) => {
             return <Box sx={{ display: "flex", gap: 0.5 }}>
-                <ActionButton>
+                <ActionButton onClick={() => openDetailCb(id)}>
                     Chi tiết
                 </ActionButton>
             </Box>
@@ -82,8 +88,9 @@ const columns = [
 
 
 export default function PayrollList() {
+    const navigate = useNavigate();
+    
     const [payrolls, setPayrolls] = React.useState([]);
-
     const [isCreatePayrollOpen, setIsCreatePayrollOpen] = React.useState(false);
 
     const {
@@ -105,7 +112,9 @@ export default function PayrollList() {
                 datagridSection={
                     <DataGrid
                         rows={payrolls || []}
-                        columns={columns}
+                        columns={getColumnConfig((id) => { 
+                            navigate(`/payroll/${id}/payslip/`)
+                        })}
                         isError={false}
                         isLoading={false}
                         isSuccess={false}

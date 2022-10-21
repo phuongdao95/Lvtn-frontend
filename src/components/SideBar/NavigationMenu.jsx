@@ -28,9 +28,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-
-
-
 const SideBar = (props) => {
     const navigate = useNavigate();
 
@@ -101,7 +98,7 @@ const SideBar = (props) => {
                 {
                     text: "Công thức và Biến",
                     onClick: () => {
-                        navigate("/formula")
+                        navigate("/formula-variable")
                     }
                 },
                 {
@@ -134,7 +131,7 @@ const SideBar = (props) => {
                 {
                     text: "Bảng công việc",
                     onClick: () => {
-                        navigate("/virtual-space")
+                        navigate("/taskboard")
                     }
                 },
                 {

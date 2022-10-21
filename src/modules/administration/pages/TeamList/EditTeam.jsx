@@ -14,6 +14,7 @@ import { useFormik } from "formik";
 import { useFetchListUserWithNoTeam } from "../../../../client/userService";
 import { useFetchOneTeam, useUpdateTeam } from "../../../../client/teamService";
 import { useFetchListDepartment } from "../../../../client/departmentService";
+import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
 const getOptionLabel = (option) => {
     return option.name;
@@ -28,28 +29,38 @@ export default function EditTeam({ closeDialogCb, teamId }) {
     const [departmentOptions, setDepartmentOptions] = React.useState([]);
 
     const {
+        isPending: isFetchListUserWithNoTeamPending,
         isSuccess: isFetchListUserWithNoTeamSuccess,
         method: fetchUsers,
         data: fetchedUsers
     } = useFetchListUserWithNoTeam();
 
     const {
+        isPending: isFetchDepartmentPending,
         isSuccess: isFetchDepartmentsSuccess,
         method: fetchDepartments,
         data: departments
     } = useFetchListDepartment();
 
     const {
+        isPending: isFetchPending,
         isSuccess: isFetchSuccess,
         method: fetchTeam,
         data: fetchedTeam,
     } = useFetchOneTeam();
 
+    const {
+        isPending: isUpdateTeamPending,
+        isSuccess: isUpdateTeamSuccess,
+        method: updateTeam,
+    } = useUpdateTeam();
+
+
     React.useEffect(() => {
         fetchUsers();
         fetchTeam(teamId);
         fetchDepartments();
-    }, [])
+    }, [isUpdateTeamSuccess])
 
     React.useEffect(() => {
         if (isFetchDepartmentsSuccess) {
@@ -65,10 +76,6 @@ export default function EditTeam({ closeDialogCb, teamId }) {
         }
     }, [isFetchListUserWithNoTeamSuccess])
 
-    const {
-        isSuccess: isUpdateTeamSuccess,
-        method: updateTeam,
-    } = useUpdateTeam();
 
     const formik = useFormik({
         initialValues: {
@@ -83,12 +90,18 @@ export default function EditTeam({ closeDialogCb, teamId }) {
             const memberIds = values.members.map((member) => member.id);
             const departmentId = values.department.id;
 
-            updateTeam(teamId, { ...values, leaderId, memberIds, departmentId });
+            updateTeam(teamId, { ...values, leaderId, departmentId, memberIds, detail: values.description });
         }
     })
 
     React.useEffect(() => {
         if (isFetchSuccess) {
+            const members = fetchedTeam.memberIds.map((value, index, array) =>
+            ({
+                id: fetchedTeam.memberIds[index],
+                name: fetchedTeam.memberNames[index]
+            }))
+
             formik.setValues({
                 ...(fetchedTeam),
                 department: {
@@ -99,11 +112,10 @@ export default function EditTeam({ closeDialogCb, teamId }) {
                     id: fetchedTeam.leaderId,
                     name: fetchedTeam.leaderName
                 },
-                members: []
+                members: members
             })
         }
     }, [isFetchSuccess])
-
 
     return <Dialog
         primaryAction={{
@@ -117,6 +129,7 @@ export default function EditTeam({ closeDialogCb, teamId }) {
         title="Chỉnh sửa Team"
     >
         <DialogForm>
+            <LoadingOverlay isLoading={isUpdateTeamPending || isFetchDepartmentPending || isFetchListUserWithNoTeamPending} />
             <Box>
                 <TwoColumnBox
                     firstSlot={

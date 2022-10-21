@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
 import DataGridTabLayout from "../../../../layouts/DataGridTabLayout";
+import MenuButton from "../../../../components/DataGrid/MenuButton";
 import FormulaList from "./FormulaList";
 import VariableList from "./VariableList";
 import SystemVariableList from "./SystemVariableList";
 import CreateFormula from "./CreateFormula";
-import CreateVariable from "../FormulaList/CreateVariable";
-import MenuButton from "../../../../components/DataGrid/MenuButton";
+import CreateVariable from "./CreateVariable";
 
 export default function FormulaVariable() {
     const [isCreateFormulaOpen, setIsCreateFormulaOpen] = React.useState(false);
