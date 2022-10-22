@@ -1,6 +1,11 @@
 import { Box, Card, CardContent, Button, ButtonGroup, FormControl, MenuItem, Select, Grid } from '@mui/material';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
+import {useGetByUser, useFetchOne} from "./../../../client/workingShiftEvent";
+import { useFetchList } from "./../../../client/workingShiftTimekeeping";
+import dayjs from 'dayjs';
+
+const OFFSET = new Date().getTimezoneOffset();
 const DAY = ['Sun', 'Mon', 'Tus', 'Wes', 'Thu', 'Fri', 'Sar'];
 const MONTH = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const padTo2Digits = num => {
@@ -51,14 +56,12 @@ const listType = [
         "Name" : "Ngày bình thường",
         "StartTime" : "8:00",
         "EndTime" : "17:00", 
-        "Coefficient" : 1,
     },
     {
         "Id" : 2,
         "Name" : "OT",
         "StartTime" : "19:00",
         "EndTime" : "20:00", 
-        "Coefficient" : 2,
     },
 ]
 const Info = ({takePicture}) => {
@@ -66,26 +69,111 @@ const Info = ({takePicture}) => {
     const format = formatDate(currTime);
     const [recognized, setRecognized] = useState(false);
     const [name, setName] = useState('');
-    const [value, setValue] = useState(listType[0].Id);
+    const [value, setValue] = useState();
+    const [data, setData] = useState([]);
+    const [isCheckin, setIsCheckin] = useState(true);
+    const [isCheckout, setIsCheckout] = useState(true);
+    const [formWorkShiftTimekeeping, setFormWorkShiftTimekeeping] = useState({});
+    const {
+        isPending,
+        isSuccess,
+        isError,
+        data: response,
+        method: fetchList
+    } = useGetByUser();
+    const {
+        isSuccess: isFetchSuccess,
+        isPending: isFetchPending,
+        data: fetchResponse,
+        method: fetchOne
+    } = useFetchOne();
+    let {
+        isSuccess: isFetchListSuccess,
+        isPending: isFetchListPending,
+        data: fetchListResponse,
+        method: fetchListTimekeeping
+    } = useFetchList();
+    useEffect(() => {
+        if (window.localStorage.getItem('user_id')) {
+            fetchList(window.localStorage.getItem('user_id'));
+        }
+    }, [])
+    useEffect(() => {
+        if (isSuccess) {
+            let lst = [];
+            let lstCheck = [];
+            response.data.map((item, index) => {
+                if (dayjs().get('day') === dayjs(item.startTime).get('day') 
+                    && item.isCheck) {
+                        let data = {
+                            id: item.id,
+                            name: item.name,
+                            startTime: dayjs(item.startTime).format('h:mm a'),
+                            endTime: dayjs(item.endTime).format('h:mm a'),
+                            showName: item.name + ' ' + dayjs(item.startTime).format('h:mm a') + ' ' + dayjs(item.endTime).format('h:mm a'),
+                        };
+                        lst.push(data);
+                }
+            });
+            setData(lst);
+        }
+    }, [isSuccess])
 
     const welcomeText = welcome(name);
 
     const clickTakePicture = () => {
-        takePicture(() => {
+        takePicture(formWorkShiftTimekeeping, () => {
             setName(window.localStorage.getItem('name'));
             setRecognized(true);
         });
     }
     const handleChange = (event) => {
         setValue(event.target.value);
+        // fetchOne(event.target.value);
+        isFetchListSuccess = false;
+        fetchListTimekeeping(window.localStorage.getItem('user_id'), dayjs().format('YYYY-MM-DD'), parseInt(event.target.value));
     };
+    // useEffect(() => {
+    //     if (isFetchSuccess) {
+    //         fetchListTimekeeping(window.localStorage.getItem('user_id'), dayjs().format('YYYY-MM-DD'), value);
+    //     }
+    // }, [isFetchSuccess])
+    useEffect(() => {
+        if (fetchListResponse.data) {
+            console.log('Fetch list ', fetchListResponse);
+            const currentDate = dayjs().format('YYYY-MM-DD');
+            let data = fetchListResponse.data;
+            console.log(currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD'));
+            if (data.length > 0 && currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD')) {
+                let form = data[0];
+                form = data[0];
+                form.CheckoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
+                form.DidCheckout = true;
+                setFormWorkShiftTimekeeping({...form});
+                setIsCheckout(false);
+                setIsCheckin(true);
+            } else {
+                setIsCheckout(true);
+                setIsCheckin(false);
+                let form = {};
+                form = {
+                    DidCheckIn : true,
+                    CheckinTime : dayjs().add(-OFFSET, 'minute').toISOString(),
+                    DidCheckout: false,
+                    EmployeeId: parseInt(window.localStorage.getItem('user_id')),
+                    WorkingShiftEventId: value,
+                };
+                setFormWorkShiftTimekeeping({...form});
+            }
+        }
+    }, [fetchListResponse.data])
 
     const groupButton = () => {
         return (
         <>
         <Grid container spacing={2} sx={{ p: 2}}>
             <Grid item xs={12}>
-                <FormControl sx={{ m: 3, width: 200 }}>
+                <FormControl sx={{ m: 3, minWidth: 200 }}>
                     {/* <FormLabel id="demo-row-radio-buttons-group-label">Loại công</FormLabel>  */}
                     <Select
                         row
@@ -93,8 +181,8 @@ const Info = ({takePicture}) => {
                         value={value}
                         onChange={handleChange}
                     >
-                        {listType.map((item, index) => (
-                            <MenuItem value={item.Id} key={index} >{item.Name}</MenuItem>
+                        {data.map((item, index) => (
+                            <MenuItem value={item.id} key={index} >{item.showName}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>
@@ -107,14 +195,14 @@ const Info = ({takePicture}) => {
                 }}>
                     <Button variant="contained" 
                         onClick={clickTakePicture}
-                        // disabled={value ? true : false}
+                        disabled={isCheckin}
                         color="primary"
                         sx={{ display: 'flex-block', mt: 2, mr: 1, width: "auto" }}>
                         Chấm giờ vào
                     </Button>
                     <Button variant="contained" 
                         onClick={clickTakePicture}
-                        // disabled={value ? true : false}
+                        disabled={isCheckout}
                         color="secondary"
                         sx={{ display: 'flex-block', mt: 2, ml: 1, width: "auto" }}>
                         Chấm giờ ra
