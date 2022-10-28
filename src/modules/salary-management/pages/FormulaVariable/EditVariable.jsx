@@ -50,15 +50,16 @@ export default function EditVariable({ closeDialogCb, id }) {
         }
     })
 
-    React.useState(() => {
+    React.useEffect(() => {
         fetchDetail(id);
-    }, []);
+    }, [])
 
-    React.useState(() => {
-        if (isFetchDetailSuccess) {
-            formik.setValues(fetchedDetail);
+    React.useEffect(() => {
+        if (fetchedDetail) {
+            formik.setValues(fetchedDetail)
         }
-    }, [isFetchDetailSuccess])
+    }, [fetchedDetail]);
+
 
     return <Dialog
         primaryAction={{
@@ -110,9 +111,11 @@ export default function EditVariable({ closeDialogCb, id }) {
                             id="dataType"
                             name="dataType"
                             menu={[
-                                { label: "Boolean", value: "boolean" },
-                                { label: "Number", value: "number" },
-                                { label: "Text", value: "text" }]}
+                                { label: "Boolean", value: "Boolean" },
+                                { label: "Integer", value: "Integer" },
+                                { label: "Text", value: "Text" },
+                                { label: "Decimal", value: "Decimal" },
+                            ]}
                             value={formik.values.dataType}
                             onChange={formik.handleChange}
                         />

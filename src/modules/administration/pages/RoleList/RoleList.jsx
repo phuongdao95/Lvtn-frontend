@@ -81,7 +81,9 @@ export default function RoleList() {
     return (
         <Fragment>
             {isCreateRolePopupOpen &&
-                <CreateRole closeDialogCb={() => setIsCreateRolePopupOpen(false)} />
+                <CreateRole
+                    reloadList={() => fetchDepartmentList()}
+                    closeDialogCb={() => setIsCreateRolePopupOpen(false)} />
             }
 
             {isEditRolePopupOpen &&
@@ -102,9 +104,9 @@ export default function RoleList() {
                     confirmAction={{
                         text: "Confirm",
                         handler: () => {
+                            deleteRole(roleId);
                             setIsDeleteRolePopupOpen(false);
                             setRoleId(null);
-                            deleteRole(roleId);
                         }
                     }}
                 />}
@@ -147,41 +149,6 @@ export default function RoleList() {
                         }
                     />
                 }
-                secondaryButtonSection={
-                    <MenuButton
-                        text={"Liên kết liên quan"}
-                        menu={
-                            [
-                                {
-                                    text: "Danh sách người dùng", handler: () => {
-                                        navigate("/user");
-                                    }
-                                },
-                                {
-                                    text: "Danh sách nhóm", handler: () => {
-                                        navigate("/group")
-                                    }
-                                },
-                                {
-                                    text: "Danh sách quyền", handler: () => {
-                                        navigate("/permission");
-                                    }
-                                },
-                                {
-                                    text: "Danh sách team", handler: () => {
-                                        navigate("/team");
-                                    }
-                                },
-                                {
-                                    text: "Danh sách department", handler: () => {
-                                        navigate("/department")
-                                    }
-                                },
-                            ]
-                        }
-                        variant="outlined"
-                        color="info"
-                    />}
                 searchSection={<SearchField />}
                 dropdownFilterSection={<Fragment></Fragment>}
                 searchButtonSection={<SearchButton />}

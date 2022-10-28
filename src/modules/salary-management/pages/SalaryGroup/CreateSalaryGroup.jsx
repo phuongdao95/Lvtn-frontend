@@ -11,24 +11,27 @@ import { useFetchListGroup } from "../../../../client/groupService";
 import { useCreateSalaryGroup } from "../../../../client/salaryGroupService";
 
 import * as yup from 'yup';
+import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
 const validationSchema = yup.object().shape({
     name: yup.string().required(),
-    description: yup.string().optional(),
     formulaName: yup.string().required(),
-    priority: yup.number().required()
 });
 
-export default function CreateSalaryGroup({ closeDialogCb }) {
+export default function CreateSalaryGroup({ reloadList, closeDialogCb }) {
     const [groupOptions, setGroupOptions] = React.useState([]);
 
     const {
+        isPending: isFetchGroupOptionsPending,
         isSuccess: isFetchGroupOptionsSuccess,
         method: fetchGroups,
         data: fetchedGroups
     } = useFetchListGroup();
 
     const {
+        isPending,
+        isSuccess,
+        isError,
         method: createSalaryGroup
     } = useCreateSalaryGroup();
 
@@ -47,6 +50,7 @@ export default function CreateSalaryGroup({ closeDialogCb }) {
         validationSchema: validationSchema,
         onSubmit: (values) => {
             const { group: { id }, ...rest } = values;
+            console.log("hello");
             createSalaryGroup({ ...rest, groupId: id })
         }
     });
@@ -63,6 +67,12 @@ export default function CreateSalaryGroup({ closeDialogCb }) {
         }
     }, [isFetchGroupOptionsSuccess])
 
+    React.useEffect(() => {
+        if (isSuccess) {
+            reloadList();
+        }
+    }, [isSuccess])
+
     return <Dialog
         primaryAction={{
             text: "Submit",
@@ -75,6 +85,7 @@ export default function CreateSalaryGroup({ closeDialogCb }) {
         title="Tạo mới salary config"
     >
         <DialogForm>
+            <LoadingOverlay isLoading={isFetchGroupOptionsPending || isPending} />
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <TwoColumnBox
                     firstSlot={

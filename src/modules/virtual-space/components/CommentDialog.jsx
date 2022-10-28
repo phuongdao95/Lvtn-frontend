@@ -4,8 +4,9 @@ import { useAddTaskComment } from "../../../client/taskService";
 import { getCurrentUserId } from "../../../client/autheticationService";
 import Dialog from "../../../components/Dialog";
 import RichTextEditor, { initialValue } from "./RichTextEditor";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 
-export default function CommentDialog({ taskId, closeDialogCb }) {
+export default function CommentDialog({ taskId, reload, closeDialogCb }) {
     const [comment, setComment] = React.useState(null);
 
     const {
@@ -14,6 +15,13 @@ export default function CommentDialog({ taskId, closeDialogCb }) {
         isError,
         method: addTaskComment,
     } = useAddTaskComment();
+
+    React.useEffect(() => {
+        if (isSuccess) {
+            reload();
+            closeDialogCb();
+        }
+    }, [isSuccess])
 
     const formik = useFormik({
         initialValues: {
@@ -39,6 +47,7 @@ export default function CommentDialog({ taskId, closeDialogCb }) {
             text: "Cancel"
         }}
     >
+        <LoadingOverlay isLoading={isPending}/>
         <RichTextEditor
             onChange={(value) => {
                 setComment(value);

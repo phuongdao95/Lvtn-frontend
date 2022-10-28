@@ -2,12 +2,12 @@ import React, { Fragment } from "react";
 import DataGridLayout from "../../../../layouts/DataGridLayout";
 import DataGrid from "../../../../components/DataGrid";
 import SearchField from "../../../../components/SearchField";
-import Select from "../../../../components/DataGrid/Select";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
+import ActionButton from "../../../../components/DataGrid/ActionButton";
 import { useFetchListDAB } from "../../../../client/dabService";
-import { useNavigate } from "react-router";
+import DABDetail from "./DABDetail";
 
-const columns = [
+const getColumnConfig = (handleOpenDetail) => [
     {
         field: "id",
         headerName: "id",
@@ -19,12 +19,12 @@ const columns = [
         width: 150,
     },
     {
-        field: "formula",
+        field: "formulaName",
         headerName: "Công thức",
         width: 250,
     },
     {
-        field: "salaryDeltaType",
+        field: "type",
         headerName: "Loại",
         width: 150,
     },
@@ -32,20 +32,25 @@ const columns = [
         field: "description",
         headerName: "Mô tả",
         width: 150,
+    },
+    {
+        field: "action",
+        headerName: "Thao tác",
+        renderCell: ({ id }) => {
+            return <ActionButton onClick={() => handleOpenDetail(id)} >
+                chi tiết
+            </ActionButton>
+        }
     }
-
 ];
 
 const rows = [];
 
 export default function DABList() {
-    const navigate = useNavigate();
-
+    const [dabId, setDabId] = React.useState(null);
     const [rows, setRows] = React.useState([]);
     const [dataGridOption, setDataGridOption] = React.useState("Khấu trừ");
-
-    const [isCreateDABOpen, setIsCreateDABOpen] = React.useState(false);
-    const [isEditDABOpen, setIsEditDABOpen] = React.useState(true);
+    const [isDetailOpen, setIsDetailOpen] = React.useState(false);
 
     const {
         data: fetchedDAB,
@@ -60,41 +65,23 @@ export default function DABList() {
 
     return (
         <Fragment>
+            {isDetailOpen && <DABDetail dabId={dabId} closeDialogCb={() => setIsDetailOpen(false)} />}
+
             <DataGridLayout
                 title={"Khấu trừ, phụ cấp và lương thưởng của tôi"}
                 datagridSection={
                     <DataGrid
                         rows={rows}
-                        columns={columns}
+                        columns={getColumnConfig((id) => {
+                            setIsDetailOpen(true);
+                            setDabId(id);
+                        })}
                         isError={false}
                         isLoading={false}
                         isSuccess={false}
                     />
                 }
                 searchSection={<SearchField />}
-                dropdownFilterSection={
-                    <Select
-                        options={[
-                            {
-                                label: "Khấu trừ", handler: () => {
-                                    setDataGridOption("Khấu trừ")
-                                }
-                            },
-                            {
-                                label: "Phụ cấp",
-                                handler: () => {
-                                    setDataGridOption("Phụ cấp");
-                                }
-                            },
-                            {
-                                label: "Lương thưởng", handler: () => {
-                                    setDataGridOption("Lương thưởng");
-                                }
-                            },
-                        ]}
-                        value={dataGridOption}
-                    />
-                }
                 searchButtonSection={<SearchButton />}
             />
         </Fragment>

@@ -8,15 +8,33 @@ import TwoColumnBox from "../../../../components/DialogForm/TwoColumnBox";
 import AutoComplete from "../../../../components/DialogForm/AutoComplete";
 import { useFormik } from "formik";
 import { useFetchListGroup } from "../../../../client/groupService";
+import { useFetchOneSalaryGroup, useUpdateSalaryGroup } from "../../../../client/salaryGroupService";
+import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
-export default function EditSalaryGroup({ closeDialogCb }) {
+export default function EditSalaryGroup({ id, closeDialogCb }) {
     const [groupOptions, setGroupOptions] = React.useState([]);
 
     const {
         isSuccess,
+        isError,
+        isPending,
+        method: updateGroup,
+    } = useUpdateSalaryGroup();
+
+    const {
+        isPending: isFetchListGroupPending,
+        isSuccess: isFetchListGroupSuccess,
         method: fetchGroups,
         data: fetchedGroups
     } = useFetchListGroup();
+
+    const {
+        isError: isFetchDetailError,
+        isSuccess: isFetchDetailSuccess,
+        isPending: isFetchDetailPending,
+        method: fetchDetail,
+        data: fetchedDetail,
+    } = useFetchOneSalaryGroup();
 
     const formik = useFormik({
         initialValues: {
@@ -28,18 +46,50 @@ export default function EditSalaryGroup({ closeDialogCb }) {
                 id: "",
                 name: "",
             }
+        },
+
+        onSubmit: (values) => {
+            const groupId = values.group.id;
+            updateGroup(id, {
+                ...values,
+                groupId: groupId
+            })
         }
     });
 
     React.useEffect(() => {
+        fetchDetail(id)
         fetchGroups();
     }, [])
 
     React.useEffect(() => {
-        if (isSuccess) {
+        if (isFetchDetailSuccess) {
+            const { priority, description, formulaName, groupId, groupName, id, name } = fetchedDetail;
+
+            formik.setValues({
+                priority,
+                name,
+                description,
+                formulaName,
+                group: {
+                    id: groupId,
+                    name: groupName,
+                }
+            })
+        }
+    }, [isFetchDetailSuccess])
+
+    React.useEffect(() => {
+        if (isFetchListGroupSuccess) {
             const groupOptions = fetchedGroups.data.map((group) =>
                 ({ id: group.id, name: group.name }));
             setGroupOptions(groupOptions)
+        }
+    }, [isFetchListGroupSuccess])
+
+    React.useEffect(() => {
+        if (isSuccess) {
+            fetchDetail(id);
         }
     }, [isSuccess])
 
@@ -54,6 +104,7 @@ export default function EditSalaryGroup({ closeDialogCb }) {
         }}
         title="Chỉnh sửa salary config"
     >
+        <LoadingOverlay isLoading={isPending || isFetchDetailPending || isFetchListGroupPending} />
         <DialogForm>
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <TwoColumnBox

@@ -13,7 +13,7 @@ import { useFormik } from "formik";
 import { useFetchTeamListWithoutDepartment } from "../../../../client/teamService";
 import { useFetchListUserWhoIsManager } from "../../../../client/userService";
 
-import { useUpdateDepartment, useFetchOneDepartment, useFetchListDepartment } from "../../../../client/departmentService";
+import { useUpdateDepartment, useFetchOneDepartment, useFetchListDepartment, useFetchTeamsOfDepartment } from "../../../../client/departmentService";
 import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
 export default function EditDepartment({ reloadList, closeDialogCb, departmentId }) {
@@ -36,6 +36,13 @@ export default function EditDepartment({ reloadList, closeDialogCb, departmentId
     } = useFetchListDepartment();
 
     const {
+        isPending: isFetchDepTeamsPending,
+        isSuccess: isFetchDepTeamsSuccess,
+        data: depTeams,
+        method: fetchDepTeams
+    } = useFetchTeamsOfDepartment();
+
+    const {
         isPending,
         isSuccess,
         isError,
@@ -52,14 +59,15 @@ export default function EditDepartment({ reloadList, closeDialogCb, departmentId
         },
         onSubmit: (values) => {
             const teamIds = values.teams.map(team => team.id);
-            const parentDepartmentId = values.parentDepartment.id;
-            const managerId = values.manager.id;
+            const parentDepartmentId = values.parentDepartment?.id ?? null;
+            const managerId = values.manager?.id ?? null;
 
-            const { teams, parentDepartment, manager,
+            const { description, teams, parentDepartment, manager,
                 ...rest } = values;
 
             updateDepartment(departmentId, {
                 ...rest,
+                detail: description,
                 teamIds,
                 managerId,
                 parentDepartmentId,
@@ -84,6 +92,7 @@ export default function EditDepartment({ reloadList, closeDialogCb, departmentId
     } = useFetchListUserWhoIsManager();
 
     React.useEffect(() => {
+        fetchDepTeams(departmentId)
         fetchTeams();
         fetchManager();
         fetchListDepartment();
@@ -103,10 +112,24 @@ export default function EditDepartment({ reloadList, closeDialogCb, departmentId
                     name: "None",
                 },
                 teams: formik.values.teams,
-                parentDepartment: formik.values.parentDepartment,
+                parentDepartment: oneDepartment.parentDepartmentId ? {
+                    id: oneDepartment.parentDepartmentId,
+                    name: oneDepartment.parentDepartmentName
+                } : {
+                    id: 0,
+                    name: "None"
+                },
             })
         }
     }, [isFetchOneSuccess])
+
+    React.useEffect(() => {
+        if (isFetchDepTeamsSuccess) {
+            const teams = depTeams.data.map((team) => ({ id: team.id, name: team.name }))
+
+            formik.setFieldValue('teams', teams);
+        }
+    }, [isFetchDepTeamsSuccess && isFetchOneSuccess])
 
     React.useEffect(() => {
         if (fetchedTeams) {
@@ -129,13 +152,14 @@ export default function EditDepartment({ reloadList, closeDialogCb, departmentId
 
     React.useEffect(() => {
         if (isFetchListSuccess) {
-            const depOptions = fetchedDepartments.data.map((dep) => ({ id: dep.id, name: dep.name }))
+            const depOptions = fetchedDepartments.data
+                .map((dep) => ({ id: dep.id, name: dep.name }))
             setDepartmentOptions(depOptions);
         }
     }, [fetchedDepartments])
 
     React.useEffect(() => {
-        if (isSuccess) { 
+        if (isSuccess) {
             reloadList();
             closeDialogCb();
         }
@@ -154,7 +178,7 @@ export default function EditDepartment({ reloadList, closeDialogCb, departmentId
     >
         <DialogForm>
             <LoadingOverlay isLoading={isPending} />
-            <LoadingOverlay isLoading={isFetchManagerPending || isFetchTeamsPending || isFetchManagerPending} />
+            <LoadingOverlay isLoading={isFetchManagerPending || isFetchTeamsPending || isFetchManagerPending || isFetchDepTeamsPending || isFetchOnePending} />
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <TwoColumnBox
                     firstSlot={

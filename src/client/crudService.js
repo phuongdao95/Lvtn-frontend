@@ -91,10 +91,12 @@ export const getUseFetchListResourceFunction =
                 const response = await api.get(pathPrefix, {
                     params
                 });
+
                 if (response.data) {
                     setData(response.data);
-                    setIsSuccess(true);
                 }
+
+                setIsSuccess(true);
             } catch (err) {
                 console.log(err);
                 setIsError(true);
@@ -137,6 +139,9 @@ export const getUseDeleteResourceFunction =
 export const getUseFetchOneResourceFunction =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsPending, setIsSuccess, setData }, pathPrefix) => {
         const fetchOneResource = async (id) => {
+            setIsError(false);
+            setIsPending(true);
+            setIsSuccess(false);
             try {
                 const path = `${pathPrefix}/${id}`
                 const response = await api.get(path, {});

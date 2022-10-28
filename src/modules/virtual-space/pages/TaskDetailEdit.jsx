@@ -9,7 +9,6 @@ import TextField from "../../../components/DialogForm/TextField";
 import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 import OneColumnBox from "../../../components/DialogForm/OneColumnBox";
 import DatePicker from "../../../components/DialogForm/DatePicker";
-import AutoCompleteMultiple from "../../../components/DialogForm/AutoCompleteMultiple";
 import AutoComplete from "../../../components/DialogForm/AutoComplete";
 import { useUpdateTask, useFetchOneTask, useFetchTaskLabelsOfTask } from '../../../client/taskService';
 import { useFetchUsersOfBoard, useFetchTaskLabelsOfBoard, useFetchTaskColumnsOfTaskBoard } from '../../../client/taskboardService';
@@ -134,6 +133,13 @@ export default function TaskDetailEdit({ reload, taskId, closeDialogCb }) {
     }, [isFetchDetailSuccess])
 
     React.useEffect(() => {
+        if (isSuccess) {
+            closeDialogCb();
+            reload();
+        }
+    }, [isSuccess])
+
+    React.useEffect(() => {
         if (isTaskLabelsSuccess) {
             setLabelOptions(taskLabelsResponse.data.map(
                 label => ({ id: label.id, name: label.name })))
@@ -174,7 +180,7 @@ export default function TaskDetailEdit({ reload, taskId, closeDialogCb }) {
         title="Sửa thông tin task"
     >
         <DialogForm>
-            <LoadingOverlay isLoading={isPending && isFetchDetailPending} />
+            <LoadingOverlay isLoading={isPending} />
             <Fragment>
                 <OneColumnBox
                     slot={
@@ -277,24 +283,6 @@ export default function TaskDetailEdit({ reload, taskId, closeDialogCb }) {
                                 name="toDate"
                                 value={formik.values.toDate}
                                 onChange={(value) => formik.setFieldValue("toDate", value)}
-                            />
-                        </Fragment>
-                    }
-                />
-
-                <OneColumnBox
-                    slot={
-                        <Fragment>
-                            <Label text={"Danh sách Nhãn"} />
-                            <AutoCompleteMultiple
-                                id="labels"
-                                name="labels"
-                                getOptionLabel={(option) => option.name}
-                                options={labelOptions}
-                                value={formik.values.labels}
-                                onChange={(event, value) => {
-                                    formik.setFieldValue("labels", value)
-                                }}
                             />
                         </Fragment>
                     }

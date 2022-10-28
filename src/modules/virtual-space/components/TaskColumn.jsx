@@ -10,7 +10,7 @@ const columnHeader = {
     marginBottom: '20px'
 }
 
-const TaskColumn = ({ prefix, elements }) => (
+const TaskColumn = ({ prefix, elements, setShouldReload }) => (
     <Box sx={{
         position: 'relative',
         maxHeight: '65vh',
@@ -36,7 +36,7 @@ const TaskColumn = ({ prefix, elements }) => (
                     minWidth: '200px',
                 }}>
                     {elements.map((item, index) => (
-                        <TaskColumnItem key={item.id} item={item} index={index} />
+                        <TaskColumnItem key={item.id} item={item} index={index} setShouldReload={setShouldReload} />
                     ))}
                     {provided.placeholder}
                 </Box>

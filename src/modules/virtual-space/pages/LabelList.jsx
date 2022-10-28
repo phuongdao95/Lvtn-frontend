@@ -69,6 +69,7 @@ export default function LabelList() {
     } = useFetchTaskLabelsOfBoard();
 
     const {
+        isError: isDeleteError,
         isPending: isDeletePending,
         isSuccess: isDeleteSuccess,
         method: deleteTaskLabel
@@ -78,14 +79,20 @@ export default function LabelList() {
         fetchLabelList(boardId);
     }, [boardId])
 
-
     React.useEffect(() => {
         console.log(isCreateLabelOpen)
     }, [isCreateLabelOpen])
 
+    React.useEffect(() => {
+        if (isDeleteSuccess) {
+            fetchLabelList(boardId);
+        }
+    }, [isDeleteSuccess])
+
     return <Fragment>
-        {isCreateLabelOpen && <LabelCreate closeDialogCb={() => setIsCreateLabelOpen(false)} />}
-        {isEditLabelOpen && <LabelEdit labelId={labelId} closeDialogCb={() => setIsEditLabelOpen(false)} />}
+        {isCreateLabelOpen && <LabelCreate
+            reload={() => fetchLabelList(boardId)} closeDialogCb={() => setIsCreateLabelOpen(false)} />}
+        {isEditLabelOpen && <LabelEdit labelId={labelId} closeDialogCb={() => setIsEditLabelOpen(false)} reload={() => fetchLabelList(boardId)} />}
         {isDeleteLabelOpen &&
             <ConfirmDialog
                 title={"Confirm"}

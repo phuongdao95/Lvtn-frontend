@@ -19,7 +19,7 @@ const addToList = (list, index, element) => {
 };
 
 
-function TaskBoard({ taskId, taskColumns, reloadList }) {
+function TaskBoard({ taskId, taskColumns, reloadList, setShouldReload }) {
     const [elements, setElements] = React.useState({});
     const { id: boardId } = useParams();
 
@@ -83,6 +83,7 @@ function TaskBoard({ taskId, taskColumns, reloadList }) {
                             elements={elements[listKey]}
                             key={listKey}
                             prefix={listKey}
+                            setShouldReload={setShouldReload}
                         />
                     ))}
                 </Box>

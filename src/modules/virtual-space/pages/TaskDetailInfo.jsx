@@ -1,49 +1,62 @@
 import React, { Fragment } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Chip } from '@mui/material';
 import TaskDetailHeader from "../components/TaskDetailHeader";
 import OneColumnBox from '../../../components/DialogForm/OneColumnBox';
 import Label from '../../../components/DialogForm/Label';
 import TwoColumnBox from '../../../components/DialogForm/TwoColumnBox';
-import TextField from '../../../components/DialogForm/TextField';
-import DatePicker from '../../../components/DialogForm/DatePicker';
-import AutoCompleteMultiple from '../../../components/DialogForm/AutoCompleteMultiple';
-import AutoComplete from '../../../components/DialogForm/AutoComplete';
-import { useUpdateTask, useFetchOneTask, useFetchTaskLabelsOfTask } from '../../../client/taskService';
-import { useFetchUsersOfBoard, useFetchTaskLabelsOfBoard, useFetchTaskColumnsOfTaskBoard } from '../../../client/taskboardService';
+import { useFetchOneTask, useFetchTaskLabelsOfTask, useRemoveTaskLabelFromTask } from '../../../client/taskService';
 import { useFormik } from 'formik';
 import { useParams } from 'react-router';
 import dayjs from 'dayjs';
 import RTEContent from '../components/RTEContent';
 import TaskDetailComments from './TaskDetailComment';
-import CommentDialog from '../components/CommentDialog';
 import DescriptionDialog from '../components/DescriptionDialog';
 import LoadingOverlay from '../../../components/LoadingOverlay/LoadingOverlay';
+import ConfirmDialog from '../../../components/Dialog/ConfirmDialog';
+import { Typography } from '@mui/material';
+import TaskDetailEdit from "./TaskDetailEdit";
+import TaskDetailNewLabel from './TaskDetailNewLabel';
+
+const initialDialogState = {
+    title: "",
+    message: "",
+    confirmAction: () => { }
+}
 
 export default function TaskDetailInfo({ taskId }) {
     const { id: boardId } = useParams();
 
     const [isCommentDialogOpen, setIsCommentDialogOpen] = React.useState(false);
     const [isDescriptionDialogOpen, setIsDescriptionDialogOpen] = React.useState(false);
-
+    const [isTaskDetailEditOpen, setIsTaskDetailEditOpen] = React.useState(false);
+    const [isAddLabelOpen, setIsAddLabelOpen] = React.useState(false);
     const [description, setDescription] = React.useState(null);
-    const [labelOptions, setLabelOptions] = React.useState([]);
-    const [columnOptions, setColumnOptions] = React.useState([]);
-    const [boardUserOptions, setBoardUserOptions] = React.useState([]);
+    const [labelId, setLabelId] = React.useState();
+    const [isRemoveLabelOpen, setIsRemoveLabelOpen] = React.useState(false);
+
+    const [isInfoDialogOpen, setIsInfoDialogOpen] = React.useState(false);
+    const [infoDialogMessage, setInfoDialogMessage] = React.useState({
+        initialDialogState
+    })
+
+    const [labelList, setLabelList] = React.useState([]);
 
     const {
-        isPending,
-        isSuccess,
-        isError,
-        method: updateTask,
-    } = useUpdateTask();
+        isSuccess: isRemoveLabelSuccess,
+        isPending: isRemoveLabelPending,
+        isError: isRemoveLabelError,
+        method: removeTaskLabelFromTask
+    } = useRemoveTaskLabelFromTask();
 
-    const {
-        isPending: isFetchUsersPending,
-        isSuccess: isFetchUsersSuccesss,
-        isError: isFetchUsersError,
-        method: fetchBoardUsers,
-        data: boardUsers
-    } = useFetchUsersOfBoard();
+    React.useEffect(() => {
+        if (isRemoveLabelError) {
+            setInfoDialogMessage({
+                title: 'Error',
+                message: 'Có lỗi xảy ra từ server'
+            });
+            setIsInfoDialogOpen(true);
+        }
+    }, [isRemoveLabelError]);
 
     const {
         isPending: isFetchLabelsPending,
@@ -52,21 +65,6 @@ export default function TaskDetailInfo({ taskId }) {
         method: fetchLabels,
         data: labels,
     } = useFetchTaskLabelsOfTask();
-
-    const {
-        isPending: isTaskLabelsPending,
-        isSuccess: isTaskLabelsSuccess,
-        isError: isTaskLabelsError,
-        method: fetchTaskLabels,
-        data: taskLabelsResponse
-    } = useFetchTaskLabelsOfBoard();
-
-    const {
-        isPending: isTaskColumnsPending,
-        isSuccess: isTaskColumnsSuccess,
-        method: fetchTaskColumns,
-        data: taskColumnsResponse,
-    } = useFetchTaskColumnsOfTaskBoard();
 
     const {
         isPending: isFetchDetailPending,
@@ -88,27 +86,20 @@ export default function TaskDetailInfo({ taskId }) {
             effort: 3,
         },
         onSubmit: (values) => {
-            const labelIds = values.labels.map(label => label.id);
-            const inChargeId = values.inCharge.id;
-            const reportToId = values.reportTo.id;
-            const columnId = values.column.id;
-
-            updateTask({
-                ...values,
-                taskLabelIds: labelIds,
-                inChargeId,
-                reportToId,
-                description: JSON.stringify(description), columnId
-            })
         }
     });
 
     React.useEffect(() => {
         fetchTaskDetail(taskId);
-        fetchTaskLabels(boardId);
-        fetchBoardUsers(boardId);
         fetchLabels(taskId);
     }, []);
+
+
+    React.useEffect(() => {
+        if (isRemoveLabelSuccess) {
+            fetchLabels(taskId);
+        }
+    }, [isRemoveLabelSuccess])
 
     React.useEffect(() => {
         if (isFetchDetailSuccess) {
@@ -142,42 +133,54 @@ export default function TaskDetailInfo({ taskId }) {
     }, [isFetchDetailSuccess])
 
     React.useEffect(() => {
-        if (isTaskLabelsSuccess) {
-            setLabelOptions(taskLabelsResponse.data.map(
-                label => ({ id: label.id, name: label.name })))
-        }
-    }, [isTaskLabelsSuccess])
-
-    React.useEffect(() => {
-        if (isTaskColumnsSuccess) {
-            setColumnOptions(taskColumnsResponse.data.map(
-                column => ({ id: column.id, name: column.name })))
-        }
-    }, [isTaskColumnsSuccess])
-
-    React.useEffect(() => {
-        if (isFetchUsersSuccesss) {
-            const boardUserOptions = boardUsers.data.map(
-                (user) => ({ id: user.id, name: user.name }))
-            setBoardUserOptions(boardUserOptions);
-        }
-    }, [isFetchUsersSuccesss])
-
-    React.useEffect(() => {
         if (isFetchLabelsSuccess) {
-            formik.setFieldValue("labels", labels.data.map(label => ({ id: label.id, name: label.name })))
+            setLabelList(labels.data.map(label => ({ id: label.id, name: label.name })))
         }
     }, [isFetchLabelsSuccess])
 
     return <Fragment>
-        {isCommentDialogOpen &&
-            <CommentDialog taskId={taskId} closeDialogCb={
-                () => setIsCommentDialogOpen(false)} />}
+
 
         {isDescriptionDialogOpen &&
-            <DescriptionDialog taskId={taskId} closeDialogCb={
-                () => setIsDescriptionDialogOpen(false)} description={description} />}
+            <DescriptionDialog taskId={taskId} reloadDescription={() => {
+                setDescription(null);
+                fetchTaskDetail(taskId);
+            }}
+                closeDialogCb={() => setIsDescriptionDialogOpen(false)} description={description} />}
 
+        {isTaskDetailEditOpen &&
+            <TaskDetailEdit
+                reload={() => { fetchTaskDetail(taskId) }}
+                taskId={taskId}
+                closeDialogCb={() => setIsTaskDetailEditOpen(false)} />}
+
+        {isAddLabelOpen &&
+            <TaskDetailNewLabel
+                reloadLabels={() => fetchLabels(taskId)}
+                taskId={taskId}
+                closeDialogCb={() => setIsAddLabelOpen(false)} />
+        }
+
+        {isRemoveLabelOpen &&
+            <ConfirmDialog
+                title={"Confirm"}
+                message="Bạn có muốn xóa chức vụ này"
+                cancelAction={{
+                    text: "Cancel",
+                    handler: () => {
+                        setLabelId(null);
+                        setIsRemoveLabelOpen(false);
+                    },
+                }}
+                confirmAction={{
+                    text: "Confirm",
+                    handler: () => {
+                        setLabelId(null);
+                        setIsRemoveLabelOpen(false);
+                        removeTaskLabelFromTask(taskId, labelId);
+                    }
+                }}
+            />}
 
         <Box sx={{
             position: 'relative',
@@ -192,40 +195,31 @@ export default function TaskDetailInfo({ taskId }) {
                 overflow: 'auto',
                 flex: 2
             }}>
-                <Box sx={{ minHeight: 300 }}>
+                <Box>
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                     }}>
                         <TaskDetailHeader>
-                            Description
+                            Mô Tả
                         </TaskDetailHeader>
 
                         <Button onClick={() => setIsDescriptionDialogOpen(true)}>
-                            edit description
+                            cập nhật mô tả
                         </Button>
                     </Box>
 
-                    <RTEContent
-                        value={description}
-                    />
+                    {description ?
+                        <RTEContent
+                            value={description}
+                        /> :
+                        <Typography fontStyle={"italic"}>
+                            Chưa có mô tả nào.
+                        </Typography>
+                    }
                 </Box>
                 <Box>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                    }}>
-                        <TaskDetailHeader>
-                            Comment
-                        </TaskDetailHeader>
-
-                        <Button onClick={() => setIsCommentDialogOpen(true)}>
-                            write a comment
-                        </Button>
-                    </Box>
-
                     <TaskDetailComments taskId={taskId} />
                 </Box>
             </Box>
@@ -233,160 +227,149 @@ export default function TaskDetailInfo({ taskId }) {
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                flex: 1
+                gap: 3,
+                flex: 1,
             }}>
                 <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between'
+                    position: 'relative',
                 }}>
-                    <TaskDetailHeader>
-                        Detail
-                    </TaskDetailHeader>
-
-                    <Button>
-                        Edit task
-                    </Button>
-                </Box>
-
-                <Fragment>
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'row',
-                        gap: 2,
-                        position: 'relative'
+                        justifyContent: 'space-between',
                     }}>
+                        <TaskDetailHeader>
+                            Danh sách nhãn
+                        </TaskDetailHeader>
 
+                        <Button size='small' onClick={() => setIsAddLabelOpen(true)}>
+                            Thêm nhãn
+                        </Button>
+                    </Box>
+
+                    {isFetchLabelsSuccess && labelList.length > 0 ?
+                        labelList.map((label) =>
+                            <Chip variant="outlined"
+                                id={label.id}
+                                label={label.name}
+                                onDelete={() => {
+                                    setIsRemoveLabelOpen(true);
+                                    setLabelId(label.id)
+                                }}
+                            />) :
+                        <Typography fontStyle={"italic"}>Chưa có nhãn nào</Typography>
+                    }
+
+                    {isFetchLabelsPending &&
+                        <LoadingOverlay isLoading={isFetchLabelsPending} />
+                    }
+                </Box>
+                <Box sx={{ position: 'relative' }}>
+                    {isFetchDetailPending &&
+                        <LoadingOverlay isLoading={isFetchDetailPending} />
+                    }
+
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                    }}>
+                        <TaskDetailHeader>
+                            Chi tiết
+                        </TaskDetailHeader>
+
+                        <Button onClick={() => setIsTaskDetailEditOpen(true)}>
+                            Cập nhật task
+                        </Button>
+                    </Box>
+
+
+                    <Fragment>
                         <Box sx={{
                             display: 'flex',
-                            flexDirection: 'column',
+                            flexDirection: 'row',
+                            gap: 2,
+                            position: 'relative'
                         }}>
-                            <OneColumnBox
-                                slot={
-                                    <Fragment>
-                                        <Label text={"Tiêu đề"} />
-                                        <TextField
-                                            id="name"
-                                            name="name"
-                                            value={formik.values.name}
-                                            onChange={formik.handleChange}
-                                            error={formik.touched.name && Boolean(formik.errors.name)}
-                                            helperText={formik.touched.name && formik.errors.name}
-                                        />
-                                    </Fragment>
-                                }
-                            />
 
-                            <TwoColumnBox
-                                firstSlot={
-                                    <Fragment>
-                                        <Label text={"Trạng thái"} />
-                                        <AutoComplete
-                                            id="column"
-                                            name="column"
-                                            getOptionLabel={(option) => option.name}
-                                            options={columnOptions}
-                                            value={formik.values.column}
-                                            onChange={(event, value) => {
-                                                formik.setFieldValue("column", value)
-                                            }}
-                                        />
-                                    </Fragment>
-                                }
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                width: 400,
+                            }}>
+                                <OneColumnBox
+                                    slot={
+                                        <Fragment>
+                                            <Label text={"Tiêu đề"} />
+                                            <Typography sx={{ fontSize: 15 }}>
+                                                {formik.values.name}
+                                            </Typography>
+                                        </Fragment>
+                                    }
+                                />
 
-                                secondSlot={
-                                    <Fragment>
-                                        <Label text={"Effort"} />
-                                        <TextField
-                                            id="effort"
-                                            type="number"
-                                            name="effor"
-                                            value={formik.values.effort}
-                                            onChange={formik.handleChange}
-                                            error={formik.touched.effort && Boolean(formik.errors.effort)}
-                                            helperText={formik.touched.effort && formik.errors.effort}
-                                        />
-                                    </Fragment>
-                                }
-                            />
+                                <TwoColumnBox
+                                    firstSlot={
+                                        <Fragment>
+                                            <Label text={"Trạng thái"} />
+                                            <Typography sx={{ fontSize: 15 }}>
+                                                {formik.values.column.name}
+                                            </Typography>
+                                        </Fragment>
+                                    }
 
-                            <TwoColumnBox
-                                firstSlot={
-                                    <Fragment>
-                                        <Label text={"Người được gán"} />
-                                        <AutoComplete
-                                            id={"inCharge"}
-                                            name={"inCharge"}
-                                            options={boardUserOptions}
-                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Empty Option`}
-                                            value={formik.values.inCharge}
-                                            onChange={(event, value) => {
-                                                formik.setFieldValue("inCharge", value)
-                                            }}
-                                        />
-                                    </Fragment>
-                                }
-                                secondSlot={
-                                    <Fragment>
-                                        <Label text={"Người báo cáo"} />
-                                        <AutoComplete
-                                            id={"reportTo"}
-                                            name={"reportTo"}
-                                            options={boardUserOptions}
-                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Empty Option`}
-                                            value={formik.values.reportTo}
-                                            onChange={(event, value) => {
-                                                formik.setFieldValue("reportTo", value)
-                                            }}
-                                        />
-                                    </Fragment>
-                                }
-                            />
+                                    secondSlot={
+                                        <Fragment>
+                                            <Label text={"Effort"} />
+                                            <Typography sx={{ fontSize: 15 }}>
+                                                {formik.values.effort ?? "Unset"}
+                                            </Typography>
+                                        </Fragment>
+                                    }
+                                />
 
-                            <TwoColumnBox
-                                firstSlot={
-                                    <Fragment>
-                                        <Label text={"Ngày bắt đầu"} />
-                                        <DatePicker id="fromDate"
-                                            name="fromDate"
-                                            value={formik.values.fromDate}
-                                            onChange={(value) => formik.setFieldValue("fromDate", value)}
-                                        />
-                                    </Fragment>
-                                }
+                                <TwoColumnBox
+                                    firstSlot={
+                                        <Fragment>
+                                            <Label text={"Người được gán"} />
+                                            <Typography sx={{ fontSize: 15 }}>
+                                                {formik.values.inChargeName ?? "Unassigned"}
+                                            </Typography>
+                                        </Fragment>
+                                    }
+                                    secondSlot={
+                                        <Fragment>
+                                            <Label text={"Người báo cáo"} />
+                                            <Typography sx={{ fontSize: 15 }}>
+                                                {formik.values.reportToName ?? "Unassigned"}
+                                            </Typography>
+                                        </Fragment>
+                                    }
+                                />
 
-                                secondSlot={
-                                    <Fragment>
-                                        <Label text={"Ngày kết thúc"} />
-                                        <DatePicker id="toDate"
-                                            name="toDate"
-                                            value={formik.values.toDate}
-                                            onChange={(value) => formik.setFieldValue("toDate", value)}
-                                        />
-                                    </Fragment>
-                                }
-                            />
+                                <TwoColumnBox
+                                    firstSlot={
+                                        <Fragment>
+                                            <Label text={"Ngày bắt đầu"} />
+                                            <Typography sx={{ fontSize: 15 }}>
+                                                {dayjs(formik.values.fromDate).format('DD/MM/YYYY')}
+                                            </Typography>
+                                        </Fragment>
+                                    }
 
-                            <OneColumnBox
-                                slot={
-                                    <Fragment>
-                                        <Label text={"Danh sách Nhãn"} />
-                                        <AutoCompleteMultiple
-                                            id="labels"
-                                            name="labels"
-                                            getOptionLabel={(option) => option.name}
-                                            options={labelOptions}
-                                            value={formik.values.labels}
-                                            onChange={(event, value) => {
-                                                formik.setFieldValue("labels", value)
-                                            }}
-                                        />
-                                    </Fragment>
-                                }
-                            />
+                                    secondSlot={
+                                        <Fragment>
+                                            <Label text={"Ngày kết thúc"} />
+                                            <Typography sx={{ fontSize: 15 }}>
+                                                {dayjs(formik.values.toDate).format('DD/MM/YYYY')}
+                                            </Typography>
+                                        </Fragment>
+                                    }
+                                />
+                            </Box>
                         </Box>
-                    </Box>
-                </Fragment>
+                    </Fragment>
+                </Box>
             </Box>
         </Box>
     </Fragment>;

@@ -5,20 +5,18 @@ import { Box } from "@mui/system";
 import { grey, lightBlue } from "@mui/material/colors";
 import TaskDetail from "../pages/TaskDetail";
 
-const cardFooter = {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-}
-
-const TaskColumnItem = ({ item, index }) => {
+const TaskColumnItem = ({ item, index, setShouldReload }) => {
     const [isTaskDetailOpen, setIsTaskDetailOpen] = React.useState(false);
 
     return (
         <Fragment>
             {isTaskDetailOpen &&
-                <TaskDetail taskId={item.id} closeCb={() => { setIsTaskDetailOpen(false) }} />
+                <TaskDetail taskId={item.id} closeCb={() => {
+                    setIsTaskDetailOpen(false);
+                    if (setShouldReload) {
+                        setShouldReload(true);
+                    }
+                }} />
             }
             <Draggable draggableId={`${item.id}`} index={index}>
                 {(provided, snapshot) => {

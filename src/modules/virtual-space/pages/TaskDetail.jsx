@@ -7,6 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TaskDetailTabs from '../components/TaskDetailTabs';
 import TaskDetailInfo from "./TaskDetailInfo";
 import TaskDetailFiles from "./TaskDetailFile";
+import TaskDetailHistory from './TaskDetailHistory';
 
 export default function TaskDetail({ taskId, closeCb = () => { } }) {
 
@@ -41,7 +42,9 @@ export default function TaskDetail({ taskId, closeCb = () => { } }) {
                         fileSection={
                             <TaskDetailFiles taskId={taskId} />
                         }
-
+                        historySection={
+                            <TaskDetailHistory taskId={taskId} />
+                        }
                     />
                 </Box>
 

@@ -81,6 +81,13 @@ const SideBar = (props) => {
                     }
                 },
 
+                {
+                    text: "Quản lý Nhóm",
+                    onClick: () => {
+                        navigate("/group")
+                    }
+                },
+
             ]
         },
 
@@ -108,9 +115,21 @@ const SideBar = (props) => {
                     }
                 },
                 {
+                    text: "Danh sách Payslip của tôi",
+                    onClick: () => {
+                        navigate("/my-payslips")
+                    },
+                },
+                {
                     text: "Danh sách Payroll",
                     onClick: () => {
                         navigate("/payroll")
+                    }
+                },
+                {
+                    text: "Công thức tính lương",
+                    onClick: () => {
+                        navigate("/salary-group")
                     }
                 },
             ]
@@ -137,7 +156,7 @@ const SideBar = (props) => {
                 {
                     text: "Danh sách Bảng",
                     onClick: () => {
-                        
+
                     }
                 }
             ]

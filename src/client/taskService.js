@@ -173,3 +173,83 @@ export const useFetchTaskFilesOfTask = getPendingErrorSuccessApiPatternFunction(
         return fetchList;
     }
 )();
+
+export const useAddTaskLabel = getPendingErrorSuccessApiPatternFunction(
+    ({ setIsError, setIsPending, setIsSuccess, setData }) => {
+        const addTaskLabel = async (taskId, tasklabelid) => {
+            setIsError(false);
+            setIsSuccess(false);
+            setIsPending(true);
+
+            try {
+                const response = await api.post(`/api/task/${taskId}/tasklabel/${tasklabelid}`);
+
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+
+            } catch (err) {
+                setIsError(true);
+                console.error(err);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        return addTaskLabel;
+    }
+)();
+
+export const useRemoveTaskLabelFromTask = getPendingErrorSuccessApiPatternFunction(
+    ({ setIsError, setIsPending, setIsSuccess, setData }) => {
+        const removeTaskLabelFromTask = async (taskId, tasklabelid) => {
+            setIsError(false);
+            setIsSuccess(false);
+            setIsPending(true);
+
+            try {
+                const response = await api.delete(`/api/task/${taskId}/tasklabel/${tasklabelid}`);
+
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+
+            } catch (err) {
+                setIsError(true);
+                console.error(err);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        return removeTaskLabelFromTask;
+    }
+)();
+
+export const useFetchTaskHistoriesOfTask = getPendingErrorSuccessApiPatternFunction(
+    ({ setIsError, setIsPending, setIsSuccess, setData }) => {
+        const fetchList = async (taskId) => {
+            setIsError(false);
+            setIsSuccess(false);
+            setIsPending(true);
+
+            try {
+                const response = await api.get(`/api/task/${taskId}/taskhistory`);
+
+                if (response.data) {
+                    setData(response.data);
+                }   
+                setIsSuccess(true);
+            } catch (err) {
+                setIsError(true);
+                console.error(err);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        return fetchList;
+    }
+)();

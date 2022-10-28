@@ -10,8 +10,9 @@ import { useFormik } from "formik"
 
 import { useFetchOneTaskLabel, useUpdateTaskLabel } from "../../../client/taskLabelService";
 import { useParams } from "react-router";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 
-export default function LabelEdit({ labelId, closeDialogCb = () => { }, createSuccessCb = () => { } }) {
+export default function LabelEdit({ labelId, closeDialogCb = () => { }, reload = () => { } }) {
     const {
         isPending: isFetchPending,
         isSuccess: isFetchSuccess,
@@ -40,6 +41,13 @@ export default function LabelEdit({ labelId, closeDialogCb = () => { }, createSu
     const { id: boardId } = useParams();
 
     React.useEffect(() => {
+        if (isSuccess) { 
+            fetchDetail(labelId)
+            reload();
+        }
+    }, [isSuccess])
+
+    React.useEffect(() => {
         fetchDetail(labelId);
     }, [labelId])
 
@@ -48,7 +56,6 @@ export default function LabelEdit({ labelId, closeDialogCb = () => { }, createSu
             formik.setValues({ name: detail.name, description: detail.description });
         }
     }, [isFetchSuccess])
-
 
     return <Dialog
         primaryAction={{
@@ -61,6 +68,7 @@ export default function LabelEdit({ labelId, closeDialogCb = () => { }, createSu
         }}
         title="Tạo mới Nhãn"
     >
+        <LoadingOverlay isLoading={isPending || isFetchPending} />
         <DialogForm>
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <TwoColumnBox

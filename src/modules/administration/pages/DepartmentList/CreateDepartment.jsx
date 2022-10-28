@@ -13,10 +13,11 @@ import { useFormik } from "formik";
 import { useFetchTeamListWithoutDepartment } from "../../../../client/teamService";
 import { useFetchListUserWhoIsManager } from "../../../../client/userService";
 
-import { useCreateDepartment } from "../../../../client/departmentService";
+import { useCreateDepartment, useFetchListDepartment } from "../../../../client/departmentService";
 import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
 export default function CreateDepartment({ reloadList, closeDialogCb }) {
+    const [departmentOptions, setDepartmentOptions] = React.useState([]);
     const [teamOptions, setTeamOptions] = React.useState([]);
     const [managerOptions, setManagerOptions] = React.useState([]);
 
@@ -26,6 +27,14 @@ export default function CreateDepartment({ reloadList, closeDialogCb }) {
         isError,
         method: createDepartment
     } = useCreateDepartment();
+
+    const {
+        isPending: isFetchListDepartmentPending,
+        isSuccess: isFetchListDepartmentSuccess,
+        isError: isFetchListDepartmentError,
+        method: fetchDepartments,
+        data: departments
+    } = useFetchListDepartment();
 
     const formik = useFormik({
         initialValues: {
@@ -37,14 +46,15 @@ export default function CreateDepartment({ reloadList, closeDialogCb }) {
         },
         onSubmit: (values) => {
             const teamIds = values.teams.map(team => team.id);
-            const parentDepartmentId = values.parentDepartment.id;
-            const managerId = values.manager.id;
+            const parentDepartmentId = values.parentDepartment?.id ?? null;
+            const managerId = values.manager?.id ?? null;
 
-            const { teams, parentDepartment, manager,
+            const { teams, description, parentDepartment, manager,
                 ...rest } = values;
 
             createDepartment({
                 ...rest,
+                detail: description,
                 teamIds,
                 managerId,
                 parentDepartmentId,
@@ -69,6 +79,7 @@ export default function CreateDepartment({ reloadList, closeDialogCb }) {
     } = useFetchListUserWhoIsManager();
 
     React.useEffect(() => {
+        fetchDepartments();
         fetchManager();
         fetchTeams();
     }, []);
@@ -91,6 +102,16 @@ export default function CreateDepartment({ reloadList, closeDialogCb }) {
             setManagerOptions(managers)
         }
     }, [fetchedManagers])
+
+    React.useEffect(() => {
+        if (departments) {
+            const department = departments.data.map((department) => ({
+                id: department.id, name: department.name
+            }));
+
+            setDepartmentOptions(department)
+        }
+    }, [departments])
 
     React.useEffect(() => {
         if (isSuccess) {
@@ -116,7 +137,7 @@ export default function CreateDepartment({ reloadList, closeDialogCb }) {
                 isPending ||
                 isFetchTeamsPending ||
                 isFetchManagersPending} />
-                
+
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <TwoColumnBox
                     firstSlot={
@@ -144,6 +165,31 @@ export default function CreateDepartment({ reloadList, closeDialogCb }) {
                                     formik.setFieldValue("manager", value);
                                 }}
                             />
+                        </Fragment>
+                    }
+                />
+
+                <TwoColumnBox
+                    firstSlot={
+                        <Fragment>
+                            <Label text={"Parent Department"} />
+                            <AutoComplete
+                                id="parentDepartment"
+                                name="parentDepartment"
+                                options={departmentOptions}
+                                getOptionLabel={(option) => option.name}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                value={formik.values.parentDepartment}
+                                onChange={(event, value) => {
+                                    formik.setFieldValue("parentDepartment", value);
+                                }}
+                            />
+
+                        </Fragment>
+                    }
+
+                    secondSlot={
+                        <Fragment>
                         </Fragment>
                     }
                 />

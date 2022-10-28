@@ -10,8 +10,9 @@ import { useFormik } from "formik"
 
 import { useCreateTaskLabel } from "../../../client/taskLabelService";
 import { useParams } from "react-router";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 
-export default function LabelCreate({ closeDialogCb = () => { }, createSuccessCb = () => { } }) {
+export default function LabelCreate({ closeDialogCb = () => { }, reload }) {
     const {
         isPending,
         isSuccess,
@@ -31,6 +32,12 @@ export default function LabelCreate({ closeDialogCb = () => { }, createSuccessCb
         }
     });
 
+    React.useEffect(() => {
+        if (isSuccess) {
+            reload();
+            closeDialogCb();
+        }
+    }, [isSuccess])
 
     return <Dialog
         primaryAction={{
@@ -43,6 +50,7 @@ export default function LabelCreate({ closeDialogCb = () => { }, createSuccessCb
         }}
         title="Tạo mới Nhãn"
     >
+        <LoadingOverlay isLoading={isPending}/>
         <DialogForm>
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <TwoColumnBox

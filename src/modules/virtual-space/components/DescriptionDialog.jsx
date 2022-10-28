@@ -3,8 +3,9 @@ import { useFormik } from "formik";
 import { useUpdateTaskDescription } from "../../../client/taskService";
 import Dialog from "../../../components/Dialog";
 import RichTextEditor, { initialValue } from "./RichTextEditor";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 
-export default function DescriptionDialog({ taskId, closeDialogCb, description }) {
+export default function DescriptionDialog({ taskId, closeDialogCb, description, reloadDescription }) {
     const {
         isSuccess,
         isPending,
@@ -21,6 +22,13 @@ export default function DescriptionDialog({ taskId, closeDialogCb, description }
         }
     })
 
+    React.useEffect(() => {
+        if (isSuccess) {
+            closeDialogCb();
+            reloadDescription();
+        }
+    }, [isSuccess])
+
     return <Dialog title={"Edit Description"}
         primaryAction={{
             handler: () => {
@@ -33,6 +41,7 @@ export default function DescriptionDialog({ taskId, closeDialogCb, description }
             text: "Cancel"
         }}
     >
+        <LoadingOverlay isLoading={isPending}/>
         <RichTextEditor
             onChange={(value) => {
                 setFormDescription(value);

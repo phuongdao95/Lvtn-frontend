@@ -5,7 +5,6 @@ import SearchField from "../../../components/DataGrid/SearchField";
 import MenuButton from "../../../components/DataGrid/MenuButton";
 import FilterButton from "../../../components/DataGrid/FilterButton";
 import TaskBoard from "../components/TaskBoard";
-import TaskDetail from "./TaskDetail";
 
 import { grey } from "@mui/material/colors";
 import { useNavigate, useParams } from "react-router";
@@ -99,7 +98,10 @@ export default function BoardDetail() {
     return <Fragment>
         {
             isTaskCreateOpen &&
-            <TaskCreate closeCb={() => { setIsTaskCreateOpen(false) }} />
+            <TaskCreate closeCb={() => {
+                setIsTaskCreateOpen(false);
+                fetchTasks(columnList.data)
+            }} />
         }
 
         <Box sx={{ padding: 2, background: 'white' }}>
@@ -110,11 +112,9 @@ export default function BoardDetail() {
                     color={grey[800]}
                 >
                     Bảng công việc
-
                 </Typography >
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, padding: 0.5 }}>
-
                     <MenuButton
                         text={"Thao tác"}
                         menu={
@@ -154,6 +154,7 @@ export default function BoardDetail() {
                 taskId={id}
                 taskColumns={taskColumns}
                 reloadList={() => setShouldReload(true)}
+                setShouldReload={setShouldReload}
             />
         </Box>
     </Fragment>

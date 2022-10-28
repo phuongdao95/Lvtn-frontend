@@ -25,7 +25,7 @@ export default function BasicTable({ rows, columns, maxHeight = '300px' }) {
                             sx={{ border: 0 }}
                         >
                             {columns.map(({ field, headerName, ...rest }) =>
-                                <TableCell key={headerName} {...rest}>
+                                <TableCell key={row.id} {...rest} align="left">
                                     {row[field]}
                                 </TableCell>
                             )}

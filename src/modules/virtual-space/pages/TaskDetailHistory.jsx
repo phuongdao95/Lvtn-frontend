@@ -1,58 +1,43 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 import { Typography, Box } from "@mui/material";
-import ActionButton from "../../../components/DataGrid/ActionButton";
 import DataGrid from "../../../components/DataGrid";
-import { Fragment } from "react";
 import TaskDetailFileCreate from "./TaskDetailFileCreate";
+import { useFetchTaskHistoriesOfTask } from "../../../client/taskService";
 
 
-const getColumnConfig = (openEditRoleCb, openDeleteRoleCb) => [
+const getColumnConfig = () => [
     {
         field: "id",
         headerName: "Id",
         width: 150,
     },
     {
-        field: "description",
+        field: "message",
         headerName: "Mô tả",
         width: 350,
     },
     {
-        field: "action",
-        headerName: "Hoạt động",
-        width: 100,
-    },
-    {
-        field: "time",
+        field: "dateTime",
         headerName: "Thời gian",
         width: 150,
     },
-    {
-        field: "ac",
-        headerName: "Thao tác",
-        width: 200,
-        renderCell: ({ id }) => {
-            return <Box sx={{ display: "flex", gap: 1 }}>
-                <ActionButton onClick={() => openEditRoleCb(id)}>
-                    Edit
-                </ActionButton>
-                <ActionButton onClick={() => openDeleteRoleCb(id)}>
-                    Delete
-                </ActionButton>
-            </Box >
-        }
-
-    }
 ]
 
-export default function TaskDetailHistory({ taskFiles }) {
+export default function TaskDetailHistory({ taskId }) {
+    const {
+        isPending,
+        isSuccess,
+        isError,
+        method: fetchTaskHistories,
+        data: fetchedTaskHistories,
+    } = useFetchTaskHistoriesOfTask();
 
+    React.useEffect(() => {
+        fetchTaskHistories(taskId)
+    }, [])
 
     return <Fragment>
-        {isEditOpen && <TaskDetailFileEdit />}
-        {isCreateOpen && <TaskDetailFileCreate />}
-
         <Box>
             <Box sx={{
                 display: 'flex',
@@ -63,11 +48,8 @@ export default function TaskDetailHistory({ taskFiles }) {
             </Box>
             <Box sx={{ padding: 2 }}>
                 <DataGrid
-                    rows={[]}
-                    columns={getColumnConfig(
-                        () => { },
-                        () => { }
-                    )}
+                    rows={fetchedTaskHistories?.data ?? []}
+                    columns={getColumnConfig()}
                 />
             </Box>
         </Box>;

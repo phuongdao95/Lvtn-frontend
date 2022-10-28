@@ -33,11 +33,9 @@ export const useFetchPermissionOfRole =
                 if (response.data) {
                     setData(response.data);
                 }
-                
                 setIsSuccess(true);
             } catch (err) {
                 console.error(err);
-                setIsSuccess(false);
                 setIsError(true);
             } finally {
                 setIsPending(false);

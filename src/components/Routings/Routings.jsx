@@ -43,6 +43,10 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import SalaryGroupList from "../../modules/salary-management/pages/SalaryGroup/SalaryGroupList";
 import ColumnList from "../../modules/virtual-space/pages/ColumnList";
 import PayslipList from "../../modules/salary-management/pages/PayRollList/PayslipList";
+import PayslipDetail from "../../modules/salary-management/pages/PayRollList/PayslipDetail";
+import HubNotify from "../../modules/virtual-space/components/HubNotify";
+import MyPayslipList from "../../modules/salary-management/pages/MyPayslipList/MyPayslipList";
+import MyPayslipDetail from "../../modules/salary-management/pages/MyPayslipList/MyPayslipDetail";
 
 export default function Routings() {
     return <Routes>
@@ -78,15 +82,15 @@ export default function Routings() {
         {/* Administration module */}
 
         <Route path="/user" element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
                 <UserList />
-            </ProtectedRoute>
+            // </ProtectedRoute>
         } />
 
         <Route path="/role" element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
+            // </ProtectedRoute>
                 <RoleList />
-            </ProtectedRoute>
         } />
         <Route path="/group" element={<GroupList />} />
         <Route path="/team" element={<TeamList />} />
@@ -96,16 +100,18 @@ export default function Routings() {
         {/* Salary Management Module */}
         <Route path="/salary" element={<SalaryList />} />
         <Route path="/dab" element={<DABList />} />
-        <Route path="/my-dab" element={<MyDABs />} />
         <Route path="/formula-variable" element={<FormulaVariable />} />
         <Route path="/payroll" element={<PayrollList />} />
         <Route path="/payroll/:id/payslip" element={<PayslipList />} />
+        <Route path="/payroll/:payrollId/payslip/:payslipId" element={<PayslipDetail />} />
         <Route path="/salary-group/" element={<SalaryGroupList />} />
-
-
+        <Route path="/my-dab" element={<MyDABs />} />
+        <Route path="/my-payslips" element={<MyPayslipList />} />
+        <Route path="/my-payslips/:payslipId" element={<MyPayslipDetail />} />
 
         {/** Shared module */}
         <Route path="/my-profile" element={<UserProfile />} />
+        <Route path="/signalr" element={<HubNotify />} />
 
     </Routes>
 }

@@ -7,8 +7,9 @@ import EditPayslip from "./EditPayslip";
 import InfoDialog from "../../../../components/Dialog/InfoDialog";
 import SearchField from "../../../../components/DataGrid/SearchField";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
+import ActionButton from "../../../../components/DataGrid/ActionButton";
 
-const getColumnConfig = () => [
+const getColumnConfig = (handleOpenDetail) => [
     {
         field: "id",
     },
@@ -30,17 +31,24 @@ const getColumnConfig = () => [
 
     {
         field: "baseSalary",
-        headerName: "Lương cơ bản"
+        headerName: "Lương cơ bản",
+        width: 150,
     },
 
     {
         field: "actualSalary",
-        headerName: "Lương thực tế"
+        headerName: "Lương thực tế",
+        width: 150,
     },
 
     {
         field: "action",
         headerName: "Thao tác",
+        renderCell: ({ id }) => {
+            return <ActionButton onClick={() => handleOpenDetail(id)}>
+                Chi tiết
+            </ActionButton>
+        }
     }
 ]
 
@@ -99,13 +107,17 @@ export default function PayslipList({ }) {
                         rows={response?.data ?? []}
                         columns={getColumnConfig(
                             (id) => {
-                                setPayslipId(id);
+                                navigate(`${id}`);
                             })}
                         isError={isError}
                         isLoading={isPending}
                         isSuccess={isSuccess}
                     />
                 }
+                secondaryButtonSection={
+                    <ActionButton onClick={() => navigate(-1)}>
+                        Quay lại
+                    </ActionButton>}
                 searchSection={<SearchField />}
                 dropdownFilterSection={<Fragment></Fragment>}
                 searchButtonSection={<SearchButton />}
@@ -113,3 +125,5 @@ export default function PayslipList({ }) {
         </Fragment>
     );
 }
+
+

@@ -18,7 +18,7 @@ export default function DABList() {
         menu={
           [
             {
-              text: "Tạo mới khấu trừ, phụ cấp, thưởng",
+              text: "Tạo mới",
               handler: () => {
                 setIsCreateDABOpen(true)
               }

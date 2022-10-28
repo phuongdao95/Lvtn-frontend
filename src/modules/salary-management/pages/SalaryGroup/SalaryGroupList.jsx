@@ -77,7 +77,7 @@ export default function SalaryGroupList() {
         isSuccess,
         isError,
         data: response,
-        method: fetchUserList
+        method: fetchSalaryGroupList
     } = useFetchListSalaryGroup();
 
     const {
@@ -88,7 +88,7 @@ export default function SalaryGroupList() {
 
     React.useEffect(() => {
         if (isDeleteSuccess) {
-            fetchUserList();
+            fetchSalaryGroupList();
         }
         if (isDeleteError) {
             setInfoDialogMessage({
@@ -112,14 +112,15 @@ export default function SalaryGroupList() {
     return (
         <Fragment>
             {isCreateSalaryGroupOpen && <CreateSalaryGroup
+                reloadList={() => fetchSalaryGroupList()}
                 closeDialogCb={
                     () => setIsCreateSalaryGroupOpen(false)}
                 createSuccessCb={() => {
                     setIsCreateSalaryGroupOpen(false);
-                    fetchUserList()
+                    fetchSalaryGroupList()
                 }} />}
             {isEditSalaryGroupOpen &&
-                <EditSalaryGroup closeDialogCb={
+                <EditSalaryGroup id={salaryGroupId} closeDialogCb={
                     () => setIsEditSalaryGroupOpen(false)}
                     salaryGroupId={salaryGroupId} />}
 
@@ -159,7 +160,7 @@ export default function SalaryGroupList() {
                     <DataGrid
                         onPageChange={(nextPageIndex) => {
                             const limit = 8;
-                            fetchUserList((nextPageIndex) * limit, limit)
+                            fetchSalaryGroupList((nextPageIndex) * limit, limit)
                         }}
                         rowCount={response?.total ?? 0}
                         paginationMode="server"

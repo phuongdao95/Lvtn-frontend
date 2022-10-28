@@ -288,24 +288,6 @@ export default function TaskCreate({ closeCb = () => { } }) {
                                         </Fragment>
                                     }
                                 />
-
-                                <OneColumnBox
-                                    slot={
-                                        <Fragment>
-                                            <Label text={"Danh sách Nhãn"} />
-                                            <AutoCompleteMultiple
-                                                id="labels"
-                                                name="labels"
-                                                getOptionLabel={(option) => option.name}
-                                                options={labelOptions}
-                                                value={formik.values.labels}
-                                                onChange={(event, value) => {
-                                                    formik.setFieldValue("labels", value)
-                                                }}
-                                            />
-                                        </Fragment>
-                                    }
-                                />
                             </Box>
                         </Box>
                     </Fragment>
