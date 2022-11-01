@@ -97,12 +97,12 @@ const HolidayConfig = () => {
                                 { text: "Danh sách ca làm việc", handler: () => { 
                                     navigate("/check-day-config/type-work-shift-day"); 
                                 } },
-                                { text: "Danh sách luật chấm công", handler: () => { 
-                                    navigate("/check-day-config/rules-work-day"); 
-                                } },
-                                { text: "Danh sách hình phạt", handler: () => { 
-                                    navigate("/check-day-config/punish-work-day"); 
-                                } },
+                                // { text: "Danh sách luật chấm công", handler: () => { 
+                                //     navigate("/check-day-config/rules-work-day"); 
+                                // } },
+                                // { text: "Danh sách hình phạt", handler: () => { 
+                                //     navigate("/check-day-config/punish-work-day"); 
+                                // } },
                             ]
                         }
                         variant="outlined"
