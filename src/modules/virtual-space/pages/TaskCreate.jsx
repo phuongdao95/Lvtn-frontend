@@ -10,9 +10,8 @@ import OneColumnBox from '../../../components/DialogForm/OneColumnBox';
 import Label from '../../../components/DialogForm/Label';
 import TwoColumnBox from '../../../components/DialogForm/TwoColumnBox';
 import AutoComplete from '../../../components/DialogForm/AutoComplete';
-import AutoCompleteMultiple from '../../../components/DialogForm/AutoCompleteMultiple';
 import DatePicker from '../../../components/DialogForm/DatePicker';
-import RichTextEditor, { initialValue } from '../components/RichTextEditor';
+import { initialValue } from '../components/RichTextEditor';
 
 import { useFormik } from 'formik';
 import {
@@ -24,7 +23,7 @@ import { useParams } from 'react-router';
 import dayjs from 'dayjs';
 import { useCreateTask } from '../../../client/taskService';
 
-export default function TaskCreate({ closeCb = () => { } }) {
+export default function TaskCreate({ closeCb = () => { }, reload }) {
     const { id: boardId } = useParams();
     const [description, setDescription] = React.useState(initialValue);
     const [labelOptions, setLabelOptions] = React.useState([]);
@@ -70,7 +69,7 @@ export default function TaskCreate({ closeCb = () => { } }) {
             labels: [],
             fromDate: dayjs(),
             toDate: dayjs().add(10),
-            effort: 3,
+            point: 3,
         },
         onSubmit: (values) => {
             const labelIds = values.labels.map(label => label.id);
@@ -116,11 +115,17 @@ export default function TaskCreate({ closeCb = () => { } }) {
         }
     }, [isFetchUsersSuccesss])
 
+    React.useEffect(() => {
+        if (isSuccess) {
+            closeCb();
+            reload();
+        }   
+    }, [isSuccess]);
+
     return (
         <React.Fragment>
             <Dialog
                 fullWidth
-                maxWidth={'xl'}
                 open={true}
             >
                 <Box sx={{
@@ -139,156 +144,125 @@ export default function TaskCreate({ closeCb = () => { } }) {
 
                 <Box sx={{ py: 1, px: 2 }}>
                     <Fragment>
-                        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                        }}>
                             <Box sx={{
                                 display: 'flex',
-                                flexDirection: 'column',
-                                flex: 2
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
                             }}>
-                                <Box sx={{
-                                    display: 'flex', flexDirection: "column", gap: 2,
-                                    flexGrow: 'none'
-                                }}>
-                                    <Box sx={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between'
-                                    }}>
-                                        <TaskDetailHeader>
-                                            Description
-                                        </TaskDetailHeader>
-                                    </Box>
-
-                                    <RichTextEditor
-                                        value={description}
-                                        onChange={(value) => {
-                                            console.log(value);
-                                            setDescription(value);
-                                        }}
-                                    />
-                                </Box>
+                                <TaskDetailHeader>
+                                    Detail
+                                </TaskDetailHeader>
                             </Box>
 
-                            <Box sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                            }}>
-                                <Box sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                }}>
-                                    <TaskDetailHeader>
-                                        Detail
-                                    </TaskDetailHeader>
-                                </Box>
+                            <OneColumnBox
+                                slot={
+                                    <Fragment>
+                                        <Label text={"Tiêu đề"} />
+                                        <TextField
+                                            id="name"
+                                            name="name"
+                                            value={formik.values.name}
+                                            onChange={formik.handleChange}
+                                            error={formik.touched.name && Boolean(formik.errors.name)}
+                                            helperText={formik.touched.name && formik.errors.name}
+                                        />
+                                    </Fragment>
+                                }
+                            />
 
-                                <OneColumnBox
-                                    slot={
-                                        <Fragment>
-                                            <Label text={"Tiêu đề"} />
-                                            <TextField
-                                                id="name"
-                                                name="name"
-                                                value={formik.values.name}
-                                                onChange={formik.handleChange}
-                                                error={formik.touched.name && Boolean(formik.errors.name)}
-                                                helperText={formik.touched.name && formik.errors.name}
-                                            />
-                                        </Fragment>
-                                    }
-                                />
+                            <TwoColumnBox
+                                firstSlot={
+                                    <Fragment>
+                                        <Label text={"Trạng thái"} />
+                                        <AutoComplete
+                                            id="column"
+                                            name="column"
+                                            getOptionLabel={(option) => option.name}
+                                            options={columnOptions}
+                                            value={formik.values.column}
+                                            onChange={(event, value) => {
+                                                formik.setFieldValue("column", value)
+                                            }}
+                                        />
+                                    </Fragment>
+                                }
 
-                                <TwoColumnBox
-                                    firstSlot={
-                                        <Fragment>
-                                            <Label text={"Trạng thái"} />
-                                            <AutoComplete
-                                                id="column"
-                                                name="column"
-                                                getOptionLabel={(option) => option.name}
-                                                options={columnOptions}
-                                                value={formik.values.column}
-                                                onChange={(event, value) => {
-                                                    formik.setFieldValue("column", value)
-                                                }}
-                                            />
-                                        </Fragment>
-                                    }
+                                secondSlot={
+                                    <Fragment>
+                                        <Label text={"Effort"} />
+                                        <TextField
+                                            id="point"
+                                            type="number"
+                                            name="point"
+                                            value={formik.values.point}
+                                            onChange={formik.handleChange}
+                                            error={formik.touched.point && Boolean(formik.errors.point)}
+                                            helperText={formik.touched.point && formik.errors.point}
+                                        />
+                                    </Fragment>
+                                }
+                            />
 
-                                    secondSlot={
-                                        <Fragment>
-                                            <Label text={"Effort"} />
-                                            <TextField
-                                                id="effort"
-                                                type="number"
-                                                name="effor"
-                                                value={formik.values.effort}
-                                                onChange={formik.handleChange}
-                                                error={formik.touched.effort && Boolean(formik.errors.effort)}
-                                                helperText={formik.touched.effort && formik.errors.effort}
-                                            />
-                                        </Fragment>
-                                    }
-                                />
+                            <TwoColumnBox
+                                firstSlot={
+                                    <Fragment>
+                                        <Label text={"Người được gán"} />
+                                        <AutoComplete
+                                            id={"inCharge"}
+                                            name={"inCharge"}
+                                            options={boardUserOptions}
+                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Empty Option`}
+                                            value={formik.values.inCharge}
+                                            onChange={(event, value) => {
+                                                formik.setFieldValue("inCharge", value)
+                                            }}
+                                        />
+                                    </Fragment>
+                                }
+                                secondSlot={
+                                    <Fragment>
+                                        <Label text={"Người báo cáo"} />
+                                        <AutoComplete
+                                            id={"reportTo"}
+                                            name={"reportTo"}
+                                            options={boardUserOptions}
+                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Empty Option`}
+                                            value={formik.values.reportTo}
+                                            onChange={(event, value) => {
+                                                formik.setFieldValue("reportTo", value)
+                                            }}
+                                        />
+                                    </Fragment>
+                                }
+                            />
 
-                                <TwoColumnBox
-                                    firstSlot={
-                                        <Fragment>
-                                            <Label text={"Người được gán"} />
-                                            <AutoComplete
-                                                id={"inCharge"}
-                                                name={"inCharge"}
-                                                options={boardUserOptions}
-                                                getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Empty Option`}
-                                                value={formik.values.inCharge}
-                                                onChange={(event, value) => {
-                                                    formik.setFieldValue("inCharge", value)
-                                                }}
-                                            />
-                                        </Fragment>
-                                    }
-                                    secondSlot={
-                                        <Fragment>
-                                            <Label text={"Người báo cáo"} />
-                                            <AutoComplete
-                                                id={"reportTo"}
-                                                name={"reportTo"}
-                                                options={boardUserOptions}
-                                                getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Empty Option`}
-                                                value={formik.values.reportTo}
-                                                onChange={(event, value) => {
-                                                    formik.setFieldValue("reportTo", value)
-                                                }}
-                                            />
-                                        </Fragment>
-                                    }
-                                />
+                            <TwoColumnBox
+                                firstSlot={
+                                    <Fragment>
+                                        <Label text={"Ngày bắt đầu"} />
+                                        <DatePicker id="fromDate"
+                                            name="fromDate"
+                                            value={formik.values.fromDate}
+                                            onChange={(value) => formik.setFieldValue("fromDate", value)}
+                                        />
+                                    </Fragment>
+                                }
 
-                                <TwoColumnBox
-                                    firstSlot={
-                                        <Fragment>
-                                            <Label text={"Ngày bắt đầu"} />
-                                            <DatePicker id="fromDate"
-                                                name="fromDate"
-                                                value={formik.values.fromDate}
-                                                onChange={(value) => formik.setFieldValue("fromDate", value)}
-                                            />
-                                        </Fragment>
-                                    }
-
-                                    secondSlot={
-                                        <Fragment>
-                                            <Label text={"Ngày kết thúc"} />
-                                            <DatePicker id="toDate"
-                                                name="toDate"
-                                                value={formik.values.toDate}
-                                                onChange={(value) => formik.setFieldValue("toDate", value)}
-                                            />
-                                        </Fragment>
-                                    }
-                                />
-                            </Box>
+                                secondSlot={
+                                    <Fragment>
+                                        <Label text={"Ngày kết thúc"} />
+                                        <DatePicker id="toDate"
+                                            name="toDate"
+                                            value={formik.values.toDate}
+                                            onChange={(value) => formik.setFieldValue("toDate", value)}
+                                        />
+                                    </Fragment>
+                                }
+                            />
                         </Box>
                     </Fragment>
                     <DialogActions>

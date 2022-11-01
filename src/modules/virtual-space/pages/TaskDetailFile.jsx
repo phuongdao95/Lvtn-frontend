@@ -153,7 +153,7 @@ export default function TaskDetailFile({ taskId, taskFiles }) {
             flexDirection: 'row',
             justifyContent: 'space-between'
         }}>
-            <Typography>{"Danh sách file"}</Typography>
+            <Typography sx={{fontWeight: 'bold'}}>{"Danh sách file"}</Typography>
             <ActionButton onClick={() => setIsCreateOpen(true)}>
                 Thêm file
             </ActionButton>

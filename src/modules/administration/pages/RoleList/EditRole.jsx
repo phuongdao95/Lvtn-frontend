@@ -36,8 +36,7 @@ const getPermissionColumnConfig = () => {
 }
 
 const validationSchema = yup.object().shape({
-    name: yup.string().required(),
-    description: yup.string().required(),
+    roleName: yup.string().required(),
 });
 
 export default function EditRole({ roleId, closeDialogCb }) {
@@ -81,7 +80,7 @@ export default function EditRole({ roleId, closeDialogCb }) {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            updateRole({ ...values });
+            updateRole(roleId, { ...values });
         }
     })
 
@@ -117,7 +116,7 @@ export default function EditRole({ roleId, closeDialogCb }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Tạo mới Role"
+        title="Cập nhật Role"
     >
         <DialogForm>
             <Box component="form" onSubmit={formik.handleSubmit}>

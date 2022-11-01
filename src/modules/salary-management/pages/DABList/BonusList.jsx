@@ -8,7 +8,7 @@ import SearchField from "../../../../components/DataGrid/SearchField";
 import InfoDialog from "../../../../components/Dialog/InfoDialog";
 import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 import EditDAB from "./EditDAB";
-import { useDeleteDAB, useFetchAllowance, useFetchDeduction, useFetchListDAB } from "../../../../client/dabService";
+import { useDeleteDAB, useFetchBonus } from "../../../../client/dabService";
 import { useNavigate } from "react-router";
 
 const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
@@ -78,7 +78,7 @@ export default function DeductionList({ shouldReload }) {
         isSuccess: isfetchSuccess,
         data: response,
         method: fetchDeduction
-    } = useFetchDeduction();
+    } = useFetchBonus();
 
     const {
         isPending: isDeletePending,
@@ -104,6 +104,12 @@ export default function DeductionList({ shouldReload }) {
         }
     }, [isDeleteSuccess])
 
+    React.useEffect(() => {
+        if (shouldReload) {
+            fetchDeduction();
+        }
+    }, [shouldReload])
+
     return <Box >
         <Box sx={{
             display: "flex",
@@ -118,6 +124,7 @@ export default function DeductionList({ shouldReload }) {
             isEditOpen &&
             <EditDAB
                 dabId={deductionId}
+                reload={() => fetchDeduction()}
                 closeDialogCb={() => {
                     setIsEditOpen(false);
                     fetchDeduction();

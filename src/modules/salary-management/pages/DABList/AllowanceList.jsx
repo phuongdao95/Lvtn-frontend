@@ -97,12 +97,17 @@ export default function DeductionList({ shouldReload }) {
         fetchDeduction();
     }, []);
 
-
     React.useEffect(() => {
         if (isDeleteSuccess) {
             fetchDeduction();
         }
     }, [isDeleteSuccess])
+
+    React.useEffect(() => {
+        if (shouldReload) {
+            fetchDeduction();
+        }
+    }, [shouldReload])
 
     return <Box >
         <Box sx={{
@@ -118,6 +123,7 @@ export default function DeductionList({ shouldReload }) {
             isEditOpen &&
             <EditDAB
                 dabId={deductionId}
+                reload={() => fetchDeduction()}
                 closeDialogCb={() => {
                     setIsEditOpen(false);
                     fetchDeduction();

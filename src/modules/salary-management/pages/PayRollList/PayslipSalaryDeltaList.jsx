@@ -35,6 +35,25 @@ const getColumnConfig = () => [
     },
 
     {
+        field: "formulaDefine",
+        headerName: "Công thức",
+        width: 400,
+    },
+
+    {
+        field: "groupName",
+        headerName: "Nhóm áp dụng",
+        width: 150,
+
+    },
+
+    {
+        field: "groupId",
+        headerName: "Group Id",
+        width: 100,
+    },
+
+    {
         field: "fromMonth",
         headerName: "Tháng bắt đầu",
         width: 100,
@@ -80,8 +99,6 @@ export default function PayslipSalaryDeltaList() {
             <SearchField />
             <SearchButton />
         </Box>
-
-
         <DataGrid
             rows={salaryDeltas?.data?.map((salaryDelta) => ({
                 ...salaryDelta,

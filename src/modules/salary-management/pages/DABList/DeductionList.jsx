@@ -9,7 +9,6 @@ import InfoDialog from "../../../../components/Dialog/InfoDialog";
 import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 import EditDAB from "./EditDAB";
 import { useDeleteDAB, useFetchDeduction, useFetchListDAB } from "../../../../client/dabService";
-import { useNavigate } from "react-router";
 
 const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
     {
@@ -61,7 +60,6 @@ const initialDialogState = {
 }
 
 export default function DeductionList({ shouldReload }) {
-    const navigate = useNavigate();
     const [deductionId, setDeductionId] = React.useState(null);
     const [deductionList, setDeductionList] = React.useState([]);
     const [isEditOpen, setIsEditOpen] = React.useState(false);
@@ -104,6 +102,12 @@ export default function DeductionList({ shouldReload }) {
         }
     }, [isDeleteSuccess])
 
+    React.useEffect(() => {
+        if (shouldReload) {
+            fetchDeduction();
+        }
+    }, [shouldReload])
+
     return <Box >
         <Box sx={{
             display: "flex",
@@ -118,6 +122,7 @@ export default function DeductionList({ shouldReload }) {
             isEditOpen &&
             <EditDAB
                 dabId={deductionId}
+                reload={() => fetchDeduction()}
                 closeDialogCb={() => {
                     setIsEditOpen(false);
                     fetchDeduction();

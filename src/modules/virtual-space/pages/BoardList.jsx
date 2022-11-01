@@ -125,7 +125,7 @@ export default function BoardList() {
         {isCreateBoardOpen && <BoardCreate
             closeDialogCb={
                 () => setIsCreateBoardOpen(false)}
-            createSuccessCb={() => {
+            reload={() => {
                 setIsCreateBoardOpen(false);
                 fetchTaskBoardListOfUser(getCurrentUserId())
             }} />}

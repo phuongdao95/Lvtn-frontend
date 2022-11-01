@@ -9,17 +9,18 @@ import AutoComplete from "../../../../components/DialogForm/AutoComplete";
 import { useFormik } from "formik";
 import { useFetchListGroup } from "../../../../client/groupService";
 import { useCreateSalaryGroup } from "../../../../client/salaryGroupService";
+import { useFetchListFormula } from "../../../../client/formulaService";
 
 import * as yup from 'yup';
 import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
 const validationSchema = yup.object().shape({
     name: yup.string().required(),
-    formulaName: yup.string().required(),
 });
 
 export default function CreateSalaryGroup({ reloadList, closeDialogCb }) {
     const [groupOptions, setGroupOptions] = React.useState([]);
+    const [formulaOptions, setFormulaOptions] = React.useState([]);
 
     const {
         isPending: isFetchGroupOptionsPending,
@@ -29,18 +30,32 @@ export default function CreateSalaryGroup({ reloadList, closeDialogCb }) {
     } = useFetchListGroup();
 
     const {
+        isSuccess: isFetchListFormulaSuccess,
+        isPending: isFetchListFormulaPending,
+        isError: isFetchListFormulaError,
+        method: fetchFormulaList,
+        data: fetchedFormulaList
+    } = useFetchListFormula()
+
+    const {
         isPending,
         isSuccess,
         isError,
         method: createSalaryGroup
     } = useCreateSalaryGroup();
 
+    React.useEffect(() => {
+        if (isFetchListFormulaSuccess) {
+            setFormulaOptions(fetchedFormulaList.data.map((formula) => ({ id: formula.name })))
+        }
+    }, [isFetchListFormulaSuccess])
+
     const formik = useFormik({
         initialValues: {
             id: "",
             name: "",
             description: "",
-            formulaName: "",
+            formulaName: null,
             priority: 1,
             group: {
                 id: "",
@@ -51,12 +66,17 @@ export default function CreateSalaryGroup({ reloadList, closeDialogCb }) {
         onSubmit: (values) => {
             const { group: { id }, ...rest } = values;
             console.log("hello");
-            createSalaryGroup({ ...rest, groupId: id })
+            createSalaryGroup({
+                ...rest,
+                groupId: id,
+                formulaName: values.formulaName?.id
+            })
         }
     });
 
     React.useEffect(() => {
         fetchGroups();
+        fetchFormulaList();
     }, [])
 
     React.useEffect(() => {
@@ -120,13 +140,16 @@ export default function CreateSalaryGroup({ reloadList, closeDialogCb }) {
                     firstSlot={
                         <Fragment>
                             <Label text={"Tên công thức"} />
-                            <TextField
+                            <AutoComplete
                                 id="formulaName"
                                 name="formulaName"
+                                options={formulaOptions}
                                 value={formik.values.formulaName}
-                                onChange={formik.handleChange}
-                                error={formik.touched.formulaName && Boolean(formik.errors.formulaName)}
-                                helperText={formik.touched.formulaName && formik.errors.formulaName}
+                                getOptionLabel={(option) => option.id}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                onChange={(event, value) => {
+                                    formik.setFieldValue("formulaName", value);
+                                }}
                             />
                         </Fragment>
                     }

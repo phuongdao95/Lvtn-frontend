@@ -9,7 +9,7 @@ import ActionButton from "../../../components/DataGrid/ActionButton";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 import LabelCreate from "./LabelCreate";
 
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useFetchTaskLabelsOfBoard } from "../../../client/taskboardService";
 import { useDeleteTaskLabel } from "../../../client/taskLabelService";
 import LabelEdit from "./LabelEdit";
@@ -52,6 +52,7 @@ const getColumnConfig = (openEditCb, openDeleteCb) => (
     ])
 
 export default function LabelList() {
+    const navigate = useNavigate();
     const { id: boardId } = useParams();
 
     const [labelId, setLabelId] = React.useState(null);
@@ -144,19 +145,11 @@ export default function LabelList() {
                 />
             }
             secondaryButtonSection={
-                <MenuButton
-                    text={"Liên kết"}
-                    menu={[
-                        {
-                            text: "Chi tiết Board",
-                            handler: () => {
-
-                            }
-                        }
-                    ]}
-                    variant="outlined"
-                    color="info"
-                />
+                <ActionButton onClick={() => {
+                    navigate(-1);
+                }}>
+                    Quay lại
+                </ActionButton>
             }
 
             searchButtonSection={<SearchButton />}

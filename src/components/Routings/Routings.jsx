@@ -14,8 +14,6 @@ import Timekeeping from "../../modules/check-day/pages/Timekeeping";
 import Registe from "../../modules/check-day/pages/Registe";
 import CheckIn from "../../modules/check-day/pages/CheckIn";
 import Calendar from "../../modules/check-day/pages/Calendar";
-import TableConfig from "../../modules/settings/virtual-space-config/TableConfig/TableConfig";
-import LabelConfig from "../../modules/settings/virtual-space-config/LabelConfig/LabelConfig";
 import TypeWorkDayConfig from "../../modules/settings/check-day-config/TypeWorkDayConfig/TypeWorkDayConfig";
 import RulesWorkDayConfig from "../../modules/settings/check-day-config/RulesWorkDayConfig/RulesWorkDayConfig";
 import PunishWorkDayConfig from "../../modules/settings/check-day-config/PunishWorkDayConfig/PunishWorkDayConfig";
@@ -111,7 +109,6 @@ export default function Routings() {
 
         {/** Shared module */}
         <Route path="/my-profile" element={<UserProfile />} />
-        <Route path="/signalr" element={<HubNotify />} />
 
     </Routes>
 }

@@ -1,35 +1,23 @@
 import React, { Fragment } from "react";
 import DataGridTabLayout from "../../../../layouts/DataGridTabLayout";
-import MenuButton from "../../../../components/DataGrid/MenuButton";
 import PayslipTimekeepingList from "./PayslipTimekeepingList";
 import PayslipSalaryDeltaList from "./PayslipSalaryDeltaList";
 import PayslipOverview from "./PayslipOverview";
+import ActionButton from "../../../../components/DataGrid/ActionButton";
+import { useNavigate } from "react-router";
 
 export default function PayslipDetail() {
+    const navigate = useNavigate();
+
     return <Fragment>
         <DataGridTabLayout
             title={"Chi tiết payslip"}
-            primaryButtonSection={<MenuButton
-                text={"Thao tác"}
-                menu={
-                    [
-                        {
-                            text: "Tạo mới Công thức",
-                            handler: () => {
-                            }
-                        },
-                        {
-                            text: "Tạo mới Biến",
-                            handler: () => {
-                            }
-                        }
-                    ]
-                }
-                variant="contained"
-                color="info"
-            />}
             secondaryButtonSection={
-                <Fragment></Fragment>
+                <Fragment>
+                    <ActionButton onClick={() => navigate(-1)}>
+                        Quay lại
+                    </ActionButton>
+                </Fragment>
             }
             tabSections={
                 [

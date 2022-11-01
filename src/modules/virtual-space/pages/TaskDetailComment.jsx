@@ -54,7 +54,7 @@ export default function TaskDetailComments({ taskId }) {
             {comments && comments.length > 0 ?
                 comments.map((comment) =>
                     <TaskComment
-                        keye={comment.id}
+                        key={comment.id}
                         avatar={comment.avatar}
                         name={comment.userName}
                         content={JSON.parse(comment.message)}

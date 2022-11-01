@@ -11,7 +11,7 @@ import { useFormik } from "formik"
 import { useCreateTaskColumn } from "../../../client/taskColumnService";
 import { useParams } from "react-router";
 
-export default function ColumnCreate({ closeDialogCb = () => { }, createSuccessCb = () => { } }) {
+export default function ColumnCreate({ closeDialogCb = () => { }, reload = () => { } }) {
     const {
         isPending,
         isSuccess,
@@ -32,6 +32,13 @@ export default function ColumnCreate({ closeDialogCb = () => { }, createSuccessC
         }
     });
 
+    React.useEffect(() => {
+        if (isSuccess){
+            closeDialogCb();
+            reload();
+        }
+    }, [isSuccess])
+
     return <Dialog
         primaryAction={{
             text: "Submit",
@@ -48,7 +55,7 @@ export default function ColumnCreate({ closeDialogCb = () => { }, createSuccessC
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Tên Nhãn"} />
+                            <Label text={"Tên Cột"} />
                             <TextField id="name"
                                 value={formik.values.name}
                                 onChange={formik.handleChange}
@@ -63,6 +70,7 @@ export default function ColumnCreate({ closeDialogCb = () => { }, createSuccessC
                             <Label text={"Thứ tự"} />
                             <TextField id="order"
                                 name="order"
+                                type="number"
                                 value={formik.values.order}
                                 onChange={formik.handleChange}
                                 error={formik.touched.order && Boolean(formik.errors.order)}

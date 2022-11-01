@@ -44,7 +44,7 @@ export default function TaskDetailHistory({ taskId }) {
                 flexDirection: 'row',
                 justifyContent: 'space-between'
             }}>
-                <Typography>{"Danh sách file"}</Typography>
+                <Typography sx={{ fontWeight: 'bold' }}>{"Lịch sử thay đổi"}</Typography>
             </Box>
             <Box sx={{ padding: 2 }}>
                 <DataGrid

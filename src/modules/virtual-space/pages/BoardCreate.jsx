@@ -11,7 +11,7 @@ import { useFormik } from "formik"
 import { useCreateTaskBoard } from "../../../client/taskboardService";
 import { getCurrentUserId } from "../../../client/autheticationService";
 
-export default function BoardCreate({ closeDialogCb = () => { }, createSuccessCb = () => { } }) {
+export default function BoardCreate({ closeDialogCb = () => { }, reload = () => { } }) {
     const {
         isPending,
         isSuccess,
@@ -28,6 +28,13 @@ export default function BoardCreate({ closeDialogCb = () => { }, createSuccessCb
             createTaskBoard({ ...values, userId: getCurrentUserId() })
         }
     });
+
+    React.useEffect(() => {
+        if (isSuccess) { 
+            reload();
+            closeDialogCb();
+        }
+    }, [isSuccess])
 
     return <Dialog
         primaryAction={{

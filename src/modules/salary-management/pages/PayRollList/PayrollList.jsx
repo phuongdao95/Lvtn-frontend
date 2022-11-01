@@ -44,6 +44,12 @@ const getColumnConfig = (openDetailCb, openDeleteCb, openSendCb) => [
     },
 
     {
+        field: "status",
+        headerName: "Trạng thái",
+        width: 100,
+    },
+
+    {
         field: "action",
         headerName: "Thao tác",
         width: 300,
@@ -197,13 +203,6 @@ export default function PayrollList() {
                         color="info"
                     />
                 }
-                secondaryButtonSection={
-                    <MenuButton
-                        text={"Liên kết liên quan"}
-                        menu={[{ text: "Danh sách template", handler: () => { } }]}
-                        variant="outlined"
-                        color="info"
-                    />}
                 searchSection={<SearchField />}
                 searchButtonSection={<SearchButton />}
             />

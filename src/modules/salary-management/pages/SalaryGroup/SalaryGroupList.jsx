@@ -25,6 +25,18 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
     },
 
     {
+        field: "priority",
+        headerName: "Độ ưu tiên",
+        width: 100,
+    },
+
+    {
+        field: "groupName",
+        headerName: "Nhóm người dùng",
+        width: 100
+    },
+
+    {
         field: "description",
         headerName: "Mô tả",
         width: 150,

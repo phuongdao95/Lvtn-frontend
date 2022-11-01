@@ -14,6 +14,7 @@ import {
     useFetchTasksOfTaskColumns
 } from "../../../client/taskboardService";
 import TaskCreate from "./TaskCreate";
+import ActionButton from "../../../components/DataGrid/ActionButton";
 
 export default function BoardDetail() {
     const navigate = useNavigate();
@@ -98,10 +99,13 @@ export default function BoardDetail() {
     return <Fragment>
         {
             isTaskCreateOpen &&
-            <TaskCreate closeCb={() => {
-                setIsTaskCreateOpen(false);
-                fetchTasks(columnList.data)
-            }} />
+            <TaskCreate
+                reload={() => {
+                    setShouldReload(true);
+                }}
+                closeCb={() => {
+                    setIsTaskCreateOpen(false);
+                }} />
         }
 
         <Box sx={{ padding: 2, background: 'white' }}>
@@ -115,6 +119,9 @@ export default function BoardDetail() {
                 </Typography >
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, padding: 0.5 }}>
+                    <ActionButton onClick={() => navigate(-1)}>
+                        Quay lại
+                    </ActionButton>
                     <MenuButton
                         text={"Thao tác"}
                         menu={

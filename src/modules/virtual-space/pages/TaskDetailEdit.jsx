@@ -78,7 +78,7 @@ export default function TaskDetailEdit({ reload, taskId, closeDialogCb }) {
             labels: [],
             fromDate: dayjs(),
             toDate: dayjs().add(10),
-            effort: 3,
+            point: 3,
         },
         onSubmit: (values) => {
             const labelIds = values.labels.map(label => label.id);
@@ -120,10 +120,10 @@ export default function TaskDetailEdit({ reload, taskId, closeDialogCb }) {
                 name: taskDetail.columnName ?? ""
             }
 
-            const { name, effort, fromDate, toDate, description } = taskDetail;
+            const { name, point, fromDate, toDate, description } = taskDetail;
 
             formik.setValues({
-                name, point: effort, fromDate, toDate,
+                name, point: point, fromDate, toDate,
                 reportTo,
                 inCharge,
                 column,
@@ -219,13 +219,13 @@ export default function TaskDetailEdit({ reload, taskId, closeDialogCb }) {
                         <Fragment>
                             <Label text={"Effort"} />
                             <TextField
-                                id="effort"
+                                id="point"
                                 type="number"
-                                name="effor"
-                                value={formik.values.effort}
+                                name="point"
+                                value={formik.values.point}
                                 onChange={formik.handleChange}
-                                error={formik.touched.effort && Boolean(formik.errors.effort)}
-                                helperText={formik.touched.effort && formik.errors.effort}
+                                error={formik.touched.point && Boolean(formik.errors.point)}
+                                helperText={formik.touched.point && formik.errors.point}
                             />
                         </Fragment>
                     }

@@ -9,6 +9,7 @@ import DialogForm from "../../../../components/DialogForm";
 import Select from "../../../../components/DialogForm/Select";
 import AutoComplete from "../../../../components/DialogForm/AutoComplete";
 import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
+import { useFetchListFormula } from "../../../../client/formulaService";
 import { useFetchOneDAB, useUpdateDAB } from "../../../../client/dabService";
 import { useFormik } from "formik";
 import { useFetchListGroup } from "../../../../client/groupService";
@@ -18,8 +19,17 @@ function generateYears() {
     return Array.from({ length: 200 }, (_, i) => i + 2020)
 }
 
-export default function EditDAB({ dabId, closeDialogCb }) {
+export default function EditDAB({ dabId, closeDialogCb, reload }) {
     const [groupOptions, setGroupOptions] = React.useState([]);
+    const [formulaOptions, setFormulaOptions] = React.useState([]);
+
+    const {
+        isSuccess: isFetchListFormulaSuccess,
+        isPending: isFetchListFormulaPending,
+        isError: isFetchListFormulaError,
+        method: fetchFormulaList,
+        data: fetchedFormulaList
+    } = useFetchListFormula();
 
     const {
         isSuccess: isFetchGroupsSuccess,
@@ -42,7 +52,6 @@ export default function EditDAB({ dabId, closeDialogCb }) {
         isPending: isUpdatePending,
         isError: isUpdateError,
         method: updateDAB,
-        data: dab
     } = useUpdateDAB();
 
     const formik = useFormik({
@@ -54,11 +63,13 @@ export default function EditDAB({ dabId, closeDialogCb }) {
             toMonth: 1,
             year: 2022,
             group: null,
+            formulaName: null,
         },
         onSubmit: (values) => {
             updateDAB(dabId, {
                 ...values,
-                groupId: values.group.id,
+                groupId: values.group?.id,
+                formulaName: values.formulaName?.id
             })
         }
     });
@@ -66,13 +77,22 @@ export default function EditDAB({ dabId, closeDialogCb }) {
     React.useEffect(() => {
         fetchDetail(dabId);
         fetchGroupList();
+        fetchFormulaList();
     }, []);
+
+    React.useEffect(() => {
+        if (isFetchListFormulaSuccess) {
+            setFormulaOptions(fetchedFormulaList.data.map((formula) => ({ id: formula.name })))
+        }
+    }, [isFetchListFormulaSuccess])
 
     React.useEffect(() => {
         if (isFetchGroupsSuccess) {
             setGroupOptions(groups.data.map(group => ({ id: group.id, name: group.name })))
         }
     }, [isFetchGroupsSuccess])
+
+
 
     React.useEffect(() => {
         if (isSuccess) {
@@ -85,13 +105,20 @@ export default function EditDAB({ dabId, closeDialogCb }) {
                     id: detail.groupId,
                     name: detail.groupName,
                 },
-                fromMonth: dayjs(detail.fromMonth).month(),
-                toMonth: dayjs(detail.toMonth).month(),
+                fromMonth: dayjs(detail.fromMonth).month() + 1,
+                toMonth: dayjs(detail.toMonth).month() + 1,
                 year: dayjs(detail.fromMonth).year(),
-                formulaName: detail.formulaName
+                formulaName: { id: detail.formulaName }
             })
         }
     }, [isSuccess])
+
+    React.useEffect(() => {
+        if (isUpdateSuccess) {
+            reload();
+            closeDialogCb();
+        }
+    }, [isUpdateSuccess])
 
     return <Dialog
         primaryAction={{
@@ -213,11 +240,16 @@ export default function EditDAB({ dabId, closeDialogCb }) {
                     secondSlot={
                         <Fragment>
                             <Label text={"Công thức"} />
-                            <TextField
+                            <AutoComplete
                                 id="formulaName"
                                 name="formulaName"
+                                options={formulaOptions}
                                 value={formik.values.formulaName}
-                                onChange={formik.handleChange}
+                                getOptionLabel={(option) => option.id}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                onChange={(event, value) => {
+                                    formik.setFieldValue("formulaName", value);
+                                }}
                             />
                         </Fragment>}
                 />

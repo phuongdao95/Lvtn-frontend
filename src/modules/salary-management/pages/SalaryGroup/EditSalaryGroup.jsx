@@ -9,10 +9,20 @@ import AutoComplete from "../../../../components/DialogForm/AutoComplete";
 import { useFormik } from "formik";
 import { useFetchListGroup } from "../../../../client/groupService";
 import { useFetchOneSalaryGroup, useUpdateSalaryGroup } from "../../../../client/salaryGroupService";
+import { useFetchListFormula } from "../../../../client/formulaService";
 import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
 export default function EditSalaryGroup({ id, closeDialogCb }) {
     const [groupOptions, setGroupOptions] = React.useState([]);
+    const [formulaOptions, setFormulaOptions] = React.useState([]);
+
+    const {
+        isSuccess: isFetchListFormulaSuccess,
+        isPending: isFetchListFormulaPending,
+        isError: isFetchListFormulaError,
+        method: fetchFormulaList,
+        data: fetchedFormulaList
+    } = useFetchListFormula();
 
     const {
         isSuccess,
@@ -41,7 +51,7 @@ export default function EditSalaryGroup({ id, closeDialogCb }) {
             id: "",
             name: "",
             description: "",
-            formulaName: "",
+            formulaName: null,
             group: {
                 id: "",
                 name: "",
@@ -52,14 +62,22 @@ export default function EditSalaryGroup({ id, closeDialogCb }) {
             const groupId = values.group.id;
             updateGroup(id, {
                 ...values,
-                groupId: groupId
+                groupId: groupId,
+                formulaName: values.formulaName?.id
             })
         }
     });
 
     React.useEffect(() => {
+        if (isFetchListFormulaSuccess) {
+            setFormulaOptions(fetchedFormulaList.data.map((formula) => ({ id: formula.name })))
+        }
+    }, [isFetchListFormulaSuccess])
+
+    React.useEffect(() => {
         fetchDetail(id)
         fetchGroups();
+        fetchFormulaList();
     }, [])
 
     React.useEffect(() => {
@@ -74,7 +92,8 @@ export default function EditSalaryGroup({ id, closeDialogCb }) {
                 group: {
                     id: groupId,
                     name: groupName,
-                }
+                },
+                formulaName: { id: formulaName }
             })
         }
     }, [isFetchDetailSuccess])
@@ -140,13 +159,16 @@ export default function EditSalaryGroup({ id, closeDialogCb }) {
                     firstSlot={
                         <Fragment>
                             <Label text={"Tên công thức"} />
-                            <TextField
+                            <AutoComplete
                                 id="formulaName"
                                 name="formulaName"
+                                options={formulaOptions}
                                 value={formik.values.formulaName}
-                                onChange={formik.handleChange}
-                                error={formik.touched.formulaName && Boolean(formik.errors.formulaName)}
-                                helperText={formik.touched.formulaName && formik.errors.formulaName}
+                                getOptionLabel={(option) => option.id}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                onChange={(event, value) => {
+                                    formik.setFieldValue("formulaName", value);
+                                }}
                             />
                         </Fragment>
                     }

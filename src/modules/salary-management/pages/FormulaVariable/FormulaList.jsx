@@ -22,7 +22,7 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
     {
         field: "name",
         headerName: "Tên",
-        width: 150,
+        width: 300,
     },
 
     {
@@ -34,7 +34,7 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
     {
         field: "define",
         headerName: "Định nghĩa",
-        width: 200,
+        width: 400,
     },
 
     {

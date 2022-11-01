@@ -8,9 +8,12 @@ import CreateDAB from "./CreateDAB";
 
 export default function DABList() {
   const [isCreateDABOpen, setIsCreateDABOpen] = React.useState(false);
+  const [shouldReload, setShouldReload] = React.useState(false);
 
   return <Fragment>
-    {isCreateDABOpen && <CreateDAB closeDialogCb={() => setIsCreateDABOpen(false)} />}
+    {isCreateDABOpen && <CreateDAB closeDialogCb={() => setIsCreateDABOpen(false)}
+      reload={() => setShouldReload(true)}
+    />}
     <DataGridTabLayout
       title={"Khấu trừ, phụ cấp và thưởng"}
       primaryButtonSection={<MenuButton
@@ -36,17 +39,17 @@ export default function DABList() {
           {
             index: 0,
             label: "Khấu trừ",
-            dataGrid: <DeductionList />,
+            dataGrid: <DeductionList shouldReload={shouldReload} />,
           },
           {
             index: 1,
             label: "Phụ cấp",
-            dataGrid: <AllowanceList />,
+            dataGrid: <AllowanceList shouldReload={shouldReload} />,
           },
           {
             index: 2,
             label: "Thưởng",
-            dataGrid: <BonusList />
+            dataGrid: <BonusList shouldReload={shouldReload} />
           }
         ]
       }

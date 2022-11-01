@@ -10,6 +10,7 @@ import Select from "../../../../components/DialogForm/Select";
 import AutoComplete from "../../../../components/DialogForm/AutoComplete";
 import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 import { useCreateDAB, useFetchOneDAB } from "../../../../client/dabService";
+import { useFetchListFormula } from "../../../../client/formulaService";
 import { useFormik } from "formik";
 import { useFetchListGroup } from "../../../../client/groupService";
 import dayjs from "dayjs";
@@ -18,8 +19,9 @@ function generateYears() {
     return Array.from({ length: 200 }, (_, i) => i + 2020)
 }
 
-export default function CreateDAB({ closeDialogCb }) {
+export default function CreateDAB({ closeDialogCb, reload }) {
     const [groupOptions, setGroupOptions] = React.useState([]);
+    const [formulaOptions, setFormulaOptions] = React.useState([]);
 
     const {
         isSuccess: isFetchGroupsSuccess,
@@ -30,19 +32,19 @@ export default function CreateDAB({ closeDialogCb }) {
     } = useFetchListGroup();
 
     const {
-        isSuccess,
-        isPending,
-        isError,
-        method: fetchDetail,
-        data: detail,
-    } = useFetchOneDAB();
-
-    const {
         isSuccess: isUpdateSuccess,
         isPending: isUpdatePending,
         isError: isUpdateError,
         method: createDAB,
     } = useCreateDAB();
+
+    const {
+        isSuccess: isFetchListFormulaSuccess,
+        isPending: isFetchListFormulaPending,
+        isError: isFetchListFormulaError,
+        method: fetchFormulaList,
+        data: fetchedFormulaList
+    } = useFetchListFormula();
 
     const formik = useFormik({
         initialValues: {
@@ -53,43 +55,40 @@ export default function CreateDAB({ closeDialogCb }) {
             toMonth: 1,
             year: 2022,
             group: null,
+            formulaName: null,
         },
         onSubmit: (values) => {
             createDAB({
                 ...values,
                 groupId: values.group?.id,
+                formulaName: values.formulaName?.id
             })
         }
     });
 
     React.useEffect(() => {
+        fetchFormulaList();
         fetchGroupList();
     }, []);
+
+    React.useEffect(() => {
+        if (isFetchListFormulaSuccess) {
+            setFormulaOptions(fetchedFormulaList.data.map((formula) => ({ id: formula.name })))
+        }
+    }, [isFetchListFormulaSuccess])
+
+    React.useEffect(() => {
+        if (isUpdateSuccess) { 
+            reload();
+            closeDialogCb();
+        }
+    }, [isUpdateSuccess])
 
     React.useEffect(() => {
         if (isFetchGroupsSuccess) {
             setGroupOptions(groups.data.map(group => ({ id: group.id, name: group.name })))
         }
     }, [isFetchGroupsSuccess])
-
-    React.useEffect(() => {
-        if (isSuccess) {
-            console.log(detail);
-            formik.setValues({
-                name: detail.name,
-                type: detail.type,
-                description: detail.description,
-                group: {
-                    id: detail.groupId,
-                    name: detail.groupName,
-                },
-                fromMonth: dayjs(detail.fromMonth).month(),
-                toMonth: dayjs(detail.toMonth).month(),
-                year: dayjs(detail.fromMonth).year(),
-                formulaName: detail.formulaName
-            })
-        }
-    }, [isSuccess])
 
     return <Dialog
         primaryAction={{
@@ -102,7 +101,7 @@ export default function CreateDAB({ closeDialogCb }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Chỉnh sửa khấu trừ, phụ cấp, thưởng"
+        title="Tạo mới khấu trừ, phụ cấp, thưởng"
     >
         <DialogForm>
             <LoadingOverlay isLoading={isUpdatePending} />
@@ -211,11 +210,16 @@ export default function CreateDAB({ closeDialogCb }) {
                     secondSlot={
                         <Fragment>
                             <Label text={"Công thức"} />
-                            <TextField
+                            <AutoComplete
                                 id="formulaName"
                                 name="formulaName"
+                                options={formulaOptions}
                                 value={formik.values.formulaName}
-                                onChange={formik.handleChange}
+                                getOptionLabel={(option) => option.id}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                onChange={(event, value) => {
+                                    formik.setFieldValue("formulaName", value);
+                                }}
                             />
                         </Fragment>}
                 />

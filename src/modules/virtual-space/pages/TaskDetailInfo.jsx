@@ -26,7 +26,6 @@ const initialDialogState = {
 export default function TaskDetailInfo({ taskId }) {
     const { id: boardId } = useParams();
 
-    const [isCommentDialogOpen, setIsCommentDialogOpen] = React.useState(false);
     const [isDescriptionDialogOpen, setIsDescriptionDialogOpen] = React.useState(false);
     const [isTaskDetailEditOpen, setIsTaskDetailEditOpen] = React.useState(false);
     const [isAddLabelOpen, setIsAddLabelOpen] = React.useState(false);
@@ -101,33 +100,28 @@ export default function TaskDetailInfo({ taskId }) {
         }
     }, [isRemoveLabelSuccess])
 
+    const [detail, setDetail] = React.useState({
+        name: "",
+        point: "",
+        fromDate: "",
+        toDate: "",
+        reportToName: "",
+        inChargeName: "",
+        columnName: "",
+    });
+
     React.useEffect(() => {
         if (isFetchDetailSuccess) {
-            const reportTo = {
-                id: taskDetail.reportToId,
-                name: taskDetail.reportToName ?? ""
-            }
+            setDescription(JSON.parse(taskDetail.description));
 
-            const inCharge = {
-                id: taskDetail.inChargeId,
-                name: taskDetail.inChargeName ?? ""
-            }
-
-            const column = {
-                id: taskDetail.columnId,
-                name: taskDetail.columnName ?? ""
-            }
-
-            const { name, effort, fromDate, toDate, description } = taskDetail;
-
-            setDescription(JSON.parse(description));
-
-            formik.setValues({
-                name, point: effort, fromDate, toDate,
-                reportTo,
-                inCharge,
-                column,
-                labels: []
+            setDetail({
+                name: taskDetail.name,
+                point: taskDetail.point,
+                fromDate: dayjs(taskDetail.fromDate).format('DD/MM/YYYY'),
+                toDate: dayjs(taskDetail.toDate).format('DD/MM/YYYY'),
+                reportToName: taskDetail.reportToName,
+                inChargeName: taskDetail.inChargeName,
+                columnName: taskDetail.columnName,
             })
         }
     }, [isFetchDetailSuccess])
@@ -302,7 +296,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Tiêu đề"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                {formik.values.name}
+                                                {detail.name}
                                             </Typography>
                                         </Fragment>
                                     }
@@ -313,7 +307,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Trạng thái"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                {formik.values.column.name}
+                                                {detail.columnName}
                                             </Typography>
                                         </Fragment>
                                     }
@@ -322,7 +316,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Effort"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                {formik.values.effort ?? "Unset"}
+                                                {detail.point}
                                             </Typography>
                                         </Fragment>
                                     }
@@ -333,7 +327,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Người được gán"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                {formik.values.inChargeName ?? "Unassigned"}
+                                                {detail.inChargeName ?? "Unassigned"}
                                             </Typography>
                                         </Fragment>
                                     }
@@ -341,7 +335,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Người báo cáo"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                {formik.values.reportToName ?? "Unassigned"}
+                                                {detail.reportToName ?? "Unassigned"}
                                             </Typography>
                                         </Fragment>
                                     }
@@ -352,7 +346,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Ngày bắt đầu"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                {dayjs(formik.values.fromDate).format('DD/MM/YYYY')}
+                                                {detail.fromDate}
                                             </Typography>
                                         </Fragment>
                                     }
@@ -361,7 +355,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Ngày kết thúc"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                {dayjs(formik.values.toDate).format('DD/MM/YYYY')}
+                                                {detail.toDate}
                                             </Typography>
                                         </Fragment>
                                     }

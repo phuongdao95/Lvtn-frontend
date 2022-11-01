@@ -96,10 +96,20 @@ export default function ColumnList() {
         fetchColumnList(boardId);
     }, [boardId])
 
+    React.useEffect(() => {
+        if (isDeleteSuccess) {
+            fetchColumnList(boardId);
+        }
+    }, [isDeleteSuccess])
+
     return <Fragment>
         {isCreateColumnOpen && <ColumnCreate
-            closeDialogCb={() => { setIsCreateColumnOpen(false); }} />}
+            reload={() => { fetchColumnList(boardId) }}
+            closeDialogCb={() => { setIsCreateColumnOpen(false); }}
+        />}
         {isEditColumnOpen && <ColumnEdit
+            reload={() => { fetchColumnList(boardId) }}
+            columnId={columnId}
             closeDialogCb={() => { setIsEditColumnOpen(false); }}
         />}
 
@@ -155,19 +165,9 @@ export default function ColumnList() {
                 />
             }
             secondaryButtonSection={
-                <MenuButton
-                    text={"Liên kết"}
-                    menu={[
-                        {
-                            text: "Quay lại Board",
-                            handler: () => {
-                                navigate(-1)
-                            }
-                        }
-                    ]}
-                    variant="outlined"
-                    color="info"
-                />
+                <ActionButton onClick={() => { navigate(-1) }}>
+                    Quay lại
+                </ActionButton>
             }
 
             searchButtonSection={<SearchButton />}
