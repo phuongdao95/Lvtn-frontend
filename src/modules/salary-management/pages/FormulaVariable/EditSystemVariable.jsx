@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { Box } from "@mui/system";
+
 import Dialog from "../../../../components/Dialog";
 import Label from "../../../../components/DialogForm/Label";
 import OneColumnBox from "../../../../components/DialogForm/OneColumnBox"
@@ -7,12 +8,7 @@ import TwoColumnBox from "../../../../components/DialogForm/TwoColumnBox";
 import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
 
-import { useUpdateFormula } from "../../../../client/formulaService";
-
-
-export default function EditFormula({ closeDialogCb }) {
-    const { } = useUpdateFormula();
-
+export default function EditSystemVariable({ variableDetail, closeDialogCb }) {
     return <Dialog
         primaryAction={{
             text: "Submit",
@@ -22,45 +18,42 @@ export default function EditFormula({ closeDialogCb }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Chỉnh sửa công thức, input hoặc constant"
+        title="Chỉnh sửa biến"
     >
         <DialogForm>
             <Box>
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Id"} />
-                            <TextField />
-                        </Fragment>
-                    }
-                    secondSlot={
-                        <Fragment>
-                            <Label text={"Input variables"} />
-                            <TextField />
-                        </Fragment>
-                    }
-                />
-
-                <TwoColumnBox
-                    firstSlot={
-                        <Fragment>
-                            <Label text={"Name"} />
-                            <TextField />
+                            <Label text={"Tên biến"} />
+                            <TextField
+                                id="name"
+                                name="name"
+                                value={variableDetail.name}
+                            />
                         </Fragment>
                     }
 
                     secondSlot={
                         <Fragment>
-                            <Label text={"Type"} />
-                            <TextField />
+                            <Label text={"Tên hiển thị"} />
+                            <TextField
+                                id="displayName"
+                                name="displayName"
+                                value={variableDetail.displayName}
+                            />
                         </Fragment>
                     }
                 />
 
                 <TwoColumnBox
                     firstSlot={<Fragment>
-                        <Label text={"Datatype"} />
-                        <TextField />
+                        <Label text={"Kiểu"} />
+                        <TextField
+                            id="dataType"
+                            name="dataType"
+                            value={variableDetail.dataType}
+                        />
                     </Fragment>}
 
                     secondSlot={<Fragment>
@@ -70,17 +63,12 @@ export default function EditFormula({ closeDialogCb }) {
                 <OneColumnBox
                     slot={
                         <Fragment>
-                            <Label text={"Define"} />
-                            <TextField />
-                        </Fragment>
-                    }
-                />
-
-                <OneColumnBox
-                    slot={
-                        <Fragment>
                             <Label text={"Description"} />
-                            <TextField />
+                            <TextField
+                                id="description"
+                                name="description"
+                                value={variableDetail.description}
+                            />
                         </Fragment>
                     }
                 />

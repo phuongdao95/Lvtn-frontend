@@ -28,9 +28,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-
-
-
 const SideBar = (props) => {
     const navigate = useNavigate();
 
@@ -84,6 +81,13 @@ const SideBar = (props) => {
                     }
                 },
 
+                {
+                    text: "Quản lý Nhóm",
+                    onClick: () => {
+                        navigate("/group")
+                    }
+                },
+
             ]
         },
 
@@ -101,7 +105,7 @@ const SideBar = (props) => {
                 {
                     text: "Công thức và Biến",
                     onClick: () => {
-                        navigate("/formula")
+                        navigate("/formula-variable")
                     }
                 },
                 {
@@ -111,9 +115,21 @@ const SideBar = (props) => {
                     }
                 },
                 {
+                    text: "Danh sách Payslip của tôi",
+                    onClick: () => {
+                        navigate("/my-payslips")
+                    },
+                },
+                {
                     text: "Danh sách Payroll",
                     onClick: () => {
                         navigate("/payroll")
+                    }
+                },
+                {
+                    text: "Công thức tính lương",
+                    onClick: () => {
+                        navigate("/salary-group")
                     }
                 },
             ]
@@ -134,13 +150,13 @@ const SideBar = (props) => {
                 {
                     text: "Bảng công việc",
                     onClick: () => {
-                        navigate("/virtual-space")
+                        navigate("/taskboard")
                     }
                 },
                 {
                     text: "Danh sách Bảng",
                     onClick: () => {
-                        
+
                     }
                 }
             ]

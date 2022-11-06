@@ -11,7 +11,6 @@ import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 
 import { useDeleteRole, useFetchListRole } from "../../../../client/roleService";
 import { Box } from "@mui/material";
-import { useState } from "react";
 import CreateRole from "./CreateRole";
 import EditRole from "./EditRole";
 
@@ -54,16 +53,16 @@ const getColumnConfig = (openEditRoleCb, openDeleteRoleCb) => [
 export default function RoleList() {
     const navigate = useNavigate();
 
-    const {
-        isSuccess: isDeleteSuccess,
-        method: deleteRole
-    } = useDeleteRole();
-
     const [roleId, setRoleId] = React.useState(null);
 
     const [isDeleteRolePopupOpen, setIsDeleteRolePopupOpen] = React.useState(false);
     const [isCreateRolePopupOpen, setIsCreateRolePopupOpen] = React.useState(false);
     const [isEditRolePopupOpen, setIsEditRolePopupOpen] = React.useState(false);
+
+    const {
+        isSuccess: isDeleteSuccess,
+        method: deleteRole
+    } = useDeleteRole();
 
     const {
         isPending,
@@ -82,7 +81,9 @@ export default function RoleList() {
     return (
         <Fragment>
             {isCreateRolePopupOpen &&
-                <CreateRole closeDialogCb={() => setIsCreateRolePopupOpen(false)} />
+                <CreateRole
+                    reloadList={() => fetchDepartmentList()}
+                    closeDialogCb={() => setIsCreateRolePopupOpen(false)} />
             }
 
             {isEditRolePopupOpen &&
@@ -103,9 +104,9 @@ export default function RoleList() {
                     confirmAction={{
                         text: "Confirm",
                         handler: () => {
+                            deleteRole(roleId);
                             setIsDeleteRolePopupOpen(false);
                             setRoleId(null);
-                            deleteRole(roleId);
                         }
                     }}
                 />}
@@ -148,41 +149,6 @@ export default function RoleList() {
                         }
                     />
                 }
-                secondaryButtonSection={
-                    <MenuButton
-                        text={"Liên kết liên quan"}
-                        menu={
-                            [
-                                {
-                                    text: "Danh sách người dùng", handler: () => {
-                                        navigate("/user");
-                                    }
-                                },
-                                {
-                                    text: "Danh sách nhóm", handler: () => {
-                                        navigate("/group")
-                                    }
-                                },
-                                {
-                                    text: "Danh sách quyền", handler: () => {
-                                        navigate("/permission");
-                                    }
-                                },
-                                {
-                                    text: "Danh sách team", handler: () => {
-                                        navigate("/team");
-                                    }
-                                },
-                                {
-                                    text: "Danh sách department", handler: () => {
-                                        navigate("/department")
-                                    }
-                                },
-                            ]
-                        }
-                        variant="outlined"
-                        color="info"
-                    />}
                 searchSection={<SearchField />}
                 dropdownFilterSection={<Fragment></Fragment>}
                 searchButtonSection={<SearchButton />}

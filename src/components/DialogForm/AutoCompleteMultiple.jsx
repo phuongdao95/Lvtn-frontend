@@ -14,6 +14,7 @@ export default function AutoCompleteMultiple({
         <Autocomplete
             fullWidth
             multiple
+            ListboxProps={{ style: { maxHeight: 150 } }}
             filterSelectedOptions
             options={options}
             value={value}
@@ -32,7 +33,7 @@ export default function AutoCompleteMultiple({
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    multiline
+                    maxRows={4}
                     fullWidth
                     size="small"
                 />

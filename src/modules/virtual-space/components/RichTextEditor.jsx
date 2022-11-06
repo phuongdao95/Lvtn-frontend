@@ -17,16 +17,21 @@ const HOTKEYS = {
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
-const RichTextEditor = () => {
-    const [value, setValue] = useState(initialValue);
+
+export const initialValue = [{
+    type: 'paragraph',
+    children: [{ text: '' }],
+}]
+
+const RichTextEditor = ({ value, onChange }) => {
     const renderElement = useCallback(props => <Element {...props} />, []);
     const renderLeaf = useCallback(props => <Leaf {...props} />, []);
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
     return (
-        <Box sx={{ border: '1px solid rgba(0,0,0,0.5)' }}>
-            <Slate editor={editor} value={value} onChange={value => setValue(value)}>
-                <Box sx={{ padding: 1 }}>
+        <Box sx={{ border: '1px solid rgba(0,0,0,0.5)', position: 'relative', maxWidth: 800 }}>
+            <Slate editor={editor} value={value} onChange={onChange}>
+                <Box sx={{ padding: 1, position: 'sticky', top: 0, zIndex: 100, background: 'white' }}>
                     <Toolbar>
                         <MarkButton format="bold" icon="format_bold" />
                         <MarkButton format="italic" icon="format_italic" />
@@ -40,7 +45,7 @@ const RichTextEditor = () => {
                     </Toolbar>
                 </Box>
 
-                <Box sx={{ borderTop: '1px solid rgba(0,0,0,0.5)', padding: 1 }}>
+                <Box sx={{ borderTop: '1px solid rgba(0,0,0,0.5)', padding: 1, maxHeight: 400, overflow: 'auto' }}>
                     <Editable
                         renderElement={renderElement}
                         renderLeaf={renderLeaf}
@@ -174,9 +179,6 @@ const MarkButton = ({ format, icon }) => {
     );
 };
 
-const initialValue = [{
-    type: 'paragraph',
-    children: [{ text: '' }],
-}]
+
 
 export default RichTextEditor;

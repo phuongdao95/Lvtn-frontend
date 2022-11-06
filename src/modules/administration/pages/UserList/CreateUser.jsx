@@ -16,6 +16,7 @@ import { useCreateUser } from "../../../../client/userService";
 import { useFetchListRole } from "../../../../client/roleService";
 import { useFetchListTeam } from "../../../../client/teamService";
 import * as yup from "yup";
+import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
 const getOptionLabel = (option) => {
     return option.name;
@@ -25,51 +26,40 @@ const isOptionEqualToValue = (option, value) => {
     return option.id === value.id
 }
 
-
-// userName: "",
-// password: "",
-// citizenId: "",
-// gender: "",
-// email: "",
-// birthday: dayjs('2000-01-01'),
-// baseSalary: 0,
-// bankName: "",
-// bankBranch: "",
-// accountName: "",
-// bankCode: "",
-// team: { id: null, name: "" },
-// role: { id: null, name: "" }
-
 const validationSchema = yup.object().shape({
     userName: yup.string().min(6, "Tài khoản tối đa 6 kí tự")
         .required(),
     password: yup.string().min(6, "Mật khẩu có độ dài tối đa 6 kí tự")
         .required(),
     name: yup.string().min(5).required("Tên không được để trống"),
-    citizenId: yup.number(),
+    citizenId: yup.number().required("Số căn cước công dân không được để trống"),
     gender: yup.string().required("Giới tính không được để trống"),
     phoneNumber: yup.string(),
     email: yup.string().email("Email không hợp lệ"),
     baseSalary: yup.number().required(),
-    bankBranch: yup.number(),
-    bankCode: yup.number(),
 })
 
-export default function CreateUser({ closeDialogCb }) {
-
+export default function CreateUser({ closeDialogCb, reloadList }) {
     const [teams, setTeams] = React.useState([]);
     const [roles, setRoles] = React.useState([]);
 
     const {
+        isPending,
+        isError,
+        isSuccess,
         method: createUser
     } = useCreateUser();
 
     const {
+        isPending: isFetchTeamsPending,
+        isError: isFetchTeamError,
         data: fetchedTeams,
         method: fetchTeams
     } = useFetchListTeam();
 
     const {
+        isPending: isFetchRolesPending,
+        isError: isFetchRoleError,
         data: fetchedRoles,
         method: fetchRoles
     } = useFetchListRole();
@@ -95,6 +85,7 @@ export default function CreateUser({ closeDialogCb }) {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
+            console.log("Hello, World");
             const teamId = values?.team.id;
             const roleId = values?.role.id;
 
@@ -127,6 +118,12 @@ export default function CreateUser({ closeDialogCb }) {
         }
     }, [fetchedRoles])
 
+    React.useEffect(() => {
+        if (isSuccess) {
+            reloadList();
+        }
+    }, [isSuccess])
+
     return <Dialog
         primaryAction={{
             text: "Submit",
@@ -140,6 +137,8 @@ export default function CreateUser({ closeDialogCb }) {
     >
         <DialogForm>
             <Box component="form" onSubmit={formik.handleSubmit}>
+                <LoadingOverlay isLoading={(isFetchRolesPending && isFetchTeamsPending)} />
+                <LoadingOverlay isLoading={(isPending)} />
                 <Segment title={"Thông tin cơ bản"}>
                     <TwoColumnBox
                         firstSlot={
@@ -258,16 +257,18 @@ export default function CreateUser({ closeDialogCb }) {
 
                         secondSlot={
                             <Fragment>
-                                <Label text={"Email"}
-                                    id="description"
-                                    value={formik.values.description}
+                                <Label text={"Email"} />
+                                <TextField
+                                    id="email"
+                                    name="email"
+                                    value={formik.values.email}
                                     onChange={formik.handleChange}
+                                    error={formik.touched.email && Boolean(formik.errors.email)}
+                                    helperText={formik.touched.email && formik.errors.email}
                                 />
-                                <TextField />
                             </Fragment>
                         }
                     />
-
 
                     <TwoColumnBox
                         firstSlot={
@@ -277,6 +278,8 @@ export default function CreateUser({ closeDialogCb }) {
                                     name="birthday"
                                     value={formik.values.birthday}
                                     onChange={(value) => formik.setFieldValue("birthday", value)}
+                                    error={formik.touched.birthday && Boolean(formik.errors.birthday)}
+                                    helperText={formik.touched.birthday && formik.errors.birthday}
                                 />
                             </Fragment>
                         }

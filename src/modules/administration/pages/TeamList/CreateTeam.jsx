@@ -8,12 +8,13 @@ import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
 import OneColumnBox from "../../../../components/DialogForm/OneColumnBox";
 import AutoCompleteMultiple from "../../../../components/DialogForm/AutoCompleteMultiple";
+import AutoComplete from "../../../../components/DialogForm/AutoComplete";
 
 import { useFormik } from "formik";
 import { useFetchListUserWithNoTeam } from "../../../../client/userService";
 import { useCreateTeam } from "../../../../client/teamService";
 import { useFetchListDepartment } from "../../../../client/departmentService";
-import AutoComplete from "../../../../components/DialogForm/AutoComplete";
+import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
 
 export default function CreateTeam({ closeDialogCb }) {
@@ -21,17 +22,22 @@ export default function CreateTeam({ closeDialogCb }) {
     const [departmentOptions, setDepartmentOptions] = React.useState([]);
 
     const {
+        isPending: isFetchDepartmentsPending,
         data: fetchedDepartments,
         method: fetchDepartments,
     } = useFetchListDepartment();
 
     const {
-        isSuccess,
+        isPending: isFetchUsersPending,
+        isSuccess: isFetchUsersSuccess,
         method: fetchUsers,
         data: fetchedUsers
     } = useFetchListUserWithNoTeam();
 
     const {
+        isSuccess,
+        isPending,
+        isError,
         method: createTeam,
     } = useCreateTeam();
 
@@ -40,12 +46,12 @@ export default function CreateTeam({ closeDialogCb }) {
     }, [])
 
     React.useEffect(() => {
-        if (isSuccess) {
+        if (isFetchUsersSuccess) {
             const userOptions = fetchedUsers.data
                 .map((user) => ({ id: user.id, name: user.name }))
             setUserOptions(userOptions);
         }
-    }, [isSuccess])
+    }, [isFetchUsersSuccess])
 
     const formik = useFormik({
         initialValues: {
@@ -100,6 +106,7 @@ export default function CreateTeam({ closeDialogCb }) {
         title="Tạo mới team"
     >
         <DialogForm>
+            <LoadingOverlay isLoading={isPending || isFetchDepartmentsPending || isFetchUsersPending} />
             <Box>
                 <TwoColumnBox
                     firstSlot={

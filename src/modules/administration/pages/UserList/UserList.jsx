@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
 import DataGridLayout from "../../../../layouts/DataGridLayout";
 import DataGrid from "../../../../components/DataGrid";
 import MenuButton from "../../../../components/DataGrid/MenuButton";
@@ -25,9 +25,8 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
         width: 250,
     },
 
-
     {
-        field: "sex",
+        field: "gender",
         headerName: "Giới tính",
         width: 100,
     },
@@ -79,8 +78,6 @@ const initialDialogState = {
     confirmAction: () => { }
 }
 
-
-
 export default function UserList() {
     const navigate = useNavigate();
     const [userId, setUserId] = React.useState(null);
@@ -101,19 +98,6 @@ export default function UserList() {
         method: deleteUser,
     } = useDeleteUser();
 
-    React.useEffect(() => {
-        if (isDeleteSuccess) {
-            fetchUserList();
-        }
-        if (isDeleteError) { 
-            setInfoDialogMessage({
-                title: 'Error',
-                message: 'Có lỗi xảy ra. Không thể xóa được item'
-            });
-            setIsInfoDialogOpen(true);
-        }
-    }, [isDeleteSuccess, isDeleteError])
-
     const {
         isPending,
         isSuccess,
@@ -121,6 +105,19 @@ export default function UserList() {
         data: response,
         method: fetchUserList
     } = useFetchListUser();
+
+    React.useEffect(() => {
+        if (isDeleteSuccess) {
+            fetchUserList();
+        }
+        if (isDeleteError) {
+            setInfoDialogMessage({
+                title: 'Error',
+                message: 'Có lỗi xảy ra. Không thể xóa được item'
+            });
+            setIsInfoDialogOpen(true);
+        }
+    }, [isDeleteSuccess, isDeleteError])
 
     React.useEffect(() => {
         if (isError) {

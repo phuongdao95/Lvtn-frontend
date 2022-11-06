@@ -36,6 +36,7 @@ export default function CreateVariable({ closeDialogCb, id }) {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
+            console.log(values);
             createVariable(values)
         }
     })
@@ -56,7 +57,7 @@ export default function CreateVariable({ closeDialogCb, id }) {
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Tên công thức"} />
+                            <Label text={"Tên biến"} />
                             <TextField
                                 id="name"
                                 name="name"
@@ -122,8 +123,15 @@ export default function CreateVariable({ closeDialogCb, id }) {
                 <OneColumnBox
                     slot={
                         <Fragment>
-                            <Label text={"Description"} />
-                            <TextField />
+                            <Label text={"mô tả"} />
+                            <TextField
+                                id="description"
+                                name="description"
+                                onChange={formik.handleChange}
+                                value={formik.values.description}
+                                error={formik.touched.description && Boolean(formik.errors.description)}
+                                helperText={formik.touched.description && formik.errors.description}
+                            />
                         </Fragment>
                     }
                 />

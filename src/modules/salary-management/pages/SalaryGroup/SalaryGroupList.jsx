@@ -10,8 +10,7 @@ import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 import CreateSalaryGroup from "./CreateSalaryGroup";
 import EditSalaryGroup from "./EditSalaryGroup";
 
-import { useFetchListUser, useDeleteUser } from "../../../../client/userService";
-import { useNavigate } from "react-router";
+import { useDeleteSalaryGroup, useFetchListSalaryGroup } from "./../../../../client/salaryGroupService";
 import { Box } from "@mui/system";
 
 const getColumnConfig = (openEditCb, openDeleteCb) => [
@@ -23,6 +22,18 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
         field: "name",
         headerName: "Tên",
         width: 250,
+    },
+
+    {
+        field: "priority",
+        headerName: "Độ ưu tiên",
+        width: 100,
+    },
+
+    {
+        field: "groupName",
+        headerName: "Nhóm người dùng",
+        width: 100
     },
 
     {
@@ -61,7 +72,6 @@ const initialDialogState = {
 }
 
 export default function SalaryGroupList() {
-    const navigate = useNavigate();
     const [salaryGroupId, setSalaryGroupId] = React.useState(null);
     const [isCreateSalaryGroupOpen, setIsCreateSalaryGroupOpen] = React.useState(false);
     const [isEditSalaryGroupOpen, setIsEditSalaryGroupOpen] = React.useState(false);
@@ -79,18 +89,18 @@ export default function SalaryGroupList() {
         isSuccess,
         isError,
         data: response,
-        method: fetchUserList
-    } = useFetchListUser();
+        method: fetchSalaryGroupList
+    } = useFetchListSalaryGroup();
 
     const {
         isSuccess: isDeleteSuccess,
         isError: isDeleteError,
         method: deleteUser,
-    } = useDeleteUser();
+    } = useDeleteSalaryGroup();
 
     React.useEffect(() => {
         if (isDeleteSuccess) {
-            fetchUserList();
+            fetchSalaryGroupList();
         }
         if (isDeleteError) {
             setInfoDialogMessage({
@@ -114,16 +124,17 @@ export default function SalaryGroupList() {
     return (
         <Fragment>
             {isCreateSalaryGroupOpen && <CreateSalaryGroup
+                reloadList={() => fetchSalaryGroupList()}
                 closeDialogCb={
                     () => setIsCreateSalaryGroupOpen(false)}
                 createSuccessCb={() => {
                     setIsCreateSalaryGroupOpen(false);
-                    fetchUserList()
+                    fetchSalaryGroupList()
                 }} />}
-            {isEditUserOpen &&
-                <EditSalaryGroup closeDialogCb={
-                    () => setIsEditUserOpen(false)}
-                    userId={userId} />}
+            {isEditSalaryGroupOpen &&
+                <EditSalaryGroup id={salaryGroupId} closeDialogCb={
+                    () => setIsEditSalaryGroupOpen(false)}
+                    salaryGroupId={salaryGroupId} />}
 
             {isDeleteSalaryGroupOpen &&
                 <ConfirmDialog
@@ -141,7 +152,7 @@ export default function SalaryGroupList() {
                         handler: () => {
                             setIsDeleteSalaryGroupOpen(false);
                             setSalaryGroupId(null);
-                            deleteUser(userId);
+                            deleteUser(salaryGroupId);
                         }
                     }}
                 />}
@@ -156,12 +167,12 @@ export default function SalaryGroupList() {
             />}
 
             <DataGridLayout
-                title={"Danh sách nhân viên"}
+                title={"Danh sách Salary Config"}
                 datagridSection={
                     <DataGrid
                         onPageChange={(nextPageIndex) => {
                             const limit = 8;
-                            fetchUserList((nextPageIndex) * limit, limit)
+                            fetchSalaryGroupList((nextPageIndex) * limit, limit)
                         }}
                         rowCount={response?.total ?? 0}
                         paginationMode="server"
@@ -186,7 +197,7 @@ export default function SalaryGroupList() {
                         menu={
                             [
                                 {
-                                    text: "Tạo mới người dùng",
+                                    text: "Tạo mới salary config",
                                     handler: () => {
                                         setIsCreateSalaryGroupOpen(true);
                                     }

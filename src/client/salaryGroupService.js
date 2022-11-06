@@ -6,7 +6,7 @@ import {
     getUseUpdateResourceFunction
 } from "./crudService";
 
-const PATH_PREFIX = "api/salarygroup/"
+const PATH_PREFIX = "api/salarygroup"
 
 export const useFetchListSalaryGroup = getUseFetchListResourceFunction(PATH_PREFIX);
 

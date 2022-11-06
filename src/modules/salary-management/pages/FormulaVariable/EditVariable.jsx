@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { Box } from "@mui/system";
 
 import Dialog from "../../../../components/Dialog";
@@ -9,7 +9,7 @@ import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
 import Select from "../../../../components/DialogForm/Select";
 
-import { useCreateVariable } from "../../../../client/variableService";
+import { useFetchOneVariable, useUpdateVariable } from "../../../../client/variableService";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -22,9 +22,19 @@ const validationSchema = yup.object().shape({
 
 export default function EditVariable({ closeDialogCb, id }) {
     const {
+        isPending: isUpdateVariablePending,
+        isError: isUpdateVariableError,
         isSuccess: isCreateVariableSuccess,
-        method: createVariable,
-    } = useCreateVariable();
+        method: updateVariable,
+    } = useUpdateVariable();
+
+    const {
+        isPending: isFetchDetailPending,
+        isError: isFetchDetailError,
+        isSuccess: isFetchDetailSuccess,
+        method: fetchDetail,
+        data: fetchedDetail
+    } = useFetchOneVariable();
 
     const formik = useFormik({
         initialValues: {
@@ -36,9 +46,20 @@ export default function EditVariable({ closeDialogCb, id }) {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            createVariable(values)
+            updateVariable(id, values)
         }
     })
+
+    React.useEffect(() => {
+        fetchDetail(id);
+    }, [])
+
+    React.useEffect(() => {
+        if (fetchedDetail) {
+            formik.setValues(fetchedDetail)
+        }
+    }, [fetchedDetail]);
+
 
     return <Dialog
         primaryAction={{
@@ -49,14 +70,14 @@ export default function EditVariable({ closeDialogCb, id }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Tạo mới biến"
+        title="Chỉnh sửa biến"
     >
         <DialogForm>
             <Box>
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Tên công thức"} />
+                            <Label text={"Tên biến"} />
                             <TextField
                                 id="name"
                                 name="name"
@@ -90,10 +111,11 @@ export default function EditVariable({ closeDialogCb, id }) {
                             id="dataType"
                             name="dataType"
                             menu={[
-                                { label: "Boolean", value: "boolean" },
-                                { label: "Number", value: "number" },
-                                { label: "Text", value: "text" },
-                                { label: "Datetime", value: "datetime" }]}
+                                { label: "Boolean", value: "Boolean" },
+                                { label: "Integer", value: "Integer" },
+                                { label: "Text", value: "Text" },
+                                { label: "Decimal", value: "Decimal" },
+                            ]}
                             value={formik.values.dataType}
                             onChange={formik.handleChange}
                         />
@@ -123,7 +145,13 @@ export default function EditVariable({ closeDialogCb, id }) {
                     slot={
                         <Fragment>
                             <Label text={"Description"} />
-                            <TextField />
+                            <TextField
+                                id="description"
+                                name="description"
+                                onChange={formik.handleChange}
+                                value={formik.values.description}
+                                error={formik.touched.description && Boolean(formik.errors.description)}
+                            />
                         </Fragment>
                     }
                 />

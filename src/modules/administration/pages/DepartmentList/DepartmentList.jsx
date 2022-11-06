@@ -115,12 +115,14 @@ export default function DepartmentList() {
 
     return (
         <Fragment>
-            {isCreateDepartmentOpen && <CreateDepartment closeDialogCb={
-                () => setIsCreateDepartmentOpen(false)} />}
+            {isCreateDepartmentOpen && <CreateDepartment
+                reloadList={fetchDepartmentList}
+                closeDialogCb={() => setIsCreateDepartmentOpen(false)} />}
 
             {isEditDepartmentOpen && <EditDepartment
-                closeDialogCb={() => setIsEditDepartmentOpen(false)}
                 departmentId={departmentId}
+                reloadList={fetchDepartmentList}
+                closeDialogCb={() => setIsEditDepartmentOpen(false)}
             />}
 
             {isDeleteDepartmentOpen &&

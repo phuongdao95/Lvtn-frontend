@@ -22,6 +22,7 @@ export default function Dialog({
                     "& .MuiPaper-root": {
                         width: "100%",
                         maxWidth: "680px",
+                        position: "relative"
                     },
                 },
             }}
