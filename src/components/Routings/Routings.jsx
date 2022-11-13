@@ -20,6 +20,7 @@ import PunishWorkDayConfig from "../../modules/settings/check-day-config/PunishW
 import HolidayConfig from "../../modules/settings/check-day-config/HolidayConfig/HolidayConfig";
 import TypeWorkShiftConfig from "../../modules/settings/check-day-config/TypeWorkShiftConfig/TypeWorkShiftConfig";
 import SelectTypeWorkShift from "../../modules/check-day/pages/SelectTypeWorkShift"
+import WorkingShiftList from "../../modules/check-day/pages/WorkingShiftList"
 
 import DABList from "../../modules/salary-management/pages/DABList/DABList";
 import SalaryList from "../../modules/salary-management/pages/SalaryList";
@@ -37,14 +38,16 @@ import FormulaVariable from "../../modules/salary-management/pages/FormulaVariab
 import BoardDetail from "../../modules/virtual-space/pages/BoardDetail";
 import BoardList from "../../modules/virtual-space/pages/BoardList";
 import LabelList from "../../modules/virtual-space/pages/LabelList";
-import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import SalaryGroupList from "../../modules/salary-management/pages/SalaryGroup/SalaryGroupList";
 import ColumnList from "../../modules/virtual-space/pages/ColumnList";
 import PayslipList from "../../modules/salary-management/pages/PayRollList/PayslipList";
 import PayslipDetail from "../../modules/salary-management/pages/PayRollList/PayslipDetail";
-import HubNotify from "../../modules/virtual-space/components/HubNotify";
 import MyPayslipList from "../../modules/salary-management/pages/MyPayslipList/MyPayslipList";
 import MyPayslipDetail from "../../modules/salary-management/pages/MyPayslipList/MyPayslipDetail";
+import ViewCheckDay from "../../modules/check-day/pages/TimekeepingListSchedule";
+import WorkingShiftRegistrationList from "../../modules/check-day/pages/WorkingShiftRegistrationList";
+import TimekeepingSchedule from "../../modules/check-day/pages/TimekeepingListSchedule";
+import RegisteredWorkingShiftList from "../../modules/check-day/pages/RegisteredWorkingShiftList"
 
 export default function Routings() {
     return <Routes>
@@ -57,8 +60,7 @@ export default function Routings() {
         <Route exact path="/approve-workflows/config-nghi-phep" element={<ConfigNghiPhep />} />
         <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
 
-        <Route path="/check-in-2" element={<Timekeeping />} />
-        <Route path="/check-in" element={<CheckIn />} />
+        <Route path="/check-in-2" element={<CheckIn />} />
         {/* <Route path="/check-out" element={<Timekeeping />} /> */}
         <Route path="/registe-image" element={<Registe />} />
         <Route path="/calendar" element={<Calendar />} />
@@ -81,19 +83,26 @@ export default function Routings() {
 
         <Route path="/user" element={
             // <ProtectedRoute>
-                <UserList />
+            <UserList />
             // </ProtectedRoute>
         } />
 
         <Route path="/role" element={
             // <ProtectedRoute>
             // </ProtectedRoute>
-                <RoleList />
+            <RoleList />
         } />
         <Route path="/group" element={<GroupList />} />
         <Route path="/team" element={<TeamList />} />
         <Route path="/permission" element={<PermissionList />} />
         <Route path="/department" element={<DepartmentList />} />
+
+        {/* Timekeeping module */}
+        <Route path="timekeeping-schedule" element={<TimekeepingSchedule />} />
+        <Route path="timekeeping-check" element={<CheckIn />} />
+        <Route path="workingshift-registration" element={<WorkingShiftRegistrationList />} />
+        <Route path="workingshift" element={<WorkingShiftList />} />
+        <Route path="registered-workingshift" element={<RegisteredWorkingShiftList />} />
 
         {/* Salary Management Module */}
         <Route path="/salary" element={<SalaryList />} />
@@ -107,8 +116,14 @@ export default function Routings() {
         <Route path="/my-payslips" element={<MyPayslipList />} />
         <Route path="/my-payslips/:payslipId" element={<MyPayslipDetail />} />
 
+
         {/** Shared module */}
         <Route path="/my-profile" element={<UserProfile />} />
 
+        <Route path="/scheduler"
+            element={
+                <ViewCheckDay />
+            }
+        />
     </Routes>
 }

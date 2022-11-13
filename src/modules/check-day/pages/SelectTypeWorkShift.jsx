@@ -1,17 +1,12 @@
 import React, {useState, Fragment, useEffect} from 'react';
 import DataGridLayout from '../../../layouts/DataGridLayout';
 import DataGrid from '../../../components/DataGrid/DataGrid';
-import MenuButton from "../../../components/DataGrid/MenuButton";
-import ActionButtonContainer from "../../../components/DataGrid/ActionButtonContainer";
-import ActionButton from "../../../components/DataGrid/ActionButton";
-import { useNavigate } from "react-router";
-
 import Button from "@mui/material/Button";
-import Checkbox from '@mui/material/Checkbox';
-
-import {useGetByUser, useUpdateSelected} from '../../../client/workingShiftEvent';
 import Snackbar from '../../../components/Snackbar/Snackbar';
 import dayjs from 'dayjs';
+import { useNavigate } from "react-router";
+import {useGetByUser, useUpdateSelected} from '../../../client/workingShiftEvent';
+
 const listDateOfWeek = [
     {
         id: 1,

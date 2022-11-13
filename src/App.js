@@ -14,7 +14,6 @@ export default function App() {
       <Login />
       :
       (<MainLayout >
-        <HubNotify />
         <Routings />
       </MainLayout >)
 
