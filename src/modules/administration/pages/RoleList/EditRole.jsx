@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Box } from "@mui/system";
-import { Checkbox } from "@mui/material";
+import { Checkbox, Typography } from "@mui/material";
 import Dialog from "../../../../components/Dialog";
 import Label from "../../../../components/DialogForm/Label";
 import OneColumnBox from "../../../../components/DialogForm/OneColumnBox"
@@ -9,184 +9,103 @@ import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
 import DialogFormTableLayout from "../../../../layouts/DialogFormTableLayout";
 import BasicTable from "../../../../components/BasicTable/BasicTable";
-import SearchField from "../../../../components/SearchField";
 
 import { useFormik } from "formik";
-import { useState } from "react";
-import { useFetchOneRole, useFetchPermissionOfRole, useUpdateRole } from "../../../../client/roleService";
+import { useCreateRole, useFetchOneRole, useFetchPermissionOfRole, useUpdateRole } from "../../../../client/roleService";
+import * as yup from "yup";
+import { useFetchListPermission } from "../../../../client/permisisonService";
+
 
 const getPermissionColumnConfig = () => {
     return [
+        {
+            field: 'check',
+            size: "small"
+        },
         {
             field: "module",
             headerName: "Module",
             size: "small"
         },
         {
-            field: "create",
-            headerName: "Create",
-            size: "small"
-
+            field: "name",
+            headerName: "Permission",
+            size: "small",
         },
-
-        {
-            field: "retrieve",
-            headerName: "Retreive",
-            size: "small"
-
-        },
-
-        {
-            field: "update",
-            headerName: "Update",
-            size: "small"
-
-        },
-
-        {
-            field: "delete",
-            headerName: "Delete",
-            size: "small"
-
-        }
     ]
 }
 
-const moduleNameList = ["User", "Role", "Permission", "Group", "Department", "DAB", "Formula", "Milestone"]
+const validationSchema = yup.object().shape({
+    roleName: yup.string().required(),
+});
 
-const getDefaultPermissionInitialState = () => {
-    const result = moduleNameList.map((value, index) => {
-        const module = `${value.toLowerCase()}`;
-
-        const crudPermissionAsText = ['create', 'retrieve', 'update', 'delete'].map((value) => {
-            return `${module}.${value}`;
-        })
-
-        return crudPermissionAsText.map((value) => ({ [value]: true }))
-            .reduce((acc, current) => ({ ...acc, ...current }), {});
-    });
-
-    return result.reduce((acc, current) => ({ ...acc, ...current }));
-}
-
-
-const getDefaultPermissionList = (getPermisison, setPermission) => {
-    return moduleNameList.map((value, index) => {
-        const moduleName = value.toLowerCase();
-
-        return {
-            id: index,
-            module: value,
-            create: <Checkbox size="small" checked={getPermisison()[`${moduleName}.create`]}
-                onChange={(event) => {
-                    setPermission({
-                        ...getPermisison(),
-                        [`${moduleName}.create`]: event.target.checked
-                    })
-                }} />,
-            retrieve: <Checkbox size="small" checked={getPermisison()[`${moduleName}.retrieve`]}
-                onClick={(event) => setPermission({
-                    ...getPermisison(),
-                    [`${moduleName}.retrieve`]: event.target.checked
-                })} />,
-            update: <Checkbox size="small" checked={getPermisison()[`${moduleName}.update`]}
-                onClick={(event) => setPermission({
-                    ...getPermisison(),
-                    [`${moduleName}.update`]: event.target.checked
-                })} />,
-            delete: <Checkbox size="small" checked={getPermisison()[`${moduleName}.delete`]}
-                onClick={(event) => setPermission({
-                    ...getPermisison(),
-                    [`${moduleName}.delete`]: event.target.checked
-                })} />,
-
-        }
-    });
-}
-
-const convertPermissionResponseToInitialState = (permission) => {
-    const permissionList = permission?.data;
-    const initialState = getDefaultPermissionInitialState();
-
-    const initialStateSetToFalse = Object.entries(initialState)
-        .reduce((acc, [key, value]) => ({ ...acc, [key]: false }), {});
-
-    const mappedPermission = permissionList
-        .map((value) => value.name)
-        .reduce((acc, current) => ({ ...acc, [current]: true }), {});
-
-    return {
-        ...initialStateSetToFalse,
-        ...mappedPermission
-    }
-
-}
-
-export default function EditRole({ closeDialogCb, roleId }) {
-    const [permisisonMap, setPermissionMap] = useState(getDefaultPermissionInitialState());
+export default function EditRole({ roleId, closeDialogCb }) {
+    const [checkList, setCheckList] = React.useState([]);
 
     const {
-        method: editRole
+        isError,
+        isPending,
+        isSuccess,
+        method: updateRole
     } = useUpdateRole();
 
     const {
-        data: fetchedPermissionResponse,
-        method: fetchPermission
+        isPending: isFetchOnePending,
+        isSuccess: isFetchOneSuccess,
+        isError: isFetchOneError,
+        method: fetchOneRole,
+        data: fetchedRole
+    } = useFetchOneRole();
+
+    const {
+        isPending: isFetchPermissionsPending,
+        isSuccess: isFetchPermissionsSuccess,
+        isError: isFetchPermissionsError,
+        method: fetchRolePermissions,
+        data: fetchedRolePermissions
     } = useFetchPermissionOfRole();
 
     const {
-        isPending: isFetchRolePending,
-        isSuccess: isFetchRoleSuccess,
-        isError: isFetchRoleError,
-        data: fetchedRoleResponse,
-        method: fetchRole
-    } = useFetchOneRole();
-
-    React.useEffect(() => {
-        if (roleId) {
-            fetchRole(roleId);
-        }
-    }, [])
-
-    React.useEffect(() => {
-        if (fetchedRoleResponse) {
-            formik.setValues({
-                ...fetchedRoleResponse
-            })
-        }
-    }, [fetchedRoleResponse])
-
-
-    React.useEffect(() => {
-        if (roleId) {
-            fetchPermission(roleId);
-        }
-    }, [])
-
-    React.useEffect(() => {
-        if (fetchedPermissionResponse) {
-            const newInitialState =
-                convertPermissionResponseToInitialState(fetchedPermissionResponse);
-
-            setPermissionMap(newInitialState);
-        }
-    }, [fetchedPermissionResponse])
+        isPending: isPermissionListPending,
+        isSuccess: isPermissionListSuccess,
+        data: permissionList,
+        method: fetchPermissionList,
+    } = useFetchListPermission();
 
     const formik = useFormik({
         initialValues: {
-            name: "",
+            roleName: "",
             description: "",
+            permissionIds: []
         },
+        validationSchema: validationSchema,
         onSubmit: (values) => {
-            const pMap = permisisonMap;
-            const pList = Object.entries(pMap).reduce((acc, [key, value]) => {
-                return value ? [...acc, key] : [...acc];
-            }, [])
-
-            const formData = { permissionNames: pList, ...values };
-            editRole(roleId, formData);
+            updateRole(roleId, { ...values });
         }
     })
+
+    React.useEffect(() => {
+        fetchPermissionList();
+        fetchRolePermissions(roleId);
+        fetchOneRole(roleId);
+    }, []);
+
+    React.useEffect(() => {
+        if (isFetchOneSuccess) {
+            formik.setValues({
+                roleName: fetchedRole.name,
+                description: fetchedRole.description,
+                permissionIds: formik.values.permissionIds
+            })
+        }
+    }, [isFetchOneSuccess])
+
+    React.useEffect(() => {
+        if (isFetchPermissionsSuccess) {
+            const permissions = fetchedRolePermissions.data.map((p) => p.id);
+            formik.setFieldValue('permissionIds', permissions);
+        }
+    }, [isFetchPermissionsSuccess])
 
     return <Dialog
         primaryAction={{
@@ -197,30 +116,36 @@ export default function EditRole({ closeDialogCb, roleId }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Chỉnh sửa chức vụ"
+        title="Cập nhật Role"
     >
         <DialogForm>
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Tên chức vụ"} />
-                            <TextField id="name"
-                                name="name"
-                                value={formik.values.name}
-                                onChange={formik.handleChange} />
+                            <Label text={"Tên Role"} />
+                            <TextField
+                                id="roleName"
+                                name="roleName"
+                                value={formik.values.roleName}
+                                onChange={formik.handleChange}
+                                error={formik.touched.roleName && Boolean(formik.errors.roleName)}
+                                helperText={formik.touched.roleName && formik.errors.name}
+                            />
                         </Fragment>
                     }
 
                     secondSlot={
                         <Fragment>
-                            <Label text={"Mô tả"} />
+                            <Label text={"Mô tả"}
+                            />
                             <TextField
                                 id="description"
                                 name="description"
                                 value={formik.values.description}
                                 onChange={formik.handleChange}
-
+                                error={formik.touched.description && Boolean(formik.errors.description)}
+                                helperText={formik.touched.description && formik.errors.description}
                             />
                         </Fragment>
                     }
@@ -228,17 +153,79 @@ export default function EditRole({ closeDialogCb, roleId }) {
 
                 <OneColumnBox
                     slot={<DialogFormTableLayout
-                        title={"Danh sách quyền"}
-                        actionSection={<SearchField />}
                         searchSection={<Fragment></Fragment>}
-                        tableSection={<BasicTable
-                            rows={getDefaultPermissionList(() => permisisonMap,
-                                (value) => {
-                                    setPermissionMap(value);
-                                })}
-                            columns={getPermissionColumnConfig()}
-                            maxHeight={'250px'}
-                        />}
+                        tableSection={
+                            <Fragment>
+                                <Typography>Danh sách quyền tài nguyên</Typography>
+                                <BasicTable
+                                    rows={permissionList?.data?.filter(permission => permission.module !== 'page_access')
+                                        .map((permission) => ({
+                                            check: <Checkbox size="small"
+                                                checked={formik.values.permissionIds.includes(permission.id)}
+                                                onChange={(event) => {
+                                                    if (event.target.checked) {
+                                                        formik.setFieldValue('permissionIds', [
+                                                            ...formik.values.permissionIds,
+                                                            permission.id
+                                                        ]);
+                                                    } else {
+                                                        formik.setFieldValue('permissionIds', [
+                                                            ...formik.values.permissionIds.
+                                                                filter(p => p !== permission.id)
+                                                        ])
+                                                    }
+                                                }}
+                                            />,
+                                            module: <p style={{ textTransform: 'capitalize' }}>
+                                                {permission.module}</p>,
+                                            name: <p style={{ textTransform: 'capitalize' }}>
+                                                {permission.name}</p>,
+                                            description: permission.description,
+                                        })) ?? []}
+                                    columns={getPermissionColumnConfig()}
+                                    maxHeight={'250px'}
+                                />
+                            </Fragment>
+                        }
+                    />}
+                />
+
+                <OneColumnBox
+                    slot={<DialogFormTableLayout
+                        searchSection={<Fragment></Fragment>}
+                        tableSection={
+                            <Fragment>
+                                <Typography>Danh sách quyền truy cập</Typography>
+                                <BasicTable
+                                    rows={permissionList?.data?.filter(permission => permission.module === "page_access")
+                                        .map((permission) => ({
+                                            check: <Checkbox size="small"
+                                                checked={formik.values.permissionIds.includes(permission.id)}
+                                                onChange={(event) => {
+                                                    if (event.target.checked) {
+                                                        formik.setFieldValue('permissionIds', [
+                                                            ...formik.values.permissionIds,
+                                                            permission.id
+                                                        ]);
+                                                    } else {
+                                                        formik.setFieldValue('permissionIds', [
+                                                            ...formik.values.permissionIds.
+                                                                filter(p => p !== permission.id)
+                                                        ])
+                                                    }
+                                                }}
+                                            />,
+                                            module: <p style={{ textTransform: 'capitalize' }}>
+                                                {permission.module.split("_").join(" ")}</p>,
+                                            name: <p style={{ textTransform: 'capitalize' }}>
+                                                {permission.name.split(".")[1]
+                                                    .split("_").join(" ")}</p>,
+                                        })) ?? []}
+                                    columns={getPermissionColumnConfig()}
+                                    maxHeight={'250px'}
+                                />
+                            </Fragment>
+                        }
                     />}
                 />
 

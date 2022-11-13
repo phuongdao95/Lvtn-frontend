@@ -22,7 +22,7 @@ export const useCreateTeam =
 export const useUpdateTeam =
     getUseUpdateResourceFunction(PATH_PREFIX);
 
-export const useDeleteTeam = 
+export const useDeleteTeam =
     getUseDeleteResourceFunction(PATH_PREFIX);
 
 export const useFetchTeamListWithoutDepartment =
@@ -51,9 +51,13 @@ export const useFetchTeamListWithoutDepartment =
                         setData(response.data);
                     }
 
-
+                    setIsSuccess(true);
                 } catch (err) {
                     console.error(err);
+                    setIsError(true);
+                }
+                finally {
+                    setIsPending(false);
                 }
             }
 

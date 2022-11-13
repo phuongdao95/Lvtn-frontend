@@ -7,26 +7,28 @@ import TwoColumnBox from "../../../../components/DialogForm/TwoColumnBox";
 import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
 import AutoCompleteMultiple from "../../../../components/DialogForm/AutoCompleteMultiple";
-import AutoComplete from "../../../../components/DialogForm/AutoComplete";
 
 import { useFetchListUser } from "../../../../client/userService";
 
 import { useFormik } from "formik";
 import { useCreateGroup } from "../../../../client/groupService";
+import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
-export default function CreateGroup({ closeDialogCb }) {
+export default function CreateGroup({ reloadList, closeDialogCb }) {
     const [userOptions, setUserOptions] = React.useState([]);
-
     const {
-        isSuccess: isFetchUserListSuccess,
-        method: fetchUserList,
-        data: fetchedUserList,
-    } = useFetchListUser();
-
-    const {
-        isSuccess: isCreateSuccess,
+        isPending: isCreateGroupPending,
+        isError: isCreateGroupError,
+        isSuccess: isCreateGroupSuccess,
         method: createGroup,
     } = useCreateGroup();
+
+    const {
+        isPending: isFetchUserListPending,
+        isSuccess: isFetchUserListSuccess,
+        method: fetchUserList,
+        data: fetchedUsers,
+    } = useFetchListUser();
 
     const formik = useFormik({
         initialValues: {
@@ -35,9 +37,18 @@ export default function CreateGroup({ closeDialogCb }) {
             users: [],
         },
         onSubmit: (values) => {
-
+            const userIds = values.users.map((user) => (user.id));
+            createGroup({ ...values, userIds });
         }
+
     })
+
+    React.useEffect(() => {
+        if (isCreateGroupSuccess) {
+            closeDialogCb();
+            reloadList();
+        }
+    }, [isCreateGroupSuccess])
 
     React.useEffect(() => {
         fetchUserList()
@@ -45,11 +56,10 @@ export default function CreateGroup({ closeDialogCb }) {
 
     React.useEffect(() => {
         if (isFetchUserListSuccess) {
-            const formatted = fetchedUserList.data.map((user) => ({ id: user.id, name: user.name }))
+            const formatted = fetchedUsers.data.map((user) => ({ id: user.id, name: user.name }))
             setUserOptions(formatted);
         }
-    }, [])
-
+    }, [isFetchUserListSuccess])
 
     return <Dialog
         primaryAction={{
@@ -60,14 +70,15 @@ export default function CreateGroup({ closeDialogCb }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Tạo mới Department"
+        title="Tạo mới Nhóm"
     >
         <DialogForm>
+            <LoadingOverlay isLoading={isCreateGroupPending || isFetchUserListPending} />
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Tên Department"} />
+                            <Label text={"Tên nhóm"} />
                             <TextField id="name"
                                 name="name"
                                 value={formik.values.name}
@@ -82,28 +93,30 @@ export default function CreateGroup({ closeDialogCb }) {
                     }
                 />
 
-                {/* <OneColumnBox
-                    slot={<Fragment>
-                        <Label text={"Teams"} />
-                        <AutoCompleteMultiple
-                            getOptionLabel={(option) => option.name}
-                            options={teamOptions}
-                            value={formik.values.teams}
-                            onChange={(event, value) => {
-                                formik.setFieldValue("teams", value)
-                            }}
-                        />
-                    </Fragment>}
-                /> */}
-
                 <OneColumnBox
                     slot={<Fragment>
-                        <Label text={"Description"} />
+                        <Label text={"Mô tả"} />
                         <TextField
                             id="description"
                             name="description"
                             value={formik.values.description}
                             onChange={formik.handleChange}
+                        />
+                    </Fragment>}
+                />
+
+                <OneColumnBox
+                    slot={<Fragment>
+                        <Label text={"Người dùng"} />
+                        <AutoCompleteMultiple
+                            id="users"
+                            name="users"
+                            getOptionLabel={(option) => option.name}
+                            options={userOptions}
+                            value={formik.values.users}
+                            onChange={(event, value) => {
+                                formik.setFieldValue("users", value);
+                            }}
                         />
                     </Fragment>}
                 />

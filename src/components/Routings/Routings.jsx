@@ -27,8 +27,6 @@ import Timekeeping from "../../modules/check-day/pages/Timekeeping";
 import Registe from "../../modules/check-day/pages/Registe";
 import CheckIn from "../../modules/check-day/pages/CheckIn";
 import Calendar from "../../modules/check-day/pages/Calendar";
-import TableConfig from "../../modules/settings/virtual-space-config/TableConfig/TableConfig";
-import LabelConfig from "../../modules/settings/virtual-space-config/LabelConfig/LabelConfig";
 import TypeWorkDayConfig from "../../modules/settings/check-day-config/TypeWorkDayConfig/TypeWorkDayConfig";
 import RulesWorkDayConfig from "../../modules/settings/check-day-config/RulesWorkDayConfig/RulesWorkDayConfig";
 import PunishWorkDayConfig from "../../modules/settings/check-day-config/PunishWorkDayConfig/PunishWorkDayConfig";
@@ -37,7 +35,6 @@ import TypeWorkShiftConfig from "../../modules/settings/check-day-config/TypeWor
 import SelectTypeWorkShift from "../../modules/check-day/pages/SelectTypeWorkShift"
 
 import DABList from "../../modules/salary-management/pages/DABList/DABList";
-import FormulaList from "../../modules/salary-management/pages/FormulaList/FormulaList";
 import SalaryList from "../../modules/salary-management/pages/SalaryList";
 
 import GroupList from "../../modules/administration/pages/GroupList/GroupList";
@@ -46,16 +43,21 @@ import UserList from "../../modules/administration/pages/UserList";
 import RoleList from "../../modules/administration/pages/RoleList/RoleList";
 import DepartmentList from "../../modules/administration/pages/DepartmentList";
 import TeamList from "../../modules/administration/pages/TeamList";
-import AccountsAndRolesPage from "../../modules/shares/pages/AccountsAndRolesPage/AccountsAndRolesPage";
 import PayrollList from "../../modules/salary-management/pages/PayRollList/PayrollList.jsx";
-import EditPayroll from "../../modules/salary-management/pages/PayRollList/EditPayroll";
 import UserProfile from "../../modules/shares/pages/UserProfile/UserProfile";
 import MyDABs from "../../modules/salary-management/pages/MyDABs/MyDABs";
 import FormulaVariable from "../../modules/salary-management/pages/FormulaVariable/FormulaVariable";
-import { Group } from "@mui/icons-material";
 import BoardDetail from "../../modules/virtual-space/pages/BoardDetail";
 import BoardList from "../../modules/virtual-space/pages/BoardList";
+import LabelList from "../../modules/virtual-space/pages/LabelList";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import SalaryGroupList from "../../modules/salary-management/pages/SalaryGroup/SalaryGroupList";
+import ColumnList from "../../modules/virtual-space/pages/ColumnList";
+import PayslipList from "../../modules/salary-management/pages/PayRollList/PayslipList";
+import PayslipDetail from "../../modules/salary-management/pages/PayRollList/PayslipDetail";
+import HubNotify from "../../modules/virtual-space/components/HubNotify";
+import MyPayslipList from "../../modules/salary-management/pages/MyPayslipList/MyPayslipList";
+import MyPayslipDetail from "../../modules/salary-management/pages/MyPayslipList/MyPayslipDetail";
 
 export default function Routings() {
     return <Routes>
@@ -91,10 +93,10 @@ export default function Routings() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/select-type-work-shift" element={<SelectTypeWorkShift />} />
 
-        <Route path="/virtual-space/" element={<BoardDetail />} />
-        <Route path="/virtual-space/board" element={<BoardList />} />
-        <Route path="/virtual-space/table-config" element={<TableConfig />} />
-        <Route path="/virtual-space/label-config" element={<LabelConfig />} />
+        <Route path="/taskboard" element={<BoardList />} />
+        <Route path="/taskboard/:id" element={<BoardDetail />} />
+        <Route path="/taskboard/:id/label" element={<LabelList />} />
+        <Route path="/taskboard/:id/column" element={<ColumnList />} />
 
         <Route path="/check-day-config/type-work-day" element={<TypeWorkDayConfig />} />
         <Route path="/check-day-config/rules-work-day" element={<RulesWorkDayConfig />} />
@@ -107,30 +109,32 @@ export default function Routings() {
         {/* Administration module */}
 
         <Route path="/user" element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
                 <UserList />
-            </ProtectedRoute>
+            // </ProtectedRoute>
         } />
 
         <Route path="/role" element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
+            // </ProtectedRoute>
                 <RoleList />
-            </ProtectedRoute>
         } />
         <Route path="/group" element={<GroupList />} />
+        <Route path="/team" element={<TeamList />} />
         <Route path="/permission" element={<PermissionList />} />
         <Route path="/department" element={<DepartmentList />} />
-        <Route path="/team" element={<TeamList />} />
-        <Route path="/group" element={<Group />} />
 
         {/* Salary Management Module */}
         <Route path="/salary" element={<SalaryList />} />
         <Route path="/dab" element={<DABList />} />
-        <Route path="/my-dab" element={<MyDABs />} />
-        <Route path="/formula" element={<FormulaList />} />
         <Route path="/formula-variable" element={<FormulaVariable />} />
         <Route path="/payroll" element={<PayrollList />} />
-        <Route path="/payroll/:id" element={<EditPayroll />} />
+        <Route path="/payroll/:id/payslip" element={<PayslipList />} />
+        <Route path="/payroll/:payrollId/payslip/:payslipId" element={<PayslipDetail />} />
+        <Route path="/salary-group/" element={<SalaryGroupList />} />
+        <Route path="/my-dab" element={<MyDABs />} />
+        <Route path="/my-payslips" element={<MyPayslipList />} />
+        <Route path="/my-payslips/:payslipId" element={<MyPayslipDetail />} />
 
         {/** Shared module */}
         <Route path="/my-profile" element={<UserProfile />} />

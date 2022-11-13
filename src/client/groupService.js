@@ -1,10 +1,13 @@
 import {
+    getPendingErrorSuccessApiPatternFunction,
     getUseCreateResourceFunction,
     getUseDeleteResourceFunction,
     getUseFetchListResourceFunction,
     getUseFetchOneResourceFunction,
     getUseUpdateResourceFunction
 } from "./crudService";
+
+import api from "./api";
 
 const PATH_PREFIX = 'api/group';
 
@@ -22,3 +25,33 @@ export const useUpdateGroup =
 
 export const useDeleteGroup =
     getUseDeleteResourceFunction(PATH_PREFIX);
+
+export const useFetchUsersOfGroup =
+    getPendingErrorSuccessApiPatternFunction(
+        ({ setIsError, setIsSuccess, setIsPending, setData }) => {
+            const fetchUsersOfGroup = async (groupId) => {
+                setIsError(false);
+                setIsSuccess(false);
+                setIsPending(true);
+                setData(null);
+
+                try {
+                    const response = await api.get(`api/group/${groupId}/user`)
+                    if (response.data) {
+                        setData(response.data);
+                    }
+
+                    setIsSuccess(true);
+                }
+                catch (err) {
+                    setData(null);
+                    setIsError(true);
+                }
+                finally {
+                    setIsPending(false);
+                }
+            }
+
+            return fetchUsersOfGroup;
+        }
+    )();

@@ -34,7 +34,7 @@ const NavBar = (props) => {
                         sx={{ display: { xs: 'none', sm: 'block' } }}
                         fontStyle={"italic"}
                     >
-                        Hệ Thống Quản Lý Nhân Viên
+                        EMS
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>

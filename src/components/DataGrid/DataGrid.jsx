@@ -23,8 +23,10 @@ export default function DataGrid({
             loading={isLoading}
             pageSize={pageSize}
             rowsPerPageOptions={rowsPerPageOptions}
+            disableColumnFilter
+            disableSelectionOnClick
+            disableColumnMenu
             {...rest}
-            
         />
     </Box>
 }

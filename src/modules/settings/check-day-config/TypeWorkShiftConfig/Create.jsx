@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import {Box} from '@mui/system'
 import Dialog from "../../../../components/Dialog";
 import Label from "../../../../components/DialogForm/Label";
@@ -16,11 +16,16 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import { useCreate } from "../../../../client/workingShiftEvent";
+import {useFetchListFormula} from "../../../../client/formulaService.js";
 import dayjs from 'dayjs';
+import Snackbar from '../../../../components/Snackbar/Snackbar';
 
 import { useFormik } from "formik";
 import * as yup from "yup";
-
+const lookUp = (id, lst) => {
+    let re = lst.filter(item => parseInt(id, 10) === item.id);
+    return re && re[0] ? re[0] : null;
+}
 const listDateOfWeek = [
     {
         id: 1,
@@ -64,24 +69,76 @@ const validationSchema = yup.object({
         .required("Nhập giờ nghỉ"),
 })
 
-const Create = ({setOpen}) => {
+const Create = ({setOpen, done}) => {
     const handleClose = () => setOpen(false);
+    const [lstFormula, setLstFormula] = useState([]);
     const formik = useFormik({
         initialValues: {
             name: "",
-            dateOfWeek: "Thứ hai",
+            dateOfWeek: 1,
             startTime: '',
             endTime: '',
-            coefficient: 1,
+            description: '',
+            breakHours: 0,
+            formula: 1,
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log(values);
-            console.log(values.startTime.toISOString()); // timestamp
-            console.log(dayjs(values.startTime.toISOString()).get('day')); // get day of week
-            console.log(dayjs(values.startTime.toISOString()).set('day', 1)); //set day of week
+            const offset = new Date().getTimezoneOffset();
+            let startTime = dayjs(values.startTime.toISOString()).set('day', values.dateOfWeek).add(-offset, 'minute');
+            let endTime = dayjs(values.endTime.toISOString()).set('day', values.dateOfWeek).add(-offset, 'minute');
+            const form = {
+                name: values.name,
+                description: values.description,
+                startTime: startTime.toISOString(),
+                endTime: endTime.toISOString(),
+                formulaName: values.formula.toString(),
+            };
+            console.log(form);
+            create(form);
         }
     })
+
+    const {
+        isPending,
+        isSuccess,
+        isError,
+        data: submitResponse,
+        method: create
+    } = useCreate();
+    const {
+        isSuccess: isFetchListFormulaSuccess,
+        data: fetchedFormulaList,
+    } = useFetchListFormula();
+    useEffect(() => {
+        if (isFetchListFormulaSuccess) {
+            setLstFormula(fetchedFormulaList.data);
+        }
+    }, [isFetchListFormulaSuccess])
+
+    useEffect(() => {
+        if (isSuccess) {
+            // fetchList();
+            setState({
+                open: true,
+                type: 'success',
+                message: 'Tạo mới thành công',
+            });
+            handleClose();
+            done();
+        } else if (isError) {
+            setState({
+                open: true, 
+                type: 'error',
+                message: 'Tạo mới thất bại',
+            })
+        }
+    }, [isSuccess]);
+    const [state, setState] = useState({
+        open: false,
+        type: 'info',
+        message: '',
+    });
 
     return (
     <Dialog
@@ -95,6 +152,7 @@ const Create = ({setOpen}) => {
         }}
         title="Tạo ca làm việc mới"
     >
+        <Snackbar state={state} close={() => setState({...state, open: false})} />
         <DialogForm>
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <OneColumnBox
@@ -125,11 +183,12 @@ const Create = ({setOpen}) => {
                                 error={formik.touched.dateOfWeek && Boolean(formik.errors.dateOfWeek)}
                                 helperText={formik.touched.dateOfWeek && formik.errors.dateOfWeek}
                                 size='small'
+                                sx={{minWidth: '300px',}}
                             >
                                 {listDateOfWeek.map((item, index) => (
                                     <MenuItem
                                         key={index}
-                                        value={item.name}
+                                        value={item.id}
                                     >
                                         {item.name}
                                     </MenuItem>
@@ -150,11 +209,10 @@ const Create = ({setOpen}) => {
                                         newValue = newValue == null ? "" : newValue;
                                         formik.setFieldValue("startTime", newValue);
                                     }}
-                                    renderInput={(params) => <MuiTextField {...params} 
+                                    renderInput={(params) => <MuiTextField sx={{minWidth: '300px',}} size='small' {...params} 
                                     error={formik.touched.startTime && Boolean(formik.errors.startTime)}
                                     helperText={formik.touched.startTime && formik.errors.startTime}
                                     />}
-                                    size='small'
                                 />
                             {/* </LocalizationProvider> */}
                         </Fragment>
@@ -169,7 +227,7 @@ const Create = ({setOpen}) => {
                                         newValue = newValue == null ? "" : newValue;
                                         formik.setFieldValue("endTime", newValue);
                                     }}
-                                    renderInput={(params) => <MuiTextField {...params}
+                                    renderInput={(params) => <MuiTextField sx={{minWidth: '300px',}} size='small' {...params}
                                     error={formik.touched.endTime && Boolean(formik.errors.endTime)}
                                     helperText={formik.touched.endTime && formik.errors.endTime}
                                     />}
@@ -181,11 +239,38 @@ const Create = ({setOpen}) => {
                 <OneColumnBox
                     slot={
                         <Fragment>
-                            <Label text={"Hệ số lương"} />
-                            <TextField id="coefficient"
-                                name="coefficient"
-                                type='number'
-                                value={formik.values.coefficient}
+                            <Label text={"Công thức"} />
+                            <Select id="formula"
+                                name="formula"
+                                value={formik.values.formula}
+                                onChange={(event, value) => {
+                                    formik.setFieldValue("formula", event.target.value);
+                                }}
+                                error={formik.touched.formula && Boolean(formik.errors.formula)}
+                                helperText={formik.touched.formula && formik.errors.formula}
+                                size='small'
+                                sx={{minWidth: '300px'}}
+                            >
+                                {lstFormula.map((item, index) => (
+                                    <MenuItem
+                                        key={index}
+                                        value={item.name}
+                                    >
+                                        {item.displayName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </Fragment>
+                    }
+                />
+                <OneColumnBox
+                    slot={
+                        <Fragment>
+                            <Label text={"Mô tả"} />
+                            <TextField id="description"
+                                name="description"
+                                type='text'
+                                value={formik.values.description}
                                 onChange={formik.handleChange}
                             />
                         </Fragment>

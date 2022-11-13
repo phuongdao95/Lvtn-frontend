@@ -16,10 +16,10 @@ import * as yup from "yup";
 import OneColumnBox from "../../../../components/DialogForm/OneColumnBox";
 import { MonthPicker, YearPicker } from "@mui/x-date-pickers";
 import Select from "../../../../components/DialogForm/Select";
+import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
 const validationSchema = yup.object().shape({
     name: yup.string().required(),
-    description: yup.string().required(),
     fromDate: yup.date().required(),
     toDate: yup.date().required(),
 });
@@ -28,15 +28,13 @@ function generateYears() {
     return Array.from({ length: 200 }, (_, i) => i + 2020)
 }
 
-function generateMonths() {
-    return Array.from({ length: 12 }, (_, i) => i + 1);
-}
-
-export default function CreatePayroll({ closeDialogCb }) {
-    const navigate = useNavigate();
-
-    const { method: createPayroll } =
-        useCreatePayroll();
+export default function CreatePayroll({ reload, closeDialogCb }) {
+    const {
+        isPending,
+        isSuccess,
+        isError,
+        method: createPayroll
+    } = useCreatePayroll();
 
     const formik = useFormik({
         initialValues: {
@@ -53,6 +51,13 @@ export default function CreatePayroll({ closeDialogCb }) {
         }
     });
 
+    React.useEffect(() => {
+        if (isSuccess) {
+            closeDialogCb();
+            reload();
+        }
+    }, [isSuccess])
+
     return <Dialog
         primaryAction={{
             text: "Submit",
@@ -65,6 +70,7 @@ export default function CreatePayroll({ closeDialogCb }) {
         title="Tạo mới Payroll"
     >
         <DialogForm>
+            <LoadingOverlay isLoading={isPending} />
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <TwoColumnBox
                     firstSlot={
@@ -82,7 +88,6 @@ export default function CreatePayroll({ closeDialogCb }) {
 
                     secondSlot={
                         <Fragment>
-
                         </Fragment>
                     }
                 />
