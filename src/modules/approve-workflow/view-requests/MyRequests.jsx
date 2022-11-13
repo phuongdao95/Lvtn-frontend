@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Chip } from '@mui/material';
 import TablePagination from '@mui/material/TablePagination';
+import * as workflowService from '../../../client/workflowService';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -31,29 +32,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const MyRequests = () => {
-    const requests = [
-        {
-            name: "Nghi phep",
-            createdDate: "05-06-2022",
-            status: "0"
-        },
-        {
-            name: "Nghi phep",
-            createdDate: "05-06-2022",
-            status: "1"
-        },
-        {
-            name: "Nghi phep",
-            createdDate: "05-06-2022",
-            status: "2"
-        }
-    ];
+    let [requests, setRequests] = useState([]);
+    useEffect(() => {
+        workflowService.getWorkflowRequests().then(data => { setRequests(data) });
+    }, []);
 
     const statusToChip = (status) => {
         switch (status) {
-            case '0':
+            case 0:
                 return <Chip label="Pending" color="warning" />;
-            case '1':
+            case 1:
                 return <Chip label="Accepted" color="success" />;
             default:
                 return <Chip label="Denied" color="error" />;

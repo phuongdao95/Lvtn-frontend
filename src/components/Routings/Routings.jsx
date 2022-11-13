@@ -5,9 +5,22 @@ import MyRequests from "../../modules/approve-workflow/view-requests/MyRequests"
 
 import ConfigNghiPhep from "../../modules/approve-workflow/nghi-phep/ConfigNghiPhep";
 import ConfigNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/ConfigNghiThaiSan";
+import ConfigAdvancePayment from "../../modules/approve-workflow/advance-payment/ConfigAdvancePayment";
+import ConfigCheckinout from "../../modules/approve-workflow/check-inout-manual/ConfigCheckinout";
+import ConfigCost from "../../modules/approve-workflow/cost/ConfigCost";
+import ConfigHelpdesk from "../../modules/approve-workflow/helpdesk/ConfigHelpdesk";
+import ConfigOvertime from "../../modules/approve-workflow/overtime/ConfigOvertime";
+import ConfigWFH from "../../modules/approve-workflow/wfh/ConfigWFH";
 
 import UserNghiPhep from "../../modules/approve-workflow/nghi-phep/UserNghiPhep";
 import UserNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/UserNghiThaiSan";
+import UserAdvancePayment from "../../modules/approve-workflow/advance-payment/UserAdvancePayment";
+import UserCheckinout from "../../modules/approve-workflow/check-inout-manual/UserCheckinout";
+import UserCost from "../../modules/approve-workflow/cost/UserCost";
+import UserHelpdesk from "../../modules/approve-workflow/helpdesk/UserHelpdesk";
+import UserOvertime from "../../modules/approve-workflow/overtime/UserOvertime";
+import UserWFH from "../../modules/approve-workflow/wfh/UserWFH";
+import WorkflowConfig from "../../modules/approve-workflow/configs/WorkflowConfig";
 
 import ListUsers from "../../modules/shares/pages/ListUsers/ListUsers";
 import Timekeeping from "../../modules/check-day/pages/Timekeeping";
@@ -47,13 +60,29 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 export default function Routings() {
     return <Routes>
         <Route path="/approve-workflows" element={<WorkFlows />} />
+        <Route exact path="/approve-workflows/configs" element={<WorkflowConfig />} />
         <Route path="/approve-workflows/my-requests" element={<MyRequests />} />
 
-        <Route exact path="/approve-workflows/user-nghi-phep" element={<UserNghiPhep />} />
-        <Route exact path="/approve-workflows/user-nghi-thai-san" element={<UserNghiThaiSan />} />
+        <Route exact path="/approve-workflows/user-nghi-phep/:id" element={<UserNghiPhep />} />
+        <Route exact path="/approve-workflows/:id" element={<UserNghiPhep />} />
 
-        <Route exact path="/approve-workflows/config-nghi-phep" element={<ConfigNghiPhep />} />
-        <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
+
+        <Route exact path="/approve-workflows/user-nghi-thai-san" element={<UserNghiThaiSan />} />
+        <Route exact path="/approve-workflows/user-advance-payment" element={<UserAdvancePayment />} />
+        <Route exact path="/approve-workflows/user-check-in-out" element={<UserCheckinout />} />
+        <Route exact path="/approve-workflows/user-cost" element={<UserCost />} />
+        <Route exact path="/approve-workflows/user-helpdesk" element={<UserHelpdesk />} />
+        <Route exact path="/approve-workflows/user-overtime" element={<UserOvertime />} />
+        <Route exact path="/approve-workflows/user-wfh" element={<UserWFH />} />
+
+        <Route exact path="/approve-workflows/configs/config-nghi-phep" element={<ConfigNghiPhep />} />
+        <Route exact path="/approve-workflows/configs/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
+        <Route exact path="/approve-workflows/configs/config-advance-payment" element={<ConfigAdvancePayment />} />
+        <Route exact path="/approve-workflows/configs/config-check-in-out" element={<ConfigCheckinout />} />
+        <Route exact path="/approve-workflows/configs/config-cost" element={<ConfigCost />} />
+        <Route exact path="/approve-workflows/configs/config-helpdesk" element={<ConfigHelpdesk />} />
+        <Route exact path="/approve-workflows/configs/config-overtime" element={<ConfigOvertime />} />
+        <Route exact path="/approve-workflows/configs/config-wfh" element={<ConfigWFH />} />
 
         <Route path="/check-in-2" element={<Timekeeping />} />
         <Route path="/check-in" element={<CheckIn />} />

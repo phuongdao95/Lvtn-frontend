@@ -123,7 +123,20 @@ const SideBar = (props) => {
             text: "Quản lý phê duyệt",
             icon: <FactCheckIcon style={{ color: textColor }} />,
             onClick: () => { },
-            subItems: []
+            subItems: [
+                {
+                    text: "Tạo mới request",
+                    onClick: () => {
+                        navigate("/approve-workflows")
+                    }
+                },
+                {
+                    text: "Danh sách request đã tạo",
+                    onClick: () => {
+                        navigate("/approve-workflows/my-requests")
+                    }
+                }
+            ]
         },
 
         {
@@ -140,7 +153,7 @@ const SideBar = (props) => {
                 {
                     text: "Danh sách Bảng",
                     onClick: () => {
-                        
+
                     }
                 }
             ]

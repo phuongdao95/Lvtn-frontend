@@ -63,11 +63,11 @@ const NghiThaiSanContent = () => {
     );
 }
 
-const UserNghiThaiSan = () => {
+const UserOvertime = () => {
 
     return (
         <ApproveItemPage content={<NghiThaiSanContent />} />
     );
 }
 
-export default UserNghiThaiSan;
+export default UserOvertime;

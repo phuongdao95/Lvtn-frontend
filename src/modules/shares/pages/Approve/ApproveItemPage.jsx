@@ -42,7 +42,7 @@ const ApproveItemPage = ({ content }) => {
     return (
         <Box sx={{ display: 'flex' }}>
             <Card sx={{ padding: 5, mt: 5, width: '60%', mr: 5 }}>
-                <BreadCrumb status={3} />
+                <BreadCrumb status={1} />
                 {content}
 
                 <Divider variant="middle" sx={{ pt: 4, marginBottom: 4 }} />
