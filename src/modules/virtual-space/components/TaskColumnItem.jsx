@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Avatar, Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { grey, lightBlue } from "@mui/material/colors";
+import { grey, lightBlue, purple } from "@mui/material/colors";
 import TaskDetail from "../pages/TaskDetail";
 
 const TaskColumnItem = ({ item, index, setShouldReload }) => {
@@ -27,7 +27,7 @@ const TaskColumnItem = ({ item, index, setShouldReload }) => {
                                 minWidth: '220px',
                                 background: 'white',
                                 border: '1px solid black',
-                                borderLeft: `6px solid ${lightBlue[500]}`
+                                borderLeft: `6px solid ${item.type == 0 ? lightBlue[500] : purple[500]}`
                             }}
                                 ref={provided.innerRef}
                                 snapshot={snapshot}

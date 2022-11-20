@@ -10,8 +10,8 @@ export default function SearchField(props) {
             size='small'
             id="standard-bare"
             variant="outlined"
-            placeholder='Search something'
-            defaultValue="How can we help"
+            placeholder='Tìm kiếm'
+            defaultValue=""
             InputProps={{
                 endAdornment: (
                     <IconButton>

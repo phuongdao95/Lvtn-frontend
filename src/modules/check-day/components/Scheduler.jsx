@@ -4,11 +4,14 @@ import SchedulerCard from "./SchedulerCard";
 import dayjs from "dayjs";
 import SchedulerDayOfWeekHeader from "./SchedulerDayOfWeekHeader";
 import { grey } from "@mui/material/colors";
+import { useFetchRegistrationListOfUser } from "../../../client/workingShiftService";
+import { getCurrentUserId } from "../../../client/autheticationService";
 
 const generateShownDaysInScheduler = (year, month) => {
     const firstDateOfMonth = dayjs(`${year}-${month}-01`);
     const diffReverseUntilSunday = firstDateOfMonth.day() - 0;
-    const firstDateShowInCalendar = firstDateOfMonth.subtract(diffReverseUntilSunday);
+    console.log({ f: firstDateOfMonth.month() });
+    const firstDateShowInCalendar = firstDateOfMonth.subtract(diffReverseUntilSunday, 'day');
     const daysInMonth = firstDateOfMonth.daysInMonth();
     const lastDateOfMonth = dayjs(`${year}-${month}-${daysInMonth}`);
     const diffUntilSaturday = 6 - lastDateOfMonth.day() - 1;
@@ -19,23 +22,58 @@ const generateShownDaysInScheduler = (year, month) => {
     for (let date = firstDateShowInCalendar;
         date.isBefore(lastDateShownInCalendar, 'day');
         date = date.add(1, 'day')) {
-        result.push(date.date());
+        result.push(date);
     }
 
     return result;
 }
 
 const generateDaysOfWeek = () => {
-    return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Friday', 'Thurday', 'Saturday'];
+    return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+}
+
+const groupEventsByDay = (events, year, month) => {
+    const firstDayOfMonth = dayjs(`${year}-${month}-01`);
+    const daysInMonth = firstDayOfMonth.daysInMonth();
+    const result = Array.from({ length: daysInMonth }, (_, index) => index + 1)
+        .map(() => []);
+
+    for (let event of events) {
+        let dayOfEvent = dayjs(event.workingShiftStartTime).date();
+        result[dayOfEvent - 1].push(event);
+    }
+
+    console.log({ result })
+    return result;
 }
 
 export default function Scheduler({ year, month }) {
+    const [events, setEvents] = React.useState([])
+
+    const {
+        isSuccess,
+        isPending,
+        isError,
+        method: fetchWorkingShifts,
+        data: registrationResponse
+    } = useFetchRegistrationListOfUser();
+
+    React.useEffect(() => {
+        fetchWorkingShifts(getCurrentUserId(), `${(month % 12) + 1}/${year}`, 'month');
+    }, [month, year])
+
+    React.useEffect(() => {
+        if (isSuccess) {
+            const eventsByDay = groupEventsByDay(registrationResponse.data);
+            setEvents(eventsByDay)
+        }
+    }, [isSuccess])
+
     const shownDays = React.useMemo(
-        () => generateShownDaysInScheduler(year, month), [year, month]);
+        () => generateShownDaysInScheduler(year, (month % 12) + 1), [year, month]);
 
     const daysOfWeek = React.useMemo(
         () => generateDaysOfWeek(), []);
-    console.log({ shownDays })
 
     return <Box
         sx={{
@@ -48,18 +86,17 @@ export default function Scheduler({ year, month }) {
         }}
     >
         {daysOfWeek.map((day, index) =>
-            <SchedulerDayOfWeekHeader dayOfWeek={day} />)}
+            <SchedulerDayOfWeekHeader key={index} dayOfWeek={day} />)}
 
-        {shownDays.map((day, index) => (
-            <SchedulerCard
+        {shownDays.map((day, index) => {
+            return <SchedulerCard
                 key={index}
-                day={day}
-                events={[
-                    { title: "Hello 8:30 - 9:30  " },
-                    { title: "World at 9:30" },
-                    { title: "World at 9:30" },
-                ]}
+                day={day.date()}
+                month={day.month()}
+                year={day.year()}
+                events={day.month() !== month ? [] : events[day.date() - 1]}
             />
-        ))}
+        }
+        )}
     </Box>
 }

@@ -10,7 +10,6 @@ import UserNghiPhep from "../../modules/approve-workflow/nghi-phep/UserNghiPhep"
 import UserNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/UserNghiThaiSan";
 
 import ListUsers from "../../modules/shares/pages/ListUsers/ListUsers";
-import Timekeeping from "../../modules/check-day/pages/Timekeeping";
 import Registe from "../../modules/check-day/pages/Registe";
 import CheckIn from "../../modules/check-day/pages/CheckIn";
 import Calendar from "../../modules/check-day/pages/Calendar";
@@ -44,10 +43,14 @@ import PayslipList from "../../modules/salary-management/pages/PayRollList/Paysl
 import PayslipDetail from "../../modules/salary-management/pages/PayRollList/PayslipDetail";
 import MyPayslipList from "../../modules/salary-management/pages/MyPayslipList/MyPayslipList";
 import MyPayslipDetail from "../../modules/salary-management/pages/MyPayslipList/MyPayslipDetail";
-import ViewCheckDay from "../../modules/check-day/pages/TimekeepingListSchedule";
 import WorkingShiftRegistrationList from "../../modules/check-day/pages/WorkingShiftRegistrationList";
 import TimekeepingSchedule from "../../modules/check-day/pages/TimekeepingListSchedule";
 import RegisteredWorkingShiftList from "../../modules/check-day/pages/RegisteredWorkingShiftList"
+import TaskBoardReport from "../../modules/virtual-space/pages/TaskBoardReport";
+import SalaryReport from "../../modules/salary-management/pages/SalaryReport";
+import WorkingShiftDayConfigList from "../../modules/check-day/pages/WorkingShiftDayConfigList";
+import Dashboard from "../../modules/shares/pages/Dashboard/Dashboard";
+
 
 export default function Routings() {
     return <Routes>
@@ -66,10 +69,14 @@ export default function Routings() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/select-type-work-shift" element={<SelectTypeWorkShift />} />
 
+
+        {/* Virtual space management system */}
         <Route path="/taskboard" element={<BoardList />} />
         <Route path="/taskboard/:id" element={<BoardDetail />} />
         <Route path="/taskboard/:id/label" element={<LabelList />} />
         <Route path="/taskboard/:id/column" element={<ColumnList />} />
+        <Route path="/taskboard-report/" element={<TaskBoardReport />} />
+
 
         <Route path="/check-day-config/type-work-day" element={<TypeWorkDayConfig />} />
         <Route path="/check-day-config/rules-work-day" element={<RulesWorkDayConfig />} />
@@ -92,6 +99,7 @@ export default function Routings() {
             // </ProtectedRoute>
             <RoleList />
         } />
+
         <Route path="/group" element={<GroupList />} />
         <Route path="/team" element={<TeamList />} />
         <Route path="/permission" element={<PermissionList />} />
@@ -103,6 +111,7 @@ export default function Routings() {
         <Route path="workingshift-registration" element={<WorkingShiftRegistrationList />} />
         <Route path="workingshift" element={<WorkingShiftList />} />
         <Route path="registered-workingshift" element={<RegisteredWorkingShiftList />} />
+        <Route path="workingshiftdayconfig" element={<WorkingShiftDayConfigList />} />
 
         {/* Salary Management Module */}
         <Route path="/salary" element={<SalaryList />} />
@@ -115,15 +124,11 @@ export default function Routings() {
         <Route path="/my-dab" element={<MyDABs />} />
         <Route path="/my-payslips" element={<MyPayslipList />} />
         <Route path="/my-payslips/:payslipId" element={<MyPayslipDetail />} />
-
+        <Route path="/salary-report/" element={<SalaryReport />} />
+        <Route path="/dashboard/" element={<Dashboard />} />
 
         {/** Shared module */}
         <Route path="/my-profile" element={<UserProfile />} />
 
-        <Route path="/scheduler"
-            element={
-                <ViewCheckDay />
-            }
-        />
     </Routes>
 }

@@ -29,7 +29,7 @@ export const useFetchWorkingShiftsOfUser =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
         const fetchByUser = async (userId) => {
             try {
-                const response = await api.get(`${pathPrefix}/${userId}`);
+                const response = await api.get(`api/user/${userId}/workingshift`);
                 if (response.data) {
                     setData(response.data);
                 }
@@ -43,7 +43,7 @@ export const useFetchWorkingShiftsOfUser =
             }
         }
         return fetchByUser;
-    })('workingshift/user');
+    })();
 
 export const useUpdateSelected =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
@@ -65,3 +65,29 @@ export const useUpdateSelected =
         }
         return updateSelected;
     })('workingshift/user');
+
+export const useFetchTimekeepingsOfUser =
+    getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
+        const fetch = async (userId, query, queryType) => {
+            try {
+                const params = {
+                    query: encodeURI(query),
+                    queryType
+                };
+
+                const response = await api.get(`/api/user/${userId}/workingshifttimekeeping`,
+                    { params });
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+            } catch (err) {
+                console.error(err);
+                setIsSuccess(false);
+                setIsError(true);
+            } finally {
+                setIsPending(false);
+            }
+        }
+        return fetch;
+    })();
