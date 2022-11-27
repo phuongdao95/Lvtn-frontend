@@ -21,10 +21,10 @@ import {
 } from '../../../client/taskboardService';
 import { useParams } from 'react-router';
 import dayjs from 'dayjs';
-import { useCreateTask } from '../../../client/taskService';
+import { useCreateSubtaskOfTask, useCreateTask } from '../../../client/taskService';
 import Select from '../../../components/DialogForm/Select';
 
-export default function TaskCreate({ closeCb = () => { }, reload }) {
+export default function TaskSubCreate({ taskId, closeCb = () => { }, reload }) {
     const { id: boardId } = useParams();
     const [description, setDescription] = React.useState(initialValue);
     const [labelOptions, setLabelOptions] = React.useState([]);
@@ -59,7 +59,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
         isSuccess,
         isError,
         method: createTask,
-    } = useCreateTask();
+    } = useCreateSubtaskOfTask();
 
     const formik = useFormik({
         initialValues: {
@@ -67,7 +67,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
             column: { id: null, name: "" },
             inCharge: { id: null, name: "" },
             reportTo: { id: null, name: "" },
-            type: "task", 
+            type: "task",
             labels: [],
             fromDate: dayjs(),
             toDate: dayjs().add(10),
@@ -79,12 +79,12 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
             const reportToId = values.reportTo.id;
             const columnId = values.column.id;
 
-            createTask({
+            createTask(taskId, {
                 ...values,
                 taskLabelIds: labelIds,
                 inChargeId,
                 reportToId,
-                description: JSON.stringify(description), 
+                description: JSON.stringify(description),
                 columnId,
             })
         }
@@ -137,7 +137,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                 }}>
                     <DialogTitle >
                         <Typography variant="h5" color="white" component="span">
-                            {"Tạo task mới"}
+                            {"Tạo Subtask mới"}
                         </Typography>
                     </DialogTitle>
                     <IconButton onClick={() => closeCb()}>
@@ -224,10 +224,6 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                                                     label: "Normal Task",
                                                     value: "task",
                                                 },
-                                                {
-                                                    label: "Epic Task",
-                                                    value: "epic"
-                                                }
                                             ]}
                                         />
                                     </Fragment>

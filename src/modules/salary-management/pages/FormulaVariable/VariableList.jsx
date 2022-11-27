@@ -5,6 +5,7 @@ import SearchButton from "../../../../components/DataGrid/SearchButton";
 import SearchField from "../../../../components/DataGrid/SearchField";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
 import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
+import Select from "../../../../components/DataGrid/Select";
 import EditVariable from "./EditVariable";
 
 import { useDeleteVariable, useFetchListVariable } from "../../../../client/variableService";
@@ -69,8 +70,8 @@ const initialDialogState = {
 }
 
 export default function VariableList() {
+    const [variableKind, setVariableKind] = React.useState("Nhóm lương")
     const [variableId, setVariableId] = React.useState(null);
-    const [variables, setVariables] = React.useState([]);
     const [isVariableEditOpen, setIsVariableEditOpen] = React.useState(false);
     const [isVariableDeleteOpen, setIsVariableDeleteOpen] = React.useState(false);
     const [isInfoDialogOpen, setIsInfoDialogOpen] = React.useState(false);
@@ -138,6 +139,29 @@ export default function VariableList() {
             gap: 2,
             mb: 2,
         }}>
+            <Select
+                value={variableKind}
+                options={
+                    [
+                        {
+                            label: "Nhóm lương",
+                            handler: () => setVariableKind("Nhóm lương")
+                        },
+                        {
+                            label: "Tăng giảm lương",
+                            handler: () => setVariableKind("Tăng giảm lương")
+                        },
+                        {
+                            label: "Chấm công",
+                            handler: () => setVariableKind("Chấm công")
+                        },
+                        {
+                            label: "KPI",
+                            handler: () => setVariableKind("KPI")
+                        }
+                    ]
+                }
+            />
             <SearchField />
             <SearchButton />
         </Box>

@@ -240,7 +240,59 @@ export const useFetchTaskHistoriesOfTask = getPendingErrorSuccessApiPatternFunct
 
                 if (response.data) {
                     setData(response.data);
-                }   
+                }
+                setIsSuccess(true);
+            } catch (err) {
+                setIsError(true);
+                console.error(err);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        return fetchList;
+    }
+)();
+
+export const useFetchSubtasksOfTask = getPendingErrorSuccessApiPatternFunction(
+    ({ setIsError, setIsPending, setIsSuccess, setData }) => {
+        const fetchList = async (taskId) => {
+            setIsError(false);
+            setIsSuccess(false);
+            setIsPending(true);
+
+            try {
+                const response = await api.get(`/api/task/${taskId}/subtasks`);
+
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+            } catch (err) {
+                setIsError(true);
+                console.error(err);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        return fetchList;
+    }
+)();
+
+export const useCreateSubtaskOfTask = getPendingErrorSuccessApiPatternFunction(
+    ({ setIsError, setIsPending, setIsSuccess, setData }) => {
+        const fetchList = async (taskId, data) => {
+            setIsError(false);
+            setIsSuccess(false);
+            setIsPending(true);
+
+            try {
+                const response = await api.post(`/api/task/${taskId}/subtasks`, data);
+
+                if (response.data) {
+                    setData(response.data);
+                }
                 setIsSuccess(true);
             } catch (err) {
                 setIsError(true);

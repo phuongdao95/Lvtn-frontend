@@ -11,6 +11,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import { grey, lightBlue } from '@mui/material/colors';
 import { AddAlarm, AttachMoney, Settings } from '@mui/icons-material';
 import NavigationItem from './NavigationItem';
@@ -39,8 +40,21 @@ const SideBar = (props) => {
 
     const routes = [
         {
+            text: "Dashboard",
+            onClick: (e) => {
+                e.stopPropagation();
+                navigate("/dashboard")
+            },
+            icon: <DashboardIcon style={{ color: textColor }} />,
+            subItems: []
+        },
+
+        {
             text: "Thông tin cá nhân",
-            onClick: () => { },
+            onClick: (e) => {
+                e.stopPropagation();
+                navigate("/user-profile");
+            },
             icon: <PersonIcon style={{ color: textColor }} />,
             subItems: []
         },
@@ -132,6 +146,12 @@ const SideBar = (props) => {
                         navigate("/salary-group")
                     }
                 },
+                {
+                    text: "Báo cáo",
+                    onClick: () => {
+                        navigate("/salary-report")
+                    }
+                }
             ]
         },
 
@@ -154,9 +174,9 @@ const SideBar = (props) => {
                     }
                 },
                 {
-                    text: "Danh sách Bảng",
+                    text: "Báo cáo",
                     onClick: () => {
-
+                        navigate("/taskboard-report")
                     }
                 }
             ]
@@ -180,15 +200,33 @@ const SideBar = (props) => {
                     }
                 },
                 {
-                    text: "Lịch biểu",
+                    text: "Lịch chấm công",
                     onClick: () => {
-                        navigate("/calendar")
+                        navigate("/timekeeping-schedule")
                     }
                 },
                 {
-                    text: "Chọn ca làm",
+                    text: "Danh sách ca làm",
                     onClick: () => {
-                        navigate("/select-type-work-shift")
+                        navigate("/workingshift")
+                    }
+                },
+                {
+                    text: "Danh sách ngày nghỉ",
+                    onClick: () => {
+                        navigate("/workingshiftdayconfig");
+                    }
+                },
+                {
+                    text: "Đăng ký ca làm",
+                    onClick: () => {
+                        navigate("/workingshift-registration")
+                    }
+                },
+                {
+                    text: "Danh sách đã đăng ký",
+                    onClick: () => {
+                        navigate("/registered-workingshift")
                     }
                 },
             ]
@@ -199,18 +237,6 @@ const SideBar = (props) => {
             icon: <Settings style={{ color: textColor }} />,
             onClick: () => { },
             subItems: [
-                {
-                    text: "Cài đặt chấm công",
-                    onClick: () => {
-                        navigate("/check-day-config/type-work-shift-day")
-                    }
-                },
-                {
-                    text: "Cài đặt môi trường ảo",
-                    onClick: () => {
-                        navigate("/virtual-space-config/table")
-                    }
-                },
             ]
         }
 
