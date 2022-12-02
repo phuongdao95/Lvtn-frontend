@@ -7,7 +7,7 @@ import OneColumnBox from "../../../../components/DialogForm/OneColumnBox"
 import TwoColumnBox from "../../../../components/DialogForm/TwoColumnBox";
 import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
-import Select from "../../../../components/DataGrid/Select";
+import Select from "../../../../components/DialogForm/Select";
 
 import { useUpdateFormula, useFetchOneFormula } from "../../../../client/formulaService";
 import { useFormik } from "formik";

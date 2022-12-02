@@ -318,7 +318,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Người được gán"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                {detail.inChargeName ?? "Unassigned"}
+                                                {detail.inChargeName ?? "Chưa được gán"}
                                             </Typography>
                                         </Fragment>
                                     }
@@ -326,7 +326,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Người báo cáo"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                {detail.reportToName ?? "Unassigned"}
+                                                {detail.reportToName ?? "Chưa được gán"}
                                             </Typography>
                                         </Fragment>
                                     }

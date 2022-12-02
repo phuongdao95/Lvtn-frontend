@@ -65,17 +65,18 @@ export default function Login() {
                         boxShadow: '0 0 5px 4px rgba(0,0,0,0.025)'
                     }}
                 >
-                    <Typography variant='h4' fontWeight={"bold"} color={grey[700]} letterSpacing={1.2}>Welcome to EMS</Typography>
+                    <Typography variant='h4' mb={2} fontWeight={"bold"} color={grey[700]} letterSpacing={1.2}>
+                        Hệ thống quản lý <br /> nhân viên
+                    </Typography>
 
-                    <Typography component="h1" variant="h6" mb={4}>
-                        Sign in
+                    <Typography component="h1" variant="h6" mb={.25}>
+                        Đăng nhập
                     </Typography>
 
                     <Box component="form"
                         onSubmit={formik.handleSubmit}
                         noValidate
                         sx={{
-                            mt: 1,
                             display: 'flex',
                             flexDirection: "column",
                             gap: 2.
@@ -84,7 +85,7 @@ export default function Login() {
                         <TextField
                             id="username"
                             name="username"
-                            label="Username"
+                            label="Tài khoản"
                             value={formik.values.username}
                             onChange={formik.handleChange}
                             error={formik.touched.username && Boolean(formik.errors.username)}
@@ -94,7 +95,7 @@ export default function Login() {
                         <TextField
                             id="password"
                             name="password"
-                            label="Password"
+                            label="Mật khẩu"
                             type="password"
                             value={formik.values.password}
                             onChange={formik.handleChange}
@@ -109,16 +110,9 @@ export default function Login() {
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            Sign In
+                            Đăng nhập
                         </Button>
 
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                        </Grid>
                     </Box>
                 </Box>
             </Container>

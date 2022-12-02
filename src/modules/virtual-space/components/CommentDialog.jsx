@@ -35,7 +35,7 @@ export default function CommentDialog({ taskId, reload, closeDialogCb }) {
         }
     })
 
-    return <Dialog title={"Write a comment"}
+    return <Dialog title={"Thêm bình luận"}
         primaryAction={{
             handler: () => {
                 formik.submitForm();

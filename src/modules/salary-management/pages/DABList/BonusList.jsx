@@ -44,10 +44,10 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
         renderCell: ({ id }) => {
             return <Box sx={{ display: "flex", gap: 1 }}>
                 <ActionButton onClick={() => onEditBtnClick(id)}>
-                    Edit
+                    Sửa
                 </ActionButton>
                 <ActionButton onClick={() => onDeleteBtnClick(id)}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </Box>
         }
@@ -134,7 +134,7 @@ export default function DeductionList({ shouldReload }) {
 
         {isDeleteOpen &&
             <ConfirmDialog
-                title={"Confirm"}
+                title={"Xác nhận"}
                 message="Bạn có muốn xóa chức vụ này"
                 cancelAction={{
                     text: "Cancel",

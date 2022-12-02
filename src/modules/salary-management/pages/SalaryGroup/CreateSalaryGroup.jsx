@@ -102,7 +102,7 @@ export default function CreateSalaryGroup({ reloadList, closeDialogCb }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Tạo mới salary config"
+        title="Tạo mới nhóm lương"
     >
         <DialogForm>
             <LoadingOverlay isLoading={isFetchGroupOptionsPending || isPending} />
@@ -110,7 +110,7 @@ export default function CreateSalaryGroup({ reloadList, closeDialogCb }) {
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Tên salary config"} />
+                            <Label text={"Tên nhóm lương"} />
                             <TextField
                                 id="name"
                                 name="name"

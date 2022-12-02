@@ -1,11 +1,10 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import isHotkey from "is-hotkey";
 import { Editable, withReact, useSlate, Slate } from "slate-react";
 import { Editor, Transforms, createEditor } from "slate";
 import { withHistory } from "slate-history";
-
-
-import { Button, Icon, Toolbar } from "./RTEComponents";
+import { FormatBold, FormatItalic, FormatUnderlined, Code, FormatListNumbered, FormatListBulleted, FormatQuote } from "@mui/icons-material";
+import { Button } from "./RTEComponents";
 import { Box } from "@mui/system";
 
 const HOTKEYS = {
@@ -31,8 +30,8 @@ const RichTextEditor = ({ value, onChange }) => {
     return (
         <Box sx={{ border: '1px solid rgba(0,0,0,0.5)', position: 'relative', maxWidth: 800 }}>
             <Slate editor={editor} value={value} onChange={onChange}>
-                <Box sx={{ padding: 1, position: 'sticky', top: 0, zIndex: 100, background: 'white' }}>
-                    <Toolbar>
+                <Box sx={{ padding: 0.3, position: 'sticky', top: 0, zIndex: 100, background: 'white' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.75 }}>
                         <MarkButton format="bold" icon="format_bold" />
                         <MarkButton format="italic" icon="format_italic" />
                         <MarkButton format="underline" icon="format_underlined" />
@@ -42,7 +41,7 @@ const RichTextEditor = ({ value, onChange }) => {
                         <BlockButton format="block-quote" icon="format_quote" />
                         <BlockButton format="numbered-list" icon="format_list_numbered" />
                         <BlockButton format="bulleted-list" icon="format_list_bulleted" />
-                    </Toolbar>
+                    </Box>
                 </Box>
 
                 <Box sx={{ borderTop: '1px solid rgba(0,0,0,0.5)', padding: 1, maxHeight: 400, overflow: 'auto' }}>
@@ -159,13 +158,14 @@ const BlockButton = ({ format, icon }) => {
                 toggleBlock(editor, format);
             }}
         >
-            <Icon>{icon}</Icon>
+            {getIconFromCode(icon) ?? icon}
         </Button>
     );
 };
 
 const MarkButton = ({ format, icon }) => {
     const editor = useSlate();
+
     return (
         <Button
             active={isMarkActive(editor, format)}
@@ -174,11 +174,46 @@ const MarkButton = ({ format, icon }) => {
                 toggleMark(editor, format);
             }}
         >
-            <Icon>{icon}</Icon>
+            {getIconFromCode(icon) ?? icon}
         </Button>
     );
 };
 
+
+const getIconFromCode = (code) => {
+    switch (code) {
+        case 'format_bold':
+            return <FormatBold fontSize="small" />
+        case 'format_italic':
+            return <FormatItalic fontSize="small" />;
+        case 'format_underlined':
+            return <FormatUnderlined fontSize="small" />;
+        case 'code':
+            return <Code fontSize="small" />;
+        case 'looks_one':
+            return <span style={{
+                display: 'inline-block',
+                margin: '0 3px',
+                verticalAlign: 'top',
+                lineHeight: '22px'
+            }}>h1</span>;
+        case 'looks_two':
+            return <span
+
+                style={{
+                    display: 'inline-block',
+                    margin: '0 3px',
+                    verticalAlign: 'top',
+                    lineHeight: '22px'
+                }}>h2</span>;
+        case 'format_list_numbered':
+            return <FormatListNumbered fontSize="small" />;
+        case 'format_list_bulleted':
+            return <FormatListBulleted fontSize="small" />;
+        case 'format_quote':
+            return <FormatQuote fontSize="small" />
+    }
+}
 
 
 export default RichTextEditor;

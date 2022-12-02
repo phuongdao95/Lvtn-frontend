@@ -38,7 +38,7 @@ const TaskColumnItem = ({ item, index, setShouldReload }) => {
                                     <Typography sx={{ fontWeight: 'bold', fontSize: '15px' }}>
                                         {item.id}
                                     </Typography>
-                                    <Typography sx={{ fontWeight: 500, fontSize: '15px', color: grey[700] }}>
+                                    <Typography sx={{ fontWeight: 500, fontSize: '13px', color: grey[700] }}>
                                         {item.name}
                                     </Typography>
                                 </Box>
@@ -46,18 +46,18 @@ const TaskColumnItem = ({ item, index, setShouldReload }) => {
                                 <Box sx={{ marginBottom: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: .7 }}>
                                         <Avatar sx={{ width: 28, height: 28 }} />
-                                        <Typography sx={{ marginTop: .4 }}>
+                                        <Typography sx={{ fontSize: '13px', marginTop: .4 }}>
                                             {item.inChargeName}
                                         </Typography>
                                     </Box>
-                                    <Typography sx={{ fontWeight: 'bold' }}>
+                                    <Typography sx={{ fontSize: '13px', fontWeight: 'bold' }}>
                                         {item.point}
                                     </Typography>
                                 </Box>
 
 
                                 <Button size="small" onClick={() => setIsTaskDetailOpen(true)} >
-                                    View Detail
+                                    Xem chi tiết
                                 </Button>
                             </Box>
                         </Fragment>

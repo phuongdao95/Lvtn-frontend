@@ -38,15 +38,15 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
     },
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         width: 200,
         renderCell: ({ id }) => {
             return <Box sx={{ display: "flex", gap: 1 }}>
                 <ActionButton onClick={() => onEditBtnClick(id)}>
-                    Edit
+                    Sửa
                 </ActionButton>
                 <ActionButton onClick={() => onDeleteBtnClick(id)}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </Box>
         }
