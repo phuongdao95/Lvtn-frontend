@@ -89,16 +89,14 @@ const Info = ({takePicture}) => {
             let lst = [];
             let lstCheck = [];
             response.data.map((item, index) => {
-                console.log({index, item});
-
-                if (dayjs().get('day') === dayjs(item.startTime).get('day') 
-                    && item.isCheck) {
+                if (dayjs().get('day') === dayjs(item.workingShiftEvent.startTime).get('day') 
+                    ) {
                         let data = {
                             id: item.id,
-                            name: item.name,
-                            startTime: dayjs(item.startTime).format('h:mm a'),
-                            endTime: dayjs(item.endTime).format('h:mm a'),
-                            showName: item.name + ' ' + dayjs(item.startTime).format('h:mm a') + ' ' + dayjs(item.endTime).format('h:mm a'),
+                            name: item.workingShiftEvent.name,
+                            startTime: dayjs(item.workingShiftEvent.startTime).format('h:mm a'),
+                            endTime: dayjs(item.workingShiftEvent.endTime).format('h:mm a'),
+                            showName: item.workingShiftEvent.name + ' ' + dayjs(item.workingShiftEvent.startTime).format('h:mm a') + ' ' + dayjs(item.workingShiftEvent.endTime).format('h:mm a'),
                         };
                         lst.push(data);
                 }
