@@ -89,6 +89,8 @@ const Info = ({takePicture}) => {
             let lst = [];
             let lstCheck = [];
             response.data.map((item, index) => {
+                console.log({index, item});
+
                 if (dayjs().get('day') === dayjs(item.startTime).get('day') 
                     && item.isCheck) {
                         let data = {

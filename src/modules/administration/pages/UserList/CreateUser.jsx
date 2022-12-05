@@ -12,12 +12,11 @@ import DatePicker from "../../../../components/DialogForm/DatePicker";
 import dayjs from "dayjs";
 
 import { useFormik } from "formik";
-import { useCreateUser, useFetchOneUser } from "../../../../client/userService";
+import { useCreateUser } from "../../../../client/userService";
 import { useFetchListRole } from "../../../../client/roleService";
 import { useFetchListTeam } from "../../../../client/teamService";
 import * as yup from "yup";
 import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
-import { getCurrentUserId } from "../../../../client/autheticationService";
 
 const getOptionLabel = (option) => {
     return option.name;
@@ -64,24 +63,6 @@ export default function CreateUser({ closeDialogCb, reloadList }) {
         data: fetchedRoles,
         method: fetchRoles
     } = useFetchListRole();
-
-    const {
-        isPending: isFetchPending,
-        isSuccess: isFetchSuccess,
-        isError: isFetchError,
-        method: fetchUser,
-        data: currentUser,
-    } = useFetchOneUser();
-
-    React.useEffect(() => {
-        fetchUser(getCurrentUserId());
-    }, [])
-
-    React.useEffect(() => {
-        if (isSuccess) { 
-            console.log(currentUser)
-        }
-    }, [isSuccess])
 
     const formik = useFormik({
         initialValues: {

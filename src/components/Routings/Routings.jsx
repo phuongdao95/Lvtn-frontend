@@ -63,7 +63,6 @@ export default function Routings() {
         <Route exact path="/approve-workflows/config-nghi-phep" element={<ConfigNghiPhep />} />
         <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
 
-        <Route path="/check-in-2" element={<CheckIn />} />
         {/* <Route path="/check-out" element={<Timekeeping />} /> */}
         <Route path="/registe-image" element={<Registe />} />
         <Route path="/calendar" element={<Calendar />} />
@@ -106,11 +105,12 @@ export default function Routings() {
 
         {/* Timekeeping module */}
         <Route path="/timekeeping-schedule" element={<TimekeepingSchedule />} />
-        <Route path="/timekeeping-check" element={<CheckIn />} />
+        {/* <Route path="/timekeeping-check" element={<CheckIn />} /> */}
         <Route path="/workingshift-registration" element={<WorkingShiftRegistrationList />} />
         <Route path="/workingshift" element={<WorkingShiftList />} />
         <Route path="/registered-workingshift" element={<RegisteredWorkingShiftList />} />
         <Route path="/workingshiftdayconfig" element={<WorkingShiftDayConfigList />} />
+        <Route path="/check-in" element={<CheckIn />} />
 
         {/* Salary Management Module */}
         <Route path="/salary" element={<SalaryList />} />
