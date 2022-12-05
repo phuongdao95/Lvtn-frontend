@@ -49,21 +49,7 @@ const welcome = name => {
         {name}
     </Box>
 )};
-// data sample 
-const listType = [
-    {
-        "Id" : 1,
-        "Name" : "Ngày bình thường",
-        "StartTime" : "8:00",
-        "EndTime" : "17:00", 
-    },
-    {
-        "Id" : 2,
-        "Name" : "OT",
-        "StartTime" : "19:00",
-        "EndTime" : "20:00", 
-    },
-]
+
 const Info = ({takePicture}) => {
     const currTime = new Date();
     const format = formatDate(currTime);
@@ -133,17 +119,10 @@ const Info = ({takePicture}) => {
         isFetchListSuccess = false;
         fetchListTimekeeping(window.localStorage.getItem('user_id'), dayjs().format('YYYY-MM-DD'), parseInt(event.target.value));
     };
-    // useEffect(() => {
-    //     if (isFetchSuccess) {
-    //         fetchListTimekeeping(window.localStorage.getItem('user_id'), dayjs().format('YYYY-MM-DD'), value);
-    //     }
-    // }, [isFetchSuccess])
     useEffect(() => {
-        if (fetchListResponse.data) {
-            console.log('Fetch list ', fetchListResponse);
+        if (fetchListResponse?.data) {
             const currentDate = dayjs().format('YYYY-MM-DD');
             let data = fetchListResponse.data;
-            console.log(currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD'));
             if (data.length > 0 && currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD')) {
                 let form = data[0];
                 form = data[0];
@@ -166,7 +145,7 @@ const Info = ({takePicture}) => {
                 setFormWorkShiftTimekeeping({...form});
             }
         }
-    }, [fetchListResponse.data])
+    }, [isFetchListSuccess])
 
     const groupButton = () => {
         return (

@@ -44,6 +44,8 @@ export default function DataGridLayout({
             </Box>
 
         </Box>
+
+        {dropdownFilterSection}
         <Box>
             {datagridSection}
         </Box>

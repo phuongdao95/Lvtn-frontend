@@ -199,15 +199,27 @@ const SideBar = (props) => {
                     }
                 },
                 {
-                    text: "Lịch biểu",
+                    text: "Lịch chấm công",
                     onClick: () => {
-                        navigate("/calendar")
+                        navigate("/timekeeping-schedule")
                     }
                 },
                 {
-                    text: "Chọn ca làm",
+                    text: "Danh sách ca làm",
                     onClick: () => {
-                        navigate("/select-type-work-shift")
+                        navigate("/workingshift")
+                    }
+                },
+                {
+                    text: "Đăng ký ca làm",
+                    onClick: () => {
+                        navigate("/workingshift-registration")
+                    }
+                },
+                {
+                    text: "Danh sách đã đăng ký",
+                    onClick: () => {
+                        navigate("/registered-workingshift")
                     }
                 },
             ]
@@ -218,18 +230,6 @@ const SideBar = (props) => {
             icon: <Settings style={{ color: textColor }} />,
             onClick: () => { },
             subItems: [
-                {
-                    text: "Cài đặt chấm công",
-                    onClick: () => {
-                        navigate("/check-day-config/type-work-shift-day")
-                    }
-                },
-                {
-                    text: "Cài đặt môi trường ảo",
-                    onClick: () => {
-                        navigate("/virtual-space-config/table")
-                    }
-                },
             ]
         }
 
