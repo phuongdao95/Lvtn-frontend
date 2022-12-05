@@ -36,7 +36,7 @@ const generateMonth = () => {
 }
 
 export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
-    const [currentMonth, setCurrentMonth] = React.useState(0);
+    const [currentMonth, setCurrentMonth] = React.useState(generateMonth()[0]);
     const [groupOptions, setGroupOptions] = React.useState([]);
     const [formulaOptions, setFormulaOptions] = React.useState([]);
     const [weekDayConfigs, setWeekDayConfigs] = React.useState([true, true, true, true, true, false, false]);
@@ -68,10 +68,6 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
         initialValues: {
             name: "",
             description: "",
-            type: "overtime",
-            fromMonth: 1,
-            toMonth: 1,
-            year: 2022,
             group: null,
             formulaName: null,
             startTime: dayjs(),
@@ -83,7 +79,9 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
             createDAB({
                 ...values,
                 groupId: values.group?.id,
-                formulaName: values.formulaName?.id
+                formulaName: values.formulaName?.id,
+                weekDayConfigs,
+                month: currentMonth,
             })
         }
     });
@@ -143,19 +141,6 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
 
                     secondSlot={
                         <Fragment>
-                            <Label text={"Loại"} />
-                            <Select
-                                id="type"
-                                name="type"
-                                value={formik.values.type}
-                                onChange={formik.handleChange}
-                                menu={[
-                                    {
-                                        label: "Fixed Shift",
-                                        value: "basic",
-                                    },
-                                ]}
-                            />
                         </Fragment>
                     }
                 />

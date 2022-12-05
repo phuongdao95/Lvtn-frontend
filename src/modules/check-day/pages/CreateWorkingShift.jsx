@@ -11,7 +11,7 @@ import AutoComplete from "../../../components/DialogForm/AutoComplete";
 import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 import TimePicker from "../../../components/DialogForm/TimePicker";
 import DatePicker from "../../../components/DialogForm/DatePicker";
-import { useCreateDAB } from "../../../client/dabService";
+import { useCreateWorkingShiftOvertime } from "../../../client/workingShiftService";
 import { useFetchListFormula } from "../../../client/formulaService";
 import { useFormik } from "formik";
 import { useFetchListGroup } from "../../../client/groupService";
@@ -34,8 +34,8 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
         isSuccess: isUpdateSuccess,
         isPending: isUpdatePending,
         isError: isUpdateError,
-        method: createDAB,
-    } = useCreateDAB();
+        method: createWorkingShift,
+    } = useCreateWorkingShiftOvertime();
 
     const {
         isSuccess: isFetchListFormulaSuccess,
@@ -49,20 +49,20 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
         initialValues: {
             name: "",
             description: "",
-            type: "",
-            fromMonth: 1,
-            toMonth: 1,
-            year: 2022,
-            group: null,
-            formulaName: null,
+            date: dayjs(),
+            startTime: dayjs(),
+            endTime: dayjs(),
             registrationStartDate: dayjs(),
             registrationEndDate: dayjs(),
+            description: "",
+            formulaName: null,
+            group: null
         },
         onSubmit: (values) => {
-            createDAB({
+            createWorkingShift({
                 ...values,
-                groupId: values.group?.id,
-                formulaName: values.formulaName?.id
+                formulaName: values.formulaName.id,
+                groupId: values.group.id,
             })
         }
     });
@@ -122,20 +122,6 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
 
                     secondSlot={
                         <Fragment>
-                            <Label text={"Loại"} />
-                            <Select
-                                id="type"
-                                name="type"
-                                value={formik.values.type}
-                                onChange={formik.handleChange}
-                                menu={[
-
-                                    {
-                                        label: "Overtime Shift",
-                                        value: "Allowance",
-                                    },
-                                ]}
-                            />
                         </Fragment>
                     }
                 />
@@ -144,7 +130,12 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
                     firstSlot={<Fragment>
                         <Label text={"Ngày"} />
                         <DatePicker
-
+                            id="date"
+                            name="date"
+                            value={formik.values.date}
+                            onChange={(value) => formik.setFieldValue("date", value)}
+                            error={formik.touched.date && Boolean(formik.errors.date)}
+                            helperText={formik.touched.date && formik.errors.date}
                         />
                     </Fragment>}
 
@@ -235,7 +226,12 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
                     slot={
                         <Fragment>
                             <Label text={"Mô tả"} />
-                            <TextField />
+                            <TextField
+                                id="description"
+                                name="description"
+                                value={formik.values.description}
+                                onChange={formik.handleChange}
+                            />
                         </Fragment>
                     }
                 />

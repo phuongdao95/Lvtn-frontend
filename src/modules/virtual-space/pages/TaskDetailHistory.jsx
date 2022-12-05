@@ -1,10 +1,9 @@
 import React, { Fragment } from "react";
 
-import { Typography, Box } from "@mui/material";
 import DataGrid from "../../../components/DataGrid";
-import TaskDetailFileCreate from "./TaskDetailFileCreate";
+import { Typography, Box } from "@mui/material";
 import { useFetchTaskHistoriesOfTask } from "../../../client/taskService";
-
+import dayjs from "dayjs";
 
 const getColumnConfig = () => [
     {
@@ -48,7 +47,10 @@ export default function TaskDetailHistory({ taskId }) {
             </Box>
             <Box sx={{ padding: 2 }}>
                 <DataGrid
-                    rows={fetchedTaskHistories?.data ?? []}
+                    rows={fetchedTaskHistories?.data?.map((row) => ({
+                        ...row,
+                        dateTime: dayjs(row.dateTime).format("DD/MM/YYYY HH:mm")
+                    })) ?? []}
                     columns={getColumnConfig()}
                 />
             </Box>

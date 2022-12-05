@@ -121,7 +121,7 @@ export default function EditSalaryGroup({ id, closeDialogCb }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Chỉnh sửa salary config"
+        title="Chỉnh sửa nhóm lương"
     >
         <LoadingOverlay isLoading={isPending || isFetchDetailPending || isFetchListGroupPending} />
         <DialogForm>

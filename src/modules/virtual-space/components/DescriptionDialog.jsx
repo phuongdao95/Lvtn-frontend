@@ -29,16 +29,16 @@ export default function DescriptionDialog({ taskId, closeDialogCb, description, 
         }
     }, [isSuccess])
 
-    return <Dialog title={"Edit Description"}
+    return <Dialog title={"Cập nhật mô tả"}
         primaryAction={{
             handler: () => {
                 formik.submitForm();
             },
-            text: "Post"
+            text: "Lưu"
         }}
         secondaryAction={{
             handler: closeDialogCb,
-            text: "Cancel"
+            text: "Hủy"
         }}
     >
         <LoadingOverlay isLoading={isPending}/>

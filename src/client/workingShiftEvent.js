@@ -29,7 +29,7 @@ export const useGetByUser =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
         const fetchByUser = async (userId) => {
             try {
-                const response = await api.get(`${pathPrefix}/${userId}`);
+                const response = await api.get(`api/user/${userId}/workingshift`);
                 if (response.data) {
                     setData(response.data);
                 }
@@ -43,7 +43,7 @@ export const useGetByUser =
             }
         }
         return fetchByUser;
-    })('workingshift/user');
+    })();
 
 export const useUpdateSelected =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {

@@ -87,7 +87,7 @@ export default function TimekeepingsOfDay({
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Lịch làm việc"
+        title={`Lịch làm việc ${date.format('DD/MM/YYYY')}`}
     >
         {isHistoryOpen && <TimekeepingHistory
             closeDialogCb={(event) => {

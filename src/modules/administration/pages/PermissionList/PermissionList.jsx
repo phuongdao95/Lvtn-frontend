@@ -19,19 +19,19 @@ const getColumnConfig = (openPermissionDetailCb) => [
 
     {
         field: "name",
-        headerName: "Name",
+        headerName: "Tên",
         width: 250,
     },
 
     {
         field: "description",
-        headerName: "Description",
-        width: 600,
+        headerName: "Mô tả",
+        width: 400,
     },
 
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         renderCell: ({ id }) => {
             return <ActionButton onClick={() => openPermissionDetailCb(id)}>
                 Detail
@@ -81,53 +81,6 @@ export default function RoleList() {
                         isSuccess={isSuccess}
                     />
                 }
-                primaryButtonSection={
-                    <MenuButton
-                        text={"Thao tác"}
-                        menu={
-                            [
-                                { text: "Xuất Excel", handler: () => { } }
-                            ]
-                        }
-                    />
-                }
-                secondaryButtonSection={
-                    <MenuButton
-                        text={"Liên kết liên quan"}
-                        menu={
-                            [
-                                {
-                                    text: "Danh sách department", handler: () => {
-                                        navigate("/department");
-                                    }
-                                },
-
-                                {
-                                    text: "Danh sách người dùng", handler: () => {
-                                        navigate("/user");
-                                    }
-                                },
-                                {
-                                    text: "Danh sách nhóm", handler: () => {
-                                        navigate("/group");
-                                    }
-                                },
-                                {
-                                    text: "Danh sách chức vụ", handler: () => {
-                                        navigate("/role")
-                                    }
-                                },
-                                {
-                                    text: "Danh sách team", handler: () => {
-                                        navigate("/team");
-                                    }
-                                },
-
-                            ]
-                        }
-                        variant="outlined"
-                        color="info"
-                    />}
                 searchSection={<SearchField />}
                 dropdownFilterSection={<Fragment></Fragment>}
                 searchButtonSection={<SearchButton />}

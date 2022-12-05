@@ -111,7 +111,7 @@ export default function CreateTeam({ closeDialogCb }) {
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Name"} />
+                            <Label text={"Tên"} />
                             <TextField
                                 id="name"
                                 name="name"
@@ -123,7 +123,7 @@ export default function CreateTeam({ closeDialogCb }) {
 
                     secondSlot={
                         <Fragment>
-                            <Label text={"Department"} />
+                            <Label text={"Phòng ban"} />
                             <AutoComplete
                                 id="department"
                                 name="department"
@@ -159,7 +159,7 @@ export default function CreateTeam({ closeDialogCb }) {
                 <OneColumnBox
                     slot={
                         <Fragment>
-                            <Label text={"Description"} />
+                            <Label text={"Mô tả"} />
                             <TextField
                                 multiline
                                 id="description"
@@ -174,7 +174,7 @@ export default function CreateTeam({ closeDialogCb }) {
                 <OneColumnBox
                     slot={
                         <Fragment>
-                            <Label text={"Members"} />
+                            <Label text={"Thành viên"} />
                             <AutoCompleteMultiple
                                 value={formik.values.members}
                                 onChange={(event, value) => {

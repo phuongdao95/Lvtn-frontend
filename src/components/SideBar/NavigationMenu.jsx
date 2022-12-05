@@ -53,7 +53,7 @@ const SideBar = (props) => {
             text: "Thông tin cá nhân",
             onClick: (e) => {
                 e.stopPropagation();
-                navigate("/user-profile");
+                navigate("/profile");
             },
             icon: <PersonIcon style={{ color: textColor }} />,
             subItems: []
@@ -168,13 +168,13 @@ const SideBar = (props) => {
             onClick: () => { },
             subItems: [
                 {
-                    text: "Bảng công việc",
+                    text: "Danh sách bảng công việc",
                     onClick: () => {
                         navigate("/taskboard")
                     }
                 },
                 {
-                    text: "Báo cáo",
+                    text: "Danh sách báo cáo",
                     onClick: () => {
                         navigate("/taskboard-report")
                     }

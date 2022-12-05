@@ -134,7 +134,7 @@ export default function UserList() {
             {isCreateUserOpen && <CreateUser
                 closeDialogCb={
                     () => setIsCreateUserOpen(false)}
-                createSuccessCb={() => {
+                reloadList={() => {
                     setIsCreateUserOpen(false);
                     fetchUserList()
                 }} />}

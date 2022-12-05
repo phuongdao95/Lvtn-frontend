@@ -90,7 +90,10 @@ export default function PayrollList() {
                 title={"Danh sách Payslip của tôi"}
                 datagridSection={
                     <DataGrid
-                        rows={payslips || []}
+                        rows={payslips.map(payslip => ({
+                            ...payslip,
+                            baseSalary: payslip.baseSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                        })) || []}
                         columns={getColumnConfig((id) => {
                             navigate(`/my-payslips/${id}/`)
                         })}
