@@ -2,24 +2,19 @@ import { Route, Routes } from "react-router";
 
 import WorkFlows from "../../modules/approve-workflow/user/WorkFlows";
 import MyRequests from "../../modules/approve-workflow/view-requests/MyRequests";
+import MyToDoRequests from "../../modules/approve-workflow/view-requests/MyToDoRequest";
 
 import ConfigNghiPhep from "../../modules/approve-workflow/nghi-phep/ConfigNghiPhep";
 import ConfigNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/ConfigNghiThaiSan";
-import ConfigAdvancePayment from "../../modules/approve-workflow/advance-payment/ConfigAdvancePayment";
 import ConfigCheckinout from "../../modules/approve-workflow/check-inout-manual/ConfigCheckinout";
-import ConfigCost from "../../modules/approve-workflow/cost/ConfigCost";
-import ConfigHelpdesk from "../../modules/approve-workflow/helpdesk/ConfigHelpdesk";
-import ConfigOvertime from "../../modules/approve-workflow/overtime/ConfigOvertime";
-import ConfigWFH from "../../modules/approve-workflow/wfh/ConfigWFH";
 
 import UserNghiPhep from "../../modules/approve-workflow/nghi-phep/UserNghiPhep";
+import ViewNghiPhep from "../../modules/approve-workflow/nghi-phep/ViewNghiPhep";
 import UserNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/UserNghiThaiSan";
-import UserAdvancePayment from "../../modules/approve-workflow/advance-payment/UserAdvancePayment";
+import ViewNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/ViewNghiThaiSan";
 import UserCheckinout from "../../modules/approve-workflow/check-inout-manual/UserCheckinout";
-import UserCost from "../../modules/approve-workflow/cost/UserCost";
-import UserHelpdesk from "../../modules/approve-workflow/helpdesk/UserHelpdesk";
-import UserOvertime from "../../modules/approve-workflow/overtime/UserOvertime";
-import UserWFH from "../../modules/approve-workflow/wfh/UserWFH";
+import ViewCheckInOut from "../../modules/approve-workflow/check-inout-manual/ViewCheckInOut";
+
 import WorkflowConfig from "../../modules/approve-workflow/configs/WorkflowConfig";
 
 import ListUsers from "../../modules/shares/pages/ListUsers/ListUsers";
@@ -59,32 +54,32 @@ import HubNotify from "../../modules/virtual-space/components/HubNotify";
 import MyPayslipList from "../../modules/salary-management/pages/MyPayslipList/MyPayslipList";
 import MyPayslipDetail from "../../modules/salary-management/pages/MyPayslipList/MyPayslipDetail";
 
+import NotFound from "../../modules/shares/404/NotFound";
+import HomePage from "../../modules/shares/homepage/HomePage";
+
 export default function Routings() {
     return <Routes>
         <Route path="/approve-workflows" element={<WorkFlows />} />
         <Route exact path="/approve-workflows/configs" element={<WorkflowConfig />} />
         <Route path="/approve-workflows/my-requests" element={<MyRequests />} />
+        <Route path="/approve-workflows/my-todo-requests" element={<MyToDoRequests />} />
 
-        <Route exact path="/approve-workflows/user-nghi-phep/:id" element={<UserNghiPhep />} />
-        <Route exact path="/approve-workflows/:id" element={<UserNghiPhep />} />
+        <Route exact path="/approve-workflows/user-nghi-phep/:id" element={<UserNghiPhep />} /> { /*new and update*/}
+        <Route exact path="/approve-workflows/user-nghi-phep/view/:id" element={<ViewNghiPhep isApprover={false} />} /> { /*view the flow*/}
+        <Route exact path="/approve-workflows/user-nghi-phep/todo/:id" element={<ViewNghiPhep isApprover={true} />} /> { /*view and update flow for approver*/}
+
+        <Route exact path="/approve-workflows/user-nghi-thai-san/:id" element={<UserNghiThaiSan />} />
+        <Route exact path="/approve-workflows/user-nghi-thai-san/view/:id" element={<ViewNghiThaiSan isApprover={false} />} /> { /*view the flow*/}
+        <Route exact path="/approve-workflows/user-nghi-thai-san/todo/:id" element={<ViewNghiThaiSan isApprover={true} />} /> { /*view and update flow for approver*/}
 
 
-        <Route exact path="/approve-workflows/user-nghi-thai-san" element={<UserNghiThaiSan />} />
-        <Route exact path="/approve-workflows/user-advance-payment" element={<UserAdvancePayment />} />
-        <Route exact path="/approve-workflows/user-check-in-out" element={<UserCheckinout />} />
-        <Route exact path="/approve-workflows/user-cost" element={<UserCost />} />
-        <Route exact path="/approve-workflows/user-helpdesk" element={<UserHelpdesk />} />
-        <Route exact path="/approve-workflows/user-overtime" element={<UserOvertime />} />
-        <Route exact path="/approve-workflows/user-wfh" element={<UserWFH />} />
+        <Route exact path="/approve-workflows/user-check-in-out/:id" element={<UserCheckinout />} />
+        <Route exact path="/approve-workflows/user-check-in-out/view/:id" element={<ViewCheckInOut isApprover={false} />} /> { /*view the flow*/}
+        <Route exact path="/approve-workflows/user-check-in-out/todo/:id" element={<ViewCheckInOut isApprover={true} />} /> { /*view and update flow for approver*/}
 
         <Route exact path="/approve-workflows/configs/config-nghi-phep" element={<ConfigNghiPhep />} />
         <Route exact path="/approve-workflows/configs/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
-        <Route exact path="/approve-workflows/configs/config-advance-payment" element={<ConfigAdvancePayment />} />
         <Route exact path="/approve-workflows/configs/config-check-in-out" element={<ConfigCheckinout />} />
-        <Route exact path="/approve-workflows/configs/config-cost" element={<ConfigCost />} />
-        <Route exact path="/approve-workflows/configs/config-helpdesk" element={<ConfigHelpdesk />} />
-        <Route exact path="/approve-workflows/configs/config-overtime" element={<ConfigOvertime />} />
-        <Route exact path="/approve-workflows/configs/config-wfh" element={<ConfigWFH />} />
 
         <Route path="/check-in-2" element={<Timekeeping />} />
         <Route path="/check-in" element={<CheckIn />} />
@@ -110,14 +105,14 @@ export default function Routings() {
 
         <Route path="/user" element={
             // <ProtectedRoute>
-                <UserList />
+            <UserList />
             // </ProtectedRoute>
         } />
 
         <Route path="/role" element={
             // <ProtectedRoute>
             // </ProtectedRoute>
-                <RoleList />
+            <RoleList />
         } />
         <Route path="/group" element={<GroupList />} />
         <Route path="/team" element={<TeamList />} />
@@ -139,5 +134,9 @@ export default function Routings() {
         {/** Shared module */}
         <Route path="/my-profile" element={<UserProfile />} />
 
+        <Route exact path="/" element={<HomePage />} />
+
+        {/* Return not found page if there's no valid route */}
+        <Route path="*" element={<NotFound />} />
     </Routes>
 }

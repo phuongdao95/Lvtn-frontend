@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { Card, InputLabel, Box, Divider, Avatar, Chip, Typography, Paper, Grid } from "@mui/material";
+import { Card, InputLabel, Box, Divider, Avatar, Chip, Typography, Paper, Grid, FormControl, Button, TextField } from "@mui/material";
 import moment from 'moment/moment';
 import BreadCrumb from '../../breadcrumb/BreadCrumb';
+import * as workflowService from '../../../../client/workflowService';
 
 
 const ApproverBox = ({ avatarUrl, name, status }) => {
 
-    let color = status === 1 ? 'info' : status === 2 ? 'success' : 'error';
-    let chipText = status === 1 ? 'Pending' : status === 2 ? 'Approved' : 'Denied';
+    let color = status == 0 ? 'info' : status == 1 ? 'success' : 'error';
+    let chipText = status == 0 ? 'Pending' : status == 1 ? 'Approved' : 'Denied';
 
     return <Box sx={{ display: 'flex', paddingBottom: '20px' }}>
         <Avatar src={avatarUrl} sx={{ height: '50px', width: '50px' }} />
@@ -37,32 +38,52 @@ const LogItemBox = ({ avatarUrl, name, text, dateLong }) => (
     </Paper>
 )
 
-const ApproveItemPage = ({ content }) => {
+const ApproveItemPage = ({ content, isNew, initialData, realData }) => {
+
+    const commentRef = React.useRef();
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <Card sx={{ padding: 5, mt: 5, width: '60%', mr: 5 }}>
+            <Card sx={{ padding: 5, mt: 5, width: `${isNew ? '100%' : '60%'}`, mr: 5 }}>
                 <BreadCrumb status={1} />
                 {content}
 
                 <Divider variant="middle" sx={{ pt: 4, marginBottom: 4 }} />
 
                 <Typography sx={{ fontWeight: '600', paddingBottom: '10px', fontSize: 20 }}>Danh sách những người có quyền chấp thuận/từ chối</Typography>
-                <ApproverBox avatarUrl="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" name="Nguyen Phuong" status={1} />
-                <ApproverBox avatarUrl="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" name="Nguyen Hai" status={2} />
-                <ApproverBox avatarUrl="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" name="Nguyen Hinh" status={3} />
+                {initialData?.approvers?.map(a =>
+                    <ApproverBox avatarUrl="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" name={a.name} status={a.status} />)}
+                {realData?.approvers?.map(a =>
+                    <ApproverBox avatarUrl="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" name={a.name} status={a.status} />)}
             </Card>
-            <Card sx={{ padding: 5, mt: 5, width: '40%' }}>
-                <Typography sx={{ fontWeight: '600', paddingBottom: '10px', fontSize: 20, margin: '0 auto' }}>Lịch sử thao tác</Typography>
-                <LogItemBox avatarUrl="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
-                    name="Nguyen Hinh"
-                    text="Test text"
-                    dateLong={1664826749721} />
-                <LogItemBox avatarUrl="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
-                    name="Nguyen Trung"
-                    text="Test text 123434343"
-                    dateLong={1904826749721} />
-            </Card>
+            {
+                !isNew &&
+                <Card sx={{ padding: 5, mt: 5, width: '40%', display: 'flex', flexDirection: 'column' }}>
+                    <Typography sx={{ fontWeight: '600', paddingBottom: '10px', fontSize: 20, margin: '0 auto' }}>Lịch sử thao tác</Typography>
+                    {realData?.comments?.map(item =>
+                        <LogItemBox avatarUrl="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+                            name={item.name}
+                            text={item.text}
+                            dateLong={item.timeLong} />)}
+                    <FormControl variant="standard" fullWidth sx={{ justifySelf: 'end' }}>
+                        <TextField
+                            multiline
+                            minRows={3}
+                            maxRows={5}
+                            focused={true}
+                            inputRef={commentRef}
+                        />
+                        <Button
+                            onClick={() => {
+                                workflowService.addComment(realData?.flowId, commentRef.current.value).then(() => {
+                                    window.location.reload(false);
+                                })
+                            }}
+                        >
+                            Comment
+                        </Button>
+                    </FormControl>
+                </Card>}
         </Box>
     );
 }

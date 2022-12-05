@@ -1,72 +1,62 @@
 import ClearIcon from '@mui/icons-material/Clear';
 import SaveIcon from '@mui/icons-material/Save';
-import ComponentDatePicker from '../../shares/common/ComponentDatePicker';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import * as React from 'react';
 import * as workflowService from '../../../client/workflowService';
 
 import ApproveItemPage from '../../shares/pages/Approve/ApproveItemPage';
-import { useFormik } from "formik";
-import * as yup from "yup";
 import { Grid, InputLabel, Button } from "@mui/material";
-import ControlledSwitches from '../../shares/common/ControlledSwitches';
+import moment from 'moment';
 
-const validationSchema = yup.object({
-    isBeforehand: yup
-        .boolean(),
-    isHusband: yup
-        .boolean(),
-    startDate: yup
-        .date()
-        .required('Ngày bắt đầu không được trống!'),
-});
-
-const NghiThaiSanContent = () => {
+const CheckinContent = () => {
     const navigate = useNavigate();
-    const formik = useFormik({
-        initialValues: {
-            isBeforehand: false,
-            isHusband: false,
-            startDate: new Date()
-        },
-        validationSchema: validationSchema,
-        onSubmit: (values) => {
-            const backToList = () => navigate('/approve-workflows/my-requests');
-            workflowService.createNghiThaiSan({ isHusband: values.isHusband, startDate: new Date() }, backToList);
-        }
-    });
+    const { id } = useParams();
+    const isNew = id === 'new';
+
+    const onSubmit = () => {
+        const backToList = () => navigate('/approve-workflows/my-requests');
+        workflowService.createCheckInout({ checkedTime: new Date() }, backToList);
+    }
 
     return (
         <Grid container spacing={2}>
             <Grid item xs={4}>
-                <InputLabel>Nghỉ thai sản trước quy định</InputLabel>
-                <ControlledSwitches name="isBeforehand" onChange={formik.handleChange} />
-            </Grid>
+                <InputLabel>Điểm danh vào lúc: {moment().format("dddd, MMMM Do YYYY, h:mm:ss a")}</InputLabel>
 
-            <Grid item xs={4}>
-                <InputLabel>Xin nghỉ với tư cách chồng sản phụ</InputLabel>
-                <ControlledSwitches name="isHusband" onChange={formik.handleChange} />
-            </Grid>
-
-            <Grid item xs={4}>
-                <ComponentDatePicker label='Nghỉ từ ngày' date={new Date()} isReadOnly={false} />
             </Grid>
 
             <Grid item xs={12}>
                 <Button variant="contained" color="error" startIcon={<ClearIcon />} sx={{ marginRight: '10px' }}>
                     Hủy
                 </Button>
-                <Button variant="contained" startIcon={<SaveIcon />} type="submit" onClick={(e) => { formik.handleSubmit(e); }}>
+                {isNew && <Button variant="contained" startIcon={<SaveIcon />} type="submit" onClick={onSubmit}>
                     Tạo mới
-                </Button>
+                </Button>}
             </Grid>
         </Grid>
     );
 }
 
 const UserCheckinout = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    if (!id) {
+        navigate("/notfound");
+    }
+    const isNew = id === 'new';
+    const [initialData, setInitialData] = React.useState();
+    const [realData, setRealData] = React.useState();
+    React.useEffect(() => {
+        if (isNew) {
+            workflowService.getIntialCheckin().then(res => setInitialData(res));
+        }
+        else {
+            workflowService.getCheckInoutById(id).then(res => setRealData(res));
+        }
+    }, []);
 
     return (
-        <ApproveItemPage content={<NghiThaiSanContent />} />
+        <ApproveItemPage content={<CheckinContent />} isNew={isNew} initialData={initialData} realData={realData} />
     );
 }
 

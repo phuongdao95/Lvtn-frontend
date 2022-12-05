@@ -151,6 +151,12 @@ const SideBar = (props) => {
                     onClick: () => {
                         navigate("/approve-workflows/my-requests")
                     }
+                },
+                {
+                    text: "Danh sách request cần xem xét",
+                    onClick: () => {
+                        navigate("/approve-workflows/my-todo-requests")
+                    }
                 }
             ]
         },
