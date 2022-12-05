@@ -29,7 +29,7 @@ export const useGetByUser =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
         const fetchByUser = async (userId) => {
             try {
-                const response = await api.get(`api/user/${userId}/workingshift`);
+                const response = await api.get(`api/user/${userId}/workingshifttimekeeping`);
                 if (response.data) {
                     setData(response.data);
                 }
