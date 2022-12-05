@@ -102,6 +102,7 @@ const Info = ({takePicture}) => {
                 }
             });
             setData(lst);
+            console.log(response.data);
         }
     }, [isSuccess])
 
@@ -117,35 +118,60 @@ const Info = ({takePicture}) => {
         setValue(event.target.value);
         // fetchOne(event.target.value);
         isFetchListSuccess = false;
-        fetchListTimekeeping(window.localStorage.getItem('user_id'), dayjs().format('YYYY-MM-DD'), parseInt(event.target.value));
-    };
-    useEffect(() => {
-        if (fetchListResponse?.data) {
-            const currentDate = dayjs().format('YYYY-MM-DD');
-            let data = fetchListResponse.data;
-            if (data.length > 0 && currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD')) {
-                let form = data[0];
-                form = data[0];
-                form.CheckoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
-                form.DidCheckout = true;
-                setFormWorkShiftTimekeeping({...form});
-                setIsCheckout(false);
-                setIsCheckin(true);
-            } else {
-                setIsCheckout(true);
-                setIsCheckin(false);
-                let form = {};
-                form = {
-                    DidCheckIn : true,
-                    CheckinTime : dayjs().add(-OFFSET, 'minute').toISOString(),
-                    DidCheckout: false,
-                    EmployeeId: parseInt(window.localStorage.getItem('user_id')),
-                    WorkingShiftEventId: value,
-                };
-                setFormWorkShiftTimekeeping({...form});
-            }
+        const currentDate = dayjs().format('YYYY-MM-DD');
+        let form = {};
+        
+        //fetchListTimekeeping(window.localStorage.getItem('user_id'), dayjs().format('YYYY-MM-DD'), parseInt(event.target.value));
+        if (data.length > 0 && currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD')) {
+            form = data[0];
+            form.CheckoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
+            form.DidCheckout = true;
+            setFormWorkShiftTimekeeping({...form});
+            setIsCheckout(false);
+            setIsCheckin(true);
+            console.log(true);
+        } else {
+            setIsCheckout(true);
+            setIsCheckin(false);
+            form = {
+                DidCheckIn : true,
+                CheckinTime : dayjs().add(-OFFSET, 'minute').toISOString(),
+                DidCheckout: false,
+                EmployeeId: parseInt(window.localStorage.getItem('user_id')),
+                WorkingShiftEventId: event.target.value,
+            };
+            setFormWorkShiftTimekeeping({...form});
+            console.log(false);
         }
-    }, [isFetchListSuccess])
+        console.log(form);
+    };
+    // useEffect(() => {
+    //     if (fetchListResponse?.data) {
+    //         const currentDate = dayjs().format('YYYY-MM-DD');
+    //         let data = fetchListResponse.data;
+    //         if (data.length > 0 && currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD')) {
+    //             let form = data[0];
+    //             form = data[0];
+    //             form.CheckoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
+    //             form.DidCheckout = true;
+    //             setFormWorkShiftTimekeeping({...form});
+    //             setIsCheckout(false);
+    //             setIsCheckin(true);
+    //         } else {
+    //             setIsCheckout(true);
+    //             setIsCheckin(false);
+    //             let form = {};
+    //             form = {
+    //                 DidCheckIn : true,
+    //                 CheckinTime : dayjs().add(-OFFSET, 'minute').toISOString(),
+    //                 DidCheckout: false,
+    //                 EmployeeId: parseInt(window.localStorage.getItem('user_id')),
+    //                 WorkingShiftEventId: value,
+    //             };
+    //             setFormWorkShiftTimekeeping({...form});
+    //         }
+    //     }
+    // }, [isFetchListSuccess])
 
     const groupButton = () => {
         return (
