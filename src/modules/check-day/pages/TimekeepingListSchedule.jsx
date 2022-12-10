@@ -136,8 +136,6 @@ export default function TimekeepingSchedule() {
             paddingX: '4px',
             marginBottom: '4px',
         }}>
-
-
             <Button size="small" onClick={handlePreviousClick}>
                 trước
             </Button>

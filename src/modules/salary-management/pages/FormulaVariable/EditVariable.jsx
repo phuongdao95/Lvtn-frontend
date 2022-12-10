@@ -125,6 +125,47 @@ export default function EditVariable({ closeDialogCb, id }) {
                     </Fragment>}
                 />
 
+                <TwoColumnBox
+                    firstSlot={
+                        <Fragment>
+                            <Label text={"Area"} />
+                            <Select
+                                id="area"
+                                name="area"
+                                value={formik.values.area}
+                                onChange={(event, value) => {
+                                    formik.setFieldValue("area", event.target.value)
+                                }}
+                                menu={[
+                                    {
+                                        label: "Nhóm lương",
+                                        value: "salaryconfig",
+                                    },
+                                    {
+                                        label: "Tăng giảm lương",
+                                        value: "salarydelta"
+                                    },
+                                    {
+                                        label: "Chấm công",
+                                        value: "timekeeping"
+                                    },
+                                    {
+                                        label: "KPI",
+                                        value: "kpi"
+                                    },
+                                ]}
+                                error={formik.touched.area && Boolean(formik.errors.area)}
+                                helperText={formik.touched.area && formik.errors.area}
+                            />
+                        </Fragment>
+                    }
+
+                    secondSlot={
+                        <Fragment>
+                        </Fragment>
+                    }
+                />
+
                 <OneColumnBox
                     slot={
                         <Fragment>

@@ -55,10 +55,10 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
         renderCell: () => {
             return <ActionButtonContainer>
                 <ActionButton onClick={onEditBtnClick}>
-                    Edit
+                    Sửa
                 </ActionButton>
                 <ActionButton onClick={onDeleteBtnClick}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </ActionButtonContainer >
         }

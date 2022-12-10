@@ -8,7 +8,7 @@ import * as aiService from '../../../client/aiService';
 import Snackbar from '../../../components/Snackbar/Snackbar';
 
 export default function CheckIn() {
-    const videoRef = useRef(null);
+const videoRef = useRef(null);
     const photoRef = useRef(null);
     const [state, setState] = useState({
         open: false,

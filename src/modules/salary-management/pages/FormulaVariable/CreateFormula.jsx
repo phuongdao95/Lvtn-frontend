@@ -10,6 +10,7 @@ import DialogForm from "../../../../components/DialogForm";
 import { useCreateFormula } from "../../../../client/formulaService";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import Select from "../../../../components/DialogForm/Select";
 
 const validationSchema = yup.object().shape({
     name: yup.string()
@@ -31,6 +32,7 @@ export default function CreateFormula({ closeDialogCb }) {
             displayName: "",
             define: "",
             description: "",
+            area: "",
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
@@ -77,6 +79,47 @@ export default function CreateFormula({ closeDialogCb }) {
                                 error={formik.touched.displayName && Boolean(formik.errors.displayName)}
                                 helperText={formik.touched.displayName && formik.errors.displayName}
                             />
+                        </Fragment>
+                    }
+                />
+
+                <TwoColumnBox
+                    firstSlot={
+                        <Fragment>
+                            <Label text={"Area"} />
+                            <Select
+                                id="area"
+                                name="area"
+                                value={formik.values.area}
+                                onChange={(event, value) => {
+                                    formik.setFieldValue("area", event.target.value)
+                                }}
+                                menu={[
+                                    {
+                                        label: "Nhóm lương",
+                                        value: "salaryconfig",
+                                    },
+                                    {
+                                        label: "Tăng giảm lương",
+                                        value: "salarydelta"
+                                    },
+                                    {
+                                        label: "Chấm công",
+                                        value: "timekeeping"
+                                    },
+                                    {
+                                        label: "KPI",
+                                        value: "kpi"
+                                    },
+                                ]}
+                                error={formik.touched.area && Boolean(formik.errors.area)}
+                                helperText={formik.touched.area && formik.errors.area}
+                            />
+                        </Fragment>
+                    }
+
+                    secondSlot={
+                        <Fragment>
                         </Fragment>
                     }
                 />

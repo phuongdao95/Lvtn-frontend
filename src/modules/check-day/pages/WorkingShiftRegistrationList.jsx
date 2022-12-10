@@ -100,8 +100,6 @@ const getColumnConfig = (openEditCb) => [
         headerName: "Loại",
         width: 150
     },
-
-
 ];
 
 const initialDialogState = {

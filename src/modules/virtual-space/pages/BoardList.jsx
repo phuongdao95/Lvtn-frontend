@@ -45,13 +45,13 @@ const getColumnConfig = (openEditCb, openDeleteCb, openDetailCb) => [
         renderCell: ({ id }) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
                 <ActionButton onClick={() => openEditCb(id)}>
-                    Edit
+                    Sửa
                 </ActionButton>
                 <ActionButton onClick={() => openDetailCb(id)}>
-                    Detail
+                    Chi tiết
                 </ActionButton>
                 <ActionButton onClick={() => openDeleteCb(id)}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </Box>
         }

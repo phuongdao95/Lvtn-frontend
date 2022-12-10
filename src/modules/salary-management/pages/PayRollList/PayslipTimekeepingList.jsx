@@ -106,6 +106,7 @@ export default function PayslipTimekeepingList() {
                 endTime: dayjs(timekeeping.endTime).format('HH:mm:ss'),
                 checkinTime: dayjs(timekeeping.checkinTime).format('HH:mm:ss'),
                 checkoutTime: dayjs(timekeeping.checkoutTime).format('HH:mm:ss'),
+                amount: timekeeping.amount.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})
             })) ?? []}
             columns={getColumnConfig()}
             height={500}

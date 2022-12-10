@@ -31,12 +31,6 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
     },
 
     {
-        field: "groupName",
-        headerName: "Nhóm người dùng",
-        width: 100
-    },
-
-    {
         field: "description",
         headerName: "Mô tả",
         width: 150,
@@ -44,7 +38,7 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
 
     {
         field: "groupName",
-        headerName: "Nhóm",
+        headerName: "Nhóm người dùng",
         width: 150
     },
 
@@ -55,10 +49,10 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
         renderCell: ({ id }) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
                 <ActionButton onClick={() => openEditCb(id)}>
-                    Edit
+                    Sửa
                 </ActionButton>
                 <ActionButton onClick={() => openDeleteCb(id)}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </Box>
         }
@@ -167,7 +161,7 @@ export default function SalaryGroupList() {
             />}
 
             <DataGridLayout
-                title={"Danh sách Salary Config"}
+                title={"Danh sách Nhóm lương"}
                 datagridSection={
                     <DataGrid
                         onPageChange={(nextPageIndex) => {

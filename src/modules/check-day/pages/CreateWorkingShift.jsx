@@ -9,15 +9,14 @@ import DialogForm from "../../../components/DialogForm";
 import Select from "../../../components/DialogForm/Select";
 import AutoComplete from "../../../components/DialogForm/AutoComplete";
 import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
-import { useCreateDAB, useFetchOneDAB } from "../../../client/dabService";
+import TimePicker from "../../../components/DialogForm/TimePicker";
+import DatePicker from "../../../components/DialogForm/DatePicker";
+import { useCreateWorkingShiftOvertime } from "../../../client/workingShiftService";
 import { useFetchListFormula } from "../../../client/formulaService";
 import { useFormik } from "formik";
 import { useFetchListGroup } from "../../../client/groupService";
-import dayjs from "dayjs";
 
-function generateYears() {
-    return Array.from({ length: 200 }, (_, i) => i + 2020)
-}
+import dayjs from "dayjs";
 
 export default function CreateWorkingShift({ closeDialogCb, reload }) {
     const [groupOptions, setGroupOptions] = React.useState([]);
@@ -35,8 +34,8 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
         isSuccess: isUpdateSuccess,
         isPending: isUpdatePending,
         isError: isUpdateError,
-        method: createDAB,
-    } = useCreateDAB();
+        method: createWorkingShift,
+    } = useCreateWorkingShiftOvertime();
 
     const {
         isSuccess: isFetchListFormulaSuccess,
@@ -50,18 +49,20 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
         initialValues: {
             name: "",
             description: "",
-            type: "",
-            fromMonth: 1,
-            toMonth: 1,
-            year: 2022,
-            group: null,
+            date: dayjs(),
+            startTime: dayjs(),
+            endTime: dayjs(),
+            registrationStartDate: dayjs(),
+            registrationEndDate: dayjs(),
+            description: "",
             formulaName: null,
+            group: null
         },
         onSubmit: (values) => {
-            createDAB({
+            createWorkingShift({
                 ...values,
-                groupId: values.group?.id,
-                formulaName: values.formulaName?.id
+                formulaName: values.formulaName.id,
+                groupId: values.group.id,
             })
         }
     });
@@ -101,7 +102,7 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Tạo mới khấu trừ, phụ cấp, thưởng"
+        title="Tạo mới ca ngoài giờ"
     >
         <DialogForm>
             <LoadingOverlay isLoading={isUpdatePending} />
@@ -121,37 +122,20 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
 
                     secondSlot={
                         <Fragment>
-                            <Label text={"Loại"} />
-                            <Select
-                                id="type"
-                                name="type"
-                                value={formik.values.type}
-                                onChange={formik.handleChange}
-                                menu={[
-                                    {
-                                        label: "Fixed Shift",
-                                        value: "Deduction"
-                                    },
-                                    {
-                                        label: "Overtime",
-                                        value: "Allowance",
-                                    },
-                                ]}
-                            />
                         </Fragment>
                     }
                 />
 
                 <TwoColumnBox
                     firstSlot={<Fragment>
-                        <Label text={"Năm"} />
-                        <Select
-                            value={formik.values.year}
-                            onChange={(event) => {
-                                formik.setFieldValue("year", event.target.value)
-                            }}
-                            menu={generateYears().map((value) =>
-                                ({ label: `Năm ${value}`, value: value }))}
+                        <Label text={"Ngày"} />
+                        <DatePicker
+                            id="date"
+                            name="date"
+                            value={formik.values.date}
+                            onChange={(value) => formik.setFieldValue("date", value)}
+                            error={formik.touched.date && Boolean(formik.errors.date)}
+                            helperText={formik.touched.date && formik.errors.date}
                         />
                     </Fragment>}
 
@@ -159,6 +143,52 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
                     </Fragment>}
                 />
 
+                <TwoColumnBox
+                    firstSlot={<Fragment>
+                        <Label text={"Bắt đầu"} />
+                        <TimePicker
+                            value={formik.values.startTime}
+                            onChange={(value) => formik.setFieldValue("startTime", value)}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </Fragment>}
+
+                    secondSlot={<Fragment>
+                        <Label text={"Kết thúc"} />
+                        <TimePicker
+                            value={formik.values.endTime}
+                            onChange={(value) => formik.setFieldError("endTime", value)}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </Fragment>}
+                />
+
+
+                <TwoColumnBox
+                    firstSlot={<Fragment>
+                        <Label text={"Ngày Bắt đầu đăng ký"} />
+                        <DatePicker
+                            id="registrationStartDate"
+                            name="registrationStartDate"
+                            value={formik.values.registrationStartDate}
+                            onChange={(value) => formik.setFieldValue("registrationStartDate", value)}
+                            error={formik.touched.registrationStartDate && Boolean(formik.errors.registrationStartDate)}
+                            helperText={formik.touched.registrationStartDate && formik.errors.registrationStartDate}
+                        />
+                    </Fragment>}
+
+                    secondSlot={<Fragment>
+                        <Label text={"Ngày Kết thúc đăng ký"} />
+                        <DatePicker
+                            id="registrationEndDate"
+                            name="registrationEndDate"
+                            value={formik.values.registrationEndDate}
+                            onChange={(value) => formik.setFieldValue("registrationEndDate", value)}
+                            error={formik.touched.registrationEndDate && Boolean(formik.errors.registrationEndDate)}
+                            helperText={formik.touched.registrationEndDate && formik.errors.registrationEndDate}
+                        />
+                    </Fragment>}
+                />
 
                 <TwoColumnBox
                     firstSlot={
@@ -196,7 +226,12 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
                     slot={
                         <Fragment>
                             <Label text={"Mô tả"} />
-                            <TextField />
+                            <TextField
+                                id="description"
+                                name="description"
+                                value={formik.values.description}
+                                onChange={formik.handleChange}
+                            />
                         </Fragment>
                     }
                 />
