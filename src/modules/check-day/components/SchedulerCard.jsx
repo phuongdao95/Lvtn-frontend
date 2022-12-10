@@ -1,9 +1,10 @@
 import React from "react";
-import { Button } from "@mui/material";
 import { grey, yellow } from "@mui/material/colors";
+import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import dayjs from "dayjs";
 import SchedulerEventCard from "./SchedulerEventCard";
+import TimekeepingsOfDay from "./TimekeepingsOfDay";
 
 const generateDaysInMonth = (year, month) => {
     const firstDateOfMonth = dayjs(`${year}-${month}-01`);
@@ -17,26 +18,36 @@ export default function SchedulerCard({
     day,
     month,
     year,
-    isDayInMonth = true
+    isDayInMonth = true,
 }) {
-    const daysInMonth = React.useMemo(
-        () => generateDaysInMonth(year, month), [year, month]);
+    const [isTimekeepingsOfDayShown, setIsTimekeepingsOfDayShown] = React.useState(false);
 
-    return <Box sx={{
-        background: 'white',
-        position: 'relative',
-        border: `2spx solid ${grey[200]}`,
-        padding: '10px',
-        paddingTop: '24px',
-        display: "flex",
-        flexDirection: "column",
-        gap: 0.5,
-        '&:hover': {
-            cursor: 'pointer',
-            background: yellow[100],
-            transition: '100ms all',
+    return <Box
+        onClick={() => setIsTimekeepingsOfDayShown(true)}
+        sx={{
+            background: 'white',
+            position: 'relative',
+            border: `2px solid ${grey[200]}`,
+            padding: '5px',
+            paddingTop: '24px',
+            display: "flex",
+            flexDirection: "column",
+            gap: 0.5,
+            '&:hover': {
+                cursor: 'pointer',
+                background: yellow[100],
+                transition: '100ms all',
+            }
+        }}>
+
+        {isTimekeepingsOfDayShown &&
+            <TimekeepingsOfDay closeDialogCb={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsTimekeepingsOfDayShown(false);
+            }} date={dayjs(new Date(year, month, day))} />
         }
-    }}>
+
         <Box sx={{
             position: 'absolute',
             fontWeight: 'semibold',
@@ -47,16 +58,18 @@ export default function SchedulerCard({
             {day}
         </Box>
 
-        <Box sx={{
-            display: 'flex', gap: 1,
-            flexWrap: "wrap",
+        <Box
+            sx={{
+                display: 'flex', gap: 1,
+                flexWrap: "wrap",
+            }}
+        >
+            {events && events.map((event) =>
+                <SchedulerEventCard title={
+                    `${dayjs(event.workingShiftStartTime).format('HH:mm')} -
+                        ${dayjs(event.workingShiftEndTime).format('HH:mm')}`} />)}
 
-        }}>
-            {events.filter((_, index) => index < 3)
-                .map((event) =>
-                    <SchedulerEventCard title={event.title} />)}
-
-            {events.length > 3 &&
+            {events && events.length > 3 &&
                 < Button size="small" variant="outlined" sx={{ textTransform: "capitalize" }}>
                     more</Button>
             }

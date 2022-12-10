@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useFetchPayslipOfPayroll } from "../../../../client/payrollService";
+import { useFetchOnePayroll, useFetchPayslipOfPayroll } from "../../../../client/payrollService";
 import DataGridLayout from "../../../../layouts/DataGridLayout";
 import DataGrid from "../../../../components/DataGrid";
 import EditPayslip from "./EditPayslip";
@@ -64,6 +64,13 @@ export default function PayslipList({ }) {
 
     const [payslipId, setPayslipId] = React.useState(null);
 
+    const {
+        isPending: isPayrollPending,
+        isSuccess: isPayrollSuccess,
+        isError: isPayrollError,
+        method: fetchOnePayroll
+    } = useFetchOnePayroll();
+
     const [isEditPayslipOpen, setIsEditPayslipOpen] = React.useState(false);
     const [isInfoDialogOpen, setIsInfoDialogOpen] = React.useState(false);
     const [infoDialogMessage, setInfoDialogMessage] = React.useState({
@@ -71,6 +78,16 @@ export default function PayslipList({ }) {
     })
 
     const resetDialogState = () => setInfoDialogMessage(initialDialogState)
+
+    React.useEffect(() => {
+        fetchOnePayroll();
+    }, []);
+
+    React.useEffect(() => {
+        if (isPayrollSuccess) { 
+            
+        }
+    }, [isPayrollSuccess])
 
     const {
         isPending,
@@ -104,7 +121,10 @@ export default function PayslipList({ }) {
                 title={"Danh sách payslip"}
                 datagridSection={
                     <DataGrid
-                        rows={response?.data ?? []}
+                        rows={response?.data.map((row) => ({
+                            ...row,
+                            baseSalary: row.baseSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                        })) ?? []}
                         columns={getColumnConfig(
                             (id) => {
                                 navigate(`${id}`);

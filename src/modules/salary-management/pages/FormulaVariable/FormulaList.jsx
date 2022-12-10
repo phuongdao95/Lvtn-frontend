@@ -6,12 +6,13 @@ import SearchButton from "../../../../components/DataGrid/SearchButton";
 import SearchField from "../../../../components/DataGrid/SearchField";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
 import EditFormula from "./EditFormula"
+import Select from "../../../../components/DataGrid/Select";
+import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 
 import {
     useFetchListFormula,
-    useEditFormula
+    useDeleteFormula
 } from "../../../../client/formulaService";
-import { set } from "date-fns/esm";
 
 const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
     {
@@ -50,10 +51,10 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
         renderCell: ({ id }) => {
             return <Box sx={{ display: "flex", gap: 1 }}>
                 <ActionButton onClick={() => onEditBtnClick(id)}>
-                    Edit
+                    Sửa
                 </ActionButton>
                 <ActionButton onClick={() => onDeleteBtnClick(id)}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </Box>
         }
@@ -61,16 +62,39 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
 ];
 
 export default function FormulaList() {
+    const [variableKind, setVariableKind] = React.useState("Nhóm lương")
     const [formulas, setFormulas] = React.useState([]);
     const [formulaId, setFormulaId] = React.useState(null);
-    const [variableId, setVariableId] = React.useState(null);
     const [isEditFormulaOpen, setIsEditFormulaOpen] = React.useState(false);
     const [isDeleteFormulaOpen, setIsDeleteFormulaOpen] = React.useState(false);
 
     const {
         isSuccess: isFetchListFormulaSuccess,
+        method: fetchFormula,
         data: fetchedFormulaList,
     } = useFetchListFormula();
+
+    const {
+        isSuccess: isDeleteSuccess,
+        method: deleteFormula,
+    } = useDeleteFormula();
+
+    React.useEffect(() => {
+        let type;
+        if (variableKind == "Nhóm lương") {
+            type = "salarygroup";
+        }
+        else if (variableKind == "Tăng giảm lương") {
+            type = "salarydelta"
+        }
+        else if (variableKind == "Chấm công") {
+            type = "timekeeping"
+        }
+        else if (variableKind == "KPI") {
+            type = "kpi"
+        }
+        fetchFormula(0, 0, type, "area");
+    }, [variableKind])
 
     React.useEffect(() => {
         if (isFetchListFormulaSuccess) {
@@ -78,13 +102,76 @@ export default function FormulaList() {
         }
     }, [isFetchListFormulaSuccess])
 
+    React.useEffect(() => {
+        if (isDeleteSuccess) {
+            let type;
+            if (variableKind == "Nhóm lương") {
+                type = "salarygroup";
+            }
+            else if (variableKind == "Tăng giảm lương") {
+                type = "salarydelta"
+            }
+            else if (variableKind == "Chấm công") {
+                type = "timekeeping"
+            }
+            else if (variableKind == "KPI") {
+                type = "kpi"
+            }
+            fetchFormula(0, 0, type, "area");
+        }
+    }, [isDeleteSuccess]);
+
     return <Box >
+        {isDeleteFormulaOpen &&
+            <ConfirmDialog
+                title={"Confirm"}
+                message="Bạn có muốn xóa chức vụ này"
+                cancelAction={{
+                    text: "Cancel",
+                    handler: () => {
+                        setFormulaId(null);
+                        setIsDeleteFormulaOpen(false)
+                    },
+                }}
+                confirmAction={{
+                    text: "Confirm",
+                    handler: () => {
+                        setFormulaId(null);
+                        setIsDeleteFormulaOpen(false);
+                        deleteFormula(formulaId);
+                    }
+                }}
+            />}
+
         <Box sx={{
             display: "flex",
             flexDirection: "row",
             gap: 2,
             mb: 2,
         }}>
+            <Select
+                value={variableKind}
+                options={
+                    [
+                        {
+                            label: "Nhóm lương",
+                            handler: () => setVariableKind("Nhóm lương")
+                        },
+                        {
+                            label: "Tăng giảm lương",
+                            handler: () => setVariableKind("Tăng giảm lương")
+                        },
+                        {
+                            label: "Chấm công",
+                            handler: () => setVariableKind("Chấm công")
+                        },
+                        {
+                            label: "KPI",
+                            handler: () => setVariableKind("KPI")
+                        }
+                    ]
+                }
+            />
             <SearchField />
             <SearchButton />
         </Box>

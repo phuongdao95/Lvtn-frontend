@@ -11,6 +11,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import { grey, lightBlue } from '@mui/material/colors';
 import { AddAlarm, AttachMoney, Settings } from '@mui/icons-material';
 import NavigationItem from './NavigationItem';
@@ -39,8 +40,21 @@ const SideBar = (props) => {
 
     const routes = [
         {
+            text: "Dashboard",
+            onClick: (e) => {
+                e.stopPropagation();
+                navigate("/dashboard")
+            },
+            icon: <DashboardIcon style={{ color: textColor }} />,
+            subItems: []
+        },
+
+        {
             text: "Thông tin cá nhân",
-            onClick: () => { },
+            onClick: (e) => {
+                e.stopPropagation();
+                navigate("/profile");
+            },
             icon: <PersonIcon style={{ color: textColor }} />,
             subItems: []
         },
@@ -132,6 +146,12 @@ const SideBar = (props) => {
                         navigate("/salary-group")
                     }
                 },
+                {
+                    text: "Báo cáo",
+                    onClick: () => {
+                        navigate("/salary-report")
+                    }
+                }
             ]
         },
 
@@ -148,15 +168,15 @@ const SideBar = (props) => {
             onClick: () => { },
             subItems: [
                 {
-                    text: "Bảng công việc",
+                    text: "Danh sách bảng công việc",
                     onClick: () => {
                         navigate("/taskboard")
                     }
                 },
                 {
-                    text: "Danh sách Bảng",
+                    text: "Danh sách báo cáo",
                     onClick: () => {
-
+                        navigate("/taskboard-report")
                     }
                 }
             ]
@@ -189,6 +209,12 @@ const SideBar = (props) => {
                     text: "Danh sách ca làm",
                     onClick: () => {
                         navigate("/workingshift")
+                    }
+                },
+                {
+                    text: "Danh sách ngày nghỉ",
+                    onClick: () => {
+                        navigate("/workingshiftdayconfig");
                     }
                 },
                 {

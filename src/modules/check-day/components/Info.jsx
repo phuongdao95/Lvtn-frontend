@@ -89,19 +89,20 @@ const Info = ({takePicture}) => {
             let lst = [];
             let lstCheck = [];
             response.data.map((item, index) => {
-                if (dayjs().get('day') === dayjs(item.startTime).get('day') 
-                    && item.isCheck) {
+                if (dayjs().get('day') === dayjs(item.workingShiftEvent.startTime).get('day') 
+                    ) {
                         let data = {
                             id: item.id,
-                            name: item.name,
-                            startTime: dayjs(item.startTime).format('h:mm a'),
-                            endTime: dayjs(item.endTime).format('h:mm a'),
-                            showName: item.name + ' ' + dayjs(item.startTime).format('h:mm a') + ' ' + dayjs(item.endTime).format('h:mm a'),
+                            name: item.workingShiftEvent.name,
+                            startTime: dayjs(item.workingShiftEvent.startTime).format('h:mm a'),
+                            endTime: dayjs(item.workingShiftEvent.endTime).format('h:mm a'),
+                            showName: item.workingShiftEvent.name + ' ' + dayjs(item.workingShiftEvent.startTime).format('h:mm a') + ' ' + dayjs(item.workingShiftEvent.endTime).format('h:mm a'),
                         };
                         lst.push(data);
                 }
             });
             setData(lst);
+            console.log(response.data);
         }
     }, [isSuccess])
 
@@ -117,35 +118,60 @@ const Info = ({takePicture}) => {
         setValue(event.target.value);
         // fetchOne(event.target.value);
         isFetchListSuccess = false;
-        fetchListTimekeeping(window.localStorage.getItem('user_id'), dayjs().format('YYYY-MM-DD'), parseInt(event.target.value));
-    };
-    useEffect(() => {
-        if (fetchListResponse?.data) {
-            const currentDate = dayjs().format('YYYY-MM-DD');
-            let data = fetchListResponse.data;
-            if (data.length > 0 && currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD')) {
-                let form = data[0];
-                form = data[0];
-                form.CheckoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
-                form.DidCheckout = true;
-                setFormWorkShiftTimekeeping({...form});
-                setIsCheckout(false);
-                setIsCheckin(true);
-            } else {
-                setIsCheckout(true);
-                setIsCheckin(false);
-                let form = {};
-                form = {
-                    DidCheckIn : true,
-                    CheckinTime : dayjs().add(-OFFSET, 'minute').toISOString(),
-                    DidCheckout: false,
-                    EmployeeId: parseInt(window.localStorage.getItem('user_id')),
-                    WorkingShiftEventId: value,
-                };
-                setFormWorkShiftTimekeeping({...form});
-            }
+        const currentDate = dayjs().format('YYYY-MM-DD');
+        let form = {};
+        
+        //fetchListTimekeeping(window.localStorage.getItem('user_id'), dayjs().format('YYYY-MM-DD'), parseInt(event.target.value));
+        if (data.length > 0 && currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD')) {
+            form = data[0];
+            form.CheckoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
+            form.DidCheckout = true;
+            setFormWorkShiftTimekeeping({...form});
+            setIsCheckout(false);
+            setIsCheckin(true);
+            console.log(true);
+        } else {
+            setIsCheckout(true);
+            setIsCheckin(false);
+            form = {
+                DidCheckIn : true,
+                CheckinTime : dayjs().add(-OFFSET, 'minute').toISOString(),
+                DidCheckout: false,
+                EmployeeId: parseInt(window.localStorage.getItem('user_id')),
+                WorkingShiftEventId: event.target.value,
+            };
+            setFormWorkShiftTimekeeping({...form});
+            console.log(false);
         }
-    }, [isFetchListSuccess])
+        console.log(form);
+    };
+    // useEffect(() => {
+    //     if (fetchListResponse?.data) {
+    //         const currentDate = dayjs().format('YYYY-MM-DD');
+    //         let data = fetchListResponse.data;
+    //         if (data.length > 0 && currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD')) {
+    //             let form = data[0];
+    //             form = data[0];
+    //             form.CheckoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
+    //             form.DidCheckout = true;
+    //             setFormWorkShiftTimekeeping({...form});
+    //             setIsCheckout(false);
+    //             setIsCheckin(true);
+    //         } else {
+    //             setIsCheckout(true);
+    //             setIsCheckin(false);
+    //             let form = {};
+    //             form = {
+    //                 DidCheckIn : true,
+    //                 CheckinTime : dayjs().add(-OFFSET, 'minute').toISOString(),
+    //                 DidCheckout: false,
+    //                 EmployeeId: parseInt(window.localStorage.getItem('user_id')),
+    //                 WorkingShiftEventId: value,
+    //             };
+    //             setFormWorkShiftTimekeeping({...form});
+    //         }
+    //     }
+    // }, [isFetchListSuccess])
 
     const groupButton = () => {
         return (

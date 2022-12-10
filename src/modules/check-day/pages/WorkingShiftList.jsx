@@ -10,10 +10,11 @@ import InfoDialog from "../../../components/Dialog/InfoDialog";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 import CreateWorkingShift from "./CreateWorkingShift";
 import EditWorkingShift from "./EditWorkingShift";
+import CreateMultipleWorkingShift from "./CreateMultipleWorkingShift";
 import Select from "../../../components/DialogForm/Select";
-import { useDeleteWorkingShift, useFetchListWorkingShift } from "../../../client/workingShiftService";
 import dayjs from "dayjs";
 
+import { useDeleteWorkingShift, useFetchListWorkingShift } from "../../../client/workingShiftService";
 
 const generateMonth = () => {
     const date = dayjs();
@@ -75,11 +76,13 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
         field: "action",
         headerName: "Thao tác",
         width: 250,
-        renderCell: ({ id }) => {
+        renderCell: ({ id, type }) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
-                <ActionButton onClick={() => openEditCb(id)}>
-                    Sửa
-                </ActionButton>
+                {type == 1 &&
+                    <ActionButton onClick={() => openEditCb(id)}>
+                        Sửa
+                    </ActionButton>
+                }
                 <ActionButton >
                     chi tiết
                 </ActionButton>
@@ -101,6 +104,8 @@ export default function WorkingShiftList() {
     const [currentMonth, setCurrentMonth] = React.useState(dayjs().format('MM/YYYY'))
     const [shiftId, setShiftId] = React.useState(null);
     const [isCreateShiftOpen, setIsCreateShiftOpen] = React.useState(false);
+    const [isCreateMultipleShiftOpen, setIsCreateMultipleShiftOpen] = React.useState(false);
+
     const [isEditShiftOpen, setIsEditShiftOpen] = React.useState(false);
     const [isDeleteShiftOpen, setIsDeleteShiftOpen] = React.useState(false);
 
@@ -157,10 +162,20 @@ export default function WorkingShiftList() {
         {isCreateShiftOpen && <CreateWorkingShift
             closeDialogCb={
                 () => setIsCreateShiftOpen(false)}
-            createSuccessCb={() => {
+            reload={() => {
                 setIsCreateShiftOpen(false);
                 fetchWorkingShifts()
             }} />}
+
+        {isCreateMultipleShiftOpen && <CreateMultipleWorkingShift
+            closeDialogCb={
+                () => setIsCreateMultipleShiftOpen(false)}
+            reload={() => {
+                setIsCreateShiftOpen(false);
+                fetchWorkingShifts()
+            }} />
+        }
+
         {isEditShiftOpen &&
             <EditWorkingShift closeDialogCb={
                 () => setIsEditShiftOpen(false)}
@@ -227,15 +242,15 @@ export default function WorkingShiftList() {
                     menu={
                         [
                             {
-                                text: "Tạo mới một ca",
+                                text: "Tạo mới ca ngoài giờ",
                                 handler: () => {
                                     setIsCreateShiftOpen(true);
                                 }
                             },
                             {
-                                text: "Tạo mới nhiều ca",
+                                text: "Tạo mới ca hằng ngày",
                                 handler: () => {
-                                    setIsCreateShiftOpen(true);
+                                    setIsCreateMultipleShiftOpen(true);
                                 }
                             },
                         ]

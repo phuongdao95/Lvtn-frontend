@@ -105,7 +105,7 @@ export default function PayslipOverview() {
                             <Box>
                                 <Label text={"Lương cơ bản"} />
                                 <Typography>
-                                    {detail.baseSalary}
+                                    {detail.baseSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
                                 </Typography>
                             </Box>
                         </Fragment>
@@ -116,7 +116,7 @@ export default function PayslipOverview() {
                             <Box>
                                 <Label text={"Lương thực tế"} />
                                 <Typography>
-                                    {detail.actualSalary}
+                                    {detail.actualSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
                                 </Typography>
                             </Box>
                         </Fragment>
@@ -129,7 +129,7 @@ export default function PayslipOverview() {
                             <Box>
                                 <Label text={"Tổng khấu trừ"} />
                                 <Typography>
-                                    {detail.totalDeduction ?? 0}
+                                    {(detail.totalDeduction ?? 0).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
                                 </Typography>
                             </Box>
                         </Fragment>
@@ -140,7 +140,7 @@ export default function PayslipOverview() {
                             <Box>
                                 <Label text={"Tổng phụ cấp"} />
                                 <Typography>
-                                    {detail.totalAllowance ?? 0}
+                                    {(detail.totalAllowance ?? 0).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
                                 </Typography>
                             </Box>
                         </Fragment>
@@ -153,7 +153,7 @@ export default function PayslipOverview() {
                             <Box>
                                 <Label text={"Tổng thưởng"} />
                                 <Typography>
-                                    {detail.totalBonus ?? 0}
+                                    {(detail.totalBonus ?? 0).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
                                 </Typography>
                             </Box>
                         </Fragment>
@@ -164,7 +164,7 @@ export default function PayslipOverview() {
                             <Box>
                                 <Label text={"Tổng lương chấm công"} />
                                 <Typography>
-                                    {detail.salaryAfterTimekeeepingCalculation ?? 0}
+                                    {(detail.salaryAfterTimekeeepingCalculation ?? 0).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
                                 </Typography>
                             </Box>
                         </Fragment>

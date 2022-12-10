@@ -5,8 +5,6 @@ import OneColumnBox from '../../../components/DialogForm/OneColumnBox';
 import Label from '../../../components/DialogForm/Label';
 import TwoColumnBox from '../../../components/DialogForm/TwoColumnBox';
 import { useFetchOneTask, useFetchTaskLabelsOfTask, useRemoveTaskLabelFromTask } from '../../../client/taskService';
-import { useFormik } from 'formik';
-import { useParams } from 'react-router';
 import dayjs from 'dayjs';
 import RTEContent from '../components/RTEContent';
 import TaskDetailComments from './TaskDetailComment';
@@ -16,6 +14,7 @@ import ConfirmDialog from '../../../components/Dialog/ConfirmDialog';
 import { Typography } from '@mui/material';
 import TaskDetailEdit from "./TaskDetailEdit";
 import TaskDetailNewLabel from './TaskDetailNewLabel';
+import TaskSubCreate from './TaskSubCreate';
 
 const initialDialogState = {
     title: "",
@@ -24,14 +23,13 @@ const initialDialogState = {
 }
 
 export default function TaskDetailInfo({ taskId }) {
-    const { id: boardId } = useParams();
-
     const [isDescriptionDialogOpen, setIsDescriptionDialogOpen] = React.useState(false);
     const [isTaskDetailEditOpen, setIsTaskDetailEditOpen] = React.useState(false);
     const [isAddLabelOpen, setIsAddLabelOpen] = React.useState(false);
     const [description, setDescription] = React.useState(null);
     const [labelId, setLabelId] = React.useState();
     const [isRemoveLabelOpen, setIsRemoveLabelOpen] = React.useState(false);
+    const [isTaskCreateOpen, setIsTaskCreateOpen] = React.useState(false);
 
     const [isInfoDialogOpen, setIsInfoDialogOpen] = React.useState(false);
     const [infoDialogMessage, setInfoDialogMessage] = React.useState({
@@ -73,21 +71,6 @@ export default function TaskDetailInfo({ taskId }) {
         data: taskDetail
     } = useFetchOneTask();
 
-    const formik = useFormik({
-        initialValues: {
-            name: "",
-            column: { id: null, name: "" },
-            inCharge: { id: null, name: "" },
-            reportTo: { id: null, name: "" },
-            labels: [],
-            fromDate: dayjs(),
-            toDate: dayjs().add(10),
-            effort: 3,
-        },
-        onSubmit: (values) => {
-        }
-    });
-
     React.useEffect(() => {
         fetchTaskDetail(taskId);
         fetchLabels(taskId);
@@ -101,6 +84,7 @@ export default function TaskDetailInfo({ taskId }) {
     }, [isRemoveLabelSuccess])
 
     const [detail, setDetail] = React.useState({
+        type: 0,
         name: "",
         point: "",
         fromDate: "",
@@ -115,6 +99,7 @@ export default function TaskDetailInfo({ taskId }) {
             setDescription(JSON.parse(taskDetail.description));
 
             setDetail({
+                type: taskDetail.type,
                 name: taskDetail.name,
                 point: taskDetail.point,
                 fromDate: dayjs(taskDetail.fromDate).format('DD/MM/YYYY'),
@@ -133,7 +118,13 @@ export default function TaskDetailInfo({ taskId }) {
     }, [isFetchLabelsSuccess])
 
     return <Fragment>
-
+        {isTaskCreateOpen &&
+            <TaskSubCreate
+                taskId={taskId}
+                closeCb={() => setIsTaskCreateOpen(false)}
+                reload={() => { }}
+            />
+        }
 
         {isDescriptionDialogOpen &&
             <DescriptionDialog taskId={taskId} reloadDescription={() => {
@@ -327,7 +318,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Người được gán"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                {detail.inChargeName ?? "Unassigned"}
+                                                {detail.inChargeName ?? "Chưa được gán"}
                                             </Typography>
                                         </Fragment>
                                     }
@@ -335,7 +326,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Người báo cáo"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                {detail.reportToName ?? "Unassigned"}
+                                                {detail.reportToName ?? "Chưa được gán"}
                                             </Typography>
                                         </Fragment>
                                     }
@@ -363,6 +354,25 @@ export default function TaskDetailInfo({ taskId }) {
                             </Box>
                         </Box>
                     </Fragment>
+
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        position: 'relative',
+                        justifyContent: 'space-between',
+                        marginTop: '10px',
+                        gap: 2,
+                    }}>
+
+                        <TaskDetailHeader>
+                            Task liên quan
+                        </TaskDetailHeader>
+                        {detail.type == 0 &&
+                            <Button onClick={() => setIsTaskCreateOpen(true)}>
+                                Tạo subtask
+                            </Button>
+                        }
+                    </Box>
                 </Box>
             </Box>
         </Box>

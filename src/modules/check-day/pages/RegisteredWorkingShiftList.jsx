@@ -11,7 +11,7 @@ import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 import CreateWorkingShift from "./CreateWorkingShift";
 import EditWorkingShift from "./EditWorkingShift";
 import Select from "../../../components/DialogForm/Select";
-import { useDeleteWorkingShift, useFetchRegistrationListOfUser } from "../../../client/workingShiftService";
+import { useDeleteRegistration, useFetchRegistrationListOfUser } from "../../../client/workingShiftService";
 import dayjs from "dayjs";
 import { getCurrentUserId } from "../../../client/autheticationService";
 
@@ -31,63 +31,79 @@ const generateMonth = () => {
     return result;
 }
 
-const getColumnConfig = (openEditCb, openDeleteCb) => [
+const getColumnConfig = (openDeleteCb) => [
+    {
+        field: "action",
+        headerName: "Thao tác",
+        width: 140,
+        renderCell: ({ id }) => {
+            return <Box sx={{ display: 'flex', gap: 1 }}>
+                <ActionButton onClick={() => openDeleteCb(id)}>
+                    Hủy Đăng ký
+                </ActionButton>
+            </Box>
+        }
+    },
+
     {
         field: "id",
         width: 100
     },
     {
-        field: "name",
+        field: "workingShiftName",
         headerName: "Tên",
         width: 150,
     },
 
     {
-        field: "date",
+        field: "startDate",
+        headerName: "Ngày Bắt đầu đăng ký",
+        width: 200,
+    },
+
+    {
+        field: "endDate",
+        headerName: "Ngày kết thúc đăng ký",
+        width: 200,
+    },
+
+    {
+        field: "workingShiftStartDate",
         headerName: "Ngày",
         width: 100,
     },
 
     {
-        field: "startTime",
-        headerName: "Bắt đầu",
+        field: "workingShiftStartTime",
+        headerName: "Bắt đầu ca làm",
         width: 100,
     },
 
     {
-        field: "endTime",
-        headerName: "Kết thúc",
+        field: "workingShiftEndTime",
+        headerName: "kết thúc ca làm",
         width: 100,
     },
 
     {
-        field: "formulaName",
+        field: "workingShiftDescription",
+        headerName: "Mô tả",
+        width: 200,
+    },
+
+    {
+        field: "workingShiftFormulaName",
         headerName: "Công thức chấm công",
         width: 150,
     },
 
     {
-        field: "type",
+        field: "workingShiftType",
         headerName: "Loại",
         width: 150
     },
-
-    {
-        field: "action",
-        headerName: "Thao tác",
-        width: 250,
-        renderCell: ({ id }) => {
-            return <Box sx={{ display: 'flex', gap: 1 }}>
-                <ActionButton >
-                    chi tiết
-                </ActionButton>
-                <ActionButton onClick={() => openDeleteCb(id)}>
-                    Hủy đăng ký
-                </ActionButton>
-            </Box>
-        }
-    }
 ];
+
 
 const initialDialogState = {
     title: "",
@@ -122,7 +138,7 @@ export default function RegisteredWorkingShiftList() {
         isPending: isDeletePending,
         isError: isDeleteError,
         method: deleteWorkingShift
-    } = useDeleteWorkingShift();
+    } = useDeleteRegistration();
 
     React.useEffect(() => {
         if (isError) {
@@ -140,7 +156,7 @@ export default function RegisteredWorkingShiftList() {
 
     React.useEffect(() => {
         if (isDeleteSuccess) {
-            fetchWorkingShifts();
+            fetchWorkingShifts(getCurrentUserId(), currentMonth, "month");
         }
         if (isDeleteError) {
             setInfoDialogMessage({
@@ -167,7 +183,7 @@ export default function RegisteredWorkingShiftList() {
         {isDeleteShiftOpen &&
             <ConfirmDialog
                 title={"Confirm"}
-                message="Bạn có muốn xóa chức vụ này"
+                message="Bạn có muốn hủy đăng ký"
                 cancelAction={{
                     text: "Cancel",
                     handler: () => {
@@ -201,15 +217,14 @@ export default function RegisteredWorkingShiftList() {
                     rowCount={response?.total ?? 0}
                     rows={response?.data?.map((shift) => ({
                         ...shift,
-                        date: dayjs(shift.startTime).format("DD/MM/YYYY"),
-                        startTime: dayjs(shift.startTime).format("HH:mm"),
-                        endTime: dayjs(shift.endTime).format("HH:mm"),
+                        startDate: dayjs(shift.startDate).format("DD/MM/YYYY HH:mm"),
+                        endDate: dayjs(shift.endDate).format("DD/MM/YYYY HH:mm"),
+                        workingShiftStartDate: dayjs(shift.workingShiftStartTime).format("DD/MM/YYYY"),
+                        workingShiftStartTime: dayjs(shift.workingShiftStartTime).format("HH:mm"),
+                        workingShiftEndTime: dayjs(shift.workingShiftEndTime).format("HH:mm"),
+                        
                     })) ?? []}
                     columns={getColumnConfig(
-                        (id) => {
-                            setShiftId(id);
-                            setIsEditShiftOpen(true);
-                        },
                         (id) => {
                             setShiftId(id);
                             setIsDeleteShiftOpen(true);
@@ -217,27 +232,6 @@ export default function RegisteredWorkingShiftList() {
                     isError={isError}
                     isLoading={isPending}
                     isSuccess={isSuccess}
-                />
-            }
-            primaryButtonSection={
-                <MenuButton
-                    text={"Thao tác"}
-                    menu={
-                        [
-                            {
-                                text: "Tạo mới một ca",
-                                handler: () => {
-                                    setIsCreateShiftOpen(true);
-                                }
-                            },
-                            {
-                                text: "Tạo mới nhiều ca",
-                                handler: () => {
-                                    setIsCreateShiftOpen(true);
-                                }
-                            },
-                        ]
-                    }
                 />
             }
             searchSection={<SearchField />}

@@ -40,13 +40,13 @@ const getColumnConfig = (openEditRoleCb, openDeleteRoleCb, downloadCb) => [
         renderCell: ({ id }) => {
             return <Box sx={{ display: "flex", gap: 1 }}>
                 <ActionButton onClick={() => downloadCb(id)}>
-                    Download
+                    Tải xuống
                 </ActionButton>
                 <ActionButton onClick={() => openEditRoleCb(id)}>
-                    Edit
+                    Sửa
                 </ActionButton>
                 <ActionButton onClick={() => openDeleteRoleCb(id)}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </Box >
         }

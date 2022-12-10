@@ -22,6 +22,7 @@ import {
 import { useParams } from 'react-router';
 import dayjs from 'dayjs';
 import { useCreateTask } from '../../../client/taskService';
+import Select from '../../../components/DialogForm/Select';
 
 export default function TaskCreate({ closeCb = () => { }, reload }) {
     const { id: boardId } = useParams();
@@ -66,6 +67,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
             column: { id: null, name: "" },
             inCharge: { id: null, name: "" },
             reportTo: { id: null, name: "" },
+            type: "task",
             labels: [],
             fromDate: dayjs(),
             toDate: dayjs().add(10),
@@ -82,7 +84,8 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                 taskLabelIds: labelIds,
                 inChargeId,
                 reportToId,
-                description: JSON.stringify(description), columnId
+                description: JSON.stringify(description),
+                columnId,
             })
         }
     });
@@ -104,6 +107,8 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
         if (isTaskColumnsSuccess) {
             setColumnOptions(taskColumnsResponse.data.map(
                 column => ({ id: column.id, name: column.name })))
+
+            formik.setFieldValue('column', columnOptions[0])
         }
     }, [isTaskColumnsSuccess])
 
@@ -119,7 +124,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
         if (isSuccess) {
             closeCb();
             reload();
-        }   
+        }
     }, [isSuccess]);
 
     return (
@@ -177,20 +182,25 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                             <TwoColumnBox
                                 firstSlot={
                                     <Fragment>
-                                        <Label text={"Trạng thái"} />
-                                        <AutoComplete
-                                            id="column"
-                                            name="column"
-                                            getOptionLabel={(option) => option.name}
-                                            options={columnOptions}
-                                            value={formik.values.column}
-                                            onChange={(event, value) => {
-                                                formik.setFieldValue("column", value)
-                                            }}
+                                        <Label text={"Loại task"} />
+                                        <Select
+                                            id="type"
+                                            name="type"
+                                            value={formik.values.type}
+                                            onChange={formik.handleChange}
+                                            menu={[
+                                                {
+                                                    label: "Normal Task",
+                                                    value: "task",
+                                                },
+                                                {
+                                                    label: "Epic Task",
+                                                    value: "epic"
+                                                }
+                                            ]}
                                         />
                                     </Fragment>
                                 }
-
                                 secondSlot={
                                     <Fragment>
                                         <Label text={"Effort"} />
@@ -215,7 +225,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                                             id={"inCharge"}
                                             name={"inCharge"}
                                             options={boardUserOptions}
-                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Empty Option`}
+                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Chưa được gán`}
                                             value={formik.values.inCharge}
                                             onChange={(event, value) => {
                                                 formik.setFieldValue("inCharge", value)
@@ -230,7 +240,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                                             id={"reportTo"}
                                             name={"reportTo"}
                                             options={boardUserOptions}
-                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Empty Option`}
+                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Chưa được gán`}
                                             value={formik.values.reportTo}
                                             onChange={(event, value) => {
                                                 formik.setFieldValue("reportTo", value)
@@ -239,6 +249,8 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                                     </Fragment>
                                 }
                             />
+
+
 
                             <TwoColumnBox
                                 firstSlot={
