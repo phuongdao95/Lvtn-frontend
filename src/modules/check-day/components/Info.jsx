@@ -4,6 +4,7 @@ import React, {useState, useEffect} from 'react';
 import {useGetByUser, useFetchOne} from "./../../../client/workingShiftEvent";
 import { useFetchList } from "./../../../client/workingShiftTimekeeping";
 import dayjs from 'dayjs';
+import Snackbar from '../../../components/Snackbar/Snackbar';
 
 const OFFSET = new Date().getTimezoneOffset();
 const DAY = ['Sun', 'Mon', 'Tus', 'Wes', 'Thu', 'Fri', 'Sar'];
@@ -50,7 +51,12 @@ const welcome = name => {
     </Box>
 )};
 
-const Info = ({takePicture}) => {
+const Info = ({takePicture, setStateMes}) => {
+    // const [stateMes, setStateMes] = useState({
+    //     open: false,
+    //     type: 'info',
+    //     message: '',
+    // });
     const currTime = new Date();
     const format = formatDate(currTime);
     const [recognized, setRecognized] = useState(false);
@@ -98,7 +104,7 @@ const Info = ({takePicture}) => {
                             endTime: dayjs(item.workingShiftEvent.endTime).format('h:mm a'),
                             showName: item.workingShiftEvent.name + ' ' + dayjs(item.workingShiftEvent.startTime).format('h:mm a') + ' ' + dayjs(item.workingShiftEvent.endTime).format('h:mm a'),
                             didCheckIn: item.didCheckIn,
-                            didCheckOut: item.didCheckOut,
+                            didCheckout: item.didCheckout,
                             checkinTime: item.checkinTime,
                             checkoutTime: item.checkoutTime,
                             isCheckInFirst: item.isCheckInFirst,
@@ -143,8 +149,14 @@ const Info = ({takePicture}) => {
                         form.checkinFirst = true;
                         if (dayjs().add(30, 'minute').format('h:mm a') >= item.startTime) {
                             setIsCheckin(false);
+                        } else {
+                            setStateMes({
+                                type: 'warning',
+                                message: 'Chưa tới giờ vào ca',
+                                open: true,
+                            })
                         }
-                    } else if (item.didCheckIn && item.didCheckout) {
+                    } else if (item.didCheckIn && item.didCheckout && dayjs().add(-30, 'minute').format('h:mm a') <= item.endTime) {
                         // second, ... checkin
                         form.didCheckIn = true;
                         form.checkInTime = dayjs().add(-OFFSET, 'minute').toISOString();
@@ -154,6 +166,12 @@ const Info = ({takePicture}) => {
                         form.checkinFirst = false;
                         if (dayjs().add(30, 'minute').format('h:mm a') >= item.startTime) {
                             setIsCheckin(false);
+                        } else {
+                            setStateMes({
+                                type: 'warning',
+                                message: 'Chưa tới giờ vào ca',
+                                open: true,
+                            })
                         }
                     } else if (!item.didCheckOut) {
                         // check out
@@ -165,6 +183,12 @@ const Info = ({takePicture}) => {
                         form.checkoutLast = true;
                         if (dayjs().add(-30, 'minute').format('h:mm a') <= item.endTime) {
                             setIsCheckout(false);
+                        } else {
+                            setStateMes({
+                                type: 'warning',
+                                message: 'Đã hết thời gian chấm tan ca',
+                                open: true,
+                            })
                         }
                     }
                     setFormWorkShiftTimekeeping({...form});
@@ -275,6 +299,7 @@ const Info = ({takePicture}) => {
             py: 1,
             minWidth: 200,
         }}>
+            {/* <Snackbar state={stateMes} close={() => setStateMes({...stateMes, open: false})} /> */}
             <Card sx={{
                 mx: 'auto',
                 textAlign: 'center',

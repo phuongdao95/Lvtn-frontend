@@ -100,7 +100,7 @@ const videoRef = useRef(null);
                                 <Aicam videoRef={videoRef} photoRef={photoRef} />
                             </Grid>
                             <Grid item xs={12} sm={4} md={4}>
-                                <Info takePicture={clickTakePicture} />
+                                <Info takePicture={clickTakePicture} setStateMes={setState} />
                             </Grid>
                         </Grid>
                     </Box>
