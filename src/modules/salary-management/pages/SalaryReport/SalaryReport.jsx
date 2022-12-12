@@ -1,15 +1,29 @@
 import React from "react";
-import { Box } from "@mui/system";
-import { Button, Typography } from "@mui/material";
 import ReportCard from "./ReportCard";
 import PayrollPicker from "./PayrollPicker";
+import RankingTable from "./RankingTable";
+import { Box } from "@mui/system";
+import { Button, Typography } from "@mui/material";
+import { useGetReport } from "../../../../client/payrollService";
+import { grey } from "@mui/material/colors";
 
 export default function SalaryReport() {
     const [isPayrollPickerOpen, setIsPayrollPickerOpen] = React.useState(false);
     const [pickedPayrollId, setPickedPayrollId] = React.useState(null);
+    const [reportData, setReportData] = React.useState(null);
+
+    const {
+        isPending,
+        isSuccess,
+        isError,
+        data: fetchedReport,
+        method: fetchReport
+    } = useGetReport();
 
     React.useEffect(() => {
-        console.log(pickedPayrollId);
+        if (pickedPayrollId) {
+            fetchReport(pickedPayrollId);
+        }
     }, [pickedPayrollId])
 
     return <Box sx={{ background: 'white', height: '80vh' }}>
@@ -26,33 +40,52 @@ export default function SalaryReport() {
             <Button variant="contained" size="small" onClick={() => setIsPayrollPickerOpen(true)}>Chọn payroll</Button>
         </Box>
 
-        <Box sx={{ padding: 2 }}>
-            <Box sx={{ display: 'flex', gap: 2 }}>
-                <ReportCard name={"Số nhân viên"} value={123} />
-                <ReportCard name={"Tổng lương nhân viên"} value={123} />
-                <ReportCard name={"Tổng khấu trừ"} value={123} />
-                <ReportCard name={"Tổng phụ cấp"} value={123} />
-                <ReportCard name={"Tổng thưởng"} value={123} />
+        {isSuccess && pickedPayrollId &&
+            <Box sx={{ padding: 2 }}>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                    <ReportCard name={"Số nhân viên"} value={
+                        fetchedReport.totalEmployee
+                    } />
+                    <ReportCard name={"Tổng lương nhân viên"} value={
+                        fetchedReport.totalActualSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                    } />
+                    <ReportCard name={"Tổng khấu trừ"} value={
+                        fetchedReport.totalDeduction.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                    } />
+                    <ReportCard name={"Tổng phụ cấp"} value={
+                        fetchedReport.totalAllowance.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                    } />
+                    <ReportCard name={"Tổng thưởng"} value={
+                        fetchedReport.totalBonus.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                    } />
+                </Box>
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, marginTop: 3 }}>
+                    <Box>
+                        <Typography marginLeft={'4px'} fontWeight={"bold"} color={grey[700]}>
+                            Xếp hạng tổng thưởng
+                        </Typography>
+
+                        <RankingTable rows={fetchedReport.top10Bonus} category='Thưởng' />
+                    </Box>
+
+                    <Box>
+                        <Typography marginLeft={'4px'} fontWeight={"bold"} color={grey[700]}>
+                            Xếp hạng tổng lương
+                        </Typography>
+
+                        <RankingTable rows={fetchedReport.top10ActualSalary} category={'Lương'} />
+                    </Box>
+                </Box>
             </Box>
+        }
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, marginTop: 3 }}>
-                <Box>
-                    Xếp hạng tổng phụ cấp
-                </Box>
-
-                <Box>
-                    Xếp hạng tổng thưởng
-                </Box>
-
-                <Box>
-                    Xếp hạng tổng khấu trừ
-                </Box>
-
-                <Box>
-                    Xếp hạng lương cơ bản
-                </Box>
+        {!pickedPayrollId &&
+            <Box sx={{ padding: 2 }}>
+                <Typography>
+                    Chưa có payroll nào được chọn
+                </Typography>
             </Box>
-        </Box>
-
+        }
     </Box>;
 }

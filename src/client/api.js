@@ -7,18 +7,18 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(async (config) => {
-    // const localStorage = window?.localStorage;
-    // const jwt = localStorage.getItem("jwt_token");
+    const localStorage = window?.localStorage;
+    const jwt = localStorage.getItem("jwt_token");
 
-    // if (jwt) {
-    //     config.headers = {
-    //         ...config.headers,
-    //         authorization: `Bearer ${jwt}`
-    //     }
-    // }
+    if (jwt) {
+        config.headers = {
+            ...config.headers,
+            authorization: `Bearer ${jwt}`
+        }
+    }
     config.headers = {
         ...config.headers,
-        // authorization: `Bearer ${jwt}`
+        authorization: `Bearer ${jwt}`
     }
 
     return config;

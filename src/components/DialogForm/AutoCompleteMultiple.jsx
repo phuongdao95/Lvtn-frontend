@@ -9,11 +9,13 @@ export default function AutoCompleteMultiple({
     isOptionEqualToValue = (option, value) => option.id === value.id,
     value,
     onChange,
+    disabled = false,
 }) {
     return (
         <Autocomplete
             fullWidth
             multiple
+            disabled={disabled}
             ListboxProps={{ style: { maxHeight: 150 } }}
             filterSelectedOptions
             options={options}

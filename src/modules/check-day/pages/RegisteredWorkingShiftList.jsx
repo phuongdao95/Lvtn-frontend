@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import { Box } from "@mui/material";
 import DataGridLayout from "../../../layouts/DataGridLayout";
 import DataGrid from "../../../components/DataGrid";
-import MenuButton from "../../../components/DataGrid/MenuButton";
 import SearchField from "../../../components/DataGrid/SearchField";
 import SearchButton from "../../../components/DataGrid/SearchButton";
 import ActionButton from "../../../components/DataGrid/ActionButton";
@@ -11,7 +10,7 @@ import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 import CreateWorkingShift from "./CreateWorkingShift";
 import EditWorkingShift from "./EditWorkingShift";
 import Select from "../../../components/DialogForm/Select";
-import { useDeleteRegistration, useFetchRegistrationListOfUser } from "../../../client/workingShiftService";
+import { useDeleteRegistrationByIdAndUserId, useFetchRegistrationListOfUser } from "../../../client/workingShiftService";
 import dayjs from "dayjs";
 import { getCurrentUserId } from "../../../client/autheticationService";
 
@@ -36,12 +35,12 @@ const getColumnConfig = (openDeleteCb) => [
         field: "action",
         headerName: "Thao tác",
         width: 140,
-        renderCell: ({ id }) => {
+        renderCell: ({ id, ...rest }) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
-                <ActionButton onClick={() => openDeleteCb(id)}>
+                <ActionButton disabled={rest.row.workingShiftType === 0} onClick={() => openDeleteCb(id)}>
                     Hủy Đăng ký
                 </ActionButton>
-            </Box>
+            </Box >
         }
     },
 
@@ -138,7 +137,7 @@ export default function RegisteredWorkingShiftList() {
         isPending: isDeletePending,
         isError: isDeleteError,
         method: deleteWorkingShift
-    } = useDeleteRegistration();
+    } = useDeleteRegistrationByIdAndUserId();
 
     React.useEffect(() => {
         if (isError) {
@@ -196,7 +195,7 @@ export default function RegisteredWorkingShiftList() {
                     handler: () => {
                         setIsDeleteShiftOpen(false);
                         setShiftId(null);
-                        deleteWorkingShift(shiftId);
+                        deleteWorkingShift(getCurrentUserId(), shiftId);
                     }
                 }}
             />}
@@ -222,7 +221,7 @@ export default function RegisteredWorkingShiftList() {
                         workingShiftStartDate: dayjs(shift.workingShiftStartTime).format("DD/MM/YYYY"),
                         workingShiftStartTime: dayjs(shift.workingShiftStartTime).format("HH:mm"),
                         workingShiftEndTime: dayjs(shift.workingShiftEndTime).format("HH:mm"),
-                        
+
                     })) ?? []}
                     columns={getColumnConfig(
                         (id) => {

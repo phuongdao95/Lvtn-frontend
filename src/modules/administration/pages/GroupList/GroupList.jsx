@@ -143,20 +143,6 @@ export default function GroupList() {
                         color="info"
                     />
                 }
-                secondaryButtonSection={
-                    <MenuButton
-                        text={"Liên kết liên quan"}
-                        menu={
-                            [
-                                { text: "Danh sách chức vụ", handler: () => { } },
-                                { text: "Danh sách team", handler: () => { } },
-                                { text: "Danh sách user", handler: () => { } },
-                                { text: "Danh sách quyền", handler: () => { } }
-                            ]
-                        }
-                        variant="outlined"
-                        color="info"
-                    />}
                 searchSection={<SearchField />}
                 dropdownFilterSection={<Fragment></Fragment>}
                 searchButtonSection={<SearchButton />}

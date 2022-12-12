@@ -40,16 +40,6 @@ const SideBar = (props) => {
 
     const routes = [
         {
-            text: "Dashboard",
-            onClick: (e) => {
-                e.stopPropagation();
-                navigate("/dashboard")
-            },
-            icon: <DashboardIcon style={{ color: textColor }} />,
-            subItems: []
-        },
-
-        {
             text: "Thông tin cá nhân",
             onClick: (e) => {
                 e.stopPropagation();

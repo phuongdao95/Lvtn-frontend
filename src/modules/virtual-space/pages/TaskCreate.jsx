@@ -220,12 +220,12 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                             <TwoColumnBox
                                 firstSlot={
                                     <Fragment>
-                                        <Label text={"Người được gán"} />
+                                        <Label text={"Người gán"} />
                                         <AutoComplete
                                             id={"inCharge"}
                                             name={"inCharge"}
                                             options={boardUserOptions}
-                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Chưa được gán`}
+                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Chưa gán`}
                                             value={formik.values.inCharge}
                                             onChange={(event, value) => {
                                                 formik.setFieldValue("inCharge", value)
@@ -240,7 +240,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                                             id={"reportTo"}
                                             name={"reportTo"}
                                             options={boardUserOptions}
-                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Chưa được gán`}
+                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Chưa gán`}
                                             value={formik.values.reportTo}
                                             onChange={(event, value) => {
                                                 formik.setFieldValue("reportTo", value)

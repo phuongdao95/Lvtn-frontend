@@ -23,17 +23,17 @@ const getPermissionColumnConfig = () => {
         },
         {
             field: "didCheckIn",
-            headerName: "Checkin",
+            headerName: "Đã Checkin",
             size: "small",
         },
         {
             field: "didCheckout",
-            headerName: "Checkout",
+            headerName: "Đã Checkout",
             size: "small",
         },
         {
             field: "type",
-            headerName: "Loại",
+            headerName: "Loại ca",
             size: "small",
         },
         {
@@ -103,13 +103,10 @@ export default function TimekeepingsOfDay({
                 endTime: <p style={{ textTransform: 'capitalize' }}>
                     {event.endTime}</p>,
                 didCheckIn: <p style={{ textTransform: 'capitalize' }}>
-                    {event.didCheckIn ? "Yes" : "No"}</p>,
+                    {event.didCheckIn ? "Có" : "Không"}</p>,
                 didCheckout: <p style={{ textTransform: 'capitalize' }}>
-                    {event.didCheckout ? "Yes" : "No"}</p>,
+                    {event.didCheckout ? "Có" : "Không"}</p>,
                 action: <Box sx={{ display: 'flex', gap: '2px' }}>
-                    <ActionButton>
-                        Chấm công
-                    </ActionButton>
                     <ActionButton onClick={() => setIsHistoryOpen(true)}>
                         Lịch sử
                     </ActionButton>

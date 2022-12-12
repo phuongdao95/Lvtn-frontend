@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { Box } from "@mui/system";
 import DataGridLayout from "../../../layouts/DataGridLayout";
 import DataGrid from "../../../components/DataGrid";
 import MenuButton from "../../../components/DataGrid/MenuButton";
@@ -11,7 +12,7 @@ import Select from "../../../components/DialogForm/Select";
 
 import WorkingShiftDayConfigCreate from "./WorkingShiftDayConfigCreate";
 import WorkingShiftDayConfigEdit from "./WorkingShiftDayConfigEdit";
-import { Box } from "@mui/system";
+
 import { useDeleteWorkingShiftDayConfig, useFetchListWorkingShiftDayConfig } from "../../../client/workingShiftService";
 import dayjs from "dayjs";
 
@@ -227,6 +228,7 @@ export default function WorkingShiftDayConfigList() {
                         display: 'flex',
                         flexDirection: 'row',
                         maxWidth: 200,
+                        marginBottm: 10,
                         gap: 2
                     }}>
                         <Select

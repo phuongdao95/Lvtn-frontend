@@ -3,7 +3,8 @@ import { useFetchOneUser } from "../../../../client/userService";
 import { Avatar, Button, Typography } from "@mui/material";
 import { getCurrentUserId } from "../../../../client/autheticationService";
 import { Box } from "@mui/system";
-import { grey } from "@mui/material/colors";
+import { blue, grey } from "@mui/material/colors";
+import UpdateAvatar from "./UpdateAvatar";
 
 export default function AvatarSection() {
     const [user, setUser] = React.useState();
@@ -34,11 +35,17 @@ export default function AvatarSection() {
         alignItems: 'center',
         gap: 2
     }}>
+
+        {isUpdateAvatarOpen && <UpdateAvatar closeDialogCb={() => {
+            setIsUpdateAvatarOpen(false)
+            fetchUser(getCurrentUserId());
+        }} />}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: .7 }}>
-            <Avatar sx={{ width: 200, height: 200 }}>
+
+            <Avatar sx={{ width: 200, height: 200, border: `8px solid ${blue[400]}` }} src={fetchedUser?.urlImage}>
             </Avatar>
 
-            <Button size="small" variant="outlined">
+            <Button size="small" variant="outlined" onClick={() => setIsUpdateAvatarOpen(true)}>
                 Cập nhật avatar
             </Button>
         </Box>

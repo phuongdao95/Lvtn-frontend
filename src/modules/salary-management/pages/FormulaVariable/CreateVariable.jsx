@@ -1,15 +1,17 @@
+import React from "react";
 import { Fragment } from "react";
 import { Box } from "@mui/system";
 
 import Dialog from "../../../../components/Dialog";
 import Label from "../../../../components/DialogForm/Label";
 import OneColumnBox from "../../../../components/DialogForm/OneColumnBox"
+import InfoDialog from "../../../../components/Dialog/InfoDialog";
 import TwoColumnBox from "../../../../components/DialogForm/TwoColumnBox";
 import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
 import Select from "../../../../components/DialogForm/Select";
 
-import { useCreateVariable } from "../../../../client/variableService";
+import { checkIfVariableDefineValid, checkIfVariableNameValid, useCreateVariable } from "../../../../client/variableService";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -26,18 +28,39 @@ export default function CreateVariable({ closeDialogCb, id }) {
         method: createVariable,
     } = useCreateVariable();
 
+    const [nameError, setNameError] = React.useState(null);
+    const [formulaDefineError, setFormulaDefineError] = React.useState(null);
+    const [isInfoDialogOpen, setIsInfoDialogOpen] = React.useState(false);
+
     const formik = useFormik({
         initialValues: {
             name: "",
             displayName: "",
             value: "",
-            dataType: "number",
+            dataType: "Integer",
             description: "",
+            area: 'salaryconfig',
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            console.log(values);
-            createVariable(values)
+        onSubmit: async (values) => {
+            const doesSalaryNameExist = await checkIfVariableNameValid(values);
+            const isSalaryDefineValid = await checkIfVariableDefineValid(values);
+
+            if (!isSalaryDefineValid) {
+                setNameError('Định nghĩa công thức không hợp lệ')
+            }
+
+            if (doesSalaryNameExist) {
+                setFormulaDefineError('Tên công thức đã tồn tại');
+            }
+
+            if (doesSalaryNameExist || !isSalaryDefineValid) {
+                setIsInfoDialogOpen(true);
+            }
+
+            if (!doesSalaryNameExist && isSalaryDefineValid) {
+                createVariable(values)
+            }
         }
     })
 
@@ -54,6 +77,14 @@ export default function CreateVariable({ closeDialogCb, id }) {
     >
         <DialogForm>
             <Box>
+                {isInfoDialogOpen && <InfoDialog
+                    closeDialogCb={() => setIsInfoDialogOpen(false)}
+                    title={"Lỗi"}
+                    message={<>
+                        {nameError} <br />
+                        {formulaDefineError}
+                    </>}
+                />}
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
@@ -91,10 +122,10 @@ export default function CreateVariable({ closeDialogCb, id }) {
                             id="dataType"
                             name="dataType"
                             menu={[
-                                { label: "Boolean", value: "boolean" },
-                                { label: "Number", value: "number" },
-                                { label: "Text", value: "text" },
-                                { label: "Datetime", value: "datetime" }]}
+                                { label: "Boolean", value: "Boolean" },
+                                { label: "Integer", value: "Integer" },
+                                { label: "Text", value: "Text" },
+                                { label: "Decimal", value: "Decimal" }]}
                             value={formik.values.dataType}
                             onChange={formik.handleChange}
                         />
