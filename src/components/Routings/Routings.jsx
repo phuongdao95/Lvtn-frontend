@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router";
+import { Navigate } from "react-router-dom";
 
 import WorkFlows from "../../modules/approve-workflow/user/WorkFlows";
 import MyRequests from "../../modules/approve-workflow/view-requests/MyRequests";
@@ -9,7 +10,6 @@ import ConfigNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/Conf
 import UserNghiPhep from "../../modules/approve-workflow/nghi-phep/UserNghiPhep";
 import UserNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/UserNghiThaiSan";
 
-import ListUsers from "../../modules/shares/pages/ListUsers/ListUsers";
 import Registe from "../../modules/check-day/pages/Registe";
 import CheckIn from "../../modules/check-day/pages/CheckIn";
 import Calendar from "../../modules/check-day/pages/Calendar";
@@ -50,6 +50,7 @@ import TaskBoardReport from "../../modules/virtual-space/pages/TaskBoardReport";
 import SalaryReport from "../../modules/salary-management/pages/SalaryReport";
 import WorkingShiftDayConfigList from "../../modules/check-day/pages/WorkingShiftDayConfigList";
 import Dashboard from "../../modules/shares/pages/Dashboard/Dashboard";
+import NotFound from "../../modules/shares/pages/NotFound";
 
 
 export default function Routings() {
@@ -86,17 +87,9 @@ export default function Routings() {
 
         {/* Administration module */}
 
-        <Route path="/user" element={
-            // <ProtectedRoute>
-            <UserList />
-            // </ProtectedRoute>
-        } />
+        <Route path="/user" element={<UserList />} />
 
-        <Route path="/role" element={
-            // <ProtectedRoute>
-            // </ProtectedRoute>
-            <RoleList />
-        } />
+        <Route path="/role" element={<RoleList />} />
 
         <Route path="/group" element={<GroupList />} />
         <Route path="/team" element={<TeamList />} />
@@ -128,6 +121,6 @@ export default function Routings() {
 
         {/** Shared module */}
         <Route path="/profile" element={<UserProfile />} />
-
+        <Route path='*' element={<NotFound />} />
     </Routes>
 }

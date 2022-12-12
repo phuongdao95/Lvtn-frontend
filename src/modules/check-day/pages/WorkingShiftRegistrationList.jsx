@@ -5,12 +5,9 @@ import DataGrid from "../../../components/DataGrid";
 import SearchField from "../../../components/DataGrid/SearchField";
 import SearchButton from "../../../components/DataGrid/SearchButton";
 import ActionButton from "../../../components/DataGrid/ActionButton";
-import InfoDialog from "../../../components/Dialog/InfoDialog";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
-import CreateWorkingShift from "./CreateWorkingShift";
-import EditWorkingShift from "./EditWorkingShift";
 import Select from "../../../components/DialogForm/Select";
-import { useCreateWorkingShiftRegistration, useDeleteWorkingShift, useFetchListWorkingShiftRegistration } from "../../../client/workingShiftService";
+import { useCreateWorkingShiftRegistration, useDeleteWorkingShift, useFetchListWorkingShiftRegistration, useFetchUnregisterWorkingShift } from "../../../client/workingShiftService";
 import dayjs from "dayjs";
 import { getCurrentUserId } from "../../../client/autheticationService";
 
@@ -125,7 +122,7 @@ export default function WorkingShiftRegistrationList() {
         isError,
         data: response,
         method: fetchWorkingShifts
-    } = useFetchListWorkingShiftRegistration();
+    } = useFetchUnregisterWorkingShift();
 
     const {
         isSuccess: isDeleteSuccess,
@@ -152,12 +149,12 @@ export default function WorkingShiftRegistrationList() {
     }, [isError]);
 
     React.useEffect(() => {
-        fetchWorkingShifts(0, 0, currentMonth, "month");
+        fetchWorkingShifts(getCurrentUserId(), currentMonth, "month");
     }, [currentMonth])
 
     React.useEffect(() => {
         if (isDeleteSuccess) {
-            fetchWorkingShifts(0, 0, currentMonth, "month");
+            fetchWorkingShifts(getCurrentUserId(), currentMonth, "month");
         }
         if (isDeleteError) {
             setInfoDialogMessage({
@@ -172,7 +169,7 @@ export default function WorkingShiftRegistrationList() {
         {isRegisterOpen &&
             <ConfirmDialog
                 title={"Xác nhận"}
-                message="Bạn có đăng ký ca làm này"
+                message="Bạn có muốn đăng ký ca làm này"
                 cancelAction={{
                     text: "Cancel",
                     handler: () => {

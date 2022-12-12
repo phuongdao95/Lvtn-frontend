@@ -121,7 +121,7 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Tạo mới ca hằng ngày"
+        title="Tạo mới / Cập nhật ca hằng ngày"
     >
         <DialogForm>
             <LoadingOverlay isLoading={isUpdatePending} />

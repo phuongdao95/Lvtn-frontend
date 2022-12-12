@@ -28,7 +28,7 @@ export default function AccountMenu() {
     return (
         <React.Fragment>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                <Tooltip title="Account settings">
+                <Tooltip title="Tài khoản">
                     <IconButton
                         onClick={handleClick}
                         size="small"
@@ -76,32 +76,21 @@ export default function AccountMenu() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem>
-                    <Avatar /> Profile
-                </MenuItem>
-                <MenuItem>
-                    <Avatar /> My account
-                </MenuItem>
-                <Divider />
-                <MenuItem>
+                <MenuItem onClick={() => {
+                    navigate("/profile")
+                }}>
                     <ListItemIcon>
-                        <PersonAdd fontSize="small" />
                     </ListItemIcon>
-                    Add another account
+                    Thông tin tài khoản
                 </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
-                        <Settings fontSize="small" />
-                    </ListItemIcon>
-                    Settings
-                </MenuItem>
+
                 <MenuItem onClick={() => {
                     logOut(() => navigate("/"));
                 }}>
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>
-                    Logout
+                    Đăng xuất
                 </MenuItem>
             </Menu>
         </React.Fragment>

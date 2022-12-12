@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Box } from "@mui/material";
+import { Box, Checkbox } from "@mui/material";
 import DataGridLayout from "../../../layouts/DataGridLayout";
 import DataGrid from "../../../components/DataGrid";
 import MenuButton from "../../../components/DataGrid/MenuButton";
@@ -32,6 +32,16 @@ const generateMonth = () => {
 }
 
 const getColumnConfig = (openEditCb, openDeleteCb) => [
+    {
+        field: 'check',
+        headerName: '',
+        width: 50,
+        renderCell: ({ id, row }) => {
+            return <Box sx={{ display: 'flex', gap: 1 }}>
+                <Checkbox />
+            </Box>
+        }
+    },
     {
         field: "id",
         width: 100
@@ -101,6 +111,8 @@ const initialDialogState = {
 }
 
 export default function WorkingShiftList() {
+    const [checkList, setCheckList] = React.useState([]);
+
     const [currentMonth, setCurrentMonth] = React.useState(dayjs().format('MM/YYYY'))
     const [shiftId, setShiftId] = React.useState(null);
     const [isCreateShiftOpen, setIsCreateShiftOpen] = React.useState(false);
@@ -263,6 +275,7 @@ export default function WorkingShiftList() {
                     display: 'flex',
                     flexDirection: 'row',
                     maxWidth: 200,
+                    marginBottom: 2,
                     gap: 2
                 }}>
                     <Select

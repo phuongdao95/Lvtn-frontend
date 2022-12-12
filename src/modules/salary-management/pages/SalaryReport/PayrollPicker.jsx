@@ -91,7 +91,7 @@ export default function PayrollPicker({ closeDialogCb, handlePick }) {
 
         <DataGrid
             height={400}
-            pageSize={[5]}
+            pageSize={5}
             rows={payrolls.map(payroll => ({
                 ...payroll,
                 fromDate: dayjs(payroll.fromDate).format("DD/MM/YYYY"),
@@ -100,7 +100,6 @@ export default function PayrollPicker({ closeDialogCb, handlePick }) {
             columns={getColumnConfig(
                 (id) => {
                     if (handlePick) {
-                        console.log(id);
                         handlePick(id);
                     }
                 }

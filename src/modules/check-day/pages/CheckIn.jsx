@@ -15,6 +15,7 @@ const videoRef = useRef(null);
         type: 'info',
         message: '',
     });
+    
     const clickTakePicture = (form, done) => {
         console.log('recognize from timekeeping');
         let video = videoRef.current;

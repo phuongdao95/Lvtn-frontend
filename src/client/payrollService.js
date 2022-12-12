@@ -150,3 +150,30 @@ export const useSendPayroll = getPendingErrorSuccessApiPatternFunction(
 
         return sendPayroll;
     })();
+
+
+export const useGetReport = getPendingErrorSuccessApiPatternFunction(
+    ({ setIsError, setIsSuccess, setIsPending, setData }) => {
+        const fetchPayroll = async (payrollId) => {
+            setIsError(false);
+            setIsSuccess(false);
+            setIsPending(true);
+
+            try {
+                const response = await api.get(`/api/payroll/${payrollId}/report/`);
+
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+            } catch (err) {
+                setIsError(true);
+                console.error(err);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        return fetchPayroll;
+    })();
+

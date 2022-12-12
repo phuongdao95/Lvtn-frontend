@@ -227,6 +227,7 @@ export default function WorkingShiftDayConfigList() {
                         display: 'flex',
                         flexDirection: 'row',
                         maxWidth: 200,
+                        marginBottm: 10,
                         gap: 2
                     }}>
                         <Select
