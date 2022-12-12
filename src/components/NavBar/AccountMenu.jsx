@@ -10,6 +10,7 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import { useNavigate } from 'react-router';
 import { useLogOut } from '../../client/autheticationService';
 
@@ -84,6 +85,12 @@ export default function AccountMenu() {
                     Thông tin tài khoản
                 </MenuItem>
 
+                <MenuItem onClick={() => navigate("approve-workflows/configs")}>
+                    <ListItemIcon>
+                        <AccountTreeIcon fontSize="small" />
+                    </ListItemIcon>
+                    Workflow Configs
+                </MenuItem>
                 <MenuItem onClick={() => {
                     logOut(() => navigate("/"));
                 }}>

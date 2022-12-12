@@ -2,6 +2,22 @@ import React from "react";
 import { Route, Routes } from "react-router";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
+import WorkFlows from "../../modules/approve-workflow/user/WorkFlows";
+import MyRequests from "../../modules/approve-workflow/view-requests/MyRequests";
+import MyToDoRequests from "../../modules/approve-workflow/view-requests/MyToDoRequest";
+
+import ConfigNghiPhep from "../../modules/approve-workflow/nghi-phep/ConfigNghiPhep";
+import ConfigNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/ConfigNghiThaiSan";
+import ConfigCheckinout from "../../modules/approve-workflow/check-inout-manual/ConfigCheckinout";
+
+import UserNghiPhep from "../../modules/approve-workflow/nghi-phep/UserNghiPhep";
+import ViewNghiPhep from "../../modules/approve-workflow/nghi-phep/ViewNghiPhep";
+import UserNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/UserNghiThaiSan";
+import ViewNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/ViewNghiThaiSan";
+import UserCheckinout from "../../modules/approve-workflow/check-inout-manual/UserCheckinout";
+import ViewCheckInOut from "../../modules/approve-workflow/check-inout-manual/ViewCheckInOut";
+import WorkflowConfig from "../../modules/approve-workflow/configs/WorkflowConfig";
+
 const WorkFlows = React.lazy(() => import("../../modules/approve-workflow/user/WorkFlows"));
 const MyRequests = React.lazy(() => import("../../modules/approve-workflow/view-requests/MyRequests"));
 const ConfigNghiPhep = React.lazy(() => import("../../modules/approve-workflow/nghi-phep/ConfigNghiPhep"));
@@ -41,16 +57,30 @@ const UserProfile = React.lazy(() => import("../../modules/shares/pages/UserProf
 const TaskBoardReport = React.lazy(() => import("../../modules/virtual-space/pages/TaskBoardReport"));
 
 
+
+import NotFound from "../../modules/shares/404/NotFound";
+import HomePage from "../../modules/shares/homepage/HomePage";
+
 export default function Routings() {
 
     return <React.Suspense fallback={<div>Loading...</div>}>
         <Routes>
             <Route path="/approve-workflows" element={<WorkFlows />} />
+            <Route exact path="/approve-workflows/configs" element={<WorkflowConfig />} />
             <Route path="/approve-workflows/my-requests" element={<MyRequests />} />
-            <Route exact path="" element={<UserNghiPhep />} />
-            <Route exact path="/approve-workflows/user-nghi-thai-san" element={<UserNghiThaiSan />} />
-            <Route exact path="/approve-workflows/config-nghi-phep" element={<ConfigNghiPhep />} />
-            <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
+            <Route path="/approve-workflows/my-todo-requests" element={<MyToDoRequests />} />
+            <Route exact path="/approve-workflows/user-nghi-phep/:id" element={<UserNghiPhep />} /> { /*new and update*/}
+            <Route exact path="/approve-workflows/user-nghi-phep/todo/:id" element={<ViewNghiPhep isApprover={true} />} /> { /*view and update flow for approver*/}
+            <Route exact path="/approve-workflows/user-nghi-phep/view/:id" element={<ViewNghiPhep isApprover={false} />} /> { /*view the flow*/}
+            <Route exact path="/approve-workflows/user-nghi-thai-san/:id" element={<UserNghiThaiSan />} />
+            <Route exact path="/approve-workflows/user-nghi-thai-san/todo/:id" element={<ViewNghiThaiSan isApprover={true} />} /> { /*view and update flow for approver*/}
+            <Route exact path="/approve-workflows/user-nghi-thai-san/view/:id" element={<ViewNghiThaiSan isApprover={false} />} /> { /*view the flow*/}
+            <Route exact path="/approve-workflows/user-check-in-out/:id" element={<UserCheckinout />} />
+            <Route exact path="/approve-workflows/user-check-in-out/view/:id" element={<ViewCheckInOut isApprover={false} />} /> { /*view the flow*/}
+            <Route exact path="/approve-workflows/user-check-in-out/todo/:id" element={<ViewCheckInOut isApprover={true} />} /> { /*view and update flow for approver*/}
+            <Route exact path="/approve-workflows/configs/config-nghi-phep" element={<ConfigNghiPhep />} />
+            <Route exact path="/approve-workflows/configs/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
+            <Route exact path="/approve-workflows/configs/config-check-in-out" element={<ConfigCheckinout />} />
 
             {/* Administration module */}
             <Route path="/user" element={<ProtectedRoute component={<UserList />} />} />
