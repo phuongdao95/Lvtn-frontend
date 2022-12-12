@@ -1,19 +1,11 @@
-import { useLocation } from "react-router";
-import { hasLoggedIn, isAllowedToVisitRoute } from "../../client/autheticationService";
-import UnauthenticatedDialog from "./UnauthenticatedDialog";
-import UnauthorizedDialog from "./UnauthorizedDialog";
+import { Navigate, useNavigate } from "react-router";
+import { hasLoggedIn } from "../../client/autheticationService";
 
 
-export default function ProtectedRoute({ children }) {
-    const location = useLocation();
-
+export default function ProtectedRoute({ component, pageName }) {
     if (!hasLoggedIn()) {
-        return <UnauthenticatedDialog />
+        return <Navigate to={"/"}/>
     }
 
-    if (!isAllowedToVisitRoute(location.pathname)) {
-        return <UnauthorizedDialog />
-    }
-
-    return children;
+    return component;
 }
