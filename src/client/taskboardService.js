@@ -101,14 +101,14 @@ export const useFetchTasksOfTaskColumn =
 export const useFetchTasksOfTaskColumns =
     getPendingErrorSuccessApiPatternFunction(
         ({ setIsError, setIsPending, setIsSuccess, setData }) => {
-            const fetchTaskListOfTaskColumn = async (columnList) => {
+            const fetchTaskListOfTaskColumn = async (columnList, formData = { isDisabled: false }) => {
                 setIsError(false);
                 setIsPending(true);
                 setIsSuccess(false);
 
                 try {
                     const responses = await Promise.all(columnList.map((column) => {
-                        return api.get(`/api/taskcolumn/${column.id}/task`).then((response) => {
+                        return api.post(`/api/taskcolumn/${column.id}/task`, formData).then((response) => {
                             const taskInfo = response.data;
 
                             return taskInfo;

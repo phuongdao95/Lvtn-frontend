@@ -83,8 +83,6 @@ export default function TaskFilter({ closeDialogCb, boardId, filters, setFilters
                 Bật / tắt bộ lọc
             </label>
 
-
-
             <TwoColumnBox
                 firstSlot={
                     <Fragment>
