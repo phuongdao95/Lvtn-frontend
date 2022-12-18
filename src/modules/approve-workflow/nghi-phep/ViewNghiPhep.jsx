@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import * as workflowService from '../../../client/workflowService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import moment from 'moment/moment';
 
 import ApproveViewItemPage from '../../shares/pages/Approve/ApproveViewItemPage';
 
@@ -22,14 +23,14 @@ const NghiPhepContent = ({ data }) => {
                 <InputLabel sx={{ fontSize: '20px', fontWeight: 'bold', color: 'black' }}>Nghỉ từ ngày</InputLabel>
             </Grid>
             <Grid item xs={6}>
-                <InputLabel sx={{ fontSize: '17px', color: 'black' }}>{data?.startDate}</InputLabel>
+                <InputLabel sx={{ fontSize: '17px', color: 'black' }}>{moment(data?.startDate).format("DD-MM-YYYY")}</InputLabel>
             </Grid>
 
             <Grid item xs={6}>
                 <InputLabel sx={{ fontSize: '20px', fontWeight: 'bold', color: 'black' }}>Nghỉ đến ngày</InputLabel>
             </Grid>
             <Grid item xs={6}>
-                <InputLabel sx={{ fontSize: '17px', color: 'black' }}>{data?.endDate}</InputLabel>
+                <InputLabel sx={{ fontSize: '17px', color: 'black' }}>{moment(data?.endDate).format("DD-MM-YYYY")}</InputLabel>
             </Grid>
         </Grid>
     )

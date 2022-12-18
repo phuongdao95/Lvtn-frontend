@@ -16,6 +16,10 @@ const UserCheckinout = React.lazy(() => import("../../modules/approve-workflow/c
 const ViewCheckInOut = React.lazy(() => import("../../modules/approve-workflow/check-inout-manual/ViewCheckInOut"));
 const WorkflowConfig = React.lazy(() => import("../../modules/approve-workflow/configs/WorkflowConfig"));
 
+const ViewMemberBalances = React.lazy(() => import("../../modules/leave-balance/ViewMemberBalances"));
+const ViewMyBalances = React.lazy(() => import("../../modules/leave-balance/ViewMyBalances"));
+const EditMemberLeaveBalance = React.lazy(() => import("../../modules/leave-balance/EditMemberLeaveBalance"));
+
 const Registe = React.lazy(() => import("../../modules/check-day/pages/Registe"));
 const CheckIn = React.lazy(() => import("../../modules/check-day/pages/CheckIn"));
 const WorkingShiftList = React.lazy(() => import("../../modules/check-day/pages/WorkingShiftList"));
@@ -79,6 +83,11 @@ export default function Routings() {
             <Route path="/permission" element={<ProtectedRoute component={<PermissionList />} pageName={"permission_list"} />} />
             <Route path="/department" element={<ProtectedRoute component={<DepartmentList />} pageName={"department_list"} />} />
 
+            {/* Leave Balance  */}
+            <Route exact path="/leave-balance/members" element={<ProtectedRoute component={<ViewMemberBalances />} />} />
+            <Route exact path="/leave-balance/member/:id" element={<ProtectedRoute component={<EditMemberLeaveBalance />} />} />
+            <Route exact path="/leave-balance/me" element={<ProtectedRoute component={<ViewMyBalances />} />} />
+
             {/* Virtual Space  */}
             <Route path="/taskboard" element={<ProtectedRoute component={<BoardList />} />} pageName={"taskboard_list"} />
             <Route path="/taskboard/:id" element={<ProtectedRoute component={<BoardDetail />} pageName={"taskboard_detail"} />} />
@@ -112,5 +121,6 @@ export default function Routings() {
             <Route path="/403" element={<Unauthorizied />} />
             <Route path='*' element={<NotFound />} />
         </Routes>
+
     </React.Suspense>
 }

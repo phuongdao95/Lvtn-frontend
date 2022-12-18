@@ -22,6 +22,9 @@ const validationSchema = yup.object({
         .min(
             yup.ref("startDate"), "Ngày kết thúc phải lớn hơn ngày bắt đầu!"
         )
+        .test('inYear', 'Cần tạo 2 yêu cầu nếu nghỉ qua năm!', (val, ctx) => {
+            return new Date(val).getFullYear() == new Date(ctx.parent.startDate).getFullYear();
+        })
         .required('Ngày kết thúc không được trống!')
 });
 

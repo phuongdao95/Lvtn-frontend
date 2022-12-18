@@ -1,3 +1,4 @@
+import { ApiTwoTone } from "@mui/icons-material";
 import api from "./api";
 
 
@@ -43,8 +44,8 @@ export const updateNghiThaiSan = ({id, startDate}, callBack) => {
 
 // Check in-out manually
 
-export const createCheckInout = (checkedTime, callBack) => {
-    api.post(`${PATH_PREFIX}/check-in-out`, { userId, checkedTime })
+export const createCheckInout = (data, callBack) => {
+    api.post(`${PATH_PREFIX}/check-in-out`, data)
     .then(() => {
         callBack();
     });
@@ -109,7 +110,23 @@ export const postCheckInConfig = (data) => api.post(`${PATH_PREFIX}/checkinout-c
     .then(res => res.data);
     
 export const getIntialCheckin = () => api.get(`${PATH_PREFIX}/initial-check-in-out/${userId}`)
-.then(res => res.data);
+    .then(res => res.data);
 
 export const getDataCheckin = (id) => api.get(`${PATH_PREFIX}/workflow/check-in-out/${id}`)
-.then(res => res.data); 
+    .then(res => res.data); 
+
+
+//
+//
+//
+
+export const getLeaveMembers = (managerId) => api.get(`${PATH_PREFIX}/members/leave/${managerId}`)
+    .then(res => res.data);
+
+export const getLeaveOfOneMember = (userId) => api.get(`${PATH_PREFIX}/member/leave/${userId}`)
+    .then(res => res.data);
+
+export const addOrUpdateLeaveBalance = ({ userId, year, totalDays }) => api.post(`${PATH_PREFIX}/member/leave`, {userId, year, totalDays})
+    .then(res => res.data);
+export const getShiftOfMonth = ({ userId, day }) => api.get(`${PATH_PREFIX}/get-shifts/${userId}/${day}`)
+    .then(res => res.data);
