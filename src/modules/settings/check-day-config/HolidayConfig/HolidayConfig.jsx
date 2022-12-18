@@ -2,8 +2,6 @@ import React, {useState, Fragment} from 'react';
 import DataGridLayout from '../../../../layouts/DataGridLayout';
 import DataGrid from '../../../../components/DataGrid/DataGrid';
 import MenuButton from "../../../../components/DataGrid/MenuButton";
-import SearchField from "../../../../components/SearchField";
-import SearchButton from "../../../../components/DataGrid/SearchButton";
 import ActionButtonContainer from "../../../../components/DataGrid/ActionButtonContainer";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
 import { useNavigate } from "react-router";

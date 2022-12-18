@@ -46,7 +46,7 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
 
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         width: 200,
         renderCell: ({ id }) => {
             return <Box sx={{ display: "flex", gap: 1 }}>

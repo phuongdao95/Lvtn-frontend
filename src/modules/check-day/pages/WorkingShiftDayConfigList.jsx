@@ -39,6 +39,11 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
         width: 150
     },
     {
+        field: "name",
+        headerName: "Tên",
+        width: 250,
+    },
+    {
         field: "description",
         headerName: "Mô tả",
         width: 250,
@@ -58,15 +63,15 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
 
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         width: 250,
         renderCell: ({ id }) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
                 <ActionButton onClick={() => openEditCb(id)}>
-                    Edit
+                    Sửa
                 </ActionButton>
                 <ActionButton onClick={() => openDeleteCb(id)}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </Box>
         }

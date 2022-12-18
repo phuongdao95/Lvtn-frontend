@@ -78,14 +78,6 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
         width: 250,
         renderCell: ({ id, type }) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
-                {type == 1 &&
-                    <ActionButton onClick={() => openEditCb(id)}>
-                        Sửa
-                    </ActionButton>
-                }
-                <ActionButton >
-                    chi tiết
-                </ActionButton>
                 <ActionButton onClick={() => openDeleteCb(id)}>
                     Xóa
                 </ActionButton>
