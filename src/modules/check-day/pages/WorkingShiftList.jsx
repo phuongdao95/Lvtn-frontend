@@ -149,7 +149,7 @@ export default function WorkingShiftList() {
 
     React.useEffect(() => {
         if (isDeleteSuccess) {
-            fetchWorkingShifts();
+            fetchWorkingShifts(0, 0, currentMonth, "month");
         }
         if (isDeleteError) {
             setInfoDialogMessage({
@@ -166,7 +166,7 @@ export default function WorkingShiftList() {
                 () => setIsCreateShiftOpen(false)}
             reload={() => {
                 setIsCreateShiftOpen(false);
-                fetchWorkingShifts()
+                fetchWorkingShifts(0, 0, currentMonth, "month");
             }} />}
 
         {isCreateMultipleShiftOpen && <CreateMultipleWorkingShift
@@ -174,7 +174,7 @@ export default function WorkingShiftList() {
                 () => setIsCreateMultipleShiftOpen(false)}
             reload={() => {
                 setIsCreateShiftOpen(false);
-                fetchWorkingShifts()
+                fetchWorkingShifts(0, 0, currentMonth, "month");
             }} />
         }
 

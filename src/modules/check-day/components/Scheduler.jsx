@@ -24,8 +24,6 @@ const generateShownDaysInScheduler = (year, month) => {
         result.push(date);
     }
 
-    console.log(result)
-
     return result;
 }
 

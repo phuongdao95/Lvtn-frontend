@@ -76,12 +76,18 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
             registrationEndDate: dayjs(),
         },
         onSubmit: (values) => {
+            const offset = new Date().getTimezoneOffset();
+            const startTime = dayjs(values.startTime).add(-offset, 'minute');
+            const endTime = dayjs(values.endTime).add(-offset, 'minute');
+
             createDAB({
                 ...values,
                 groupId: values.group?.id,
                 formulaName: values.formulaName?.id,
                 weekDayConfigs,
                 month: currentMonth,
+                startTime,
+                endTime
             })
         }
     });
@@ -180,7 +186,7 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
                         <Label text={"Kết thúc"} />
                         <TimePicker
                             value={formik.values.endTime}
-                            onChange={(value) => formik.setFieldError("endTime", value)}
+                            onChange={(value) => formik.setFieldValue("endTime", value)}
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </Fragment>}
