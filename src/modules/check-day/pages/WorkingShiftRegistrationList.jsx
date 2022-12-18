@@ -213,8 +213,8 @@ export default function WorkingShiftRegistrationList() {
                     rowCount={response?.total ?? 0}
                     rows={response?.data?.map((shift) => ({
                         ...shift,
-                        startDate: dayjs(shift.startDate).format("DD/MM/YYYY HH:mm"),
-                        endDate: dayjs(shift.endDate).format("DD/MM/YYYY HH:mm"),
+                        startDate: dayjs(shift.startDate).format("DD/MM/YYYY"),
+                        endDate: dayjs(shift.endDate).format("DD/MM/YYYY"),
                         workingShiftStartDate: dayjs(shift.workingShiftStartTime).format("DD/MM/YYYY"),
                         workingShiftStartTime: dayjs(shift.workingShiftStartTime).format("HH:mm"),
                         workingShiftEndTime: dayjs(shift.workingShiftEndTime).format("HH:mm"),
