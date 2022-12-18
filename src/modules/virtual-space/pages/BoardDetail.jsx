@@ -1,7 +1,5 @@
 import { Box, IconButton, Typography } from "@mui/material";
 import React, { Fragment } from "react";
-import SearchButton from "../../../components/DataGrid/SearchButton";
-import SearchField from "../../../components/DataGrid/SearchField";
 import MenuButton from "../../../components/DataGrid/MenuButton";
 import FilterButton from "../../../components/DataGrid/FilterButton";
 import TaskBoard from "../components/TaskBoard";
@@ -14,11 +12,26 @@ import {
     useFetchTasksOfTaskColumns
 } from "../../../client/taskboardService";
 import TaskCreate from "./TaskCreate";
+import TaskFilter from "../components/TaskFilter";
 import ActionButton from "../../../components/DataGrid/ActionButton";
+import dayjs from "dayjs";
 
 export default function BoardDetail() {
     const navigate = useNavigate();
     const { id } = useParams()
+
+    const [isFilterOpen, setIsFilterOpen] = React.useState(false);
+    const [shouldApplyFilter, setShouldApplyFilter] = React.useState(false);
+
+    const [filters, setFilters] = React.useState({
+        inChargeds: [],
+        reportTos: [],
+        labels: [],
+        taskType: 'basic',
+        startDate: dayjs(),
+        endDate: dayjs(),
+        isDisabled: false,
+    });
 
     const [taskColumns, setTaskColumns] = React.useState();
     const [shouldReload, setShouldReload] = React.useState(false);
@@ -45,6 +58,12 @@ export default function BoardDetail() {
         data: fetchedColumns,
         method: fetchTasks,
     } = useFetchTasksOfTaskColumns();
+
+    React.useEffect(() => {
+        if (shouldApplyFilter) {
+            fetchTasks(columnList.data);
+        }
+    }, [shouldApplyFilter]);
 
     React.useEffect(() => {
         fetchDetail(id);
@@ -152,11 +171,22 @@ export default function BoardDetail() {
 
             <Box sx={{ position: 'relative', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-                    <FilterButton />
-                    <SearchField />
-                    <SearchButton />
+                    <FilterButton
+                        onClick={() => { setIsFilterOpen(true) }}
+                    />
                 </Box>
             </Box>
+
+            {
+                isFilterOpen &&
+                <TaskFilter
+                    boardId={id}
+                    closeDialogCb={() => setIsFilterOpen(false)}
+                    setFilters={setFilters}
+                    filters={filters}
+                />
+            }
+
             <TaskBoard
                 taskId={id}
                 taskColumns={taskColumns}

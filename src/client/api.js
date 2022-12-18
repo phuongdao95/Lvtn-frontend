@@ -16,6 +16,10 @@ api.interceptors.request.use(async (config) => {
             authorization: `Bearer ${jwt}`
         }
     }
+    config.headers = {
+        ...config.headers,
+        authorization: `Bearer ${jwt}`
+    }
 
     return config;
 }, (err) => Promise.reject(err));

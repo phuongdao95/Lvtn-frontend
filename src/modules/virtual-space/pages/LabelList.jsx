@@ -41,10 +41,10 @@ const getColumnConfig = (openEditCb, openDeleteCb) => (
             renderCell: ({ id }) => {
                 return <Box sx={{ display: 'flex', gap: 1 }}>
                     <ActionButton onClick={() => openEditCb(id)}>
-                        Edit
+                        Sửa
                     </ActionButton>
                     <ActionButton onClick={() => openDeleteCb(id)}>
-                        Delete
+                        Xóa
                     </ActionButton>
                 </Box>
             }

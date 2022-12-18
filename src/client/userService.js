@@ -15,7 +15,7 @@ export const useCreateUser =
 export const useUpdateUser =
     getUseUpdateResourceFunction(PATH_PREFIX);
 
-export const useDeleteUser = 
+export const useDeleteUser =
     getUseDeleteResourceFunction(PATH_PREFIX);
 
 export const useFetchListUserWithNoTeam =
@@ -87,3 +87,32 @@ export const useFetchListUserWhoIsManager =
 
         return fetchUsers;
     })(PATH_PREFIX);
+
+export const useUploadAvatar =
+    getPendingErrorSuccessApiPatternFunction(({
+        setIsError,
+        setIsSuccess,
+        setIsPending,
+        setData }) => {
+        const fetchUsers = async (userId, formData) => {
+            setIsError(false);
+            setIsSuccess(false);
+            setIsPending(true);
+            try {
+                const response = await api.post(`/api/user/${userId}/avatar`, formData);
+
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+                return response.data;
+            } catch (err) {
+                setIsError(false);
+                console.error(err);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        return fetchUsers;
+    })();

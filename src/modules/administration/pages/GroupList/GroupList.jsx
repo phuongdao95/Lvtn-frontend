@@ -21,28 +21,28 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
 
     {
         field: "name",
-        headerName: "Name",
+        headerName: "Tên",
         width: 250,
     },
 
 
     {
         field: "description",
-        headerName: "Description",
+        headerName: "Mô tả",
         width: 150,
     },
 
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         width: 300,
         renderCell: ({ id }) => {
             return <ActionButtonContainer>
                 <ActionButton onClick={() => onEditBtnClick(id)}>
-                    Edit
+                    Sửa
                 </ActionButton>
                 <ActionButton onClick={() => onDeleteBtnClick(id)}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </ActionButtonContainer >
         }
@@ -143,20 +143,6 @@ export default function GroupList() {
                         color="info"
                     />
                 }
-                secondaryButtonSection={
-                    <MenuButton
-                        text={"Liên kết liên quan"}
-                        menu={
-                            [
-                                { text: "Danh sách chức vụ", handler: () => { } },
-                                { text: "Danh sách team", handler: () => { } },
-                                { text: "Danh sách user", handler: () => { } },
-                                { text: "Danh sách quyền", handler: () => { } }
-                            ]
-                        }
-                        variant="outlined"
-                        color="info"
-                    />}
                 searchSection={<SearchField />}
                 dropdownFilterSection={<Fragment></Fragment>}
                 searchButtonSection={<SearchButton />}

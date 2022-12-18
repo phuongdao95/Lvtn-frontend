@@ -1,134 +1,116 @@
+import React from "react";
 import { Route, Routes } from "react-router";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
-import WorkFlows from "../../modules/approve-workflow/user/WorkFlows";
-import MyRequests from "../../modules/approve-workflow/view-requests/MyRequests";
+const WorkFlows = React.lazy(() => import("../../modules/approve-workflow/user/WorkFlows"));
+const MyRequests = React.lazy(() => import("../../modules/approve-workflow/view-requests/MyRequests"));
+const MyToDoRequests = React.lazy(() => import("../../modules/approve-workflow/view-requests/MyToDoRequest"));
+const ConfigNghiPhep = React.lazy(() => import("../../modules/approve-workflow/nghi-phep/ConfigNghiPhep"));
+const ConfigNghiThaiSan = React.lazy(() => import("../../modules/approve-workflow/nghi-thai-san/ConfigNghiThaiSan"));
+const ConfigCheckinout = React.lazy(() => import("../../modules/approve-workflow/check-inout-manual/ConfigCheckinout"));
+const UserNghiPhep = React.lazy(() => import("../../modules/approve-workflow/nghi-phep/UserNghiPhep"));
+const ViewNghiPhep = React.lazy(() => import("../../modules/approve-workflow/nghi-phep/ViewNghiPhep"));
+const UserNghiThaiSan = React.lazy(() => import("../../modules/approve-workflow/nghi-thai-san/UserNghiThaiSan"));
+const ViewNghiThaiSan = React.lazy(() => import("../../modules/approve-workflow/nghi-thai-san/ViewNghiThaiSan"));
+const UserCheckinout = React.lazy(() => import("../../modules/approve-workflow/check-inout-manual/UserCheckinout"));
+const ViewCheckInOut = React.lazy(() => import("../../modules/approve-workflow/check-inout-manual/ViewCheckInOut"));
+const WorkflowConfig = React.lazy(() => import("../../modules/approve-workflow/configs/WorkflowConfig"));
 
-import ConfigNghiPhep from "../../modules/approve-workflow/nghi-phep/ConfigNghiPhep";
-import ConfigNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/ConfigNghiThaiSan";
-
-import UserNghiPhep from "../../modules/approve-workflow/nghi-phep/UserNghiPhep";
-import UserNghiThaiSan from "../../modules/approve-workflow/nghi-thai-san/UserNghiThaiSan";
-
-import ListUsers from "../../modules/shares/pages/ListUsers/ListUsers";
-import Registe from "../../modules/check-day/pages/Registe";
-import CheckIn from "../../modules/check-day/pages/CheckIn";
-import Calendar from "../../modules/check-day/pages/Calendar";
-import TypeWorkDayConfig from "../../modules/settings/check-day-config/TypeWorkDayConfig/TypeWorkDayConfig";
-import RulesWorkDayConfig from "../../modules/settings/check-day-config/RulesWorkDayConfig/RulesWorkDayConfig";
-import PunishWorkDayConfig from "../../modules/settings/check-day-config/PunishWorkDayConfig/PunishWorkDayConfig";
-import HolidayConfig from "../../modules/settings/check-day-config/HolidayConfig/HolidayConfig";
-import TypeWorkShiftConfig from "../../modules/settings/check-day-config/TypeWorkShiftConfig/TypeWorkShiftConfig";
-import SelectTypeWorkShift from "../../modules/check-day/pages/SelectTypeWorkShift"
-import WorkingShiftList from "../../modules/check-day/pages/WorkingShiftList"
-
-import DABList from "../../modules/salary-management/pages/DABList/DABList";
-import SalaryList from "../../modules/salary-management/pages/SalaryList";
-
-import GroupList from "../../modules/administration/pages/GroupList/GroupList";
-import PermissionList from "../../modules/administration/pages/PermissionList/PermissionList";
-import UserList from "../../modules/administration/pages/UserList";
-import RoleList from "../../modules/administration/pages/RoleList/RoleList";
-import DepartmentList from "../../modules/administration/pages/DepartmentList";
-import TeamList from "../../modules/administration/pages/TeamList";
-import PayrollList from "../../modules/salary-management/pages/PayRollList/PayrollList.jsx";
-import UserProfile from "../../modules/shares/pages/UserProfile/UserProfile";
-import MyDABs from "../../modules/salary-management/pages/MyDABs/MyDABs";
-import FormulaVariable from "../../modules/salary-management/pages/FormulaVariable/FormulaVariable";
-import BoardDetail from "../../modules/virtual-space/pages/BoardDetail";
-import BoardList from "../../modules/virtual-space/pages/BoardList";
-import LabelList from "../../modules/virtual-space/pages/LabelList";
-import SalaryGroupList from "../../modules/salary-management/pages/SalaryGroup/SalaryGroupList";
-import ColumnList from "../../modules/virtual-space/pages/ColumnList";
-import PayslipList from "../../modules/salary-management/pages/PayRollList/PayslipList";
-import PayslipDetail from "../../modules/salary-management/pages/PayRollList/PayslipDetail";
-import MyPayslipList from "../../modules/salary-management/pages/MyPayslipList/MyPayslipList";
-import MyPayslipDetail from "../../modules/salary-management/pages/MyPayslipList/MyPayslipDetail";
-import WorkingShiftRegistrationList from "../../modules/check-day/pages/WorkingShiftRegistrationList";
-import TimekeepingSchedule from "../../modules/check-day/pages/TimekeepingListSchedule";
-import RegisteredWorkingShiftList from "../../modules/check-day/pages/RegisteredWorkingShiftList"
-import TaskBoardReport from "../../modules/virtual-space/pages/TaskBoardReport";
-import SalaryReport from "../../modules/salary-management/pages/SalaryReport";
-import WorkingShiftDayConfigList from "../../modules/check-day/pages/WorkingShiftDayConfigList";
-import Dashboard from "../../modules/shares/pages/Dashboard/Dashboard";
-
+const Registe = React.lazy(() => import("../../modules/check-day/pages/Registe"));
+const CheckIn = React.lazy(() => import("../../modules/check-day/pages/CheckIn"));
+const WorkingShiftList = React.lazy(() => import("../../modules/check-day/pages/WorkingShiftList"));
+const PayrollList = React.lazy(() => import("../../modules/salary-management/pages/PayRollList/PayrollList.jsx"));
+const MyDABs = React.lazy(() => import("../../modules/salary-management/pages/MyDABs/MyDABs"));
+const FormulaVariable = React.lazy(() => import("../../modules/salary-management/pages/FormulaVariable/FormulaVariable"));
+const BoardDetail = React.lazy(() => import("../../modules/virtual-space/pages/BoardDetail"));
+const BoardList = React.lazy(() => import("../../modules/virtual-space/pages/BoardList"));
+const LabelList = React.lazy(() => import("../../modules/virtual-space/pages/LabelList"))
+const SalaryGroupList = React.lazy(() => import("../../modules/salary-management/pages/SalaryGroup/SalaryGroupList"))
+const ColumnList = React.lazy(() => import("../../modules/virtual-space/pages/ColumnList"))
+const PayslipList = React.lazy(() => import("../../modules/salary-management/pages/PayRollList/PayslipList"))
+const PayslipDetail = React.lazy(() => import("../../modules/salary-management/pages/PayRollList/PayslipDetail"));
+const MyPayslipList = React.lazy(() => import("../../modules/salary-management/pages/MyPayslipList/MyPayslipList"))
+const MyPayslipDetail = React.lazy(() => import("../../modules/salary-management/pages/MyPayslipList/MyPayslipDetail"))
+const WorkingShiftRegistrationList = React.lazy(() => import("../../modules/check-day/pages/WorkingShiftRegistrationList"))
+const NotFound = React.lazy(() => import("../../modules/shares/pages/NotFound"));
+const Unauthorizied = React.lazy(() => import("../../modules/shares/pages/Unauthorized"));
+const TimekeepingSchedule = React.lazy(() => import("../../modules/check-day/pages/TimekeepingListSchedule"))
+const RegisteredWorkingShiftList = React.lazy(() => import("../../modules/check-day/pages/RegisteredWorkingShiftList"));
+const SalaryReport = React.lazy(() => import("../../modules/salary-management/pages/SalaryReport"));
+const SalaryList = React.lazy(() => import('../../modules/salary-management/pages/SalaryList'));
+const DABList = React.lazy(() => import("../../modules/salary-management/pages/DABList/DABList"));
+const UserList = React.lazy(() => import("../../modules/administration/pages/UserList"));
+const RoleList = React.lazy(() => import("../../modules/administration/pages/RoleList"));
+const PermissionList = React.lazy(() => import("../../modules/administration/pages/PermissionList/PermissionList"));
+const DepartmentList = React.lazy(() => import("../../modules/administration/pages/DepartmentList"));
+const GroupList = React.lazy(() => import("../../modules/administration/pages/GroupList/GroupList"));
+const TeamList = React.lazy(() => import("../../modules/administration/pages/TeamList"));
+const WorkingShiftDayConfigList = React.lazy(() => import("../../modules/check-day/pages/WorkingShiftDayConfigList"));
+const UserProfile = React.lazy(() => import("../../modules/shares/pages/UserProfile/UserProfile"))
+const TaskBoardReport = React.lazy(() => import("../../modules/virtual-space/pages/TaskBoardReport"));
 
 export default function Routings() {
-    return <Routes>
-        <Route path="/approve-workflows" element={<WorkFlows />} />
-        <Route path="/approve-workflows/my-requests" element={<MyRequests />} />
 
-        <Route exact path="/approve-workflows/user-nghi-phep" element={<UserNghiPhep />} />
-        <Route exact path="/approve-workflows/user-nghi-thai-san" element={<UserNghiThaiSan />} />
+    return <React.Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+            <Route path="/approve-workflows" element={<ProtectedRoute component={<WorkFlows />} />} pageName={"approve_workflow_list"} />
+            <Route exact path="/approve-workflows/configs" element={<ProtectedRoute component={<WorkflowConfig />} pageName={"approve_workflow_config_list"} />} />
+            <Route path="/approve-workflows/my-requests" element={<ProtectedRoute component={<MyRequests />} />} pageName={"my_requests"} />
+            <Route path="/approve-workflows/my-todo-requests" element={<ProtectedRoute component={<MyToDoRequests />} pageName={"my_todo_requests"} />} />
+            <Route exact path="/approve-workflows/user-nghi-phep/:id" element={<ProtectedRoute component={<UserNghiPhep />} pageName={"user_nghi_phep"} />} />
+            <Route exact path="/approve-workflows/user-nghi-thai-san/:id" element={<ProtectedRoute component={<UserNghiThaiSan />} pageName={"user_nghi_thai_san"} />} />
+            <Route exact path="/approve-workflows/user-check-in-out/:id" element={<ProtectedRoute component={<UserCheckinout />} pageName={"user_check_in_out"} />} />
+            <Route exact path="/approve-workflows/configs/config-nghi-phep" element={<ProtectedRoute component={<ConfigNghiPhep />} pageName={"config_nghi_phep"} />} />
+            <Route exact path="/approve-workflows/configs/config-nghi-thai-san" element={<ProtectedRoute component={<ConfigNghiThaiSan />} pageName={"config_nghi_thai_san"} />} />
+            <Route exact path="/approve-workflows/configs/config-check-in-out" element={<ProtectedRoute component={<ConfigCheckinout />} pageName={"config_check_in_out"} />} />
 
-        <Route exact path="/approve-workflows/config-nghi-phep" element={<ConfigNghiPhep />} />
-        <Route exact path="/approve-workflows/config-nghi-thai-san" element={<ConfigNghiThaiSan />} />
+            <Route exact path="/approve-workflows/user-nghi-phep/view/:id" element={<ProtectedRoute component={<ViewNghiPhep isApprover={false} />} />} />
+            <Route exact path="/approve-workflows/user-nghi-phep/todo/:id" element={<ProtectedRoute component={<ViewNghiPhep isApprover={true} />} />} />
+            <Route exact path="/approve-workflows/user-nghi-thai-san/todo/:id" element={<ProtectedRoute component={<ViewNghiThaiSan isApprover={true} />} />} />
+            <Route exact path="/approve-workflows/user-nghi-thai-san/view/:id" element={<ProtectedRoute component={<ViewNghiThaiSan isApprover={false} />} />} />
+            <Route exact path="/approve-workflows/user-check-in-out/view/:id" element={<ProtectedRoute component={<ViewCheckInOut isApprover={false} />} />} />
+            <Route exact path="/approve-workflows/user-check-in-out/todo/:id" element={<ProtectedRoute component={<ViewCheckInOut isApprover={true} />} />} />
 
-        <Route path="/check-in-2" element={<CheckIn />} />
-        {/* <Route path="/check-out" element={<Timekeeping />} /> */}
-        <Route path="/registe-image" element={<Registe />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/select-type-work-shift" element={<SelectTypeWorkShift />} />
+            {/* Administration module */}
+            <Route path="/user" element={<ProtectedRoute component={<UserList />} pageName={"user_list"} />} />
+            <Route path="/role" element={<ProtectedRoute component={<RoleList />} pageName={"role_list"} />} />
+            <Route path="/group" element={<ProtectedRoute component={<GroupList />} pageName={"group_list"} />} />
+            <Route path="/team" element={<ProtectedRoute component={<TeamList />} />} pageName={"team_list"} />
+            <Route path="/permission" element={<ProtectedRoute component={<PermissionList />} pageName={"permission_list"} />} />
+            <Route path="/department" element={<ProtectedRoute component={<DepartmentList />} pageName={"department_list"} />} />
 
+            {/* Virtual Space  */}
+            <Route path="/taskboard" element={<ProtectedRoute component={<BoardList />} />} pageName={"taskboard_list"} />
+            <Route path="/taskboard/:id" element={<ProtectedRoute component={<BoardDetail />} pageName={"taskboard_detail"} />} />
+            <Route path="/taskboard/:id/label" element={<ProtectedRoute component={<LabelList />} pageName={"taskboard_label_list"} />} />
+            <Route path="/taskboard/:id/column" element={<ProtectedRoute component={<ColumnList />} pageName={"taskboard_column_list"} />} />
+            <Route path="/taskboard-report/" element={<ProtectedRoute component={<TaskBoardReport />} pageName={"taskboard_report"} />} />
 
-        {/* Virtual space management system */}
-        <Route path="/taskboard" element={<BoardList />} />
-        <Route path="/taskboard/:id" element={<BoardDetail />} />
-        <Route path="/taskboard/:id/label" element={<LabelList />} />
-        <Route path="/taskboard/:id/column" element={<ColumnList />} />
-        <Route path="/taskboard-report/" element={<TaskBoardReport />} />
+            {/* Timekeeping */}
+            <Route path="/registe-image" element={<Registe />} pageName={"image_registration"} />
+            <Route path="/timekeeping-schedule" element={<ProtectedRoute component={<TimekeepingSchedule />} pageName={"timekeeping_schedule"} />} />
+            <Route path="/workingshift-registration" element={<ProtectedRoute component={<WorkingShiftRegistrationList pageName={"workingshift_registration"} />} />} />
+            <Route path="/workingshift" element={<ProtectedRoute component={<WorkingShiftList />} pageName={"workingshift"} />} />
+            <Route path="/registered-workingshift" element={<ProtectedRoute component={<RegisteredWorkingShiftList />} pageName={"registered_workingshift"} />} />
+            <Route path="/workingshiftdayconfig" element={<ProtectedRoute component={<WorkingShiftDayConfigList />} pageName={"workingshift_dayconfig"} />} />
+            <Route path="/check-in" element={<ProtectedRoute component={<CheckIn />} pageName={"check_in"} />} />
 
+            {/* Salary Management */}
+            <Route path="/salary" element={<ProtectedRoute component={<SalaryList />} pageName={"salary_list"} />} />
+            <Route path="/dab" element={<ProtectedRoute component={<DABList />} pageName={"dab_list"} />} />
+            <Route path="/formula-variable" element={<ProtectedRoute component={<FormulaVariable pageName={"formula_variable_list"} />} />} />
+            <Route path="/payroll" element={<ProtectedRoute component={<PayrollList />} pageName={"payroll_list"} />} />
+            <Route path="/payroll/:id/payslip" element={<ProtectedRoute component={<PayslipList />} pageName={"payroll_detail"} />} />
+            <Route path="/payroll/:payrollId/payslip/:payslipId" element={<ProtectedRoute component={<PayslipDetail />} pageName={"payroll_detail"} />} />
+            <Route path="/salary-group/" element={<ProtectedRoute component={<SalaryGroupList />} pageName={"salary_group_list"} />} />
+            <Route path="/my-dab" element={<ProtectedRoute component={<MyDABs />} pageName={"my_dab"} />} />
+            <Route path="/my-payslips" element={<ProtectedRoute component={<MyPayslipList />} pageName={"my_payslip"} />} />
+            <Route path="/my-payslips/:payslipId" element={<ProtectedRoute component={<MyPayslipDetail />} pageName={"my_payslip"} />} />
+            <Route path="/salary-report/" element={<ProtectedRoute component={<SalaryReport />} pageName={"salary_report"} />} />
 
-        <Route path="/check-day-config/type-work-day" element={<TypeWorkDayConfig />} />
-        <Route path="/check-day-config/rules-work-day" element={<RulesWorkDayConfig />} />
-        <Route path="/check-day-config/punish-work-day" element={<PunishWorkDayConfig />} />
-        <Route path="/check-day-config/holiday" element={<HolidayConfig />} />
-        <Route path="/check-day-config/type-work-shift-day" element={<TypeWorkShiftConfig />} />
-
-        <Route path="/list-users" element={<ListUsers />} />
-
-        {/* Administration module */}
-
-        <Route path="/user" element={
-            // <ProtectedRoute>
-            <UserList />
-            // </ProtectedRoute>
-        } />
-
-        <Route path="/role" element={
-            // <ProtectedRoute>
-            // </ProtectedRoute>
-            <RoleList />
-        } />
-
-        <Route path="/group" element={<GroupList />} />
-        <Route path="/team" element={<TeamList />} />
-        <Route path="/permission" element={<PermissionList />} />
-        <Route path="/department" element={<DepartmentList />} />
-
-        {/* Timekeeping module */}
-        <Route path="timekeeping-schedule" element={<TimekeepingSchedule />} />
-        <Route path="timekeeping-check" element={<CheckIn />} />
-        <Route path="workingshift-registration" element={<WorkingShiftRegistrationList />} />
-        <Route path="workingshift" element={<WorkingShiftList />} />
-        <Route path="registered-workingshift" element={<RegisteredWorkingShiftList />} />
-        <Route path="workingshiftdayconfig" element={<WorkingShiftDayConfigList />} />
-
-        {/* Salary Management Module */}
-        <Route path="/salary" element={<SalaryList />} />
-        <Route path="/dab" element={<DABList />} />
-        <Route path="/formula-variable" element={<FormulaVariable />} />
-        <Route path="/payroll" element={<PayrollList />} />
-        <Route path="/payroll/:id/payslip" element={<PayslipList />} />
-        <Route path="/payroll/:payrollId/payslip/:payslipId" element={<PayslipDetail />} />
-        <Route path="/salary-group/" element={<SalaryGroupList />} />
-        <Route path="/my-dab" element={<MyDABs />} />
-        <Route path="/my-payslips" element={<MyPayslipList />} />
-        <Route path="/my-payslips/:payslipId" element={<MyPayslipDetail />} />
-        <Route path="/salary-report/" element={<SalaryReport />} />
-        <Route path="/dashboard/" element={<Dashboard />} />
-
-        {/** Shared module */}
-        <Route path="/my-profile" element={<UserProfile />} />
-
-    </Routes>
+            <Route path="/profile" element={<ProtectedRoute component={<UserProfile />} pageName="profile" />} />
+            <Route path="/403" element={<Unauthorizied />} />
+            <Route path='*' element={<NotFound />} />
+        </Routes>
+    </React.Suspense>
 }

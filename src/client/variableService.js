@@ -51,3 +51,24 @@ export const useFetchSystemVariableList = getPendingErrorSuccessApiPatternFuncti
         return fetchVariables;
     }
 )()
+
+export const checkIfVariableNameValid = async function ({ name, area }) {
+    const response = await api.post(`api/salaryvariable/validation/name`, {
+        name, formulaArea: area
+    });
+
+    if (response.data) {
+        return response?.data?.value;
+    }
+}
+
+export const checkIfVariableDefineValid = async function ({ value, area }) {
+    const response = await api.post(`api/salaryvariable/validation/formulaDefine`, {
+        value, formulaArea: area
+    });
+
+    if (response.data) {
+        return response?.data?.value;
+    }
+}
+

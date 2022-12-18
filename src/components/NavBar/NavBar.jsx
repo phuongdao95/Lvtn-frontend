@@ -5,7 +5,6 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
-import MailMenu from "./MailMenu";
 import AccountMenu from './AccountMenu';
 import NotificationMenu from './NotificationMenu';
 
@@ -32,13 +31,12 @@ const NavBar = (props) => {
                         noWrap
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}
-                        fontStyle={"italic"}
+                        textTransform='capitalize'
                     >
-                        EMS
+                        Hệ thống quản lý nhân viên
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <MailMenu />
                         <NotificationMenu />
                         <AccountMenu />
                     </Box>

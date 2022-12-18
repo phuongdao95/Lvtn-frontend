@@ -10,6 +10,7 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import { useNavigate } from 'react-router';
 import { useLogOut } from '../../client/autheticationService';
 
@@ -28,7 +29,7 @@ export default function AccountMenu() {
     return (
         <React.Fragment>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                <Tooltip title="Account settings">
+                <Tooltip title="Tài khoản">
                     <IconButton
                         onClick={handleClick}
                         size="small"
@@ -76,24 +77,19 @@ export default function AccountMenu() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem>
-                    <Avatar /> Profile
-                </MenuItem>
-                <MenuItem>
-                    <Avatar /> My account
-                </MenuItem>
-                <Divider />
-                <MenuItem>
+                <MenuItem onClick={() => {
+                    navigate("/profile")
+                }}>
                     <ListItemIcon>
-                        <PersonAdd fontSize="small" />
                     </ListItemIcon>
-                    Add another account
+                    Thông tin tài khoản
                 </MenuItem>
-                <MenuItem>
+
+                <MenuItem onClick={() => navigate("approve-workflows/configs")}>
                     <ListItemIcon>
-                        <Settings fontSize="small" />
+                        <AccountTreeIcon fontSize="small" />
                     </ListItemIcon>
-                    Settings
+                    Workflow Configs
                 </MenuItem>
                 <MenuItem onClick={() => {
                     logOut(() => navigate("/"));
@@ -101,7 +97,7 @@ export default function AccountMenu() {
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>
-                    Logout
+                    Đăng xuất
                 </MenuItem>
             </Menu>
         </React.Fragment>

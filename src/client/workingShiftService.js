@@ -35,6 +35,35 @@ export const useCreateWorkingShiftRegistration =
 export const useDeleteRegistration =
     getUseDeleteResourceFunction("/api/workingshiftregistration");
 
+export const useDeleteRegistrationByIdAndUserId = getPendingErrorSuccessApiPatternFunction(
+    ({ setIsError, setIsSuccess, setIsPending, setData }) => {
+        const fetch = async (userId, registrationId) => {
+            setIsError(false);
+            setIsSuccess(false);
+            setIsPending(true);
+
+            try {
+                const response = await api.delete(
+                    `/api/user/${userId}/workingshiftregistration/${registrationId}`);
+
+                if (response.data) {
+                    setData(response.data);
+                }
+
+                setIsSuccess(true);
+            } catch (err) {
+                setIsError(true);
+                console.error(err);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        return fetch;
+    })();
+
+
+
 
 export const useFetchRegistrationListOfUser = getPendingErrorSuccessApiPatternFunction(
     ({ setIsError, setIsSuccess, setIsPending, setData }) => {
@@ -223,3 +252,34 @@ export const useUpdateOverTimeShift =
 
         return fetchList;
     })('api/workingshift/basicshift');
+
+
+export const useFetchUnregisterWorkingShift =
+    getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsPending, setIsSuccess, setData }, pathPrefix) => {
+        const fetchList = async function (id, query, queryType) {
+            setIsError(false);
+            setIsPending(true);
+            setIsSuccess(false);
+
+            try {
+                const params = { query: encodeURIComponent(query), queryType }
+
+                const response = await api.get(`api/user/${id}/unregisteredworkingshift/`, {
+                    params
+                });
+
+                if (response.data) {
+                    setData(response.data);
+                }
+
+                setIsSuccess(true);
+            } catch (err) {
+                console.log(err);
+                setIsError(true);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        return fetchList;
+    })();

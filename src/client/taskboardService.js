@@ -74,13 +74,13 @@ export const useFetchTaskLabelsOfBoard =
 export const useFetchTasksOfTaskColumn =
     getPendingErrorSuccessApiPatternFunction(
         ({ setIsError, setIsPending, setIsSuccess, setData }) => {
-            const fetchTaskListOfTaskColumn = async (taskboardId) => {
+            const fetchTaskListOfTaskColumn = async (taskboardId, formData) => {
                 setIsError(false);
                 setIsPending(true);
                 setIsSuccess(false);
 
                 try {
-                    const response = await api.get(`api/taskcolumn/${taskboardId}/task`)
+                    const response = await api.post(`api/taskcolumn/${taskboardId}/task`)
                     if (response.data) {
                         setData(response.data)
                     }
@@ -101,14 +101,14 @@ export const useFetchTasksOfTaskColumn =
 export const useFetchTasksOfTaskColumns =
     getPendingErrorSuccessApiPatternFunction(
         ({ setIsError, setIsPending, setIsSuccess, setData }) => {
-            const fetchTaskListOfTaskColumn = async (columnList) => {
+            const fetchTaskListOfTaskColumn = async (columnList, formData = { isDisabled: false }) => {
                 setIsError(false);
                 setIsPending(true);
                 setIsSuccess(false);
 
                 try {
                     const responses = await Promise.all(columnList.map((column) => {
-                        return api.get(`/api/taskcolumn/${column.id}/task`).then((response) => {
+                        return api.post(`/api/taskcolumn/${column.id}/task`, formData).then((response) => {
                             const taskInfo = response.data;
 
                             return taskInfo;
@@ -185,7 +185,7 @@ export const useFetchUsersOfBoard
                 if (response.data) {
                     setData(response.data);
                 }
-                
+
                 setIsSuccess(true);
             } catch (err) {
                 setIsError(true);
@@ -197,3 +197,35 @@ export const useFetchUsersOfBoard
 
         return fetchList;
     })();
+
+
+export const useFetchReportOfBoard
+    = getPendingErrorSuccessApiPatternFunction(({
+        setIsError,
+        setIsPending,
+        setIsSuccess,
+        setData
+    }) => {
+        const fetchReport = async (boardId) => {
+            setIsError(false);
+            setIsSuccess(false);
+            setIsPending(true);
+
+            try {
+                const response = await api.get(`/api/taskboard/${boardId}/report`);
+
+                if (response.data) {
+                    setData(response.data);
+                }
+
+                setIsSuccess(true);
+            } catch (err) {
+                setIsError(true);
+                console.error(err);
+            } finally {
+                setIsPending(false);
+            }
+        }
+
+        return fetchReport;
+    })()

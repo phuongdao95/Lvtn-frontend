@@ -192,7 +192,7 @@ export default function NotificationMenu() {
                     </Box>
                 }
                 {notifications.map(({ id, message, title, dateTime, isRead }, index) =>
-                    <Box >
+                    <Box key={id} >
                         <Box sx={{ padding: 2, position: 'relative', background: !isRead ? grey[300] : 'white' }}>
                             <NotificationCard
                                 id={id}

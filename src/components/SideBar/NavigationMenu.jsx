@@ -40,20 +40,10 @@ const SideBar = (props) => {
 
     const routes = [
         {
-            text: "Dashboard",
-            onClick: (e) => {
-                e.stopPropagation();
-                navigate("/dashboard")
-            },
-            icon: <DashboardIcon style={{ color: textColor }} />,
-            subItems: []
-        },
-
-        {
             text: "Thông tin cá nhân",
             onClick: (e) => {
                 e.stopPropagation();
-                navigate("/user-profile");
+                navigate("/profile");
             },
             icon: <PersonIcon style={{ color: textColor }} />,
             subItems: []
@@ -159,7 +149,26 @@ const SideBar = (props) => {
             text: "Quản lý phê duyệt",
             icon: <FactCheckIcon style={{ color: textColor }} />,
             onClick: () => { },
-            subItems: []
+            subItems: [
+                {
+                    text: "Tạo mới request",
+                    onClick: () => {
+                        navigate("/approve-workflows")
+                    }
+                },
+                {
+                    text: "Danh sách request đã tạo",
+                    onClick: () => {
+                        navigate("/approve-workflows/my-requests")
+                    }
+                },
+                {
+                    text: "Danh sách request cần xem xét",
+                    onClick: () => {
+                        navigate("/approve-workflows/my-todo-requests")
+                    }
+                }
+            ]
         },
 
         {
@@ -168,13 +177,13 @@ const SideBar = (props) => {
             onClick: () => { },
             subItems: [
                 {
-                    text: "Bảng công việc",
+                    text: "Danh sách bảng công việc",
                     onClick: () => {
                         navigate("/taskboard")
                     }
                 },
                 {
-                    text: "Báo cáo",
+                    text: "Danh sách báo cáo",
                     onClick: () => {
                         navigate("/taskboard-report")
                     }

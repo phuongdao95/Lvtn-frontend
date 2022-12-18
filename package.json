@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.10.0",
-    "@emotion/styled": "^11.10.0",
     "@microsoft/signalr": "^6.0.10",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.9.2",
@@ -16,21 +14,19 @@
     "axios": "^0.27.2",
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.5",
-    "emotion": "^11.0.0",
-    "emotion-icons": "^3.27.0",
     "face-api.js": "^0.22.2",
     "formik": "^2.2.9",
     "is-hotkey": "^0.2.0",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-chartjs-2": "^5.0.1",
     "react-dom": "^18.2.0",
-    "react-number-format": "^5.0.0-beta.5",
-    "react-organizational-chart": "^2.1.1",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "react-toastify": "^9.1.1",
     "slate": "^0.82.1",
     "slate-history": "^0.66.0",
     "slate-react": "^0.83.1",
@@ -38,9 +34,9 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -60,5 +56,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.13.5",
+    "customize-cra": "^1.0.0",
+    "react-app-rewired": "^2.2.1"
   }
 }

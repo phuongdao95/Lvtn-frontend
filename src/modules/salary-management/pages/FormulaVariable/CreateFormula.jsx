@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { Box } from "@mui/system";
 import Dialog from "../../../../components/Dialog";
 import Label from "../../../../components/DialogForm/Label";
@@ -7,10 +7,11 @@ import TwoColumnBox from "../../../../components/DialogForm/TwoColumnBox";
 import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
 
-import { useCreateFormula } from "../../../../client/formulaService";
+import { checkIfSalaryDefineValid, checkIfSalaryNameValid, useCreateFormula } from "../../../../client/formulaService";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Select from "../../../../components/DialogForm/Select";
+import InfoDialog from "../../../../components/Dialog/InfoDialog";
 
 const validationSchema = yup.object().shape({
     name: yup.string()
@@ -22,6 +23,10 @@ const validationSchema = yup.object().shape({
 });
 
 export default function CreateFormula({ closeDialogCb }) {
+    const [isInfoDialogOpen, setIsInfoDialogOpen] = React.useState(false);
+    const [nameError, setNameError] = React.useState(null);
+    const [formulaDefineError, setFormulaDefineError] = React.useState(null);
+
     const {
         method: createFormula
     } = useCreateFormula();
@@ -32,11 +37,28 @@ export default function CreateFormula({ closeDialogCb }) {
             displayName: "",
             define: "",
             description: "",
-            area: "",
+            area: "salaryconfig",
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            createFormula(values);
+        onSubmit: async (values) => {
+            const doesSalaryNameExist = await checkIfSalaryNameValid(values);
+            const isSalaryDefineValid = await checkIfSalaryDefineValid(values);
+
+            if (!isSalaryDefineValid) {
+                setNameError('Định nghĩa công thức không hợp lệ')
+            }
+
+            if (doesSalaryNameExist) {
+                setFormulaDefineError('Tên công thức đã tồn tại');
+            }
+
+            if (doesSalaryNameExist || !isSalaryDefineValid) {
+                setIsInfoDialogOpen(true);
+            }
+
+            if (!doesSalaryNameExist && isSalaryDefineValid) {
+                createFormula(values);
+            }
         }
     })
 
@@ -51,6 +73,14 @@ export default function CreateFormula({ closeDialogCb }) {
         }}
         title="Tạo mới công thức"
     >
+        {isInfoDialogOpen && <InfoDialog
+            closeDialogCb={() => setIsInfoDialogOpen(false)}
+            title={"Lỗi"}
+            message={<>
+                {nameError} <br />
+                {formulaDefineError}
+            </>}
+        />}
         <DialogForm>
             <Box>
                 <TwoColumnBox

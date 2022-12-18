@@ -67,7 +67,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
             column: { id: null, name: "" },
             inCharge: { id: null, name: "" },
             reportTo: { id: null, name: "" },
-            type: "task", 
+            type: "task",
             labels: [],
             fromDate: dayjs(),
             toDate: dayjs().add(10),
@@ -84,7 +84,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                 taskLabelIds: labelIds,
                 inChargeId,
                 reportToId,
-                description: JSON.stringify(description), 
+                description: JSON.stringify(description),
                 columnId,
             })
         }
@@ -107,6 +107,8 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
         if (isTaskColumnsSuccess) {
             setColumnOptions(taskColumnsResponse.data.map(
                 column => ({ id: column.id, name: column.name })))
+
+            formik.setFieldValue('column', columnOptions[0])
         }
     }, [isTaskColumnsSuccess])
 
@@ -180,39 +182,6 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                             <TwoColumnBox
                                 firstSlot={
                                     <Fragment>
-                                        <Label text={"Trạng thái"} />
-                                        <AutoComplete
-                                            id="column"
-                                            name="column"
-                                            getOptionLabel={(option) => option.name}
-                                            options={columnOptions}
-                                            value={formik.values.column}
-                                            onChange={(event, value) => {
-                                                formik.setFieldValue("column", value)
-                                            }}
-                                        />
-                                    </Fragment>
-                                }
-
-                                secondSlot={
-                                    <Fragment>
-                                        <Label text={"Effort"} />
-                                        <TextField
-                                            id="point"
-                                            type="number"
-                                            name="point"
-                                            value={formik.values.point}
-                                            onChange={formik.handleChange}
-                                            error={formik.touched.point && Boolean(formik.errors.point)}
-                                            helperText={formik.touched.point && formik.errors.point}
-                                        />
-                                    </Fragment>
-                                }
-                            />
-
-                            <TwoColumnBox
-                                firstSlot={
-                                    <Fragment>
                                         <Label text={"Loại task"} />
                                         <Select
                                             id="type"
@@ -234,6 +203,16 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                                 }
                                 secondSlot={
                                     <Fragment>
+                                        <Label text={"Effort"} />
+                                        <TextField
+                                            id="point"
+                                            type="number"
+                                            name="point"
+                                            value={formik.values.point}
+                                            onChange={formik.handleChange}
+                                            error={formik.touched.point && Boolean(formik.errors.point)}
+                                            helperText={formik.touched.point && formik.errors.point}
+                                        />
                                     </Fragment>
                                 }
                             />
@@ -241,12 +220,12 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                             <TwoColumnBox
                                 firstSlot={
                                     <Fragment>
-                                        <Label text={"Người được gán"} />
+                                        <Label text={"Người gán"} />
                                         <AutoComplete
                                             id={"inCharge"}
                                             name={"inCharge"}
                                             options={boardUserOptions}
-                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Empty Option`}
+                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Chưa gán`}
                                             value={formik.values.inCharge}
                                             onChange={(event, value) => {
                                                 formik.setFieldValue("inCharge", value)
@@ -261,7 +240,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                                             id={"reportTo"}
                                             name={"reportTo"}
                                             options={boardUserOptions}
-                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Empty Option`}
+                                            getOptionLabel={(option) => option.id ? `${option.id} - ${option.name}` : `Chưa gán`}
                                             value={formik.values.reportTo}
                                             onChange={(event, value) => {
                                                 formik.setFieldValue("reportTo", value)

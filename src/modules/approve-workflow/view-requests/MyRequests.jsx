@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
+import { Link } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -8,7 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Chip } from '@mui/material';
-import TablePagination from '@mui/material/TablePagination';
+import * as workflowService from '../../../client/workflowService';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -31,32 +32,32 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const MyRequests = () => {
-    const requests = [
-        {
-            name: "Nghi phep",
-            createdDate: "05-06-2022",
-            status: "0"
-        },
-        {
-            name: "Nghi phep",
-            createdDate: "05-06-2022",
-            status: "1"
-        },
-        {
-            name: "Nghi phep",
-            createdDate: "05-06-2022",
-            status: "2"
-        }
-    ];
+    let [requests, setRequests] = useState([]);
+    useEffect(() => {
+        workflowService.getWorkflowRequests().then(data => { setRequests(data) });
+    }, []);
 
     const statusToChip = (status) => {
         switch (status) {
-            case '0':
+            case 0:
                 return <Chip label="Pending" color="warning" />;
-            case '1':
+            case 1:
                 return <Chip label="Accepted" color="success" />;
             default:
                 return <Chip label="Denied" color="error" />;
+        }
+    }
+
+    const getFlowName = (name) => {
+        switch (name) {
+            case 'nghi-phep':
+                return 'Nghỉ phép';
+            case 'nghi-thai-san':
+                return 'Nghỉ thai sản';
+            case 'check-in-out':
+                return 'Điểm danh thủ công';
+            default:
+                return 'Không xác định';
         }
     }
 
@@ -81,8 +82,12 @@ const MyRequests = () => {
                     <TableBody>
                         {requests.map((row, index) => (
                             <StyledTableRow key={index}>
-                                <StyledTableCell align="right">{index + 1}</StyledTableCell>
-                                <StyledTableCell align="center">{row.name}</StyledTableCell>
+                                <StyledTableCell align="right">
+                                    <Link to={`/approve-workflows/user-${row.name + (row.status == 0 ? '' : '/view')}/${row.id}`}>
+                                        {index + 1}
+                                    </Link>
+                                </StyledTableCell>
+                                <StyledTableCell align="center">{getFlowName(row.name)}</StyledTableCell>
                                 <StyledTableCell align="center">{row.createdDate}</StyledTableCell>
                                 <StyledTableCell align="center">{statusToChip(row.status)}</StyledTableCell>
                             </StyledTableRow>
@@ -90,15 +95,6 @@ const MyRequests = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={requests.length}
-                rowsPerPage={10}
-            //page={page}
-            //onPageChange={handleChangePage}
-            //onRowsPerPageChange={handleChangeRowsPerPage}
-            />
         </Paper>
     );
 }

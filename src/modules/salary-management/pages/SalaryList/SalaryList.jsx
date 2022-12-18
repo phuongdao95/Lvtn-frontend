@@ -113,17 +113,6 @@ export default function SalaryList() {
                         color="info"
                     />
                 }
-                secondaryButtonSection={
-                    <MenuButton
-                        text={"Liên kết liên quan"}
-                        menu={
-                            [
-                                { text: "Danh sách template", handler: () => { } }
-                            ]
-                        }
-                        variant="outlined"
-                        color="info"
-                    />}
                 searchSection={<SearchField />}
                 dropdownFilterSection={<Select />}
                 searchButtonSection={<SearchButton />}
