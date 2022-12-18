@@ -21,6 +21,7 @@ export default function BoardDetail() {
     const { id } = useParams()
 
     const [isFilterOpen, setIsFilterOpen] = React.useState(false);
+    const [shouldApplyFilter, setShouldApplyFilter] = React.useState(false);
 
     const [filters, setFilters] = React.useState({
         inChargeds: [],
@@ -57,6 +58,12 @@ export default function BoardDetail() {
         data: fetchedColumns,
         method: fetchTasks,
     } = useFetchTasksOfTaskColumns();
+
+    React.useEffect(() => {
+        if (shouldApplyFilter) {
+            fetchTasks(columnList.data);
+        }
+    }, [shouldApplyFilter]);
 
     React.useEffect(() => {
         fetchDetail(id);
