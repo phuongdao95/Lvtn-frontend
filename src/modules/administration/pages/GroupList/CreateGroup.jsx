@@ -56,7 +56,7 @@ export default function CreateGroup({ reloadList, closeDialogCb }) {
 
     React.useEffect(() => {
         if (isFetchUserListSuccess) {
-            const formatted = fetchedUsers.data.map((user) => ({ id: user.id, name: user.name }))
+            const formatted = fetchedUsers.data.map((user) => ({ id: user.id, name: `${user.name} (${user.username})` }))
             setUserOptions(formatted);
         }
     }, [isFetchUserListSuccess])

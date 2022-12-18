@@ -50,7 +50,7 @@ const getColumnConfig = ({ onEditBtnClick, onDeleteBtnClick }) => [
 
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         width: 300,
         renderCell: () => {
             return <ActionButtonContainer>

@@ -151,7 +151,7 @@ export default function WorkingShiftDayConfigList() {
             {isDeleteUserOpen &&
                 <ConfirmDialog
                     title={"Confirm"}
-                    message="Bạn có muốn xóa chức vụ này"
+                    message="Bạn có muốn xóa ngày này"
                     cancelAction={{
                         text: "Cancel",
                         handler: () => {

@@ -131,7 +131,7 @@ const SideBar = (props) => {
                     }
                 },
                 {
-                    text: "Công thức tính lương",
+                    text: "Danh sách nhóm lương",
                     onClick: () => {
                         navigate("/salary-group")
                     }

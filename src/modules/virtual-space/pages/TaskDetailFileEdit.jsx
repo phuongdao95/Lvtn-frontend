@@ -32,7 +32,6 @@ export default function TaskDetailFileEdit({ reload, taskId, fileId, closeDialog
             description: "",
         },
         onSubmit: (values) => {
-            console.log({ fileId });
             updateTaskFile(fileId, {
                 ...values,
             })

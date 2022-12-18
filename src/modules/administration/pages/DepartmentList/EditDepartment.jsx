@@ -250,7 +250,7 @@ export default function EditDepartment({ reloadList, closeDialogCb, departmentId
 
                 <OneColumnBox
                     slot={<Fragment>
-                        <Label text={"Description"} />
+                        <Label text={"Mô tả"} />
                         <TextField
                             id="description"
                             name="description"

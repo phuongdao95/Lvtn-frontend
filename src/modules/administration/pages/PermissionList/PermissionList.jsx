@@ -34,14 +34,14 @@ const getColumnConfig = (openPermissionDetailCb) => [
         headerName: "Thao tác",
         renderCell: ({ id }) => {
             return <ActionButton onClick={() => openPermissionDetailCb(id)}>
-                Detail
+                Chi tiết
             </ActionButton>
         }
     }
 ];
 
 
-export default function RoleList() {
+export default function PermissionList() {
     const navigate = useNavigate();
 
     const [isPermissionDetailOpen, setIsPermissionDetailOpen]

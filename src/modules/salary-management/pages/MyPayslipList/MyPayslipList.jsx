@@ -18,13 +18,13 @@ const getColumnConfig = (openDetailCb) => [
     },
     {
         field: "name",
-        headerName: "Name",
+        headerName: "Tên",
         width: 150,
     },
 
     {
         field: "employeeName",
-        headerName: "From Date",
+        headerName: "Tên nhân viên",
         width: 100
     },
 
@@ -41,13 +41,13 @@ const getColumnConfig = (openDetailCb) => [
 
     {
         field: "description",
-        headerName: "Description",
+        headerName: "Mô tả",
         width: 200,
     },
 
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         width: 300,
         renderCell: ({ id }) => {
             return <Box sx={{ display: "flex", gap: 0.5 }}>
@@ -92,7 +92,8 @@ export default function PayrollList() {
                     <DataGrid
                         rows={payslips.map(payslip => ({
                             ...payslip,
-                            baseSalary: payslip.baseSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                            baseSalary: payslip.baseSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }),
+                            actualSalary: payslip.actualSalary.toLocaleString('it-IT', {style: 'currency', currency: 'VND'})
                         })) || []}
                         columns={getColumnConfig((id) => {
                             navigate(`/my-payslips/${id}/`)

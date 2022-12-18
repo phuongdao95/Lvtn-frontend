@@ -157,7 +157,7 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
                         <Label text={"Kết thúc"} />
                         <TimePicker
                             value={formik.values.endTime}
-                            onChange={(value) => formik.setFieldError("endTime", value)}
+                            onChange={(value) => formik.setFieldValue("endTime", value)}
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </Fragment>}

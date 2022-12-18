@@ -81,7 +81,6 @@ export default function LabelList() {
     }, [boardId])
 
     React.useEffect(() => {
-        console.log(isCreateLabelOpen)
     }, [isCreateLabelOpen])
 
     React.useEffect(() => {

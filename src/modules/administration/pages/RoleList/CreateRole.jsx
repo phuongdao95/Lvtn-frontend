@@ -173,7 +173,7 @@ export default function CreateRole({ reloadList, closeDialogCb }) {
                                             module: <p style={{ textTransform: 'capitalize' }}>
                                                 {permission.module.split("_").join(" ")}</p>,
                                             name: <p style={{ textTransform: 'capitalize' }}>
-                                                {permission.name.split(".")[1]
+                                                {permission.name.split(".")[0]
                                                     .split("_").join(" ")}</p>,
                                         })) ?? []}
                                     columns={getPermissionColumnConfig()}

@@ -97,7 +97,7 @@ export default function TeamList() {
             {isDeleteTeamOpen &&
                 <ConfirmDialog
                     title={"Confirm"}
-                    message="Bạn có muốn xóa chức vụ này"
+                    message="Bạn có muốn xóa Team này"
                     cancelAction={{
                         text: "Cancel",
                         handler: () => {

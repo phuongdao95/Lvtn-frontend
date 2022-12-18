@@ -75,8 +75,29 @@ export const useFetchTimekeepingsOfUser =
                     queryType
                 };
 
-                const response = await api.get(`/api/user/${userId}/workingshifttimekeeping`,
+                const response = await api.get(`/api/user/${userId}/scheduler`,
                     { params });
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+            } catch (err) {
+                console.error(err);
+                setIsSuccess(false);
+                setIsError(true);
+            } finally {
+                setIsPending(false);
+            }
+        }
+        return fetch;
+    })();
+
+
+export const useFetchTimekeepingHistoriesOfTimekeeping =
+    getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
+        const fetch = async (timekeepingId) => {
+            try {
+                const response = await api.get(`/api/workingshifttimekeeping/${timekeepingId}/workingshifttimekeepinghistory`);
                 if (response.data) {
                     setData(response.data);
                 }

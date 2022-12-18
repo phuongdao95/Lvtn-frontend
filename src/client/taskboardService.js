@@ -101,18 +101,25 @@ export const useFetchTasksOfTaskColumn =
 export const useFetchTasksOfTaskColumns =
     getPendingErrorSuccessApiPatternFunction(
         ({ setIsError, setIsPending, setIsSuccess, setData }) => {
-            const fetchTaskListOfTaskColumn = async (columnList, formData = { isDisabled: false }) => {
+            const fetchTaskListOfTaskColumn = async (columnList, formData = { isDisabled: true }) => {
                 setIsError(false);
                 setIsPending(true);
                 setIsSuccess(false);
 
                 try {
                     const responses = await Promise.all(columnList.map((column) => {
-                        return api.post(`/api/taskcolumn/${column.id}/task`, formData).then((response) => {
-                            const taskInfo = response.data;
+                        const { labels, inChargeds, reportTos } = formData;
+                        const labelIds = labels?.map((label) => label.id);
+                        const inChargeIds = inChargeds?.map((inCharged) => inCharged.id);
+                        const reportToIds = reportTos?.map((reportTo) => reportTo.id);
 
-                            return taskInfo;
-                        });
+                        return api.post(`/api/taskcolumn/${column.id}/task`,
+                            { ...formData, labelIds, inChargeIds, reportToIds, startDate: null, endDate: null })
+                            .then((response) => {
+                                const taskInfo = response.data;
+
+                                return taskInfo;
+                            });
                     }));
 
 

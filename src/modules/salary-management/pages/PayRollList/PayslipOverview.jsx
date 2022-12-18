@@ -41,7 +41,7 @@ export default function PayslipOverview() {
                     secondSlot={
                         <Fragment>
                             <Box>
-                                <Label text={"Description"} />
+                                <Label text={"Mô tả"} />
                                 <Typography>
                                     {detail.description}
                                 </Typography>
@@ -66,7 +66,7 @@ export default function PayslipOverview() {
                     secondSlot={
                         <Fragment>
                             <Box>
-                                <Label text={"Description"} />
+                                <Label text={"Mô tả"} />
                                 <Typography>
                                     {detail.description}
                                 </Typography>

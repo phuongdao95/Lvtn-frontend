@@ -212,7 +212,7 @@ export default function CreateDepartment({ reloadList, closeDialogCb }) {
 
                 <OneColumnBox
                     slot={<Fragment>
-                        <Label text={"Description"} />
+                        <Label text={"Mô tả"} />
                         <TextField
                             id="description"
                             name="description"

@@ -145,9 +145,11 @@ export default function EditUser({ closeDialogCb, userId }) {
                             <Fragment>
                                 <Label text={"Tên tài khoản"} />
                                 <TextField id="username"
+                                    readOnly={true}
                                     name="username"
                                     value={formik.values.username}
-                                    onChange={formik.handleChange} />
+                                    onChange={formik.handleChange}
+                                />
                             </Fragment>
                         }
 
@@ -220,11 +222,11 @@ export default function EditUser({ closeDialogCb, userId }) {
                                         },
                                         {
                                             label: "Nam",
-                                            value: "Male",
+                                            value: "male",
                                         },
                                         {
                                             label: "Nữ",
-                                            value: "Female"
+                                            value: "female"
                                         }
                                     ]}
                                 />

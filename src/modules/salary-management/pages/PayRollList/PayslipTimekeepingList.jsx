@@ -101,6 +101,8 @@ export default function PayslipTimekeepingList() {
         <DataGrid
             rows={timekeepings?.data?.map((timekeeping) => ({
                 ...timekeeping,
+                didCheckIn: timekeeping.didCheckIn ? "Có" : "Không",
+                didCheckout: timekeeping.didCheckout ? "Có" : "Không",
                 date: dayjs(timekeeping.startTime).format('DD/MM/YYYY'),
                 startTime: dayjs(timekeeping.startTime).format('HH:mm:ss'),
                 endTime: dayjs(timekeeping.endTime).format('HH:mm:ss'),

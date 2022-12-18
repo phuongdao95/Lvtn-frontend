@@ -39,7 +39,7 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
     const [currentMonth, setCurrentMonth] = React.useState(generateMonth()[0]);
     const [groupOptions, setGroupOptions] = React.useState([]);
     const [formulaOptions, setFormulaOptions] = React.useState([]);
-    const [weekDayConfigs, setWeekDayConfigs] = React.useState([true, true, true, true, true, false, false]);
+    const [weekDayConfigs, setWeekDayConfigs] = React.useState([false, true, true, true, true, true, false]);
 
     const {
         isSuccess: isFetchGroupsSuccess,
@@ -179,7 +179,7 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
                     secondSlot={<Fragment>
                         <Label text={"Kết thúc"} />
                         <TimePicker
-                            value={formik.values.startTime}
+                            value={formik.values.endTime}
                             onChange={(value) => formik.setFieldError("endTime", value)}
                             renderInput={(params) => <TextField {...params} />}
                         />
@@ -252,7 +252,7 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
                             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
                                 <div>
                                     <FormControlLabel control={
-                                        <Checkbox checked={weekDayConfigs[0]}
+                                        <Checkbox checked={weekDayConfigs[1]}
                                             onChange={(event) => {
                                                 let cloned = [...weekDayConfigs];
                                                 cloned[0] = event.target.checked;
@@ -263,7 +263,7 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
                                 </div>
                                 <div>
                                     <FormControlLabel control={
-                                        <Checkbox checked={weekDayConfigs[1]}
+                                        <Checkbox checked={weekDayConfigs[2]}
                                             onChange={(event) => {
                                                 let cloned = [...weekDayConfigs];
                                                 cloned[1] = event.target.checked;
@@ -274,7 +274,7 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
                                 </div>
                                 <div>
                                     <FormControlLabel control={
-                                        <Checkbox checked={weekDayConfigs[2]}
+                                        <Checkbox checked={weekDayConfigs[3]}
                                             onChange={(event) => {
                                                 let cloned = [...weekDayConfigs];
                                                 cloned[2] = event.target.checked;
@@ -285,7 +285,7 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
                                 </div>
                                 <div>
                                     <FormControlLabel control={
-                                        <Checkbox checked={weekDayConfigs[3]}
+                                        <Checkbox checked={weekDayConfigs[4]}
                                             onChange={(event) => {
                                                 let cloned = [...weekDayConfigs];
                                                 cloned[3] = event.target.checked;
@@ -296,7 +296,7 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
                                 </div>
                                 <div>
                                     <FormControlLabel control={
-                                        <Checkbox checked={weekDayConfigs[4]}
+                                        <Checkbox checked={weekDayConfigs[5]}
                                             onChange={(event) => {
                                                 let cloned = [...weekDayConfigs];
                                                 cloned[4] = event.target.checked;
@@ -307,7 +307,7 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
                                 </div>
                                 <div>
                                     <FormControlLabel control={
-                                        <Checkbox checked={weekDayConfigs[5]}
+                                        <Checkbox checked={weekDayConfigs[6]}
                                             onChange={(event) => {
                                                 let cloned = [...weekDayConfigs];
                                                 cloned[5] = event.target.checked;
@@ -318,7 +318,7 @@ export default function CreateMultipleWorkingShift({ closeDialogCb, reload }) {
                                 </div>
                                 <div>
                                     <FormControlLabel control={
-                                        <Checkbox checked={weekDayConfigs[6]}
+                                        <Checkbox checked={weekDayConfigs[0]}
                                             onChange={(event) => {
                                                 let cloned = [...weekDayConfigs];
                                                 cloned[6] = event.target.checked;

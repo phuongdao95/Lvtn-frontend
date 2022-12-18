@@ -33,16 +33,6 @@ const generateMonth = () => {
 
 const getColumnConfig = (openEditCb, openDeleteCb) => [
     {
-        field: 'check',
-        headerName: '',
-        width: 50,
-        renderCell: ({ id, row }) => {
-            return <Box sx={{ display: 'flex', gap: 1 }}>
-                <Checkbox />
-            </Box>
-        }
-    },
-    {
         field: "id",
         width: 100
     },
@@ -196,7 +186,7 @@ export default function WorkingShiftList() {
         {isDeleteShiftOpen &&
             <ConfirmDialog
                 title={"Confirm"}
-                message="Bạn có muốn xóa chức vụ này"
+                message="Bạn có muốn xóa ca làm việc này"
                 cancelAction={{
                     text: "Cancel",
                     handler: () => {
@@ -260,7 +250,7 @@ export default function WorkingShiftList() {
                                 }
                             },
                             {
-                                text: "Tạo mới ca hằng ngày",
+                                text: "Tạo mới / Cập nhật ca hằng ngày",
                                 handler: () => {
                                     setIsCreateMultipleShiftOpen(true);
                                 }

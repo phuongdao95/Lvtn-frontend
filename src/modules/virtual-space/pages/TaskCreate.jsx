@@ -64,10 +64,9 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
     const formik = useFormik({
         initialValues: {
             name: "",
-            column: { id: null, name: "" },
             inCharge: { id: null, name: "" },
             reportTo: { id: null, name: "" },
-            type: "task",
+            type: "normal",
             labels: [],
             fromDate: dayjs(),
             toDate: dayjs().add(10),
@@ -77,10 +76,12 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
             const labelIds = values.labels.map(label => label.id);
             const inChargeId = values.inCharge.id;
             const reportToId = values.reportTo.id;
-            const columnId = values.column.id;
+            const columnId = columnOptions.filter(column => column.name === "Todo")[0].id;
+            const taskType = values.type;
 
             createTask({
                 ...values,
+                taskType, 
                 taskLabelIds: labelIds,
                 inChargeId,
                 reportToId,
@@ -159,7 +160,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                                 justifyContent: 'space-between',
                             }}>
                                 <TaskDetailHeader>
-                                    Detail
+                                    Chi tiết
                                 </TaskDetailHeader>
                             </Box>
 
@@ -191,7 +192,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                                             menu={[
                                                 {
                                                     label: "Normal Task",
-                                                    value: "task",
+                                                    value: "normal",
                                                 },
                                                 {
                                                     label: "Epic Task",
@@ -282,7 +283,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                             Hủy
                         </Button>
                         <Button variant="contained" onClick={() => { formik.submitForm() }} >
-                            Tạo mới task
+                            Liên kết task
                         </Button>
                     </DialogActions>
                 </Box>

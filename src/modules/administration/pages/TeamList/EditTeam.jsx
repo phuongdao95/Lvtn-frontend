@@ -71,7 +71,7 @@ export default function EditTeam({ closeDialogCb, teamId }) {
     React.useEffect(() => {
         if (isFetchListUserWithNoTeamSuccess) {
             const userOptions = fetchedUsers.data
-                .map((user) => ({ id: user.id, name: user.name }))
+                .map((user) => ({ id: user.id, name: `${user.name} (${user.username})` }))
             setUserOptions(userOptions);
         }
     }, [isFetchListUserWithNoTeamSuccess])
@@ -134,7 +134,7 @@ export default function EditTeam({ closeDialogCb, teamId }) {
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Name"} />
+                            <Label text={"Tên"} />
                             <TextField
                                 id="name"
                                 name="name"
@@ -146,7 +146,7 @@ export default function EditTeam({ closeDialogCb, teamId }) {
 
                     secondSlot={
                         <Fragment>
-                            <Label text={"Department"} />
+                            <Label text={"Phòng ban"} />
                             <AutoComplete
                                 id="department"
                                 getOptionLabel={getOptionLabel}
@@ -192,7 +192,7 @@ export default function EditTeam({ closeDialogCb, teamId }) {
                 <OneColumnBox
                     slot={
                         <Fragment>
-                            <Label text={"Description"} />
+                            <Label text={"Mô tả"} />
                             <TextField
                                 multiline
                                 id="description"
@@ -207,11 +207,10 @@ export default function EditTeam({ closeDialogCb, teamId }) {
                 <OneColumnBox
                     slot={
                         <Fragment>
-                            <Label text={"Members"} />
+                            <Label text={"Thành viên"} />
                             <AutoCompleteMultiple
                                 value={formik.values.members}
                                 onChange={(event, value) => {
-                                    console.log(event.target.value);
                                     formik.setFieldValue("members", value)
                                 }}
                                 options={userOptions}

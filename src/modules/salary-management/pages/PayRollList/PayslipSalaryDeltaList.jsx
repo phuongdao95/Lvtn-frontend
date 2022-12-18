@@ -102,6 +102,7 @@ export default function PayslipSalaryDeltaList() {
         <DataGrid
             rows={salaryDeltas?.data?.map((salaryDelta) => ({
                 ...salaryDelta,
+                amount: salaryDelta.amount.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }),
                 fromMonth: dayjs(salaryDelta.fromMonth).format("MM/YYYY"),
                 toMonth: dayjs(salaryDelta.toMonth).format("MM/YYYY")
             })) ?? []}

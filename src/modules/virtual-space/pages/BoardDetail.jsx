@@ -61,7 +61,7 @@ export default function BoardDetail() {
 
     React.useEffect(() => {
         if (shouldApplyFilter) {
-            fetchTasks(columnList.data);
+            fetchTasks(columnList.data, filters);
         }
     }, [shouldApplyFilter]);
 
@@ -77,7 +77,6 @@ export default function BoardDetail() {
     }, [isFetchColumnsSuccess])
 
     React.useEffect(() => {
-        console.log(shouldReload)
         if (shouldReload) {
             fetchTasks(columnList.data);
             setShouldReload(false);
@@ -86,7 +85,6 @@ export default function BoardDetail() {
 
     React.useEffect(() => {
         if (isFetchTasksSuccess) {
-            console.log({ fetchedColumns })
             const mapped = fetchedColumns.map((column) => ({
                 id: `${column.id}`,
                 prefix: column.name,
@@ -182,6 +180,10 @@ export default function BoardDetail() {
                 <TaskFilter
                     boardId={id}
                     closeDialogCb={() => setIsFilterOpen(false)}
+                    applyFilter={() => {
+                        setIsFilterOpen(false);
+                        fetchTasks(columnList.data, filters)
+                    }}
                     setFilters={setFilters}
                     filters={filters}
                 />

@@ -137,7 +137,7 @@ export default function BoardList() {
         {isDeleteBoardOpen &&
             <ConfirmDialog
                 title={"Confirm"}
-                message="Bạn có muốn xóa chức vụ này"
+                message="Bạn có muốn xóa bảng công việc này"
                 cancelAction={{
                     text: "Cancel",
                     handler: () => {

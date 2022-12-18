@@ -58,7 +58,6 @@ export default function TaskBoardReport() {
                     menu={options}
                     value={pickedOption?.value ?? -1}
                     onChange={(x) => {
-                        console.log(x);
                         setPickedOption(x.target)
                     }}
                 />

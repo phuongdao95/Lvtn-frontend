@@ -5,27 +5,25 @@ import DialogForm from "../../../../components/DialogForm";
 import Label from "../../../../components/DialogForm/Label";
 import TextField from "../../../../components/DialogForm/TextField";
 import TwoColumnBox from "../../../../components/DialogForm/TwoColumnBox";
-import DatePicker from "../../../../components/DialogForm/DatePicker";
 
-import { useNavigate } from "react-router";
 import { useFormik } from "formik";
 import { useCreatePayroll } from "../../../../client/payrollService";
 
 import dayjs from "dayjs";
-import * as yup from "yup";
 import OneColumnBox from "../../../../components/DialogForm/OneColumnBox";
-import { MonthPicker, YearPicker } from "@mui/x-date-pickers";
 import Select from "../../../../components/DialogForm/Select";
 import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 
+import * as yup from "yup";
+
 const validationSchema = yup.object().shape({
-    name: yup.string().required(),
+    name: yup.string().required("Tên là một trường cần thiết"),
     fromDate: yup.date().required(),
     toDate: yup.date().required(),
 });
 
 function generateYears() {
-    return Array.from({ length: 200 }, (_, i) => i + 2020)
+    return Array.from({ length: 5 }, (_, i) => i + 2020)
 }
 
 export default function CreatePayroll({ reload, closeDialogCb }) {
@@ -60,11 +58,11 @@ export default function CreatePayroll({ reload, closeDialogCb }) {
 
     return <Dialog
         primaryAction={{
-            text: "Submit",
+            text: "Lưu",
             handler: () => { formik.submitForm(); },
         }}
         secondaryAction={{
-            text: "Cancel",
+            text: "Hủy",
             handler: closeDialogCb
         }}
         title="Tạo mới Payroll"

@@ -48,7 +48,7 @@ export default function CreateTeam({ closeDialogCb }) {
     React.useEffect(() => {
         if (isFetchUsersSuccess) {
             const userOptions = fetchedUsers.data
-                .map((user) => ({ id: user.id, name: user.name }))
+                .map((user) => ({ id: user.id, name: `${user.name} (${user.username})` }))
             setUserOptions(userOptions);
         }
     }, [isFetchUsersSuccess])
@@ -178,7 +178,6 @@ export default function CreateTeam({ closeDialogCb }) {
                             <AutoCompleteMultiple
                                 value={formik.values.members}
                                 onChange={(event, value) => {
-                                    console.log(event.target.value);
                                     formik.setFieldValue("members", value)
                                 }}
                                 options={userOptions}

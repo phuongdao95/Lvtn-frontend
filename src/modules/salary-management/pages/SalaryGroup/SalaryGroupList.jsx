@@ -133,7 +133,7 @@ export default function SalaryGroupList() {
             {isDeleteSalaryGroupOpen &&
                 <ConfirmDialog
                     title={"Confirm"}
-                    message="Bạn có muốn xóa chức vụ này"
+                    message="Bạn có muốn xóa cài đặt lương này"
                     cancelAction={{
                         text: "Cancel",
                         handler: () => {
