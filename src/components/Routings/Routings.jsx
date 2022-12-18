@@ -16,6 +16,10 @@ const UserCheckinout = React.lazy(() => import("../../modules/approve-workflow/c
 const ViewCheckInOut = React.lazy(() => import("../../modules/approve-workflow/check-inout-manual/ViewCheckInOut"));
 const WorkflowConfig = React.lazy(() => import("../../modules/approve-workflow/configs/WorkflowConfig"));
 
+const ViewMemberBalances = React.lazy(() => import("../../modules/leave-balance/ViewMemberBalances"));
+const ViewMyBalances = React.lazy(() => import("../../modules/leave-balance/ViewMyBalances"));
+const EditMemberLeaveBalance = React.lazy(() => import("../../modules/leave-balance/EditMemberLeaveBalance"));
+
 const Registe = React.lazy(() => import("../../modules/check-day/pages/Registe"));
 const CheckIn = React.lazy(() => import("../../modules/check-day/pages/CheckIn"));
 const WorkingShiftList = React.lazy(() => import("../../modules/check-day/pages/WorkingShiftList"));
@@ -78,6 +82,11 @@ export default function Routings() {
             <Route path="/permission" element={<ProtectedRoute component={<PermissionList />} />} />
             <Route path="/department" element={<ProtectedRoute component={<DepartmentList />} />} />
 
+            {/* Leave Balance  */}
+            <Route exact path="/leave-balance/members" element={<ProtectedRoute component={<ViewMemberBalances />} />} />
+            <Route exact path="/leave-balance/member/:id" element={<ProtectedRoute component={<EditMemberLeaveBalance />} />} />
+            <Route exact path="/leave-balance/me" element={<ProtectedRoute component={<ViewMyBalances />} />} />
+
             {/* Virtual Space  */}
             <Route path="/taskboard" element={<ProtectedRoute component={<BoardList />} />} />
             <Route path="/taskboard/:id" element={<ProtectedRoute component={<BoardDetail />} />} />
@@ -110,5 +119,6 @@ export default function Routings() {
             <Route path="/profile" element={<ProtectedRoute component={<UserProfile />} />} />
             <Route path='*' element={<ProtectedRoute component={<NotFound />} />} />
         </Routes>
+
     </React.Suspense>
 }
