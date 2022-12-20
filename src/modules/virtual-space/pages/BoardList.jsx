@@ -111,16 +111,6 @@ export default function BoardList() {
         fetchTaskBoardListOfUser(getCurrentUserId());
     }, [])
 
-    React.useEffect(() => {
-        if (isError) {
-            setInfoDialogMessage({
-                title: 'Error',
-                message: 'Có lỗi xảy ra từ server, xin vui lòng load lại trang hoặc đăng nhập với quyền cao hơn'
-            });
-            setIsInfoDialogOpen(true);
-        }
-    }, [isError]);
-
     return <Fragment>
         {isCreateBoardOpen && <BoardCreate
             closeDialogCb={

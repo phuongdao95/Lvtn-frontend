@@ -76,7 +76,7 @@ export default function CreateSalaryGroup({ reloadList, closeDialogCb }) {
 
     React.useEffect(() => {
         fetchGroups();
-        fetchFormulaList();
+        fetchFormulaList("salaryconfig");
     }, [])
 
     React.useEffect(() => {

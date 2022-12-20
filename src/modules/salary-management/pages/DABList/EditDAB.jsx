@@ -77,7 +77,7 @@ export default function EditDAB({ dabId, closeDialogCb, reload }) {
     React.useEffect(() => {
         fetchDetail(dabId);
         fetchGroupList();
-        fetchFormulaList();
+        fetchFormulaList("salarydelta");
     }, []);
 
     React.useEffect(() => {

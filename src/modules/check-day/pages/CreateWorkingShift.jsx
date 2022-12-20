@@ -73,7 +73,7 @@ export default function CreateWorkingShift({ closeDialogCb, reload }) {
     });
 
     React.useEffect(() => {
-        fetchFormulaList();
+        fetchFormulaList("timekeeping");
         fetchGroupList();
     }, []);
 

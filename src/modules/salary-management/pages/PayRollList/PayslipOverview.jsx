@@ -55,7 +55,7 @@ export default function PayslipOverview() {
                     firstSlot={
                         <Fragment>
                             <Box>
-                                <Label text={"Name"} />
+                                <Label text={"Tên payslip"} />
                                 <Typography>
                                     {detail.name}
                                 </Typography>
@@ -65,36 +65,14 @@ export default function PayslipOverview() {
 
                     secondSlot={
                         <Fragment>
-                            <Box>
-                                <Label text={"Mô tả"} />
-                                <Typography>
-                                    {detail.description}
-                                </Typography>
-                            </Box>
-                        </Fragment>
-                    }
-                />
-
-                <TwoColumnBox
-                    firstSlot={
-                        <Fragment>
-                            <Box>
-                                <Label text={"Month"} />
-                                <Typography>
-                                    {detail.month}
-                                </Typography>
-                            </Box>
-                        </Fragment>
-                    }
-
-                    secondSlot={
-                        <Fragment>
-                            <Box>
-                                <Label text={"Year"} />
-                                <Typography>
-                                    {detail.Year}
-                                </Typography>
-                            </Box>
+                            <Fragment>
+                                <Box>
+                                    <Label text={"Tháng"} />
+                                    <Typography>
+                                        {detail.month}
+                                    </Typography>
+                                </Box>
+                            </Fragment>
                         </Fragment>
                     }
                 />

@@ -170,7 +170,7 @@ export default function TaskFilter({ closeDialogCb, boardId, filters, setFilters
                         name="inChargeds"
                         getOptionLabel={(option) => option.name}
                         options={userOptions}
-                        value={filters.inChargeds}
+                        value={filters.reportTos}
                         onChange={(event, value) => {
                             setFilters({
                                 ...filters,

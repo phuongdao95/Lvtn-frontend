@@ -94,7 +94,7 @@ export default function FormulaList() {
 
     React.useEffect(() => {
         let type = getTypeFromText(variableKind);
-        fetchFormula(0, 0, type, "area");
+        fetchFormula(type, "area");
     }, [variableKind])
 
     React.useEffect(() => {
@@ -118,7 +118,7 @@ export default function FormulaList() {
             else if (variableKind == "KPI") {
                 type = "kpi"
             }
-            fetchFormula(0, 0, type, "area");
+            fetchFormula(type, "area");
         }
     }, [isDeleteSuccess]);
 
