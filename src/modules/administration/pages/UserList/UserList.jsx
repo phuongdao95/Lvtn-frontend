@@ -17,14 +17,18 @@ import { Box } from "@mui/system";
 const getColumnConfig = (openEditCb, openDeleteCb) => [
     {
         field: "id",
-        width: 150
+        width: 50
     },
     {
         field: "name",
         headerName: "Tên",
         width: 250,
     },
-
+    {
+        field: "username",
+        headerName: "Tên tài khoản",
+        width: 150,
+    },
     {
         field: "gender",
         headerName: "Giới tính",
@@ -38,7 +42,7 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
     },
 
     {
-        field: "role",
+        field: "roleName",
         headerName: "Chức vụ",
         width: 150,
     },
@@ -51,21 +55,21 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
 
     {
         field: "departmentName",
-        headerName: "Department",
+        headerName: "Phòng ban",
         width: 150
     },
 
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         width: 250,
         renderCell: ({ id }) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
                 <ActionButton onClick={() => openEditCb(id)}>
-                    Edit
+                    Sửa
                 </ActionButton>
                 <ActionButton onClick={() => openDeleteCb(id)}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </Box>
         }
@@ -146,7 +150,7 @@ export default function UserList() {
             {isDeleteUserOpen &&
                 <ConfirmDialog
                     title={"Confirm"}
-                    message="Bạn có muốn xóa chức vụ này"
+                    message="Bạn có muốn xóa người dùng này"
                     cancelAction={{
                         text: "Cancel",
                         handler: () => {
@@ -184,7 +188,11 @@ export default function UserList() {
                         }}
                         rowCount={response?.total ?? 0}
                         paginationMode="server"
-                        rows={response?.data ?? []}
+                        rows={response?.data.map((item) => ({
+                            ...item,
+                            gender: item.gender === "male" ? "Nam" : "Nữ"
+
+                        })) ?? []}
                         columns={getColumnConfig(
                             (id) => {
                                 setUserId(id);
@@ -214,41 +222,6 @@ export default function UserList() {
                         }
                     />
                 }
-                secondaryButtonSection={
-                    <MenuButton
-                        text={"Liên kết liên quan"}
-                        menu={
-                            [
-                                {
-                                    text: "Danh sách nhóm", handler: () => {
-                                        navigate("/group");
-                                    }
-                                },
-                                {
-                                    text: "Danh sách quyền", handler: () => {
-                                        navigate("/permission");
-                                    }
-                                },
-                                {
-                                    text: "Danh sách team", handler: () => {
-                                        navigate("/team");
-                                    }
-                                },
-                                {
-                                    text: "Danh sách department", handler: () => {
-                                        navigate("/department")
-                                    }
-                                },
-                                {
-                                    text: "Danh sách chức vụ", handler: () => {
-                                        navigate("/role")
-                                    }
-                                }
-                            ]
-                        }
-                        variant="outlined"
-                        color="info"
-                    />}
                 searchSection={<SearchField />}
                 dropdownFilterSection={<Fragment></Fragment>}
                 searchButtonSection={<SearchButton />}

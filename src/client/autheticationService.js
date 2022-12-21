@@ -1,36 +1,6 @@
 import api from "./api";
 import { getPendingErrorSuccessApiPatternFunction } from "./crudService";
 
-const routeMap = {
-    "/my-profile": "my_profile",
-    "/user": "user_list",
-    "/role": "role_list",
-    "/permission": "permission_list",
-    "department": "team_list",
-    "group": "group_list",
-    "department": "department_list",
-
-    "/dab": "dab_list",
-    "my_dab": "my_dab",
-    "/my-payslip": "my_payslip",
-    "/formula": "salary_formula_list",
-    "/variable": "salary_variable_list",
-    "/salary-group": "salary_group_list",
-    "/payroll": "payroll_list",
-
-    "/virtual-space/board": "board_list",
-    "/virtual-space/task": "task_list",
-    "/virtual-space/my-board": "board_list_of_team",
-    "/virtual-space/my-board/:id/task": "task_list_of_board",
-    "/virtual-space/": "label_list_of_board",
-
-    ["timekeeping_image_registration"]: "",
-    ["timekeeping_check_in"]: "/check-in",
-    ["timekeeping_check_out"]: "/check-out",
-    ["timekeeping_list"]: "/timekeeping",
-    ["workingshift_list"]: "/workingshift",
-};
-
 export const useLogin =
     getPendingErrorSuccessApiPatternFunction(({
         setIsError,
@@ -104,26 +74,4 @@ export const getCurrentUserId = () => {
     }
 
     return window.localStorage.getItem('user_id');
-}
-
-export const isAllowedToVisitRoute = (pathname) => {
-    if (!window && !window.localStorage) {
-        return false;
-    }
-
-    if (!window.localStorage.getItem('page_access_list')) {
-        return false;
-    }
-
-    try {
-        const localStorage = window.localStorage;
-        const pageAccessList = JSON.parse(localStorage.getItem('page_access_list'));
-        if (pageAccessList.includes(routeMap[pathname])) {
-            return true;
-        }
-    }
-    catch (err) {
-        console.err(err);
-        return false;
-    }
 }

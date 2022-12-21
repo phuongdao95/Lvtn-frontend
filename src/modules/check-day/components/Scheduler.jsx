@@ -10,17 +10,16 @@ import { getCurrentUserId } from "../../../client/autheticationService";
 const generateShownDaysInScheduler = (year, month) => {
     const firstDateOfMonth = dayjs(`${year}-${month}-01`);
     const diffReverseUntilSunday = firstDateOfMonth.day() - 0;
-    console.log({ f: firstDateOfMonth.month() });
     const firstDateShowInCalendar = firstDateOfMonth.subtract(diffReverseUntilSunday, 'day');
     const daysInMonth = firstDateOfMonth.daysInMonth();
     const lastDateOfMonth = dayjs(`${year}-${month}-${daysInMonth}`);
-    const diffUntilSaturday = 6 - lastDateOfMonth.day() - 1;
+    const diffUntilSaturday = 6 - lastDateOfMonth.day();
     const lastDateShownInCalendar = lastDateOfMonth.add(diffUntilSaturday, 'day');
 
     const result = [];
 
     for (let date = firstDateShowInCalendar;
-        date.isBefore(lastDateShownInCalendar, 'day');
+        date.isBefore(lastDateShownInCalendar, 'day') || date.isSame(lastDateShownInCalendar, 'day');
         date = date.add(1, 'day')) {
         result.push(date);
     }

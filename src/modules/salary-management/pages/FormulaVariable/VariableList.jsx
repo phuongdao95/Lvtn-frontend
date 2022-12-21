@@ -8,7 +8,7 @@ import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 import Select from "../../../../components/DataGrid/Select";
 import EditVariable from "./EditVariable";
 
-import { useDeleteVariable, useFetchListVariable } from "../../../../client/variableService";
+import { useDeleteVariable, useFetchListVariable, useFetchVariableList } from "../../../../client/variableService";
 
 const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
     {
@@ -48,7 +48,7 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
 
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         width: 200,
         renderCell: ({ id }) => {
             return <Box sx={{ display: "flex", gap: 1 }}>
@@ -62,6 +62,19 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
         }
     }
 ]
+
+const getTypeFromText = (text) => {
+    switch (text) {
+        case "Nhóm lương":
+            return "salarygroup";
+        case "Tăng giảm lương":
+            return "salarydelta";
+        case "Chấm công":
+            return "timekeeping";
+        case "KPI":
+            return "kpi";
+    }
+}
 
 const initialDialogState = {
     title: "",
@@ -87,7 +100,7 @@ export default function VariableList() {
         isSuccess,
         data: response,
         method: reloadList,
-    } = useFetchListVariable();
+    } = useFetchVariableList();
 
     const {
         isPending: isDeletePending,
@@ -97,8 +110,14 @@ export default function VariableList() {
     } = useDeleteVariable();
 
     React.useEffect(() => {
+        const type = getTypeFromText(variableKind);
+        reloadList(type)
+    }, [variableKind])
+
+    React.useEffect(() => {
         if (isDeleteSuccess) {
-            reloadList();
+            const type = getTypeFromText(variableKind);
+            reloadList(type);
         }
         if (isDeleteError) {
             setInfoDialogMessage({

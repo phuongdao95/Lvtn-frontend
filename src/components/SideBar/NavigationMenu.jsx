@@ -131,7 +131,7 @@ const SideBar = (props) => {
                     }
                 },
                 {
-                    text: "Công thức tính lương",
+                    text: "Danh sách nhóm lương",
                     onClick: () => {
                         navigate("/salary-group")
                     }
@@ -240,7 +240,6 @@ const SideBar = (props) => {
                 },
             ]
         },
-
         {
             text: "Ngày nghỉ",
             icon: <AlarmOff style={{ color: textColor }} />,
@@ -268,7 +267,6 @@ const SideBar = (props) => {
             subItems: [
             ]
         }
-
     ];
 
     return (

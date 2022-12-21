@@ -57,9 +57,9 @@ export default function Routings() {
 
     return <React.Suspense fallback={<div>Loading...</div>}>
         <Routes>
-            <Route path="/approve-workflows" element={<ProtectedRoute component={<WorkFlows />} />} pageName={"approve_workflow_list"} />
+            <Route path="/approve-workflows" element={<ProtectedRoute component={<WorkFlows />} pageName={"approve_workflow_list"} />} />
             <Route exact path="/approve-workflows/configs" element={<ProtectedRoute component={<WorkflowConfig />} pageName={"approve_workflow_config_list"} />} />
-            <Route path="/approve-workflows/my-requests" element={<ProtectedRoute component={<MyRequests />} />} pageName={"my_requests"} />
+            <Route path="/approve-workflows/my-requests" element={<ProtectedRoute component={<MyRequests />} pageName={"my_requests"} />} />
             <Route path="/approve-workflows/my-todo-requests" element={<ProtectedRoute component={<MyToDoRequests />} pageName={"my_todo_requests"} />} />
             <Route exact path="/approve-workflows/user-nghi-phep/:id" element={<ProtectedRoute component={<UserNghiPhep />} pageName={"user_nghi_phep"} />} />
             <Route exact path="/approve-workflows/user-nghi-thai-san/:id" element={<ProtectedRoute component={<UserNghiThaiSan />} pageName={"user_nghi_thai_san"} />} />
@@ -68,18 +68,18 @@ export default function Routings() {
             <Route exact path="/approve-workflows/configs/config-nghi-thai-san" element={<ProtectedRoute component={<ConfigNghiThaiSan />} pageName={"config_nghi_thai_san"} />} />
             <Route exact path="/approve-workflows/configs/config-check-in-out" element={<ProtectedRoute component={<ConfigCheckinout />} pageName={"config_check_in_out"} />} />
 
-            <Route exact path="/approve-workflows/user-nghi-phep/view/:id" element={<ProtectedRoute component={<ViewNghiPhep isApprover={false} />} />} />
-            <Route exact path="/approve-workflows/user-nghi-phep/todo/:id" element={<ProtectedRoute component={<ViewNghiPhep isApprover={true} />} />} />
-            <Route exact path="/approve-workflows/user-nghi-thai-san/todo/:id" element={<ProtectedRoute component={<ViewNghiThaiSan isApprover={true} />} />} />
-            <Route exact path="/approve-workflows/user-nghi-thai-san/view/:id" element={<ProtectedRoute component={<ViewNghiThaiSan isApprover={false} />} />} />
-            <Route exact path="/approve-workflows/user-check-in-out/view/:id" element={<ProtectedRoute component={<ViewCheckInOut isApprover={false} />} />} />
-            <Route exact path="/approve-workflows/user-check-in-out/todo/:id" element={<ProtectedRoute component={<ViewCheckInOut isApprover={true} />} />} />
+            <Route exact path="/approve-workflows/user-nghi-phep/view/:id" element={<ProtectedRoute component={<ViewNghiPhep isApprover={false} />} pageName={"user_nghi_phep_view"} />} />
+            <Route exact path="/approve-workflows/user-nghi-thai-san/view/:id" element={<ProtectedRoute component={<ViewNghiThaiSan isApprover={false} />} pageName={"user_nghi_thai_san_view"} />} />
+            <Route exact path="/approve-workflows/user-check-in-out/view/:id" element={<ProtectedRoute component={<ViewCheckInOut isApprover={false} />} pageName={"user_check_in_out_view"} />} />
+            <Route exact path="/approve-workflows/user-nghi-phep/todo/:id" element={<ProtectedRoute component={<ViewNghiPhep isApprover={true} />} pageName={"user_nghi_phep_todo"} />} />
+            <Route exact path="/approve-workflows/user-nghi-thai-san/todo/:id" element={<ProtectedRoute component={<ViewNghiThaiSan isApprover={true} />} pageName={"user_nghi_thai_san_todo"} />} />
+            <Route exact path="/approve-workflows/user-check-in-out/todo/:id" element={<ProtectedRoute component={<ViewCheckInOut isApprover={true} />} pageName={"user_check_in_out_todo"} />} />
 
             {/* Administration module */}
             <Route path="/user" element={<ProtectedRoute component={<UserList />} pageName={"user_list"} />} />
             <Route path="/role" element={<ProtectedRoute component={<RoleList />} pageName={"role_list"} />} />
             <Route path="/group" element={<ProtectedRoute component={<GroupList />} pageName={"group_list"} />} />
-            <Route path="/team" element={<ProtectedRoute component={<TeamList />} />} pageName={"team_list"} />
+            <Route path="/team" element={<ProtectedRoute component={<TeamList />} pageName={"team_list"} />} />
             <Route path="/permission" element={<ProtectedRoute component={<PermissionList />} pageName={"permission_list"} />} />
             <Route path="/department" element={<ProtectedRoute component={<DepartmentList />} pageName={"department_list"} />} />
 
@@ -89,7 +89,7 @@ export default function Routings() {
             <Route exact path="/leave-balance/me" element={<ProtectedRoute component={<ViewMyBalances />} />} />
 
             {/* Virtual Space  */}
-            <Route path="/taskboard" element={<ProtectedRoute component={<BoardList />} />} pageName={"taskboard_list"} />
+            <Route path="/taskboard" element={<ProtectedRoute component={<BoardList />} pageName={"taskboard_list"} />} />
             <Route path="/taskboard/:id" element={<ProtectedRoute component={<BoardDetail />} pageName={"taskboard_detail"} />} />
             <Route path="/taskboard/:id/label" element={<ProtectedRoute component={<LabelList />} pageName={"taskboard_label_list"} />} />
             <Route path="/taskboard/:id/column" element={<ProtectedRoute component={<ColumnList />} pageName={"taskboard_column_list"} />} />
@@ -98,7 +98,7 @@ export default function Routings() {
             {/* Timekeeping */}
             <Route path="/registe-image" element={<Registe />} pageName={"image_registration"} />
             <Route path="/timekeeping-schedule" element={<ProtectedRoute component={<TimekeepingSchedule />} pageName={"timekeeping_schedule"} />} />
-            <Route path="/workingshift-registration" element={<ProtectedRoute component={<WorkingShiftRegistrationList pageName={"workingshift_registration"} />} />} />
+            <Route path="/workingshift-registration" element={<ProtectedRoute component={<WorkingShiftRegistrationList />} pageName={"workingshift_registration"} />} />
             <Route path="/workingshift" element={<ProtectedRoute component={<WorkingShiftList />} pageName={"workingshift"} />} />
             <Route path="/registered-workingshift" element={<ProtectedRoute component={<RegisteredWorkingShiftList />} pageName={"registered_workingshift"} />} />
             <Route path="/workingshiftdayconfig" element={<ProtectedRoute component={<WorkingShiftDayConfigList />} pageName={"workingshift_dayconfig"} />} />
@@ -107,14 +107,14 @@ export default function Routings() {
             {/* Salary Management */}
             <Route path="/salary" element={<ProtectedRoute component={<SalaryList />} pageName={"salary_list"} />} />
             <Route path="/dab" element={<ProtectedRoute component={<DABList />} pageName={"dab_list"} />} />
-            <Route path="/formula-variable" element={<ProtectedRoute component={<FormulaVariable pageName={"formula_variable_list"} />} />} />
+            <Route path="/formula-variable" element={<ProtectedRoute component={<FormulaVariable />} pageName={"formula_variable_list"} />} />
             <Route path="/payroll" element={<ProtectedRoute component={<PayrollList />} pageName={"payroll_list"} />} />
             <Route path="/payroll/:id/payslip" element={<ProtectedRoute component={<PayslipList />} pageName={"payroll_detail"} />} />
-            <Route path="/payroll/:payrollId/payslip/:payslipId" element={<ProtectedRoute component={<PayslipDetail />} pageName={"payroll_detail"} />} />
+            <Route path="/payroll/:payrollId/payslip/:payslipId" element={<ProtectedRoute component={<PayslipDetail />} pageName={"payslip_detail"} />} />
             <Route path="/salary-group/" element={<ProtectedRoute component={<SalaryGroupList />} pageName={"salary_group_list"} />} />
             <Route path="/my-dab" element={<ProtectedRoute component={<MyDABs />} pageName={"my_dab"} />} />
             <Route path="/my-payslips" element={<ProtectedRoute component={<MyPayslipList />} pageName={"my_payslip"} />} />
-            <Route path="/my-payslips/:payslipId" element={<ProtectedRoute component={<MyPayslipDetail />} pageName={"my_payslip"} />} />
+            <Route path="/my-payslips/:payslipId" element={<ProtectedRoute component={<MyPayslipDetail />} pageName={"my_payslip_detail"} />} />
             <Route path="/salary-report/" element={<ProtectedRoute component={<SalaryReport />} pageName={"salary_report"} />} />
 
             <Route path="/profile" element={<ProtectedRoute component={<UserProfile />} pageName="profile" />} />

@@ -134,7 +134,7 @@ export default function DeductionList({ shouldReload }) {
         {isDeleteOpen &&
             <ConfirmDialog
                 title={"Confirm"}
-                message="Bạn có muốn xóa chức vụ này"
+                message="Bạn có muốn xóa tăng giảm lương này"
                 cancelAction={{
                     text: "Cancel",
                     handler: () => {

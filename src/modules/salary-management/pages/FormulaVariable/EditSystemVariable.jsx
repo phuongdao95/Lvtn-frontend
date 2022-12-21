@@ -29,6 +29,7 @@ export default function EditSystemVariable({ variableDetail, closeDialogCb }) {
                             <TextField
                                 id="name"
                                 name="name"
+                                readOnly={true}
                                 value={variableDetail.name}
                             />
                         </Fragment>
@@ -63,7 +64,7 @@ export default function EditSystemVariable({ variableDetail, closeDialogCb }) {
                 <OneColumnBox
                     slot={
                         <Fragment>
-                            <Label text={"Description"} />
+                            <Label text={"Mô tả"} />
                             <TextField
                                 id="description"
                                 name="description"

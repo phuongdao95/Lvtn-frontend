@@ -163,7 +163,6 @@ export default function TaskDetailEdit({ reload, taskId, closeDialogCb }) {
 
     React.useEffect(() => {
         if (isFetchLabelsSuccess) {
-            console.log({ labels });
             formik.setFieldValue("labels", labels.data.map(label => ({ id: label.id, name: label.name })))
         }
     }, [isFetchLabelsSuccess])

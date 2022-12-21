@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
-import { Box, Button, Chip } from '@mui/material';
+import { Box, Button, Chip, IconButton } from '@mui/material';
 import TaskDetailHeader from "../components/TaskDetailHeader";
 import OneColumnBox from '../../../components/DialogForm/OneColumnBox';
 import Label from '../../../components/DialogForm/Label';
 import TwoColumnBox from '../../../components/DialogForm/TwoColumnBox';
-import { useFetchOneTask, useFetchTaskLabelsOfTask, useRemoveTaskLabelFromTask } from '../../../client/taskService';
+import { useDeleteTaskFromEpic, useFetchOneTask, useFetchTaskLabelsOfTask, useFetchTasksOfEpic, useRemoveTaskLabelFromTask } from '../../../client/taskService';
 import dayjs from 'dayjs';
 import RTEContent from '../components/RTEContent';
 import TaskDetailComments from './TaskDetailComment';
@@ -15,6 +15,8 @@ import { Typography } from '@mui/material';
 import TaskDetailEdit from "./TaskDetailEdit";
 import TaskDetailNewLabel from './TaskDetailNewLabel';
 import TaskSubCreate from './TaskSubCreate';
+import TaskDetail from './TaskDetail';
+import { blue, grey, red } from '@mui/material/colors';
 
 const initialDialogState = {
     title: "",
@@ -30,6 +32,10 @@ export default function TaskDetailInfo({ taskId }) {
     const [labelId, setLabelId] = React.useState();
     const [isRemoveLabelOpen, setIsRemoveLabelOpen] = React.useState(false);
     const [isTaskCreateOpen, setIsTaskCreateOpen] = React.useState(false);
+    const [isSubtaskOpen, setIsSubtaskOpen] = React.useState(false);
+    const [activeSubtask, setActiveSubtask] = React.useState(null);
+    const [isDeleteLinkTaskOpen, setIsDeleteLinkTaskOpen] = React.useState(false);
+    const [subTaskToBeDeleted, setSubTaskToBeDeleted] = React.useState(null)
 
     const [isInfoDialogOpen, setIsInfoDialogOpen] = React.useState(false);
     const [infoDialogMessage, setInfoDialogMessage] = React.useState({
@@ -44,6 +50,15 @@ export default function TaskDetailInfo({ taskId }) {
         isError: isRemoveLabelError,
         method: removeTaskLabelFromTask
     } = useRemoveTaskLabelFromTask();
+
+    const {
+        isPending: isDeleteTaskFromEpicPending,
+        isSuccess: isDeleteTaskFromEpicSuccess,
+        isError: isDeleteTaskFromEpicError,
+        method: deleteTaskFromEpic,
+    } = useDeleteTaskFromEpic();
+
+
 
     React.useEffect(() => {
         if (isRemoveLabelError) {
@@ -75,7 +90,11 @@ export default function TaskDetailInfo({ taskId }) {
         fetchTaskDetail(taskId);
         fetchLabels(taskId);
     }, []);
-
+    React.useEffect(() => {
+        if (isDeleteTaskFromEpicSuccess) {
+            fetchSubtasks(taskId)
+        }
+    }, [isDeleteTaskFromEpicSuccess])
 
     React.useEffect(() => {
         if (isRemoveLabelSuccess) {
@@ -92,7 +111,31 @@ export default function TaskDetailInfo({ taskId }) {
         reportToName: "",
         inChargeName: "",
         columnName: "",
+        taskType: null,
     });
+
+    const [subTasks, setSubtasks] = React.useState([]);
+
+    const {
+        isPending: isSubtasksPending,
+        isSuccess: isSubtasksSuccess,
+        isError: isSubtasksError,
+        method: fetchSubtasks,
+        data: fetchedSubtasks,
+    } = useFetchTasksOfEpic();
+
+    React.useEffect(() => {
+        if (detail.type === 1) {
+            fetchSubtasks(taskId);
+        }
+    }, [detail.type])
+
+    React.useEffect(() => {
+        if (isSubtasksSuccess) {
+            const data = fetchedSubtasks.data.map((item) => ({ id: item.id, name: item.name, point: item.point }))
+            setSubtasks(data);
+        }
+    }, [isSubtasksSuccess])
 
     React.useEffect(() => {
         if (isFetchDetailSuccess) {
@@ -107,6 +150,7 @@ export default function TaskDetailInfo({ taskId }) {
                 reportToName: taskDetail.reportToName,
                 inChargeName: taskDetail.inChargeName,
                 columnName: taskDetail.columnName,
+                taskType: taskDetail.taskType
             })
         }
     }, [isFetchDetailSuccess])
@@ -121,8 +165,10 @@ export default function TaskDetailInfo({ taskId }) {
         {isTaskCreateOpen &&
             <TaskSubCreate
                 taskId={taskId}
-                closeCb={() => setIsTaskCreateOpen(false)}
-                reload={() => { }}
+                closeCb={() => {
+                    setIsTaskCreateOpen(false);
+                    fetchSubtasks(taskId);
+                }}
             />
         }
 
@@ -149,7 +195,7 @@ export default function TaskDetailInfo({ taskId }) {
         {isRemoveLabelOpen &&
             <ConfirmDialog
                 title={"Confirm"}
-                message="Bạn có muốn xóa chức vụ này"
+                message="Bạn có muốn xóa nhãn này"
                 cancelAction={{
                     text: "Cancel",
                     handler: () => {
@@ -166,6 +212,28 @@ export default function TaskDetailInfo({ taskId }) {
                     }
                 }}
             />}
+
+        {isDeleteLinkTaskOpen &&
+            <ConfirmDialog
+                title={"Confirm"}
+                message="Bạn có muốn xóa liên kết subtask này"
+                cancelAction={{
+                    text: "Hủy",
+                    handler: () => {
+                        setSubTaskToBeDeleted(null);
+                        setIsDeleteLinkTaskOpen(false);
+                    },
+                }}
+                confirmAction={{
+                    text: "Xác nhận",
+                    handler: () => {
+                        setSubTaskToBeDeleted(null);
+                        setIsDeleteLinkTaskOpen(false);
+                        deleteTaskFromEpic(subTaskToBeDeleted);
+                    }
+                }}
+            />}
+
 
         <Box sx={{
             position: 'relative',
@@ -367,14 +435,73 @@ export default function TaskDetailInfo({ taskId }) {
                         <TaskDetailHeader>
                             Task liên quan
                         </TaskDetailHeader>
-                        {detail.type == 0 &&
+                        {detail.type == 1 &&
                             <Button onClick={() => setIsTaskCreateOpen(true)}>
-                                Tạo subtask
+                                Liên kết subtask
                             </Button>
                         }
+
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Box sx={{
+                            display: 'flex', justifyContent: 'space-between', paddingY: 0.35,
+                            paddingX: 1,
+                        }}>
+                            <Box sx={{ fontWeight: 'bold', color: grey[700] }}>Id</Box>
+                            <Box sx={{ fontWeight: 'bold', color: grey[700] }}>Tên</Box>
+                        </Box>
+                        {subTasks && subTasks.map((item) => <Box
+                            onClick={() => {
+                                setActiveSubtask(item.id)
+                                setIsSubtaskOpen(true);
+                            }}
+                            sx={{
+                                position: 'relative',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                cursor: 'pointer',
+                                paddingY: 0.35,
+                                paddingX: 1,
+                                background: blue[50],
+                                '&:hover': {
+                                    background: blue[100],
+                                }
+                            }}
+                            key={item.id}>
+                            <Box>
+                                {item.id}
+                            </Box>
+                            <Box>
+                                {item.name}
+                            </Box>
+                            <Box sx={{
+                                position: 'absolute',
+                                left: '100%',
+                                bottom: '0px',
+                                padding: '5px',
+                                fontSize: '14px',
+                                '&:hover': {
+                                    background: red[400]
+                                }
+                            }} onClick={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                setIsDeleteLinkTaskOpen(true);
+                                setSubTaskToBeDeleted(item.id)
+                            }}>
+                                x
+                            </Box>
+                        </Box>)}
                     </Box>
                 </Box>
             </Box>
+
+            {isSubtaskOpen && activeSubtask &&
+                <TaskDetail taskId={activeSubtask} closeCb={() => {
+                    setIsSubtaskOpen(false)
+                    setActiveSubtask(null);
+                }} />
+            }
         </Box>
     </Fragment>;
 }

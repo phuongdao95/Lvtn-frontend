@@ -121,7 +121,7 @@ export default function PayrollList() {
             {isDeleteOpen &&
                 <ConfirmDialog
                     title={"Confirm"}
-                    message="Bạn có muốn xóa chức vụ này"
+                    message="Bạn có muốn xóa payroll này"
                     cancelAction={{
                         text: "Cancel",
                         handler: () => {

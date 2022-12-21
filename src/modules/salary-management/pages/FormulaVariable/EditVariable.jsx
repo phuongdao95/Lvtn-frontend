@@ -20,6 +20,20 @@ const validationSchema = yup.object().shape({
     describe: yup.string()
 });
 
+const parseAreaFromNumber = (n) => {
+    switch (n) {
+        case 0:
+            return "kpi";
+        case 1:
+            return "timekeeping";
+        case 2:
+            return "salaryconfig";
+        case 3:
+        default:
+            return "salarydelta";
+    }
+}
+
 export default function EditVariable({ closeDialogCb, id }) {
     const {
         isPending: isUpdateVariablePending,
@@ -43,6 +57,7 @@ export default function EditVariable({ closeDialogCb, id }) {
             value: "",
             dataType: "number",
             description: "",
+            area: "salaryconfig"
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
@@ -56,7 +71,16 @@ export default function EditVariable({ closeDialogCb, id }) {
 
     React.useEffect(() => {
         if (fetchedDetail) {
-            formik.setValues(fetchedDetail)
+            const { name, displayName, value, dataType, description, area } = fetchedDetail;
+
+            formik.setValues({
+                name,
+                displayName,
+                value,
+                dataType,
+                description,
+                area: parseAreaFromNumber(area)
+            })
         }
     }, [fetchedDetail]);
 
@@ -82,6 +106,7 @@ export default function EditVariable({ closeDialogCb, id }) {
                                 id="name"
                                 name="name"
                                 value={formik.values.name}
+                                readOnly={true}
                                 onChange={formik.handleChange}
                                 error={formik.touched.name && Boolean(formik.errors.name)}
                                 helperText={formik.touched.name && formik.errors.name}
@@ -106,8 +131,9 @@ export default function EditVariable({ closeDialogCb, id }) {
 
                 <TwoColumnBox
                     firstSlot={<Fragment>
-                        <Label text={"Datatype"} />
+                        <Label text={"Kiểu dữ liệu"} />
                         <Select
+                            readOnly
                             id="dataType"
                             name="dataType"
                             menu={[
@@ -132,6 +158,7 @@ export default function EditVariable({ closeDialogCb, id }) {
                             <Select
                                 id="area"
                                 name="area"
+                                readOnly={true}
                                 value={formik.values.area}
                                 onChange={(event, value) => {
                                     formik.setFieldValue("area", event.target.value)
@@ -185,7 +212,7 @@ export default function EditVariable({ closeDialogCb, id }) {
                 <OneColumnBox
                     slot={
                         <Fragment>
-                            <Label text={"Description"} />
+                            <Label text={"Mô tả"} />
                             <TextField
                                 id="description"
                                 name="description"

@@ -77,7 +77,7 @@ export default function EditSalaryGroup({ id, closeDialogCb }) {
     React.useEffect(() => {
         fetchDetail(id)
         fetchGroups();
-        fetchFormulaList();
+        fetchFormulaList("salaryconfig");
     }, [])
 
     React.useEffect(() => {

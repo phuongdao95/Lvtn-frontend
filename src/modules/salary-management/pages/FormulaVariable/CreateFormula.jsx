@@ -15,10 +15,10 @@ import InfoDialog from "../../../../components/Dialog/InfoDialog";
 
 const validationSchema = yup.object().shape({
     name: yup.string()
-        .required()
-        .matches(/[_a-zA-Z][_a-zA-Z0-9]{0,30}/, "Tên hiển thị phải hiển thị chuẩn"),
-    displayName: yup.string().required(),
-    define: yup.string().required(),
+        .matches(/[_a-z][_a-z0-9]{0,30}/, "Tên hiển thị phải viết liền không dấu, viết thường, bao gồm a-z,0-9 và có thể cách nhau bởi dấu '_'")
+        .required("Tên là trường bắt buộc"),
+    displayName: yup.string().required("Tên hiển thị là trường bắt buộc"),
+    define: yup.string().required("Định nghĩa công thức là trường bắt buộc"),
     description: yup.string()
 });
 
@@ -37,7 +37,7 @@ export default function CreateFormula({ closeDialogCb }) {
             displayName: "",
             define: "",
             description: "",
-            area: "salaryconfig",
+            formulaArea: "salaryconfig",
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
@@ -116,13 +116,13 @@ export default function CreateFormula({ closeDialogCb }) {
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Area"} />
+                            <Label text={"formulaArea"} />
                             <Select
-                                id="area"
-                                name="area"
-                                value={formik.values.area}
+                                id="formulaArea"
+                                name="formulaArea"
+                                value={formik.values.formulaArea}
                                 onChange={(event, value) => {
-                                    formik.setFieldValue("area", event.target.value)
+                                    formik.setFieldValue("formulaArea", event.target.value)
                                 }}
                                 menu={[
                                     {
@@ -142,8 +142,8 @@ export default function CreateFormula({ closeDialogCb }) {
                                         value: "kpi"
                                     },
                                 ]}
-                                error={formik.touched.area && Boolean(formik.errors.area)}
-                                helperText={formik.touched.area && formik.errors.area}
+                                error={formik.touched.formulaArea && Boolean(formik.errors.formulaArea)}
+                                helperText={formik.touched.formulaArea && formik.errors.formulaArea}
                             />
                         </Fragment>
                     }

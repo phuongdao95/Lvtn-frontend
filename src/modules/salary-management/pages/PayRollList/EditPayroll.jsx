@@ -65,11 +65,11 @@ const getColumnConfig = () => [
     },
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         renderCell: ({ id }) => {
             return <Box>
                 <ActionButton>
-                    Edit
+                    Sửa
                 </ActionButton>
             </Box>
         }

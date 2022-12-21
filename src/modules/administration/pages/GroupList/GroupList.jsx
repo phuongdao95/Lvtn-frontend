@@ -91,16 +91,16 @@ export default function GroupList() {
             {issDeleteGroupOpen &&
                 <ConfirmDialog
                     title={"Confirm"}
-                    message="Bạn có muốn xóa chức vụ này"
+                    message="Bạn có muốn xóa Group này"
                     cancelAction={{
-                        text: "Cancel",
+                        text: "Hủy",
                         handler: () => {
                             setGroupId(null);
                             setIsDeleteGroupOpen(false)
                         },
                     }}
                     confirmAction={{
-                        text: "Confirm",
+                        text: "Xác nhận",
                         handler: () => {
                             setIsDeleteGroupOpen(false);
                             setGroupId(null);

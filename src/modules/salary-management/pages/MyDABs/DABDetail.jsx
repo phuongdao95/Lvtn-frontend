@@ -5,11 +5,10 @@ import Dialog from "../../../../components/Dialog";
 import Label from "../../../../components/DialogForm/Label";
 import OneColumnBox from "../../../../components/DialogForm/OneColumnBox"
 import TwoColumnBox from "../../../../components/DialogForm/TwoColumnBox";
-import TextField from "../../../../components/DialogForm/TextField";
 import DialogForm from "../../../../components/DialogForm";
 
 import { useFetchOneDAB } from "../../../../client/dabService";
-import { useFormik } from "formik/dist";
+import { useFormik } from "formik";
 import dayjs from "dayjs";
 
 
@@ -26,31 +25,32 @@ export default function DABDetail({ dabId, closeDialogCb }) {
         fetchDetail(dabId);
     }, [])
 
-    React.useEffect(() => {
-        if (isSuccess) {
-            console.log(detail);
-            formik.setValues({
-                name: detail.name,
-                type: detail.salaryDeltaType,
-                fromMonth: detail.fromMonth,
-                toMonth: detail.toMonth,
-                associatedFormula: detail.formula,
-                description: detail.description
-            })
-        }
-    }, [isSuccess])
-
     const formik = useFormik({
         initialValues: {
             name: "",
             type: "",
             fromMonth: "",
             toMonth: "",
+            associatedFormula: "",
+            description: ""
         },
         onSubmit: (values) => {
-            console.log(values);
         }
     })
+
+    React.useEffect(() => {
+        if (isSuccess) {
+            formik.setValues({
+                name: detail.name,
+                type: detail.salaryDeltaType,
+                fromMonth: detail.fromMonth,
+                toMonth: detail.toMonth,
+                associatedFormula: detail.formulaName,
+                description: detail.description
+            })
+        }
+    }, [isSuccess])
+
 
     return <Dialog
         primaryAction={{
@@ -68,7 +68,7 @@ export default function DABDetail({ dabId, closeDialogCb }) {
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Name"} />
+                            <Label text={"Tên"} />
                             <Typography>
                                 {formik.values.name}
                             </Typography>
@@ -77,9 +77,9 @@ export default function DABDetail({ dabId, closeDialogCb }) {
 
                     secondSlot={
                         <Fragment>
-                            <Label text={"Type"} />
+                            <Label text={"Loại"} />
                             <Typography>
-                                {formik.values.type}
+                                {detail?.type ?? "NA"}
                             </Typography>
                         </Fragment>
                     }
@@ -89,14 +89,14 @@ export default function DABDetail({ dabId, closeDialogCb }) {
                     firstSlot={<Fragment>
                         <Label text={"Từ đầu tháng"} />
                         <Typography>
-                            {dayjs(formik.values.fromMonth).format('MM')}
+                            {dayjs(formik.values.fromMonth).format('MM/YYYY')}
                         </Typography>
                     </Fragment>}
 
                     secondSlot={<Fragment>
                         <Label text={"Đến hết tháng"} />
                         <Typography>
-                            {dayjs(formik.values.toMonth).format('MM')}
+                            {dayjs(formik.values.toMonth).format('MM/YYYY')}
                         </Typography>
                     </Fragment>}
                 />
@@ -104,9 +104,9 @@ export default function DABDetail({ dabId, closeDialogCb }) {
                 <TwoColumnBox
                     firstSlot={
                         <Fragment>
-                            <Label text={"Associated formula"} />
+                            <Label text={"Công thức liên quan"} />
                             <Typography>
-                                {formik.values.formula ?? "NaS"}
+                                {detail?.formulaName ?? "NA"}
                             </Typography>
                         </Fragment>
                     }

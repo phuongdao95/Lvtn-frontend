@@ -7,7 +7,7 @@ import SearchButton from "../../../components/DataGrid/SearchButton";
 import ActionButton from "../../../components/DataGrid/ActionButton";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 import Select from "../../../components/DialogForm/Select";
-import { useCreateWorkingShiftRegistration, useDeleteWorkingShift, useFetchListWorkingShiftRegistration, useFetchUnregisterWorkingShift } from "../../../client/workingShiftService";
+import { useCreateWorkingShiftRegistration, useDeleteWorkingShift, useFetchUnregisterWorkingShift } from "../../../client/workingShiftService";
 import dayjs from "dayjs";
 import { getCurrentUserId } from "../../../client/autheticationService";
 
@@ -31,9 +31,18 @@ const getColumnConfig = (openEditCb) => [
         field: "action",
         headerName: "Thao tác",
         width: 100,
-        renderCell: ({ id }) => {
+        renderCell: ({ id, ...rest }) => {
+            const startDate = dayjs(rest.row.startDate.split("/").reverse().join("-"));
+            const endDate = dayjs(rest.row.endDate.split("/").reverse().join("-"));
+            const now = dayjs();
+
+            const isButtonEnabled = rest.row.workingShiftType !== "Fixed Shift" &&
+                (
+                    (now.isSame(startDate, 'date') || now.isAfter(startDate, 'date')) &&
+                    (now.isSame(endDate, 'date') || now.isBefore(endDate, 'date'))
+                )
             return <Box sx={{ display: 'flex', gap: 1 }}>
-                <ActionButton onClick={() => openEditCb(id)}>
+                <ActionButton onClick={() => openEditCb(id)} isDi>
                     Đăng ký
                 </ActionButton>
             </Box>
@@ -139,6 +148,12 @@ export default function WorkingShiftRegistrationList() {
     } = useCreateWorkingShiftRegistration();
 
     React.useEffect(() => {
+        if (isCreateSuccess) {
+            fetchWorkingShifts(getCurrentUserId(), currentMonth, "month");
+        }
+    }, [isCreateSuccess])
+
+    React.useEffect(() => {
         if (isError) {
             setInfoDialogMessage({
                 title: 'Error',
@@ -171,14 +186,14 @@ export default function WorkingShiftRegistrationList() {
                 title={"Xác nhận"}
                 message="Bạn có muốn đăng ký ca làm này"
                 cancelAction={{
-                    text: "Cancel",
+                    text: "Hủy",
                     handler: () => {
                         setShiftId(null);
                         setIsRegisterOpen(false)
                     },
                 }}
                 confirmAction={{
-                    text: "Confirm",
+                    text: "Xác nhận",
                     handler: () => {
                         createWorkingShiftRegistration({
                             userId: getCurrentUserId(),
@@ -198,8 +213,8 @@ export default function WorkingShiftRegistrationList() {
                     rowCount={response?.total ?? 0}
                     rows={response?.data?.map((shift) => ({
                         ...shift,
-                        startDate: dayjs(shift.startDate).format("DD/MM/YYYY HH:mm"),
-                        endDate: dayjs(shift.endDate).format("DD/MM/YYYY HH:mm"),
+                        startDate: dayjs(shift.startDate).format("DD/MM/YYYY"),
+                        endDate: dayjs(shift.endDate).format("DD/MM/YYYY"),
                         workingShiftStartDate: dayjs(shift.workingShiftStartTime).format("DD/MM/YYYY"),
                         workingShiftStartTime: dayjs(shift.workingShiftStartTime).format("HH:mm"),
                         workingShiftEndTime: dayjs(shift.workingShiftEndTime).format("HH:mm"),

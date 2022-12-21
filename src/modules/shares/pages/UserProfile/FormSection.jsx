@@ -82,7 +82,7 @@ export default function FormSection() {
                 }}>
                     <Box sx={{ minWidth: '300px' }}>
                         <Label text={"Tuổi"} />
-                        {user?.age ?? "unset"}
+                        {user?.birthday ? dayjs().get('year') - (dayjs(user?.birthday).get('year')) : "unset"}
                     </Box>
 
                     <Box sx={{ flexGrow: 1 }}>
@@ -105,7 +105,7 @@ export default function FormSection() {
 
                     <Box sx={{ flexGrow: 1 }}>
                         <Label text={"Giới tính"} />
-                        {user?.gender ?? "unset"}
+                        {user?.gender === "male" ? "Nam" : user?.gender === "female" ? "Nữ" : "Chưa gán"}
                     </Box>
                 </Box>
 
@@ -138,12 +138,12 @@ export default function FormSection() {
 
                         <Box sx={{ minWidth: '300px' }}>
                             <Label text={"Tên ngân hàng"} />
-                            {user?.phoneNumber ?? "unset"}
+                            {user?.bankName ?? "unset"}
                         </Box>
 
                         <Box sx={{ flexGrow: 1 }}>
                             <Label text={"Số tài khoản"} />
-                            {user?.gender ?? "unset"}
+                            {user?.accountNumber ?? "unset"}
                         </Box>
                     </Box>
 
@@ -155,7 +155,7 @@ export default function FormSection() {
 
                         <Box sx={{ minWidth: '300px' }}>
                             <Label text={"Chi nhánh"} />
-                            {user?.phoneNumber ?? "unset"}
+                            {user?.bankBranch ?? "unset"}
                         </Box>
                     </Box>
                 </Box>

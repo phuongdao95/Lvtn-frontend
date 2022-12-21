@@ -23,27 +23,27 @@ const getColumnConfig = (openEditRoleCb, openDeleteRoleCb) => [
 
     {
         field: "name",
-        headerName: "Name",
+        headerName: "Tên",
         width: 250,
     },
 
     {
         field: "description",
-        headerName: "Description",
+        headerName: "Mô tả",
         width: 300,
     },
 
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         width: 200,
         renderCell: ({ id }) => {
             return <Box sx={{ display: "flex", gap: 1 }}>
                 <ActionButton onClick={() => openEditRoleCb(id)}>
-                    Edit
+                    Sửa 
                 </ActionButton>
                 <ActionButton onClick={() => openDeleteRoleCb(id)}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </Box >
         }

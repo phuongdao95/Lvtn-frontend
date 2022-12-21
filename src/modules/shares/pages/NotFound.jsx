@@ -1,9 +1,14 @@
 import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
+import { hasLoggedIn } from "../../../client/autheticationService";
 
 export default function NotFound() {
     const navigate = useNavigate();
+
+    if (!hasLoggedIn()) {
+        return <Navigate to={"/"} />
+    }
 
     return <Box sx={{
         display: 'flex',
