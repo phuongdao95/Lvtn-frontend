@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { uniq, without } from 'lodash';
-import { Box, InputLabel, Button, Checkbox, Avatar, ListItem, ListItemAvatar, ListItemText, List, TextField } from '@mui/material';
+import { Box, InputLabel, Button, Avatar, ListItem, ListItemAvatar, ListItemText, List, TextField } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import SendIcon from '@mui/icons-material/Send';
@@ -90,21 +90,6 @@ const ApproveComponent = ({ departmentList, userList, isSequence, min, departmen
                                             Thêm
                                         </Button>
                                     </Box>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Grid container>
-                                <Grid item xs={4}>
-                                    <label>Yêu cầu approve dạng dây chuyền?</label>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Checkbox
-                                        defaultChecked={approveData.isSequence}
-                                        onChange={(e) => setApproveData({ ...approveData, isSequence: e.target.checked })}
-                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                    />
                                 </Grid>
                             </Grid>
                         </Grid>
