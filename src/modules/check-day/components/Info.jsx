@@ -134,7 +134,7 @@ const Info = ({takePicture, setStateMes}) => {
         let form = {};
         setIsCheckout(true);
         setIsCheckin(true);
-        
+        console.log(OFFSET);
         //fetchListTimekeeping(window.localStorage.getItem('user_id'), dayjs().format('YYYY-MM-DD'), parseInt(event.target.value));
         if (data.length > 0) {
             data.forEach(item => {
@@ -143,6 +143,7 @@ const Info = ({takePicture, setStateMes}) => {
                     form.id = item.id;
                     if (!item.didCheckIn) {
                         // first checkin
+                        form.Offset = OFFSET;
                         form.didCheckIn = true;
                         form.checkInTime = dayjs().add(-OFFSET, 'minute').toISOString();
                         form.didCheckout = false;
@@ -162,6 +163,7 @@ const Info = ({takePicture, setStateMes}) => {
                     // } else if (item.didCheckIn && item.didCheckout && dayjs().add(-30, 'minute').format('h:mm a') <= item.endTime) {
                     } else if (item.didCheckIn && item.didCheckout && dayjs().isBefore(dayjs(item.endTime).add(30, 'minute'))) {
                         // second, ... checkin
+                        form.Offset = OFFSET;
                         form.didCheckIn = true;
                         form.checkInTime = dayjs().add(-OFFSET, 'minute').toISOString();
                         form.didCheckout = false;
@@ -181,6 +183,7 @@ const Info = ({takePicture, setStateMes}) => {
                         }
                     } else if (!item.didCheckOut) {
                         // check out
+                        form.Offset = OFFSET;
                         form.didCheckIn = true;
                         form.checkoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
                         form.didCheckout = true;
