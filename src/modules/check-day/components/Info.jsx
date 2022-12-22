@@ -100,8 +100,8 @@ const Info = ({takePicture, setStateMes}) => {
                         let data = {
                             id: item.id,
                             name: item.workingShiftEvent.name,
-                            startTime: dayjs(item.workingShiftEvent.startTime).format('h:mm a'),
-                            endTime: dayjs(item.workingShiftEvent.endTime).format('h:mm a'),
+                            startTime: item.workingShiftEvent.startTime,
+                            endTime: item.workingShiftEvent.endTime,
                             showName: item.workingShiftEvent.name + ' ' + dayjs(item.workingShiftEvent.startTime).format('h:mm a') + ' ' + dayjs(item.workingShiftEvent.endTime).format('h:mm a'),
                             didCheckIn: item.didCheckIn,
                             didCheckout: item.didCheckout,
@@ -109,12 +109,12 @@ const Info = ({takePicture, setStateMes}) => {
                             checkoutTime: item.checkoutTime,
                             isCheckInFirst: item.isCheckInFirst,
                             isCheckOutLast: item.isCheckOutLast,
+                            workday: item.workingShiftEvent.startTime,
                         };
                         lst.push(data);
                 }
             });
             setData(lst);
-            console.log(response.data);
         }
     }, [isSuccess])
 
@@ -127,17 +127,19 @@ const Info = ({takePicture, setStateMes}) => {
         });
     }
     const handleChange = (event) => {
-        setValue(event.target.value);
+        //setValue(event.target.value);
         // fetchOne(event.target.value);
         isFetchListSuccess = false;
         const currentDate = dayjs().format('YYYY-MM-DD');
         let form = {};
         setIsCheckout(true);
         setIsCheckin(true);
+        
         //fetchListTimekeeping(window.localStorage.getItem('user_id'), dayjs().format('YYYY-MM-DD'), parseInt(event.target.value));
         if (data.length > 0) {
             data.forEach(item => {
-                if (item.id == event.target.value && currentDate === dayjs(item.checkinTime).format('YYYY-MM-DD')){
+                if (item.id == event.target.value && currentDate === dayjs(item.workday).format('YYYY-MM-DD')){
+                    console.log(item);
                     form.id = item.id;
                     if (!item.didCheckIn) {
                         // first checkin
@@ -146,8 +148,9 @@ const Info = ({takePicture, setStateMes}) => {
                         form.didCheckout = false;
                         form.employeeId = parseInt(window.localStorage.getItem('user_id'));
                         form.workingShiftEventId = event.target.value;
-                        form.checkinFirst = true;
-                        if (dayjs().add(30, 'minute').format('h:mm a') >= item.startTime) {
+                        form.isCheckInFirst = true;
+                        // if (dayjs().add(30, 'minute').format('h:mm a') >= dayjs(item.startTime).format('h:mm a')) {
+                        if (dayjs().isAfter(dayjs(item.startTime).add(-30, 'minute'))) {
                             setIsCheckin(false);
                         } else {
                             setStateMes({
@@ -156,15 +159,18 @@ const Info = ({takePicture, setStateMes}) => {
                                 open: true,
                             })
                         }
-                    } else if (item.didCheckIn && item.didCheckout && dayjs().add(-30, 'minute').format('h:mm a') <= item.endTime) {
+                    // } else if (item.didCheckIn && item.didCheckout && dayjs().add(-30, 'minute').format('h:mm a') <= item.endTime) {
+                    } else if (item.didCheckIn && item.didCheckout && dayjs().isBefore(dayjs(item.endTime).add(30, 'minute'))) {
                         // second, ... checkin
                         form.didCheckIn = true;
                         form.checkInTime = dayjs().add(-OFFSET, 'minute').toISOString();
                         form.didCheckout = false;
                         form.employeeId = parseInt(window.localStorage.getItem('user_id'));
                         form.workingShiftEventId = event.target.value;
-                        form.checkinFirst = false;
-                        if (dayjs().add(30, 'minute').format('h:mm a') >= item.startTime) {
+                        form.isCheckInFirst = false;
+                        form.isCheckOutLast = false;
+                        // if (dayjs().add(30, 'minute').format('h:mm a') >= item.startTime) {
+                        if (dayjs().isAfter(dayjs(item.startTime).add(-30, 'minute'))) {
                             setIsCheckin(false);
                         } else {
                             setStateMes({
@@ -180,8 +186,10 @@ const Info = ({takePicture, setStateMes}) => {
                         form.didCheckout = true;
                         form.employeeId = parseInt(window.localStorage.getItem('user_id'));
                         form.workingShiftEventId = event.target.value;
-                        form.checkoutLast = true;
-                        if (dayjs().add(-30, 'minute').format('h:mm a') <= item.endTime) {
+                        form.isCheckOutLast = true;
+                        form.isCheckInFirst = false;
+                        // if (dayjs().add(-30, 'minute').format('h:mm a') <= item.endTime) {
+                        if (dayjs().isBefore(dayjs(item.endTime).add(30, 'minute'))) {
                             setIsCheckout(false);
                         } else {
                             setStateMes({
