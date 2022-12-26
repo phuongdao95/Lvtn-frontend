@@ -5,6 +5,7 @@ import {useGetByUser, useFetchOne} from "./../../../client/workingShiftEvent";
 import { useFetchList } from "./../../../client/workingShiftTimekeeping";
 import dayjs from 'dayjs';
 import Snackbar from '../../../components/Snackbar/Snackbar';
+import * as checkinRuleService from '../../../client/checkinConfigService';
 
 const OFFSET = new Date().getTimezoneOffset();
 const DAY = ['Sun', 'Mon', 'Tus', 'Wes', 'Thu', 'Fri', 'Sar'];
@@ -66,6 +67,7 @@ const Info = ({takePicture, setStateMes}) => {
     const [isCheckin, setIsCheckin] = useState(true);
     const [isCheckout, setIsCheckout] = useState(true);
     const [formWorkShiftTimekeeping, setFormWorkShiftTimekeeping] = useState({});
+    const [checkRuleMinute, setCheckRuleMinute] = useState(30);
     const {
         isPending,
         isSuccess,
@@ -89,6 +91,16 @@ const Info = ({takePicture, setStateMes}) => {
         if (window.localStorage.getItem('user_id')) {
             fetchList(window.localStorage.getItem('user_id'));
         }
+    }, [])
+    useEffect(() => {
+        checkinRuleService.getRule()
+        .then(res => {
+            console.log('res checkin rule ', res);
+            setCheckRuleMinute(res.data);
+        })
+        .catch(error => {
+            console.log('error checkin rule ', error);
+        });
     }, [])
     useEffect(() => {
         if (isSuccess) {
@@ -151,7 +163,8 @@ const Info = ({takePicture, setStateMes}) => {
                         form.workingShiftEventId = event.target.value;
                         form.isCheckInFirst = true;
                         // if (dayjs().add(30, 'minute').format('h:mm a') >= dayjs(item.startTime).format('h:mm a')) {
-                        if (dayjs().isAfter(dayjs(item.startTime).add(-30, 'minute'))) {
+                        // if (dayjs().isAfter(dayjs(item.startTime).add(-30, 'minute'))) {
+                        if (dayjs().isAfter(dayjs(item.startTime).add(-checkRuleMinute, 'minute'))) {
                             setIsCheckin(false);
                         } else {
                             setStateMes({
@@ -161,7 +174,8 @@ const Info = ({takePicture, setStateMes}) => {
                             })
                         }
                     // } else if (item.didCheckIn && item.didCheckout && dayjs().add(-30, 'minute').format('h:mm a') <= item.endTime) {
-                    } else if (item.didCheckIn && item.didCheckout && dayjs().isBefore(dayjs(item.endTime).add(30, 'minute'))) {
+                    // } else if (item.didCheckIn && item.didCheckout && dayjs().isBefore(dayjs(item.endTime).add(30, 'minute'))) {
+                    } else if (item.didCheckIn && item.didCheckout && dayjs().isBefore(dayjs(item.endTime).add(checkRuleMinute, 'minute'))) {
                         // second, ... checkin
                         form.Offset = OFFSET;
                         form.didCheckIn = true;
@@ -172,7 +186,8 @@ const Info = ({takePicture, setStateMes}) => {
                         form.isCheckInFirst = false;
                         form.isCheckOutLast = false;
                         // if (dayjs().add(30, 'minute').format('h:mm a') >= item.startTime) {
-                        if (dayjs().isAfter(dayjs(item.startTime).add(-30, 'minute'))) {
+                        // if (dayjs().isAfter(dayjs(item.startTime).add(-30, 'minute'))) {
+                        if (dayjs().isAfter(dayjs(item.startTime).add(-checkRuleMinute, 'minute'))) {
                             setIsCheckin(false);
                         } else {
                             setStateMes({
@@ -192,7 +207,8 @@ const Info = ({takePicture, setStateMes}) => {
                         form.isCheckOutLast = true;
                         form.isCheckInFirst = false;
                         // if (dayjs().add(-30, 'minute').format('h:mm a') <= item.endTime) {
-                        if (dayjs().isBefore(dayjs(item.endTime).add(30, 'minute'))) {
+                        // if (dayjs().isBefore(dayjs(item.endTime).add(30, 'minute'))) {
+                        if (dayjs().isBefore(dayjs(item.endTime).add(checkRuleMinute, 'minute'))) {
                             setIsCheckout(false);
                         } else {
                             setStateMes({
