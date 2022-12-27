@@ -22,21 +22,18 @@ const getColumnConfig = () => [
     },
     {
         field: "startTime",
-        headerName: "Thời gian bắt đầu",
-        width: 150,
+        headerName: "Bắt đầu",
+        width: 100,
     },
     {
         field: "endTime",
-        headerName: "Thời gian kết thúc",
-        width: 150,
+        headerName: "Kết thúc",
+        width: 100,
     },
     {
         field: "didCheckIn",
-        headerName: "Đã checkin",
+        headerName: "Checkin",
         width: 100,
-        renderCell: () => { 
-            return 
-        }
     },
     {
         field: "checkinTime",
@@ -45,8 +42,8 @@ const getColumnConfig = () => [
     },
     {
         field: "didCheckout",
-        headerName: "Đã checkout",
-        width: 150,
+        headerName: "Checkout",
+        width: 100,
     },
     {
         field: "checkoutTime",
@@ -64,9 +61,9 @@ const getColumnConfig = () => [
         width: 150,
     },
     {
-        field: "payslipName",
-        headerName: "Tên payslip",
-        width: 100,
+        field: "formulaDefine",
+        headerName: "Công thức",
+        width: 300,
     }
 ]
 

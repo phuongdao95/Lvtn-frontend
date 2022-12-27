@@ -1,10 +1,11 @@
-import { Grid, TextField, Card, InputLabel, Box, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
 import SaveIcon from '@mui/icons-material/Save';
 import ApproveComponent from "../../shares/pages/Approve/ApproveComponent";
 import * as React from 'react';
 import * as workflowService from "../../../client/workflowService";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const ConfigNghiThaiSan = () => {
     const [departmentList, setDepartmentList] = React.useState([]);
@@ -36,24 +37,28 @@ const ConfigNghiThaiSan = () => {
     }
 
     const onSubmit = () => {
+        if (data.min > data.departmentIds.length + data.userIds.length) {
+            toast.error("Số người tối thiểu phải bé hơn tổng số người xét duyệt!");
+            return;
+        }
         workflowService.postNghiThaiSanConfig({
             "approveInfo": {
                 "sequence": data.isSequence,
-                "minimum": 0,
+                "minimum": data.min,
                 "departmentIds": data.departmentIds,
                 "customApprovers": data.userIds
-            },
-            "primary": Number(primaryRef.current.value),
-            "secondary": Number(secondaryRef.current.value)
-        });
+            }
+        })
+            .then(() => {
+                toast.success("Lưu thành công!");
+                navigate("/approve-workflows/configs");
+            });
     }
 
     const getApproveData = (data) => {
         setData(data);
     }
 
-    const primaryRef = React.useRef();
-    const secondaryRef = React.useRef();
     return (
         <>
             <ApproveComponent
@@ -65,29 +70,7 @@ const ConfigNghiThaiSan = () => {
                 departmentIds={configData.approveInfo.departmentIds}
                 userIds={configData.approveInfo.customApprovers}
                 key={configData.key} />
-            <Card sx={{ padding: 5, mt: 5 }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={4}>
-                        <InputLabel sx={{ color: 'black' }}>Cho phép nghỉ sớm trước (ngày)</InputLabel>
-                        <TextField type="number" fullWidth size="small"></TextField>
-                    </Grid>
 
-                    <Grid item xs={4}>
-                        <InputLabel sx={{ color: 'black' }}>Số ngày nghỉ thai sản (người nghỉ là sản phụ) (tháng)</InputLabel>
-                        <TextField type="number" fullWidth size="small"
-                            inputRef={primaryRef}
-                            defaultValue={configData.primary}
-                        ></TextField>
-                    </Grid>
-
-                    <Grid item xs={4}>
-                        <InputLabel sx={{ color: 'black' }}>Số ngày nghỉ thai sản (người nghỉ là chồng sản phụ) (tháng)</InputLabel>
-                        <TextField type="number" fullWidth size="small"
-                            inputRef={secondaryRef}
-                            defaultValue={configData.secondaryRef}></TextField>
-                    </Grid>
-                </Grid>
-            </Card>
             <Box sx={{ display: 'flex', alignItems: 'flex-end', paddingLeft: 'calc(100% - 256px)', paddingTop: 2, margin: '0' }}>
                 <Button variant="contained" color="error" startIcon={<ClearIcon />} sx={{ marginRight: '10px' }} onClick={onCancel}>
                     Hủy

@@ -16,6 +16,10 @@ const UserCheckinout = React.lazy(() => import("../../modules/approve-workflow/c
 const ViewCheckInOut = React.lazy(() => import("../../modules/approve-workflow/check-inout-manual/ViewCheckInOut"));
 const WorkflowConfig = React.lazy(() => import("../../modules/approve-workflow/configs/WorkflowConfig"));
 
+const ViewMemberBalances = React.lazy(() => import("../../modules/leave-balance/ViewMemberBalances"));
+const ViewMyBalances = React.lazy(() => import("../../modules/leave-balance/ViewMyBalances"));
+const EditMemberLeaveBalance = React.lazy(() => import("../../modules/leave-balance/EditMemberLeaveBalance"));
+
 const Registe = React.lazy(() => import("../../modules/check-day/pages/Registe"));
 const CheckIn = React.lazy(() => import("../../modules/check-day/pages/CheckIn"));
 const CheckinConfig = React.lazy(() => import("../../modules/check-day/pages/CheckinConfig"));
@@ -54,9 +58,9 @@ export default function Routings() {
 
     return <React.Suspense fallback={<div>Loading...</div>}>
         <Routes>
-            <Route path="/approve-workflows" element={<ProtectedRoute component={<WorkFlows />} />} pageName={"approve_workflow_list"} />
+            <Route path="/approve-workflows" element={<ProtectedRoute component={<WorkFlows />} pageName={"approve_workflow_list"} />} />
             <Route exact path="/approve-workflows/configs" element={<ProtectedRoute component={<WorkflowConfig />} pageName={"approve_workflow_config_list"} />} />
-            <Route path="/approve-workflows/my-requests" element={<ProtectedRoute component={<MyRequests />} />} pageName={"my_requests"} />
+            <Route path="/approve-workflows/my-requests" element={<ProtectedRoute component={<MyRequests />} pageName={"my_requests"} />} />
             <Route path="/approve-workflows/my-todo-requests" element={<ProtectedRoute component={<MyToDoRequests />} pageName={"my_todo_requests"} />} />
             <Route exact path="/approve-workflows/user-nghi-phep/:id" element={<ProtectedRoute component={<UserNghiPhep />} pageName={"user_nghi_phep"} />} />
             <Route exact path="/approve-workflows/user-nghi-thai-san/:id" element={<ProtectedRoute component={<UserNghiThaiSan />} pageName={"user_nghi_thai_san"} />} />
@@ -80,6 +84,11 @@ export default function Routings() {
             <Route path="/permission" element={<ProtectedRoute component={<PermissionList />} pageName={"permission_list"} />} />
             <Route path="/department" element={<ProtectedRoute component={<DepartmentList />} pageName={"department_list"} />} />
 
+            {/* Leave Balance  */}
+            <Route exact path="/leave-balance/members" element={<ProtectedRoute component={<ViewMemberBalances />} />} />
+            <Route exact path="/leave-balance/member/:id" element={<ProtectedRoute component={<EditMemberLeaveBalance />} />} />
+            <Route exact path="/leave-balance/me" element={<ProtectedRoute component={<ViewMyBalances />} />} />
+
             {/* Virtual Space  */}
             <Route path="/taskboard" element={<ProtectedRoute component={<BoardList />} pageName={"taskboard_list"} />} />
             <Route path="/taskboard/:id" element={<ProtectedRoute component={<BoardDetail />} pageName={"taskboard_detail"} />} />
@@ -90,7 +99,7 @@ export default function Routings() {
             {/* Timekeeping */}
             <Route path="/registe-image" element={<Registe />} pageName={"image_registration"} />
             <Route path="/timekeeping-schedule" element={<ProtectedRoute component={<TimekeepingSchedule />} pageName={"timekeeping_schedule"} />} />
-            <Route path="/workingshift-registration" element={<ProtectedRoute component={<WorkingShiftRegistrationList pageName={"workingshift_registration"} />} />} />
+            <Route path="/workingshift-registration" element={<ProtectedRoute component={<WorkingShiftRegistrationList />} pageName={"workingshift_registration"} />} />
             <Route path="/workingshift" element={<ProtectedRoute component={<WorkingShiftList />} pageName={"workingshift"} />} />
             <Route path="/registered-workingshift" element={<ProtectedRoute component={<RegisteredWorkingShiftList />} pageName={"registered_workingshift"} />} />
             <Route path="/workingshiftdayconfig" element={<ProtectedRoute component={<WorkingShiftDayConfigList />} pageName={"workingshift_dayconfig"} />} />
@@ -107,12 +116,13 @@ export default function Routings() {
             <Route path="/salary-group/" element={<ProtectedRoute component={<SalaryGroupList />} pageName={"salary_group_list"} />} />
             <Route path="/my-dab" element={<ProtectedRoute component={<MyDABs />} pageName={"my_dab"} />} />
             <Route path="/my-payslips" element={<ProtectedRoute component={<MyPayslipList />} pageName={"my_payslip"} />} />
-            <Route path="/my-payslips/:payslipId" element={<ProtectedRoute component={<MyPayslipDetail />} pageName={"my_payslip"} />} />
+            <Route path="/my-payslips/:payslipId" element={<ProtectedRoute component={<MyPayslipDetail />} pageName={"my_payslip_detail"} />} />
             <Route path="/salary-report/" element={<ProtectedRoute component={<SalaryReport />} pageName={"salary_report"} />} />
 
             <Route path="/profile" element={<ProtectedRoute component={<UserProfile />} pageName="profile" />} />
             <Route path="/403" element={<Unauthorizied />} />
             <Route path='*' element={<NotFound />} />
         </Routes>
+
     </React.Suspense>
 }

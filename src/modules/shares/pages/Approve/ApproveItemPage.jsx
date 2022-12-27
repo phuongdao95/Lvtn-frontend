@@ -7,8 +7,8 @@ import * as workflowService from '../../../../client/workflowService';
 
 const ApproverBox = ({ avatarUrl, name, status }) => {
 
-    let color = status == 0 ? 'info' : status == 1 ? 'success' : 'error';
-    let chipText = status == 0 ? 'Pending' : status == 1 ? 'Approved' : 'Denied';
+    let color = status == 1 ? 'info' : status == 2 ? 'success' : 'error';
+    let chipText = status == 1 ? 'Pending' : status == 2 ? 'Approved' : 'Denied';
 
     return <Box sx={{ display: 'flex', paddingBottom: '20px' }}>
         <Avatar src={avatarUrl} sx={{ height: '50px', width: '50px' }} />
@@ -23,7 +23,7 @@ const LogItemBox = ({ avatarUrl, name, text, dateLong }) => (
     <Paper style={{ padding: "15px 20px" }}>
         <Grid container wrap="nowrap" spacing={2}>
             <Grid item>
-                <Avatar alt="Remy Sharp" src={avatarUrl} />
+                <Avatar src={avatarUrl} />
             </Grid>
             <Grid justifyContent="left" item xs zeroMinWidth>
                 <h4 style={{ margin: 0, textAlign: "left" }}>{name}</h4>
@@ -45,7 +45,16 @@ const ApproveItemPage = ({ content, isNew, initialData, realData }) => {
     return (
         <Box sx={{ display: 'flex' }}>
             <Card sx={{ padding: 5, mt: 5, width: `${isNew ? '100%' : '60%'}`, mr: 5 }}>
-                <BreadCrumb status={1} />
+                {!isNew && <BreadCrumb status={realData?.status} />}
+                {!isNew &&
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <InputLabel>Người tạo: {realData?.userCreatedName}</InputLabel>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <InputLabel>Ngày tạo: {moment(realData?.createdTime).format("DD-MM-YYYY")}</InputLabel>
+                        </Grid>
+                    </Grid>}
                 {content}
 
                 <Divider variant="middle" sx={{ pt: 4, marginBottom: 4 }} />

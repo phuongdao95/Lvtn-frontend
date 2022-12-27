@@ -283,7 +283,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
                             Hủy
                         </Button>
                         <Button variant="contained" onClick={() => { formik.submitForm() }} >
-                            Liên kết task
+                            Tạo mới task
                         </Button>
                     </DialogActions>
                 </Box>
