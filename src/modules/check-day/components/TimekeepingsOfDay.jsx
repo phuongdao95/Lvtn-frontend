@@ -84,11 +84,6 @@ export default function TimekeepingsOfDay({
 
     return <Dialog
         sx={{ position: 'relative' }}
-        primaryAction={{
-            text: "Submit",
-            handler: () => {
-            },
-        }}
         secondaryAction={{
             text: "Cancel",
             handler: closeDialogCb

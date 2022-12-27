@@ -15,7 +15,7 @@ import { useCreateWorkingShiftDayConfig } from "../../../client/workingShiftServ
 import dayjs from "dayjs";
 
 const validationSchema = yup.object().shape({
-    name: yup.string().required(),
+    //name: yup.string().required(),
     description: yup.string()
 });
 
@@ -29,7 +29,7 @@ export default function WorkingShiftDayConfigCreate({ reloadList, closeDialogCb 
 
     const formik = useFormik({
         initialValues: {
-            name: "",
+            //name: "",
             description: "",
             date: dayjs(),
             type: 'holiday'
@@ -62,23 +62,24 @@ export default function WorkingShiftDayConfigCreate({ reloadList, closeDialogCb 
             <LoadingOverlay isLoading={isCreateRolePending} />
             <Box component="form" onSubmit={formik.handleSubmit}>
                 <TwoColumnBox
+                    // firstSlot={
+                    //     <Fragment>
+                    //         <Label text={"Tên ngày nghỉ"} />
+                    //         <TextField
+                    //             id="name"
+                    //             name="name"
+                    //             value={formik.values.name}
+                    //             onChange={formik.handleChange}
+                    //             error={formik.touched.name && Boolean(formik.errors.name)}
+                    //             helperText={formik.touched.name && formik.errors.name}
+                    //         />
+                    //     </Fragment>
+                    // }
+
+                    // secondSlot={
                     firstSlot={
                         <Fragment>
-                            <Label text={"Tên ngày nghỉ"} />
-                            <TextField
-                                id="name"
-                                name="name"
-                                value={formik.values.name}
-                                onChange={formik.handleChange}
-                                error={formik.touched.name && Boolean(formik.errors.name)}
-                                helperText={formik.touched.name && formik.errors.name}
-                            />
-                        </Fragment>
-                    }
-
-                    secondSlot={
-                        <Fragment>
-                            <Label text={"Mô tả"}
+                            <Label text={"Tên ngày nghỉ"}
                             />
                             <TextField
                                 id="description"

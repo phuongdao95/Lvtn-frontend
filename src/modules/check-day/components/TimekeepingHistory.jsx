@@ -1,7 +1,8 @@
 import React from "react";
-import { useFetchTimekeepingHistoriesOfTimekeeping, useFetchTimekeepingsOfUser } from "../../../client/timekeepingService";
 import Dialog from "../../../components/Dialog";
 import BasicTable from "../../../components/BasicTable";
+import dayjs from "dayjs";
+import { useFetchTimekeepingHistoriesOfTimekeeping, useFetchTimekeepingsOfUser } from "../../../client/timekeepingService";
 
 const getPermissionColumnConfig = () => {
     return [
@@ -52,11 +53,6 @@ export default function TimekeepingHistory({ closeDialogCb, id }) {
 
     return <Dialog
         sx={{ position: 'relative' }}
-        primaryAction={{
-            text: "Submit",
-            handler: () => {
-            },
-        }}
         secondaryAction={{
             text: "Cancel",
             handler: closeDialogCb
@@ -69,9 +65,9 @@ export default function TimekeepingHistory({ closeDialogCb, id }) {
                     id: <p style={{ textTransform: 'capitalize' }}>
                         {event.id}</p>,
                     dateTime: <p style={{ textTransform: 'capitalize' }}>
-                        {event.endTime}</p>,
+                        {dayjs(event.dateTime).format("HH:mm")}</p>,
                     type: <p style={{ textTransform: 'capitalize' }}>
-                        {event.didCheckIn ? "Có" : "Không"}</p>,
+                        {event.type}</p>,
                 })) ?? []}
                 columns={getPermissionColumnConfig()}
                 maxHeight={'250px'}
