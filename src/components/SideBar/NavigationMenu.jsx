@@ -260,13 +260,6 @@ const SideBar = (props) => {
             ]
         },
 
-        {
-            text: "Cài đặt",
-            icon: <Settings style={{ color: textColor }} />,
-            onClick: () => { },
-            subItems: [
-            ]
-        }
     ];
 
     return (
