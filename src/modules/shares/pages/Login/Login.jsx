@@ -46,7 +46,7 @@ export default function Login() {
 
     React.useEffect(() => {
         if (isSuccess) {
-            navigate("/user");
+            navigate("/profile");
         }
     }, [isSuccess])
 

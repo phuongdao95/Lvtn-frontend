@@ -22,7 +22,21 @@ const validationSchema = yup.object().shape({
     description: yup.string()
 });
 
-export default function EditFormula({ formulaId, closeDialogCb }) {
+const parseAreaFromNumber = (n) => {
+    switch (n) {
+        case 0:
+            return "kpi";
+        case 1:
+            return "timekeeping";
+        case 2:
+            return "salaryconfig";
+        case 3:
+        default:
+            return "salarydelta";
+    }
+}
+
+export default function EditFormula({ formulaId, closeDialogCb, area = null }) {
     const {
         isSuccess,
         isError,
@@ -44,6 +58,7 @@ export default function EditFormula({ formulaId, closeDialogCb }) {
             displayName: "",
             define: "",
             description: "",
+            area: area
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
@@ -57,7 +72,15 @@ export default function EditFormula({ formulaId, closeDialogCb }) {
 
     React.useEffect(() => {
         if (isFetchOneSuccess) {
-            formik.setValues(fetchedFormula)
+            const { name, displayName, define, description, area } = fetchedFormula;
+
+            formik.setValues({
+                name,
+                displayName,
+                define,
+                description,
+                area: parseAreaFromNumber(area)
+            })
         }
     }, [isFetchOneSuccess])
 
@@ -79,6 +102,7 @@ export default function EditFormula({ formulaId, closeDialogCb }) {
                         <Fragment>
                             <Label text={"Tên"} />
                             <TextField
+                                readOnly={true}
                                 id="name"
                                 name="name"
                                 value={formik.values.name}
@@ -109,6 +133,7 @@ export default function EditFormula({ formulaId, closeDialogCb }) {
                         <Fragment>
                             <Label text={"Area"} />
                             <Select
+                                readOnly={true}
                                 id="area"
                                 name="area"
                                 value={formik.values.area}

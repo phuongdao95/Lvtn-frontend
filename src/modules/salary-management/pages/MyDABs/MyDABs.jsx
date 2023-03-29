@@ -6,12 +6,13 @@ import SearchButton from "../../../../components/DataGrid/SearchButton";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
 import { useFetchListDAB } from "../../../../client/dabService";
 import DABDetail from "./DABDetail";
+import dayjs from "dayjs";
 
 const getColumnConfig = (handleOpenDetail) => [
     {
         field: "id",
         headerName: "id",
-        width: 150,
+        width: 50,
     },
     {
         field: "name",
@@ -34,6 +35,16 @@ const getColumnConfig = (handleOpenDetail) => [
         width: 150,
     },
     {
+        field: "fromMonth",
+        headerName: "Từ tháng",
+        width: 150,
+    },
+    {
+        field: "toMonth",
+        headerName: "Đến tháng",
+        width: 150,
+    },
+    {
         field: "action",
         headerName: "Thao tác",
         renderCell: ({ id }) => {
@@ -49,7 +60,6 @@ const rows = [];
 export default function DABList() {
     const [dabId, setDabId] = React.useState(null);
     const [rows, setRows] = React.useState([]);
-    const [dataGridOption, setDataGridOption] = React.useState("Khấu trừ");
     const [isDetailOpen, setIsDetailOpen] = React.useState(false);
 
     const {
@@ -71,7 +81,12 @@ export default function DABList() {
                 title={"Khấu trừ, phụ cấp và lương thưởng của tôi"}
                 datagridSection={
                     <DataGrid
-                        rows={rows}
+                        rows={rows?.map((data) =>
+                        ({
+                            ...data,
+                            fromMonth: dayjs(data.fromMonth).format("MM/YYYY"),
+                            toMonth: dayjs(data.toMonth).format("MM/YYYY")
+                        }))}
                         columns={getColumnConfig((id) => {
                             setIsDetailOpen(true);
                             setDabId(id);

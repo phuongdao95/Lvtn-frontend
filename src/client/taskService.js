@@ -305,3 +305,126 @@ export const useCreateSubtaskOfTask = getPendingErrorSuccessApiPatternFunction(
         return fetchList;
     }
 )();
+
+
+export const useFetchTasksOfEpic = getPendingErrorSuccessApiPatternFunction(({
+    setIsError,
+    setIsPending,
+    setIsSuccess,
+    setData
+}) => {
+    const fetchReport = async (eipcId) => {
+        setIsError(false);
+        setIsSuccess(false);
+        setIsPending(true);
+
+        try {
+            const response = await api.get(`/api/epic/${eipcId}/task`);
+
+            if (response.data) {
+                setData(response.data);
+            }
+
+            setIsSuccess(true);
+        } catch (err) {
+            setIsError(true);
+            console.error(err);
+        } finally {
+            setIsPending(false);
+        }
+    }
+
+    return fetchReport;
+})()
+
+export const useFetchTasksNotBelongToAnyEpicOfBoard = getPendingErrorSuccessApiPatternFunction(({
+    setIsError,
+    setIsPending,
+    setIsSuccess,
+    setData
+}) => {
+    const fetchReport = async (boardId) => {
+        setIsError(false);
+        setIsSuccess(false);
+        setIsPending(true);
+
+        try {
+            const response = await api.get(`/api/board/${boardId}/orphan-task`);
+
+            if (response.data) {
+                setData(response.data);
+            }
+
+            setIsSuccess(true);
+        } catch (err) {
+            setIsError(true);
+            console.error(err);
+        } finally {
+            setIsPending(false);
+        }
+    }
+
+    return fetchReport;
+})()
+
+
+
+export const useDeleteTaskFromEpic = getPendingErrorSuccessApiPatternFunction(({
+    setIsError,
+    setIsPending,
+    setIsSuccess,
+    setData
+}) => {
+    const fetchReport = async (taskId) => {
+        setIsError(false);
+        setIsSuccess(false);
+        setIsPending(true);
+
+        try {
+            const response = await api.delete(`/api/epic/task/${taskId}`);
+
+            if (response.data) {
+                setData(response.data);
+            }
+
+            setIsSuccess(true);
+        } catch (err) {
+            setIsError(true);
+            console.error(err);
+        } finally {
+            setIsPending(false);
+        }
+    }
+
+    return fetchReport;
+})()
+
+export const useLinkTask = getPendingErrorSuccessApiPatternFunction(({
+    setIsError,
+    setIsPending,
+    setIsSuccess,
+    setData
+}) => {
+    const fetchReport = async (epicId, taskId) => {
+        setIsError(false);
+        setIsSuccess(false);
+        setIsPending(true);
+
+        try {
+            const response = await api.post(`/api/epic/link/${epicId}/${taskId}`);
+
+            if (response.data) {
+                setData(response.data);
+            }
+
+            setIsSuccess(true);
+        } catch (err) {
+            setIsError(true);
+            console.error(err);
+        } finally {
+            setIsPending(false);
+        }
+    }
+
+    return fetchReport;
+})()

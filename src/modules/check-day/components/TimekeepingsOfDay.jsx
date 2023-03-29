@@ -3,14 +3,18 @@ import Dialog from "../../../components/Dialog";
 import BasicTable from "../../../components/BasicTable/";
 import ActionButton from "../../../components/DataGrid/ActionButton";
 import { Box } from "@mui/material";
-import { useFetchRegistrationListOfUser, useFetchWorkingShiftsOfUser } from "../../../client/workingShiftService";
 import { getCurrentUserId } from "../../../client/autheticationService";
+import { useFetchTimekeepingsOfUser } from "../../../client/timekeepingService";
 import dayjs from "dayjs";
 import TimekeepingHistory from "./TimekeepingHistory";
-import { useFetchTimekeepingsOfUser } from "../../../client/timekeepingService";
 
 const getPermissionColumnConfig = () => {
     return [
+        {
+            field: "id",
+            headerName: "Id",
+            size: "small",
+        },
         {
             field: "startTime",
             headerName: "Bắt đầu",
@@ -50,6 +54,7 @@ export default function TimekeepingsOfDay({
 }) {
     const [isHistoryOpen, setIsHistoryOpen] = React.useState(false);
     const [events, setEvents] = React.useState([]);
+    const [timekeepingId, setTimekeepingId] = React.useState([]);
 
     const {
         isPending,
@@ -66,6 +71,7 @@ export default function TimekeepingsOfDay({
     React.useEffect(() => {
         if (isSuccess) {
             const events = fetched.data.map((item) => ({
+                id: item.id,
                 startTime: dayjs(item.workingShiftEvent.startTime).format('HH:mm'),
                 endTime: dayjs(item.workingShiftEvent.endTime).format('HH:mm'),
                 didCheckIn: item.didCheckIn,
@@ -78,11 +84,6 @@ export default function TimekeepingsOfDay({
 
     return <Dialog
         sx={{ position: 'relative' }}
-        primaryAction={{
-            text: "Submit",
-            handler: () => {
-            },
-        }}
         secondaryAction={{
             text: "Cancel",
             handler: closeDialogCb
@@ -90,30 +91,43 @@ export default function TimekeepingsOfDay({
         title={`Lịch làm việc ${date.format('DD/MM/YYYY')}`}
     >
         {isHistoryOpen && <TimekeepingHistory
+            id={timekeepingId}
             closeDialogCb={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
                 setIsHistoryOpen(false)
+                setTimekeepingId(null);
             }} />}
 
-        <BasicTable
-            rows={events?.map((event) => ({
-                startTime: <p style={{ textTransform: 'capitalize' }}>
-                    {event.startTime}</p>,
-                endTime: <p style={{ textTransform: 'capitalize' }}>
-                    {event.endTime}</p>,
-                didCheckIn: <p style={{ textTransform: 'capitalize' }}>
-                    {event.didCheckIn ? "Có" : "Không"}</p>,
-                didCheckout: <p style={{ textTransform: 'capitalize' }}>
-                    {event.didCheckout ? "Có" : "Không"}</p>,
-                action: <Box sx={{ display: 'flex', gap: '2px' }}>
-                    <ActionButton onClick={() => setIsHistoryOpen(true)}>
-                        Lịch sử
-                    </ActionButton>
-                </Box>
-            })) ?? []}
-            columns={getPermissionColumnConfig()}
-            maxHeight={'250px'}
-        />
+        {events.length > 0 ?
+            <BasicTable
+                rows={events?.map((event) => ({
+                    id: <p style={{ textTransform: 'capitalize' }}>
+                        {event.id}</p>,
+                    startTime: <p style={{ textTransform: 'capitalize' }}>
+                        {event.startTime}</p>,
+                    endTime: <p style={{ textTransform: 'capitalize' }}>
+                        {event.endTime}</p>,
+                    didCheckIn: <p style={{ textTransform: 'capitalize' }}>
+                        {event.didCheckIn ? "Có" : "Không"}</p>,
+                    didCheckout: <p style={{ textTransform: 'capitalize' }}>
+                        {event.didCheckout ? "Có" : "Không"}</p>,
+                    action: <Box sx={{ display: 'flex', gap: '2px' }}>
+                        <ActionButton onClick={() => {
+                            setIsHistoryOpen(true);
+                            setTimekeepingId(event.id);
+                        }}>
+                            Lịch sử
+                        </ActionButton>
+                    </Box>
+                })) ?? []}
+                columns={getPermissionColumnConfig()}
+                maxHeight={'250px'}
+            />
+            :
+            <div>
+                Không có ca làm việc nào
+            </div>
+        }
     </Dialog >;
 }

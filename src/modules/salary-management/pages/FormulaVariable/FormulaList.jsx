@@ -46,7 +46,7 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
 
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         width: 200,
         renderCell: ({ id }) => {
             return <Box sx={{ display: "flex", gap: 1 }}>
@@ -60,6 +60,19 @@ const getColumnConfig = (onEditBtnClick, onDeleteBtnClick) => [
         }
     }
 ];
+
+const getTypeFromText = (text) => {
+    switch (text) {
+        case "Nhóm lương":
+            return "salarygroup";
+        case "Tăng giảm lương":
+            return "salarydelta";
+        case "Chấm công":
+            return "timekeeping";
+        case "KPI":
+            return "kpi";
+    }
+}
 
 export default function FormulaList() {
     const [variableKind, setVariableKind] = React.useState("Nhóm lương")
@@ -80,20 +93,8 @@ export default function FormulaList() {
     } = useDeleteFormula();
 
     React.useEffect(() => {
-        let type;
-        if (variableKind == "Nhóm lương") {
-            type = "salarygroup";
-        }
-        else if (variableKind == "Tăng giảm lương") {
-            type = "salarydelta"
-        }
-        else if (variableKind == "Chấm công") {
-            type = "timekeeping"
-        }
-        else if (variableKind == "KPI") {
-            type = "kpi"
-        }
-        fetchFormula(0, 0, type, "area");
+        let type = getTypeFromText(variableKind);
+        fetchFormula(type, "area");
     }, [variableKind])
 
     React.useEffect(() => {
@@ -117,7 +118,7 @@ export default function FormulaList() {
             else if (variableKind == "KPI") {
                 type = "kpi"
             }
-            fetchFormula(0, 0, type, "area");
+            fetchFormula(type, "area");
         }
     }, [isDeleteSuccess]);
 

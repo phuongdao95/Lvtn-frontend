@@ -1,3 +1,3 @@
-import RoleList from "../PermissionList/PermissionList";
+import RoleList from "./RoleList"
 
 export default RoleList;

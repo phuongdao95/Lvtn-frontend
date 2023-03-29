@@ -1,7 +1,5 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { grey } from "@mui/material/colors";
-import { Avatar } from "@mui/material";
 
 const columns = [
   {
@@ -10,17 +8,17 @@ const columns = [
   },
   {
     field: "name",
-    headerName: "Name",
+    headerName: "Tên",
     width: 150,
   },
   {
     field: "departmentName",
-    headerName: "Department",
+    headerName: "Phòng ban",
     width: 270,
   },
   {
     field: "description",
-    headerName: "Description",
+    headerName: "Mô tả",
     width: 300,
   },
 ];

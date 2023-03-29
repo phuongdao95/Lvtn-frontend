@@ -165,7 +165,7 @@ export default function WorkingShiftRegistrationList() {
         {isDeleteShiftOpen &&
             <ConfirmDialog
                 title={"Confirm"}
-                message="Bạn có muốn xóa chức vụ này"
+                message="Bạn có muốn xóa đăng ký này"
                 cancelAction={{
                     text: "Cancel",
                     handler: () => {

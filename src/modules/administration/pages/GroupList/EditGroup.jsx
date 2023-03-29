@@ -77,7 +77,7 @@ export default function EditGroup({ groupId, closeDialogCb }) {
     React.useEffect(() => {
         if (isFetchUserListSuccess) {
             const formatted = fetchedUserList
-                .data.map((user) => ({ id: user.id, name: user.name }))
+                .data.map((user) => ({ id: user.id, name: `${user.name} (${user.username})` }))
             setUserOptions(formatted);
         }
     }, [isFetchUserListSuccess])
@@ -86,7 +86,7 @@ export default function EditGroup({ groupId, closeDialogCb }) {
         if (isGroupUsersSuccess) {
             const users = groupUsers.data.map((user) => ({
                 id: user.id,
-                name: user.name
+                name: `${user.name} (${user.username})`
             }))
 
             formik.setFieldValue('users', users);
@@ -143,7 +143,7 @@ export default function EditGroup({ groupId, closeDialogCb }) {
 
                 <OneColumnBox
                     slot={<Fragment>
-                        <Label text={"Description"} />
+                        <Label text={"Mô tả"} />
                         <TextField
                             id="description"
                             name="description"

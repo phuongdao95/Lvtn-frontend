@@ -25,6 +25,33 @@ export const useUpdateVariable =
 export const useDeleteVariable =
     getUseDeleteResourceFunction(PATH_PREFIX);
 
+export const useFetchVariableList = getPendingErrorSuccessApiPatternFunction(
+    ({ setIsError, setIsSuccess, setIsPending, setData }) => {
+        const fetchVariables = async (type) => {
+            setIsError(false);
+            setIsSuccess(false);
+            setIsPending(false);
+
+            try {
+                const response = await api.get(`api/salaryvariable?kind=${type}`)
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+            }
+            catch (err) {
+                setData(err);
+                setIsError(true);
+            }
+            finally {
+                setIsPending(false);
+            }
+        }
+
+        return fetchVariables;
+    }
+)()
+
 export const useFetchSystemVariableList = getPendingErrorSuccessApiPatternFunction(
     ({ setIsError, setIsSuccess, setIsPending, setData }) => {
         const fetchVariables = async (type) => {

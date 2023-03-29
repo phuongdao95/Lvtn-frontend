@@ -78,7 +78,6 @@ export default function BoardEdit({ boardId, closeDialogCb = () => { }, createSu
 
                     secondSlot={
                         <Fragment>
-
                         </Fragment>
                     }
                 />

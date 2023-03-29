@@ -32,7 +32,7 @@ export default function CreateTeamPopup() {
             <Typography
               sx={{ fontWeight: "bold", color: grey[700], fontSize: 14 }}
             >
-              Team Leaderr
+              Team Leader
             </Typography>
             <TextField size="small" fullWidth />
           </Box>
@@ -60,7 +60,7 @@ export default function CreateTeamPopup() {
           <Typography
             sx={{ fontWeight: "bold", color: grey[700], fontSize: 14 }}
           >
-            Description
+            Mô tả
           </Typography>
           <TextField fullWidth multiline={true} minRows={2} maxRows={4} />
         </Box>

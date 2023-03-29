@@ -5,13 +5,12 @@ import Label from "../../../components/DialogForm/Label";
 import AutoCompleteMultiple from "../../../components/DialogForm/AutoCompleteMultiple";
 import TwoColumnBox from "../../../components/DialogForm/TwoColumnBox";
 import OneColumnBox from "../../../components/DialogForm/OneColumnBox";
-import DatePicker from "../../../components/DialogForm/DatePicker";
 import Select from "../../../components/DialogForm/Select";
 import { useFetchTaskLabelsOfBoard, useFetchUsersOfBoard } from "../../../client/taskboardService";
-import { Box, Checkbox } from "@mui/material";
+import { Checkbox } from "@mui/material";
 
 
-export default function TaskFilter({ closeDialogCb, boardId, filters, setFilters }) {
+export default function TaskFilter({ closeDialogCb, boardId, filters, setFilters, applyFilter = () => { } }) {
     const [userOptions, setUserOptions] = React.useState([]);
     const [labelOptions, setLabelOptions] = React.useState([]);
 
@@ -65,7 +64,7 @@ export default function TaskFilter({ closeDialogCb, boardId, filters, setFilters
         primaryAction={{
             text: "Áp dụng",
             handler: () => {
-
+                applyFilter();
             },
         }}
         secondaryAction={{
@@ -88,12 +87,11 @@ export default function TaskFilter({ closeDialogCb, boardId, filters, setFilters
                     <Fragment>
                         <Label text={"Loại task"} />
                         <Select
-                            id="gender"
-                            name="gender"
+                            id="taskType"
+                            name="taskType"
                             disabled={filters.isDisabled}
                             value={filters.taskType}
                             onChange={(event) => {
-                                console.log(event.target.value)
                                 setFilters({
                                     ...filters,
                                     taskType: event.target.value
@@ -102,7 +100,7 @@ export default function TaskFilter({ closeDialogCb, boardId, filters, setFilters
                             menu={[
                                 {
                                     label: "Basic & Epic",
-                                    value: "empty",
+                                    value: "basicepic",
                                 },
                                 {
                                     label: "Basic",
@@ -143,36 +141,6 @@ export default function TaskFilter({ closeDialogCb, boardId, filters, setFilters
                 </Fragment>}
             />
 
-            <TwoColumnBox
-                firstSlot={
-                    <Fragment>
-                        <Label text={"Ngày bắt đầu"} />
-                        <DatePicker id="startDate"
-                            name="startDate"
-                            disabled={filters.isDisabled}
-                            value={filters.startDate}
-                            onChange={(value) => {
-                                setFilters({ ...filters, startDate: value })
-                            }}
-                        />
-                    </Fragment>
-                }
-
-                secondSlot={
-                    <Fragment>
-                        <Label text={"Ngày kết thúc"} />
-                        <DatePicker id="endDate"
-                            name="endDate"
-                            disabled={filters.isDisabled}
-                            value={filters.endDate}
-                            onChange={(value) => {
-                                setFilters({ ...filters, endDate: value })
-                            }}
-                        />
-                    </Fragment>
-                }
-            />
-
             <OneColumnBox
                 slot={<Fragment>
                     <Label text={"Đảm nhận bởi"} />
@@ -202,7 +170,7 @@ export default function TaskFilter({ closeDialogCb, boardId, filters, setFilters
                         name="inChargeds"
                         getOptionLabel={(option) => option.name}
                         options={userOptions}
-                        value={filters.inChargeds}
+                        value={filters.reportTos}
                         onChange={(event, value) => {
                             setFilters({
                                 ...filters,

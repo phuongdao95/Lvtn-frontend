@@ -111,16 +111,6 @@ export default function BoardList() {
         fetchTaskBoardListOfUser(getCurrentUserId());
     }, [])
 
-    React.useEffect(() => {
-        if (isError) {
-            setInfoDialogMessage({
-                title: 'Error',
-                message: 'Có lỗi xảy ra từ server, xin vui lòng load lại trang hoặc đăng nhập với quyền cao hơn'
-            });
-            setIsInfoDialogOpen(true);
-        }
-    }, [isError]);
-
     return <Fragment>
         {isCreateBoardOpen && <BoardCreate
             closeDialogCb={
@@ -137,7 +127,7 @@ export default function BoardList() {
         {isDeleteBoardOpen &&
             <ConfirmDialog
                 title={"Confirm"}
-                message="Bạn có muốn xóa chức vụ này"
+                message="Bạn có muốn xóa bảng công việc này"
                 cancelAction={{
                     text: "Cancel",
                     handler: () => {

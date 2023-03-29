@@ -128,7 +128,7 @@ export default function DepartmentList() {
             {isDeleteDepartmentOpen &&
                 <ConfirmDialog
                     title={"Confirm"}
-                    message="Bạn có muốn xóa chức vụ này"
+                    message="Bạn có muốn xóa Department này"
                     cancelAction={{
                         text: "Cancel",
                         handler: () => {

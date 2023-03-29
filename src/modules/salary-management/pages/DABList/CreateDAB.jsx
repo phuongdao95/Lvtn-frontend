@@ -67,7 +67,7 @@ export default function CreateDAB({ closeDialogCb, reload }) {
     });
 
     React.useEffect(() => {
-        fetchFormulaList();
+        fetchFormulaList("salarydelta");
         fetchGroupList();
     }, []);
 

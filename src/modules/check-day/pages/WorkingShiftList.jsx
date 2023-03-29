@@ -33,16 +33,6 @@ const generateMonth = () => {
 
 const getColumnConfig = (openEditCb, openDeleteCb) => [
     {
-        field: 'check',
-        headerName: '',
-        width: 50,
-        renderCell: ({ id, row }) => {
-            return <Box sx={{ display: 'flex', gap: 1 }}>
-                <Checkbox />
-            </Box>
-        }
-    },
-    {
         field: "id",
         width: 100
     },
@@ -88,14 +78,6 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
         width: 250,
         renderCell: ({ id, type }) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
-                {type == 1 &&
-                    <ActionButton onClick={() => openEditCb(id)}>
-                        Sửa
-                    </ActionButton>
-                }
-                <ActionButton >
-                    chi tiết
-                </ActionButton>
                 <ActionButton onClick={() => openDeleteCb(id)}>
                     Xóa
                 </ActionButton>
@@ -159,7 +141,7 @@ export default function WorkingShiftList() {
 
     React.useEffect(() => {
         if (isDeleteSuccess) {
-            fetchWorkingShifts();
+            fetchWorkingShifts(0, 0, currentMonth, "month");
         }
         if (isDeleteError) {
             setInfoDialogMessage({
@@ -176,7 +158,7 @@ export default function WorkingShiftList() {
                 () => setIsCreateShiftOpen(false)}
             reload={() => {
                 setIsCreateShiftOpen(false);
-                fetchWorkingShifts()
+                fetchWorkingShifts(0, 0, currentMonth, "month");
             }} />}
 
         {isCreateMultipleShiftOpen && <CreateMultipleWorkingShift
@@ -184,7 +166,7 @@ export default function WorkingShiftList() {
                 () => setIsCreateMultipleShiftOpen(false)}
             reload={() => {
                 setIsCreateShiftOpen(false);
-                fetchWorkingShifts()
+                fetchWorkingShifts(0, 0, currentMonth, "month");
             }} />
         }
 
@@ -196,7 +178,7 @@ export default function WorkingShiftList() {
         {isDeleteShiftOpen &&
             <ConfirmDialog
                 title={"Confirm"}
-                message="Bạn có muốn xóa chức vụ này"
+                message="Bạn có muốn xóa ca làm việc này"
                 cancelAction={{
                     text: "Cancel",
                     handler: () => {
@@ -260,7 +242,7 @@ export default function WorkingShiftList() {
                                 }
                             },
                             {
-                                text: "Tạo mới ca hằng ngày",
+                                text: "Tạo mới / Cập nhật ca hằng ngày",
                                 handler: () => {
                                     setIsCreateMultipleShiftOpen(true);
                                 }

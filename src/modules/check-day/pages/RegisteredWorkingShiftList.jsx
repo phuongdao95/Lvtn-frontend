@@ -36,8 +36,18 @@ const getColumnConfig = (openDeleteCb) => [
         headerName: "Thao tác",
         width: 140,
         renderCell: ({ id, ...rest }) => {
+            const startDate = dayjs(rest.row.startDate.split("/").reverse().join("-"));
+            const endDate = dayjs(rest.row.endDate.split("/").reverse().join("-"));
+            const now = dayjs();
+
+            const isButtonEnabled = rest.row.workingShiftType !== "Fixed Shift" &&
+                (
+                    (now.isSame(startDate, 'date') || now.isAfter(startDate, 'date')) &&
+                    (now.isSame(endDate, 'date') || now.isBefore(endDate, 'date'))
+                )
+
             return <Box sx={{ display: 'flex', gap: 1 }}>
-                <ActionButton disabled={rest.row.workingShiftType === 0} onClick={() => openDeleteCb(id)}>
+                <ActionButton disabled={!isButtonEnabled} onClick={() => openDeleteCb(id)}>
                     Hủy Đăng ký
                 </ActionButton>
             </Box >
@@ -216,12 +226,12 @@ export default function RegisteredWorkingShiftList() {
                     rowCount={response?.total ?? 0}
                     rows={response?.data?.map((shift) => ({
                         ...shift,
-                        startDate: dayjs(shift.startDate).format("DD/MM/YYYY HH:mm"),
-                        endDate: dayjs(shift.endDate).format("DD/MM/YYYY HH:mm"),
+                        startDate: dayjs(shift.startDate).format("DD/MM/YYYY"),
+                        endDate: dayjs(shift.endDate).format("DD/MM/YYYY"),
                         workingShiftStartDate: dayjs(shift.workingShiftStartTime).format("DD/MM/YYYY"),
                         workingShiftStartTime: dayjs(shift.workingShiftStartTime).format("HH:mm"),
                         workingShiftEndTime: dayjs(shift.workingShiftEndTime).format("HH:mm"),
-
+                        workingShiftType: shift.workingShiftType === 0 ? "Fixed Shift" : "Overtime Shift"
                     })) ?? []}
                     columns={getColumnConfig(
                         (id) => {

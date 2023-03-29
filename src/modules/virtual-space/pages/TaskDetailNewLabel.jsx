@@ -57,7 +57,6 @@ export default function TaskDetailNewLabel({ reloadLabels, taskId, closeDialogCb
         primaryAction={{
             text: "Thêm Nhãn",
             handler: () => {
-                console.log({ label })
                 if (label) {
                     addTaskLabelToTask(taskId, label.id)
                 }

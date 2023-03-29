@@ -84,8 +84,8 @@ export default function PayslipList({ }) {
     }, []);
 
     React.useEffect(() => {
-        if (isPayrollSuccess) { 
-            
+        if (isPayrollSuccess) {
+
         }
     }, [isPayrollSuccess])
 
@@ -123,7 +123,8 @@ export default function PayslipList({ }) {
                     <DataGrid
                         rows={response?.data.map((row) => ({
                             ...row,
-                            baseSalary: row.baseSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                            baseSalary: row.baseSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }),
+                            actualSalary: row.actualSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
                         })) ?? []}
                         columns={getColumnConfig(
                             (id) => {

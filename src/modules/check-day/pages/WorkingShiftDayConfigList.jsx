@@ -40,9 +40,14 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
     },
     {
         field: "description",
-        headerName: "Mô tả",
+        headerName: "Tên",
         width: 250,
     },
+    // {
+    //     field: "description",
+    //     headerName: "Mô tả",
+    //     width: 250,
+    // },
 
     {
         field: "date",
@@ -58,15 +63,15 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
 
     {
         field: "action",
-        headerName: "Action",
+        headerName: "Thao tác",
         width: 250,
         renderCell: ({ id }) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
                 <ActionButton onClick={() => openEditCb(id)}>
-                    Edit
+                    Sửa
                 </ActionButton>
                 <ActionButton onClick={() => openDeleteCb(id)}>
-                    Delete
+                    Xóa
                 </ActionButton>
             </Box>
         }
@@ -151,7 +156,7 @@ export default function WorkingShiftDayConfigList() {
             {isDeleteUserOpen &&
                 <ConfirmDialog
                     title={"Confirm"}
-                    message="Bạn có muốn xóa chức vụ này"
+                    message="Bạn có muốn xóa ngày này"
                     cancelAction={{
                         text: "Cancel",
                         handler: () => {
