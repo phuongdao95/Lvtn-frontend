@@ -15,9 +15,9 @@ export default function ProtectedRoute({ component, pageName }) {
         return <Navigate to={"/"} />
     }
 
-    if (!isAllowedToVist(pageName)) {
-        return <Navigate to={"/403"} />
-    }
+    // if (!isAllowedToVist(pageName)) {
+    //     return <Navigate to={"/403"} />
+    // }
 
     return component;
 }
