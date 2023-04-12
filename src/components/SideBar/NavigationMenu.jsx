@@ -240,25 +240,25 @@ const SideBar = (props) => {
                 },
             ]
         },
-        {
-            text: "Ngày nghỉ",
-            icon: <AlarmOff style={{ color: textColor }} />,
-            onClick: () => { },
-            subItems: [
-                {
-                    text: "Department quản lý",
-                    onClick: () => {
-                        navigate("/leave-balance/members")
-                    }
-                },
-                {
-                    text: "Của tôi",
-                    onClick: () => {
-                        navigate("/leave-balance/me")
-                    }
-                }
-            ]
-        },
+        // {
+        //     text: "Ngày nghỉ",
+        //     icon: <AlarmOff style={{ color: textColor }} />,
+        //     onClick: () => { },
+        //     subItems: [
+        //         {
+        //             text: "Department quản lý",
+        //             onClick: () => {
+        //                 navigate("/leave-balance/members")
+        //             }
+        //         },
+        //         {
+        //             text: "Của tôi",
+        //             onClick: () => {
+        //                 navigate("/leave-balance/me")
+        //             }
+        //         }
+        //     ]
+        // },
 
     ];
 
