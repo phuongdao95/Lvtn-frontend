@@ -24,6 +24,7 @@ const Registe = React.lazy(() => import("../../modules/check-day/pages/Registe")
 const CheckIn = React.lazy(() => import("../../modules/check-day/pages/CheckIn"));
 const CheckinConfig = React.lazy(() => import("../../modules/check-day/pages/CheckinConfig"));
 const WorkingShiftList = React.lazy(() => import("../../modules/check-day/pages/WorkingShiftList"));
+const TimekeepingManage = React.lazy(() => import("../../modules/check-day/pages/TimekeepingManage"));
 const PayrollList = React.lazy(() => import("../../modules/salary-management/pages/PayRollList/PayrollList.jsx"));
 const MyDABs = React.lazy(() => import("../../modules/salary-management/pages/MyDABs/MyDABs"));
 const FormulaVariable = React.lazy(() => import("../../modules/salary-management/pages/FormulaVariable/FormulaVariable"));
@@ -105,6 +106,7 @@ export default function Routings() {
             <Route path="/workingshiftdayconfig" element={<ProtectedRoute component={<WorkingShiftDayConfigList />} pageName={"workingshift_dayconfig"} />} />
             <Route path="/check-in" element={<ProtectedRoute component={<CheckIn />} pageName={"check_in"} />} />
             <Route path="/check-in/configs" element={<ProtectedRoute component={<CheckinConfig />} pageName={"check_in_config"} />} />
+            <Route path="/timekeeping-manage" element={<ProtectedRoute component={<TimekeepingManage />} pageName={"timekeeping_manage"} />} />
 
             {/* Salary Management */}
             <Route path="/salary" element={<ProtectedRoute component={<SalaryList />} pageName={"salary_list"} />} />

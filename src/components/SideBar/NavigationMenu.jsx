@@ -238,6 +238,12 @@ const SideBar = (props) => {
                         navigate("/registered-workingshift")
                     }
                 },
+                {
+                    text: "Thống kê chấm công",
+                    onClick: () => {
+                        navigate("/timekeeping-manage")
+                    }
+                },
             ]
         },
         {
