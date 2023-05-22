@@ -1,42 +1,33 @@
 import * as React from 'react';
-import Grid from '@mui/material/Grid';
-import WorkflowCard from './WorkflowCard';
+import WorkflowSection from './WorkflowSection';
 
-/*
- * There is 7 flows in total.
-*/
 const flows = [
     {
         title: 'Nghỉ phép',
         content: 'Tạo request cho việc nghỉ phép',
         link: 'user-nghi-phep/new',
-        icon: 'notifications_off'
+        tags: 'Chung, Ngày nghỉ'
     },
     {
         title: 'Nghỉ thai sản',
         content: 'Tạo request nghỉ thai sản dành cho nữ sản phụ hoặc nam có vợ là sản phụ',
         link: 'user-nghi-thai-san/new',
-        icon: 'family_restroom'
+        tags: 'Chung, Ngày nghỉ'
     },
     {
-        title: 'Điểm danh thủ công',
+        title: 'Kiểm tra log giờ làm việc',
         content: 'Tạo request khi chấm công bằng khuôn mặt gặp trục trặc',
         link: 'user-check-in-out/new',
-        icon: 'where_to_vote'
+        tags: 'Chung, Chính sách công ty'
     }
 ];
 
 const WorkFlows = () => {
     return (<>
-        <Grid container spacing={5}>
-            {
-                flows.map((flow, index) =>
-                    <Grid item={true} xs={4} key={index}>
-                        <WorkflowCard title={flow.title} content={flow.content} icon={flow.icon} link={flow.link} />
-                    </Grid>
-                )
-            }
-        </Grid>
+        <h2>Tạo mới request</h2>
+        {['Chung', 'Ngày nghỉ', 'Chính sách công ty'].map(tag => {
+            return <WorkflowSection sectionName={tag} listWorkflow={flows.filter(f => f.tags.includes(tag))} key={tag}/>
+        })}
     </>);
 }
 

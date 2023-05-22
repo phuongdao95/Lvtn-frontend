@@ -1,56 +1,76 @@
 import * as React from 'react';
-import { Grid, InputLabel } from "@mui/material";
-import { useParams } from 'react-router';
-import * as workflowService from '../../../client/workflowService';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import moment from 'moment/moment';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+import { DropzoneArea } from 'material-ui-dropzone';
+import { styled } from '@mui/material/styles';
 
-import ApproveViewItemPage from '../../shares/pages/Approve/ApproveViewItemPage';
+const GrayButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText('#afafaf'),
+    backgroundColor: '#afafaf',
+    '&:hover': {
+        backgroundColor: 'white',
+    },
+    textTransform: 'none',
+    marginLeft: '3px'
+}));
 
+const ViewNghiPhep = () => {
+    return (<div>
+        <h2>Yêu cầu nghỉ phép</h2>
+        <Box>
+            <GrayButton variant="contained">Chỉnh sửa thông tin</GrayButton>
+            <GrayButton variant="contained" sx={{ marginRight: '15px' }}>Thêm bình luận</GrayButton>
 
-const NghiPhepContent = ({ data }) => {
-    return (
-        <Grid container spacing={2} >
-            <Grid item xs={6}>
-                <InputLabel sx={{ fontSize: '20px', fontWeight: 'bold', color: 'black' }}>Lý do xin phép</InputLabel>
-            </Grid>
-            <Grid item xs={6}>
-                <InputLabel sx={{ fontSize: '17px', color: 'black' }}>{data?.reason}</InputLabel>
-            </Grid>
+            <GrayButton variant="contained">Thêm người theo dõi</GrayButton>
+            <GrayButton variant="contained" sx={{ marginRight: '15px' }}>Thêm người xét duyệt</GrayButton>
 
-            <Grid item xs={6}>
-                <InputLabel sx={{ fontSize: '20px', fontWeight: 'bold', color: 'black' }}>Nghỉ từ ngày</InputLabel>
-            </Grid>
-            <Grid item xs={6}>
-                <InputLabel sx={{ fontSize: '17px', color: 'black' }}>{moment(data?.startDate).format("DD-MM-YYYY")}</InputLabel>
-            </Grid>
-
-            <Grid item xs={6}>
-                <InputLabel sx={{ fontSize: '20px', fontWeight: 'bold', color: 'black' }}>Nghỉ đến ngày</InputLabel>
-            </Grid>
-            <Grid item xs={6}>
-                <InputLabel sx={{ fontSize: '17px', color: 'black' }}>{moment(data?.endDate).format("DD-MM-YYYY")}</InputLabel>
-            </Grid>
-        </Grid>
-    )
-}
+            <GrayButton variant="contained">Thông qua request</GrayButton>
+            <GrayButton variant="contained" sx={{ marginRight: '15px' }}>Hủy bỏ request</GrayButton>
+        </Box>
+        <Divider variant="middle" sx={{ mb: '20px', mt: '10px' }} />
 
 
-const ViewNghiPhep = ({ isApprover = false }) => {
-    const { id } = useParams();
-    const [data, setData] = React.useState();
-    React.useEffect(() => {
-        workflowService.getDataNghiPhep(id)
-            .then((data) => setData(data))
-            .catch((err) => toast.log(err));
-    }, [])
-    return (
-        <>
-            <ApproveViewItemPage content={<NghiPhepContent data={data} />} isApprover={isApprover} data={data} flowId={id} />
-            <ToastContainer />
-        </>
-    );
+        <FormControl variant="standard" sx={{ mb: '10px', width: '100%' }}>
+            <Typography sx={{ fontWeight: 'bold !important', fontSize: '0.9rem !important' }}>
+                Tiêu đề
+            </Typography>
+            <TextField variant='outlined' size='small' sx={{ backgroundColor: 'white', width: '50%' }} />
+        </FormControl>
+        <br />
+
+        <FormControl variant="standard" sx={{ mb: '10px', width: '100%' }}>
+            <Typography sx={{ fontWeight: 'bold !important', fontSize: '0.9rem !important' }}>
+                Mô tả chi tiết
+            </Typography>
+            <TextField variant='outlined' size='small' sx={{ backgroundColor: 'white', width: '50%' }} multiline minRows={4} />
+        </FormControl>
+        <br />
+
+        <FormControl variant="standard" sx={{ mb: '10px', width: '100%' }}>
+            <Typography sx={{ fontWeight: 'bold !important', fontSize: '0.9rem !important' }}>
+                Tài liệu đính kèm
+            </Typography>
+            <DropzoneArea
+            />
+        </FormControl>
+        <br />
+
+        <Typography sx={{ fontWeight: 'bold !important' }}>
+            Người tạo: Nguyễn Chí Thiện (MSNV: NCT)
+        </Typography>
+        <br />
+        <Typography sx={{ fontWeight: 'bold !important' }}>
+            Người xác nhận: Trương Khánh Toàn (MSNV: TKT)
+        </Typography>
+
+        <Divider variant="middle" textAlign='left' sx={{ mb: '20px', mt: '10px' }} >Bình luận</Divider>
+
+
+    </div>)
 }
 
 export default ViewNghiPhep;
