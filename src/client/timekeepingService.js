@@ -92,6 +92,31 @@ export const useFetchTimekeepingsOfUser =
         return fetch;
     })();
 
+export const useFetchTimekeepingsOfUserForManager =
+    getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
+        const fetch = async (userId, query, queryType) => {
+            try {
+                const params = {
+                    query: encodeURI(query),
+                    queryType
+                };
+
+                const response = await api.get(`/api/manager/${userId}/scheduler`,
+                    { params });
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+            } catch (err) {
+                console.error(err);
+                setIsSuccess(false);
+                setIsError(true);
+            } finally {
+                setIsPending(false);
+            }
+        }
+        return fetch;
+    })();
 
 export const useFetchTimekeepingHistoriesOfTimekeeping =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {

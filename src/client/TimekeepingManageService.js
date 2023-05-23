@@ -30,3 +30,30 @@ export const useFetchList = getPendingErrorSuccessApiPatternFunction(
         return fetch;
     })();
 
+export const useIsFullTime = getPendingErrorSuccessApiPatternFunction(
+        ({ setIsError, setIsSuccess, setIsPending, setData }) => {
+            const fetch = async (day, month, year, id) => {
+                setIsError(false);
+                setIsSuccess(false);
+                setIsPending(true);
+    
+                try {
+                    const response = await api.get(
+                        `api/manage?day=${day}&month=${month}&year=${year}&id=${id}`);
+    
+                    if (response.data) {
+                        setData(response.data);
+                    }
+    
+                    setIsSuccess(true);
+                } catch (err) {
+                    setIsError(true);
+                    console.error(err);
+                } finally {
+                    setIsPending(false);
+                }
+            }
+    
+            return fetch;
+        })();
+

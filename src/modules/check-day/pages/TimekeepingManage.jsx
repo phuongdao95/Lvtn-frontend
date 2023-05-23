@@ -18,7 +18,7 @@ import { useFetchList } from "../../../client/TimekeepingManageService";
 import { useNavigate } from "react-router";
 import { Box } from "@mui/system";
 
-const getColumnConfig = (openEditCb) => [
+const getColumnConfig = (navigate, monthYear) => [
     {
         field: "id",
         width: 50
@@ -64,7 +64,10 @@ const getColumnConfig = (openEditCb) => [
         width: 250,
         renderCell: ({ id }) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
-                <ActionButton onClick={() => openEditCb(id)}>
+                <ActionButton onClick={() => monthYear != null ? 
+                    navigate(`/timekeeping-manage-schedule/${monthYear.month()}/${monthYear.year()}/${id}`) 
+                    : console.log(monthYear)}
+                >
                     Chi tiết
                 </ActionButton>
             </Box>
@@ -86,6 +89,7 @@ export default function TimekeepingManage() {
     const resetDialogState = () => setInfoDialogMessage(initialDialogState)
     const [monthYear, setMonthYear] = React.useState(null);
     const [workCount, setWorkCount] = React.useState(0);
+    const navigate = useNavigate();
 
     const {
         isPending,
@@ -121,7 +125,7 @@ export default function TimekeepingManage() {
                 title={"Thống kê công của nhân viên"}
                 datagridSection={
                     <DataGrid
-                        pageSize={44}
+                        pageSize={response?.count ?? 44}
                         rowCount={response?.count ?? 44}
                         paginationMode="server"
                         rows={
@@ -130,10 +134,7 @@ export default function TimekeepingManage() {
                                 gender: item.gender === "male" ? "Nam" : "Nữ"
                             })) ?? []
                         }
-                        columns={getColumnConfig(
-                            (id) => {
-                                console.log(id);
-                            })}
+                        columns={getColumnConfig(navigate, monthYear)}
                         isError={false}
                         isLoading={false}
                         isSuccess={true}
