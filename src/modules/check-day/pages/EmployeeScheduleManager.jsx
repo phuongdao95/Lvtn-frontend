@@ -79,8 +79,9 @@ const schedulerReducer = (state, action) => {
     }
 }
 
-export default function TimekeepingSchedule() {
-    const { month, year, id } = useParams();
+export default function TimekeepingSchedule({params, setSwitchToSchedule}) {
+    // const { month, year, id } = useParams();
+    const { month, year, id } = params;
     const initialMonth = {
         year: Number(year),
         month: Number(month),
@@ -92,23 +93,9 @@ export default function TimekeepingSchedule() {
         = React.useReducer(schedulerReducer, initialSchedulerState);
 
 
-    const handlePreviousClick = React.useCallback(() => {
-        if (schedulerState.isEventPickerActive) {
-            dispatchMonthAction({ type: 'previousMonth' })
-        }
-        if (schedulerState.isMonthPickerActive) {
-            dispatchMonthAction({ type: 'previousYear' })
-        }
-    }, [schedulerState.isEventPickerActive, schedulerState.isMonthPickerActive]);
-
-    const handleNextClick = React.useCallback(() => {
-        if (schedulerState.isEventPickerActive) {
-            dispatchMonthAction({ type: 'nextMonth' })
-        }
-        if (schedulerState.isMonthPickerActive) {
-            dispatchMonthAction({ type: 'nextYear' })
-        }
-    }, [schedulerState.isEventPickerActive, schedulerState.isMonthPickerActive]);
+    const handlePreviousClick = () => {
+        setSwitchToSchedule(false);
+    }
 
     return <Box sx={{
         padding: 2,
@@ -134,23 +121,7 @@ export default function TimekeepingSchedule() {
             marginBottom: '4px',
         }}>
             <Button size="small" onClick={handlePreviousClick}>
-                trước
-            </Button>
-            <Button
-                size="small"
-                sx={{ fontSize: '24px' }}
-                onClick={() => dispatchShedulerAction({ type: 'togglePicker' })}>
-
-                {schedulerState.isEventPickerActive && <>
-                    Tháng {monthState.month + 1}, {monthState.year}
-                </>}
-
-                {(schedulerState.isMonthPickerActive) && <>
-                    Năm {monthState.year}
-                </>}
-            </Button>
-            <Button size="small" onClick={handleNextClick}>
-                sau
+                Quay lại 
             </Button>
         </Box>
 

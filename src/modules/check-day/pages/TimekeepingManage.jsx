@@ -14,11 +14,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
+import TimekeepingSchedule from './EmployeeScheduleManager';
+
 import { useFetchList } from "../../../client/TimekeepingManageService";
 import { useNavigate } from "react-router";
 import { Box } from "@mui/system";
 
-const getColumnConfig = (navigate, monthYear) => [
+const getColumnConfig = (params, setParams, setSwitchToSchedule) => [
     {
         field: "id",
         width: 50
@@ -64,9 +66,17 @@ const getColumnConfig = (navigate, monthYear) => [
         width: 250,
         renderCell: ({ id }) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
-                <ActionButton onClick={() => monthYear != null ? 
+                {/* <ActionButton onClick={() => monthYear != null ? 
                     navigate(`/timekeeping-manage-schedule/${monthYear.month()}/${monthYear.year()}/${id}`) 
                     : console.log(monthYear)}
+                > */}
+                <ActionButton onClick={() => {
+                    setParams({
+                        ...params,
+                        id: id
+                    });
+                    setSwitchToSchedule(true);
+                }}
                 >
                     Chi tiết
                 </ActionButton>
@@ -91,6 +101,9 @@ export default function TimekeepingManage() {
     const [workCount, setWorkCount] = React.useState(0);
     const navigate = useNavigate();
 
+    const [switchToSchedule, setSwitchToSchedule] = React.useState(false);
+    const [params, setParams] = React.useState({});
+
     const {
         isPending,
         isSuccess,
@@ -102,6 +115,10 @@ export default function TimekeepingManage() {
     React.useEffect(() => {
         if (monthYear != null) {
             fetchUserList(monthYear.month() + 1, monthYear.year(), workCount);
+            setParams({
+                month: monthYear.month(),
+                year: monthYear.year()
+            });
         }
     }, [monthYear])
 
@@ -112,7 +129,12 @@ export default function TimekeepingManage() {
     }, [workCount]);
 
     return (
-        <Fragment>
+        <>
+        {switchToSchedule && <TimekeepingSchedule 
+            params={params}
+            setSwitchToSchedule={setSwitchToSchedule}
+            />}
+        {!switchToSchedule && <Fragment>
             {isInfoDialogOpen && <InfoDialog
                 title={infoDialogMessage.title}
                 message={infoDialogMessage.message}
@@ -134,7 +156,7 @@ export default function TimekeepingManage() {
                                 gender: item.gender === "male" ? "Nam" : "Nữ"
                             })) ?? []
                         }
-                        columns={getColumnConfig(navigate, monthYear)}
+                        columns={getColumnConfig(params, setParams, setSwitchToSchedule)}
                         isError={false}
                         isLoading={false}
                         isSuccess={true}
@@ -181,6 +203,7 @@ export default function TimekeepingManage() {
                 }
                 searchButtonSection={<SearchButton />}
             />
-        </Fragment>
+        </Fragment>}
+        </>
     );
 }
