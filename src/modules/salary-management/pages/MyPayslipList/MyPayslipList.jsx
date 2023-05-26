@@ -9,6 +9,8 @@ import ActionButton from "../../../../components/DataGrid/ActionButton";
 import { useFetchPayslipsOfUser } from "../../../../client/payrollService";
 import { useNavigate } from "react-router";
 import { getCurrentUserId } from "../../../../client/autheticationService";
+import { Button } from "@mui/material";
+import MenuButton from "../../../../components/DataGrid/MenuButton";
 
 const getColumnConfig = (openDetailCb) => [
     {
@@ -93,7 +95,7 @@ export default function PayrollList() {
                         rows={payslips.map(payslip => ({
                             ...payslip,
                             baseSalary: payslip.baseSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }),
-                            actualSalary: payslip.actualSalary.toLocaleString('it-IT', {style: 'currency', currency: 'VND'})
+                            actualSalary: payslip.actualSalary.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
                         })) || []}
                         columns={getColumnConfig((id) => {
                             navigate(`/my-payslips/${id}/`)
@@ -105,7 +107,18 @@ export default function PayrollList() {
                 }
                 searchSection={<SearchField />}
                 searchButtonSection={<SearchButton />}
-            />
+                primaryButtonSection={
+                    <MenuButton
+                        text={"Thao tác"}
+                        menu={
+                            [
+                                { text: "Xuất payslip", handler: () => { } },
+                            ]
+                        }
+                        variant="contained"
+                        color="info"
+                    />
+                } />
         </Fragment>
     );
 }

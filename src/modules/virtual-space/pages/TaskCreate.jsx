@@ -23,6 +23,16 @@ import { useParams } from 'react-router';
 import dayjs from 'dayjs';
 import { useCreateTask } from '../../../client/taskService';
 import Select from '../../../components/DialogForm/Select';
+import * as yup from 'yup';
+
+const validationSchema = yup.object().shape({
+    name: yup.string().required(),
+    inCharge: yup.object().required(),
+    reportTo: yup.object().required(),
+    fromDate: yup.date().required(),
+    toDate: yup.date().required(),
+    point: yup.number().required()
+});
 
 export default function TaskCreate({ closeCb = () => { }, reload }) {
     const { id: boardId } = useParams();
@@ -72,6 +82,7 @@ export default function TaskCreate({ closeCb = () => { }, reload }) {
             toDate: dayjs().add(10),
             point: 3,
         },
+        validationSchema,
         onSubmit: (values) => {
             const labelIds = values.labels.map(label => label.id);
             const inChargeId = values.inCharge.id;

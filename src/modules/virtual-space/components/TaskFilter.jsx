@@ -7,7 +7,7 @@ import TwoColumnBox from "../../../components/DialogForm/TwoColumnBox";
 import OneColumnBox from "../../../components/DialogForm/OneColumnBox";
 import Select from "../../../components/DialogForm/Select";
 import { useFetchTaskLabelsOfBoard, useFetchUsersOfBoard } from "../../../client/taskboardService";
-import { Checkbox } from "@mui/material";
+import { Box, Checkbox } from "@mui/material";
 
 
 export default function TaskFilter({ closeDialogCb, boardId, filters, setFilters, applyFilter = () => { } }) {
@@ -115,8 +115,37 @@ export default function TaskFilter({ closeDialogCb, boardId, filters, setFilters
                     </Fragment>
                 }
 
+                
                 secondSlot={
                     <Fragment>
+                        <Label text={"Tùy chọn"} />
+                        <AutoCompleteMultiple
+                            id="options"
+                            name="options"
+                            disabled={filters.isDisabled}
+                            getOptionLabel={(option) => option.name}
+                            options={[
+                                {
+                                    name: "Bị trễ hạn",
+                                    id: "isLateTask"
+                                },
+                                {
+                                    name: "Được mở lại",
+                                    id: "isReopenTask"
+                                },
+                                {
+                                    name: "Dự đoán trễ hạn",
+                                    id: "isEstimatedAsLateTask"
+                                }
+                            ]}
+                            value={filters.options}
+                            onChange={(event, value) => {
+                                setFilters({
+                                    ...filters,
+                                    options: value
+                                });
+                            }}
+                        />
                     </Fragment>
                 }
             />

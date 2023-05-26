@@ -16,6 +16,7 @@ const UserCheckinout = React.lazy(() => import("../../modules/approve-workflow/c
 const ViewCheckInOut = React.lazy(() => import("../../modules/approve-workflow/check-inout-manual/ViewCheckInOut"));
 const WorkflowConfig = React.lazy(() => import("../../modules/approve-workflow/configs/WorkflowConfig"));
 
+const MyTeam = React.lazy(() => import("../../modules/virtual-space/pages/MyTeam"));
 const Registe = React.lazy(() => import("../../modules/check-day/pages/Registe"));
 const CheckIn = React.lazy(() => import("../../modules/check-day/pages/CheckIn"));
 const WorkingShiftList = React.lazy(() => import("../../modules/check-day/pages/WorkingShiftList"));
@@ -48,6 +49,7 @@ const TeamList = React.lazy(() => import("../../modules/administration/pages/Tea
 const WorkingShiftDayConfigList = React.lazy(() => import("../../modules/check-day/pages/WorkingShiftDayConfigList"));
 const UserProfile = React.lazy(() => import("../../modules/shares/pages/UserProfile/UserProfile"))
 const TaskBoardReport = React.lazy(() => import("../../modules/virtual-space/pages/TaskBoardReport"));
+const TaskEstimationReport = React.lazy(() => import("../../modules/virtual-space/pages/TaskEstimationReport"));
 
 export default function Routings() {
 
@@ -85,6 +87,7 @@ export default function Routings() {
             <Route path="/taskboard/:id/label" element={<ProtectedRoute component={<LabelList />} pageName={"taskboard_label_list"} />} />
             <Route path="/taskboard/:id/column" element={<ProtectedRoute component={<ColumnList />} pageName={"taskboard_column_list"} />} />
             <Route path="/taskboard-report/" element={<ProtectedRoute component={<TaskBoardReport />} pageName={"taskboard_report"} />} />
+            <Route path="/my-team/" element={<ProtectedRoute component={<MyTeam />} pageName={"my_team"} />} />
 
             {/* Timekeeping */}
             <Route path="/registe-image" element={<Registe />} pageName={"image_registration"} />

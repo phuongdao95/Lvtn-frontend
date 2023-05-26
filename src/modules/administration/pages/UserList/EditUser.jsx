@@ -27,25 +27,29 @@ const isOptionEqualToValue = (option, value) => {
 export default function EditUser({ closeDialogCb, userId }) {
     const [teams, setTeams] = React.useState([]);
     const [roles, setRoles] = React.useState([]);
-
+    const [shouldReload, setShouldReload] = React.useState(false);
 
     const {
         data: fetchedUser,
-        method: fetchUser
+        method: fetchUser,
+        isFetchUserSuccess, 
     } = useFetchOneUser();
 
     const {
-        method: updateUser
+        method: updateUser,
+        isUpdateUserSuccess
     } = useUpdateUser();
 
     const {
         data: fetchedTeams,
-        method: fetchTeams
+        method: fetchTeams,
+        isFetchTeamSuccess,
     } = useFetchListTeam();
 
     const {
         data: fetchedRoles,
-        method: fetchRoles
+        method: fetchRoles,
+        isFetchRoleSuccess,
     } = useFetchListRole();
 
     const formik = useFormik({
@@ -77,10 +81,6 @@ export default function EditUser({ closeDialogCb, userId }) {
     })
 
     React.useEffect(() => {
-        fetchUser(userId);
-    }, [])
-
-    React.useEffect(() => {
         if (fetchedUser) {
             formik.setValues({
                 ...(fetchedUser),
@@ -97,7 +97,9 @@ export default function EditUser({ closeDialogCb, userId }) {
     }, [fetchedRoles, fetchedTeams])
 
     React.useEffect(() => {
+        fetchUser(userId);
         fetchTeams();
+        fetchRoles();
     }, [])
 
     React.useEffect(() => {
@@ -112,10 +114,6 @@ export default function EditUser({ closeDialogCb, userId }) {
     }, [fetchedTeams])
 
     React.useEffect(() => {
-        fetchRoles();
-    }, [])
-
-    React.useEffect(() => {
         if (fetchedRoles) {
             const roles = fetchedRoles.data.map((role) => ({
                 id: role.id,
@@ -125,6 +123,12 @@ export default function EditUser({ closeDialogCb, userId }) {
             setRoles(roles);
         }
     }, [fetchedRoles])
+
+    React.useEffect(() => {
+        if (isFetchRoleSuccess || isFetchUserSuccess || isFetchTeamSuccess ||  isUpdateUserSuccess) {
+            setShouldReload(true);
+        }
+    }, [isFetchRoleSuccess, isFetchUserSuccess, isFetchTeamSuccess, isUpdateUserSuccess])
 
     return <Dialog
         primaryAction={{

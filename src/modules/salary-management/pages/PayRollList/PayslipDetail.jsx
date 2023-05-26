@@ -4,10 +4,13 @@ import PayslipTimekeepingList from "./PayslipTimekeepingList";
 import PayslipSalaryDeltaList from "./PayslipSalaryDeltaList";
 import PayslipOverview from "./PayslipOverview";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { Button, Link } from "@mui/material";
 
 export default function PayslipDetail() {
     const navigate = useNavigate();
+
+    const { payslipId } = useParams();
 
     return <Fragment>
         <DataGridTabLayout
@@ -17,6 +20,8 @@ export default function PayslipDetail() {
                     <ActionButton onClick={() => navigate(-1)}>
                         Quay lại
                     </ActionButton>
+
+                    <Button href={`/api/payslip/${payslipId}/export`} target="_blank" variant="contained">Xuất Excel</Button>;
                 </Fragment>
             }
             tabSections={
