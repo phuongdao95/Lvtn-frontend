@@ -8,6 +8,9 @@ import { useFetchTimekeepingsOfUser } from "../../../client/timekeepingService";
 import dayjs from "dayjs";
 import TimekeepingHistoryManage from "./TimekeepingHistoryManage";
 
+import CreateAddedCheck from "./CreateAddedCheck";
+import MenuButton from "../../../components/DataGrid/MenuButton";
+
 const getPermissionColumnConfig = () => {
     return [
         {
@@ -18,7 +21,7 @@ const getPermissionColumnConfig = () => {
         {
             field: "startTime",
             headerName: "Bắt đầu",
-            size: "small"
+            size: "small",
         },
         {
             field: "endTime",
@@ -56,6 +59,8 @@ export default function TimekeepingsOfDayManager({
     const [isHistoryOpen, setIsHistoryOpen] = React.useState(false);
     const [events, setEvents] = React.useState([]);
     const [timekeepingId, setTimekeepingId] = React.useState([]);
+    const [timekeeping, setTimekeeping] = React.useState(null);
+    const [isCreateOpen, setIsCreateOpen] = React.useState(false);
 
     const {
         isPending,
@@ -70,6 +75,7 @@ export default function TimekeepingsOfDayManager({
     }, [])
 
     React.useEffect(() => {
+        console.log(isSuccess);
         if (isSuccess) {
             const events = fetched.data.map((item) => ({
                 id: item.id,
@@ -78,7 +84,7 @@ export default function TimekeepingsOfDayManager({
                 didCheckIn: item.didCheckIn,
                 didCheckout: item.didCheckout
             }));
-
+            // console.log(events)
             setEvents(events);
         }
     }, [isSuccess])
@@ -101,6 +107,20 @@ export default function TimekeepingsOfDayManager({
                 fetchWorkingShifts(id, date.format('DD/MM/YYYY'), 'date');
             }} />}
 
+        {isCreateOpen && <CreateAddedCheck
+            workingShiftTimekeeping={timekeeping}
+            closeDialogCb={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                setIsCreateOpen(false)
+                fetchWorkingShifts(id, date.format('DD/MM/YYYY'), 'date');
+            }} 
+            closeAfterSubmit={(event) => {
+                setIsCreateOpen(false)
+                fetchWorkingShifts(id, date.format('DD/MM/YYYY'), 'date');
+            }}
+            />}
+
         {events.length > 0 ?
             <BasicTable
                 rows={events?.map((event) => ({
@@ -114,14 +134,28 @@ export default function TimekeepingsOfDayManager({
                         {event.didCheckIn ? "Có" : "Không"}</p>,
                     didCheckout: <p style={{ textTransform: 'capitalize' }}>
                         {event.didCheckout ? "Có" : "Không"}</p>,
-                    action: <Box sx={{ display: 'flex', gap: '2px' }}>
-                        <ActionButton onClick={() => {
-                            setIsHistoryOpen(true);
-                            setTimekeepingId(event.id);
-                        }}>
-                            Lịch sử
-                        </ActionButton>
-                    </Box>
+                    action: 
+                    <MenuButton
+                        text={"Thao tác"}
+                        menu={
+                            [
+                                {
+                                    text: "Lịch sử",
+                                    handler: () => {
+                                        setIsHistoryOpen(true);
+                                        setTimekeepingId(event.id);
+                                    }
+                                },
+                                {
+                                    text: "Chấm công bù",
+                                    handler: () => {
+                                        setTimekeeping(event);
+                                        setIsCreateOpen(true);
+                                    }
+                                },
+                            ]
+                        }
+                    />
                 })) ?? []}
                 columns={getPermissionColumnConfig()}
                 maxHeight={'250px'}
