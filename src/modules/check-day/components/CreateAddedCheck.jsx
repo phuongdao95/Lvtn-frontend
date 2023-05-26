@@ -26,7 +26,7 @@ const typeOptions = [
     {id: '2', name: 'Chấm bù giờ ra'},
 ]
 
-export default function CreateAddedCheck({ workingShiftTimekeeping, closeDialogCb }) {
+export default function CreateAddedCheck({ workingShiftTimekeeping, closeDialogCb, closeAfterSubmit }) {
     const {
         isPending,
         isError,
@@ -47,7 +47,7 @@ export default function CreateAddedCheck({ workingShiftTimekeeping, closeDialogC
             addCheckTime(values.id, values.time.hour(), 
                         values.time.minute(), 
                         Number(values.type.id));
-            closeDialogCb();
+            closeAfterSubmit();
         }
     })
     return <Dialog
