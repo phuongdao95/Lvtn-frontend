@@ -11,9 +11,9 @@ const isAllowedToVist = (pageName) => {
 }
 
 export default function ProtectedRoute({ component, pageName }) {
-    if (!hasLoggedIn()) {
-        return <Navigate to={"/"} />
-    }
+    // if (!hasLoggedIn()) {
+    //     return <Navigate to={"/"} />
+    // }
 
     // if (!isAllowedToVist(pageName)) {
     //     return <Navigate to={"/403"} />

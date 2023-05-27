@@ -66,6 +66,26 @@ export const useUpdateSelected =
         return updateSelected;
     })('workingshift/user');
 
+export const managerAddCheckTime =
+    getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
+        const updateSelected = async (id, hour, minute, type) => {
+            try {
+                const response = await api.put(`/api/manager/createTimekeeping/${id}/${hour}/${minute}/${type}`);
+                if (response.data) {
+                    setData(response.data);
+                }
+                setIsSuccess(true);
+            } catch (err) {
+                console.error(err);
+                setIsSuccess(false);
+                setIsError(true);
+            } finally {
+                setIsPending(false);
+            }
+        }
+        return updateSelected;
+    })();
+
 export const useFetchTimekeepingsOfUser =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
         const fetch = async (userId, query, queryType) => {
