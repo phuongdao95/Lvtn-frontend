@@ -16,9 +16,14 @@ const UserCheckinout = React.lazy(() => import("../../modules/approve-workflow/c
 const ViewCheckInOut = React.lazy(() => import("../../modules/approve-workflow/check-inout-manual/ViewCheckInOut"));
 const WorkflowConfig = React.lazy(() => import("../../modules/approve-workflow/configs/WorkflowConfig"));
 
+const ViewMemberBalances = React.lazy(() => import("../../modules/leave-balance/ViewMemberBalances"));
+const ViewMyBalances = React.lazy(() => import("../../modules/leave-balance/ViewMyBalances"));
+const EditMemberLeaveBalance = React.lazy(() => import("../../modules/leave-balance/EditMemberLeaveBalance"));
+
 const MyTeam = React.lazy(() => import("../../modules/virtual-space/pages/MyTeam"));
 const Registe = React.lazy(() => import("../../modules/check-day/pages/Registe"));
 const CheckIn = React.lazy(() => import("../../modules/check-day/pages/CheckIn"));
+const CheckinConfig = React.lazy(() => import("../../modules/check-day/pages/CheckinConfig"));
 const WorkingShiftList = React.lazy(() => import("../../modules/check-day/pages/WorkingShiftList"));
 const PayrollList = React.lazy(() => import("../../modules/salary-management/pages/PayRollList/PayrollList.jsx"));
 const MyDABs = React.lazy(() => import("../../modules/salary-management/pages/MyDABs/MyDABs"));
@@ -81,6 +86,11 @@ export default function Routings() {
             <Route path="/permission" element={<ProtectedRoute component={<PermissionList />} pageName={"permission_list"} />} />
             <Route path="/department" element={<ProtectedRoute component={<DepartmentList />} pageName={"department_list"} />} />
 
+            {/* Leave Balance  */}
+            <Route exact path="/leave-balance/members" element={<ProtectedRoute component={<ViewMemberBalances />} />} />
+            <Route exact path="/leave-balance/member/:id" element={<ProtectedRoute component={<EditMemberLeaveBalance />} />} />
+            <Route exact path="/leave-balance/me" element={<ProtectedRoute component={<ViewMyBalances />} />} />
+
             {/* Virtual Space  */}
             <Route path="/taskboard" element={<ProtectedRoute component={<BoardList />} pageName={"taskboard_list"} />} />
             <Route path="/taskboard/:id" element={<ProtectedRoute component={<BoardDetail />} pageName={"taskboard_detail"} />} />
@@ -97,6 +107,7 @@ export default function Routings() {
             <Route path="/registered-workingshift" element={<ProtectedRoute component={<RegisteredWorkingShiftList />} pageName={"registered_workingshift"} />} />
             <Route path="/workingshiftdayconfig" element={<ProtectedRoute component={<WorkingShiftDayConfigList />} pageName={"workingshift_dayconfig"} />} />
             <Route path="/check-in" element={<ProtectedRoute component={<CheckIn />} pageName={"check_in"} />} />
+            <Route path="/check-in/configs" element={<ProtectedRoute component={<CheckinConfig />} pageName={"check_in_config"} />} />
 
             {/* Salary Management */}
             <Route path="/salary" element={<ProtectedRoute component={<SalaryList />} pageName={"salary_list"} />} />
@@ -115,5 +126,6 @@ export default function Routings() {
             <Route path="/403" element={<Unauthorizied />} />
             <Route path='*' element={<NotFound />} />
         </Routes>
+
     </React.Suspense>
 }

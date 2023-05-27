@@ -9,6 +9,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import { useNavigate } from 'react-router';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import ManageHistoryOutlinedIcon from '@mui/icons-material/ManageHistoryOutlined';
 import { getCurrentUserId, useLogOut } from '../../client/autheticationService';
 
 export default function AccountMenu() {
@@ -79,6 +81,7 @@ export default function AccountMenu() {
                     navigate("/profile")
                 }}>
                     <ListItemIcon>
+                        <AccountCircleOutlinedIcon />
                     </ListItemIcon>
                     Thông tin tài khoản
                 </MenuItem>
@@ -87,7 +90,13 @@ export default function AccountMenu() {
                     <ListItemIcon>
                         <AccountTreeIcon fontSize="small" />
                     </ListItemIcon>
-                    Workflow Configs
+                    Cài đặt Xét duyệt 
+                </MenuItem>
+                <MenuItem onClick={() => navigate("check-in/configs")}>
+                    <ListItemIcon>
+                        <ManageHistoryOutlinedIcon fontSize="small" />
+                    </ListItemIcon>
+                    Cài đặt chấm công 
                 </MenuItem>
                 <MenuItem onClick={() => {
                     logOut(() => navigate("/"));

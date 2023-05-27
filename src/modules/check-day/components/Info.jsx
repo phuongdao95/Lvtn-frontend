@@ -1,10 +1,10 @@
 import { Box, Card, CardContent, Button, ButtonGroup, FormControl, MenuItem, Select, Grid } from '@mui/material';
 import React, {useState, useEffect} from 'react';
-
 import {useGetByUser, useFetchOne} from "./../../../client/workingShiftEvent";
 import { useFetchList } from "./../../../client/workingShiftTimekeeping";
 import dayjs from 'dayjs';
 import Snackbar from '../../../components/Snackbar/Snackbar';
+import * as checkinRuleService from '../../../client/checkinConfigService';
 
 const OFFSET = new Date().getTimezoneOffset();
 const DAY = ['Sun', 'Mon', 'Tus', 'Wes', 'Thu', 'Fri', 'Sar'];
@@ -52,11 +52,6 @@ const welcome = name => {
 )};
 
 const Info = ({takePicture, setStateMes}) => {
-    // const [stateMes, setStateMes] = useState({
-    //     open: false,
-    //     type: 'info',
-    //     message: '',
-    // });
     const currTime = new Date();
     const format = formatDate(currTime);
     const [recognized, setRecognized] = useState(false);
@@ -66,6 +61,7 @@ const Info = ({takePicture, setStateMes}) => {
     const [isCheckin, setIsCheckin] = useState(true);
     const [isCheckout, setIsCheckout] = useState(true);
     const [formWorkShiftTimekeeping, setFormWorkShiftTimekeeping] = useState({});
+    const [checkRuleMinute, setCheckRuleMinute] = useState(30);
     const {
         isPending,
         isSuccess,
@@ -91,6 +87,16 @@ const Info = ({takePicture, setStateMes}) => {
         }
     }, [])
     useEffect(() => {
+        checkinRuleService.getRule()
+        .then(res => {
+            console.log('res checkin rule ', res);
+            setCheckRuleMinute(res.data);
+        })
+        .catch(error => {
+            console.log('error checkin rule ', error);
+        });
+    }, [])
+    useEffect(() => {
         if (isSuccess) {
             let lst = [];
             let lstCheck = [];
@@ -100,54 +106,135 @@ const Info = ({takePicture, setStateMes}) => {
                         let data = {
                             id: item.id,
                             name: item.workingShiftEvent.name,
-                            startTime: dayjs(item.workingShiftEvent.startTime).format('h:mm a'),
-                            endTime: dayjs(item.workingShiftEvent.endTime).format('h:mm a'),
-                            showName: item.workingShiftEvent.name + ' ' + dayjs(item.workingShiftEvent.startTime).format('h:mm a') + ' ' + dayjs(item.workingShiftEvent.endTime).format('h:mm a'),
+                            startTime: item.workingShiftEvent.startTime,
+                            endTime: item.workingShiftEvent.endTime,
+                            showName: item.workingShiftEvent.name 
+                                        + ' ' 
+                                        + dayjs(item.workingShiftEvent.startTime).format('h:mm a') 
+                                        + ' ' 
+                                        + dayjs(item.workingShiftEvent.endTime).format('h:mm a'),
                             didCheckIn: item.didCheckIn,
                             didCheckout: item.didCheckout,
                             checkinTime: item.checkinTime,
                             checkoutTime: item.checkoutTime,
                             isCheckInFirst: item.isCheckInFirst,
                             isCheckOutLast: item.isCheckOutLast,
+                            workday: item.workingShiftEvent.startTime,
                         };
                         lst.push(data);
                 }
             });
             setData(lst);
-            console.log(response.data);
         }
     }, [isSuccess])
 
     const welcomeText = welcome(name);
 
     const clickTakePicture = () => {
-        takePicture(formWorkShiftTimekeeping, () => {
+        let form = {};
+        getFormWorkShiftTimekeeping(form);
+        takePicture(form, () => {
             setName(window.localStorage.getItem('name'));
             setRecognized(true);
         });
     }
+
+    const getFormWorkShiftTimekeeping = (form) => {
+        // isFetchListSuccess = false;
+        const currentDate = dayjs().format('YYYY-MM-DD');
+        // let form = {};
+        if (data.length > 0) {
+            form.Offset = OFFSET;
+            form.didCheckIn = true;
+            form.employeeId = parseInt(window.localStorage.getItem('user_id'));
+            data.forEach(item => {
+                if (currentDate === dayjs(item.workday).format('YYYY-MM-DD')) {
+                    // TODO:so sanh thoi gian currentDate dang o item nao, hh:mm:ss 
+                    if ( dayjs(item.startTime).add(-checkRuleMinute, 'minute').isBefore(dayjs()) 
+                                                                                    && dayjs().isBefore(dayjs(item.endTime).add(checkRuleMinute, 'minute')) ) {
+                        form.id = item.id;
+                        if (!item.didCheckIn) {
+                            // first checkin
+                            form.checkInTime = dayjs().add(-OFFSET, 'minute').toISOString();
+                            form.didCheckout = false;
+                            form.employeeId = parseInt(window.localStorage.getItem('user_id'));
+                            form.workingShiftEventId = item.id;
+                            form.isCheckInFirst = true;
+                            if (dayjs().isAfter(dayjs(item.startTime).add(-checkRuleMinute, 'minute'))) {
+                                // setIsCheckin(false);
+                            } else {
+                                setStateMes({
+                                    type: 'warning',
+                                    message: 'Chưa tới giờ vào ca',
+                                    open: true,
+                                })
+                            }
+                        } else if (item.didCheckIn && item.didCheckout) {
+                            // second, ... checkin
+                            if (dayjs().isAfter(dayjs(item.startTime).add(-checkRuleMinute, 'minute'))) {
+                                // setIsCheckin(false);
+                            } else {
+                                setStateMes({
+                                    type: 'warning',
+                                    message: 'Chưa tới giờ vào ca',
+                                    open: true,
+                                })
+                            }
+                            form.checkInTime = dayjs().add(-OFFSET, 'minute').toISOString();
+                            form.didCheckout = false;
+                            form.workingShiftEventId = item.id;
+                            form.isCheckInFirst = false;
+                            form.isCheckOutLast = false;
+                        } else if (!item.didCheckOut) {
+                            if (dayjs().isBefore(dayjs(item.endTime).add(checkRuleMinute, 'minute'))) {
+                                // setIsCheckout(false);
+                            } else {
+                                setStateMes({
+                                    type: 'warning',
+                                    message: 'Đã hết thời gian chấm tan ca',
+                                    open: true,
+                                })
+                            }
+                            // check out
+                            form.checkoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
+                            form.didCheckout = true;
+                            form.workingShiftEventId = item.id;
+                            form.isCheckOutLast = true;
+                            form.isCheckInFirst = false;
+                        }
+                    }
+                    setFormWorkShiftTimekeeping({...form});
+                    console.log(form);
+                    return;
+                    // TODO:kiem tra dang la check in hay out
+                    // TODO:set form va ket thuc
+                }
+            })
+        }
+    }
+
     const handleChange = (event) => {
-        setValue(event.target.value);
-        // fetchOne(event.target.value);
         isFetchListSuccess = false;
         const currentDate = dayjs().format('YYYY-MM-DD');
         let form = {};
         setIsCheckout(true);
         setIsCheckin(true);
-        //fetchListTimekeeping(window.localStorage.getItem('user_id'), dayjs().format('YYYY-MM-DD'), parseInt(event.target.value));
+        console.log(OFFSET);
         if (data.length > 0) {
             data.forEach(item => {
-                if (item.id == event.target.value && currentDate === dayjs(item.checkinTime).format('YYYY-MM-DD')){
+                if (item.id == event.target.value && currentDate === dayjs(item.workday).format('YYYY-MM-DD')){
+                    console.log(item);
                     form.id = item.id;
                     if (!item.didCheckIn) {
                         // first checkin
+                        form.Offset = OFFSET;
                         form.didCheckIn = true;
                         form.checkInTime = dayjs().add(-OFFSET, 'minute').toISOString();
                         form.didCheckout = false;
                         form.employeeId = parseInt(window.localStorage.getItem('user_id'));
                         form.workingShiftEventId = event.target.value;
-                        form.checkinFirst = true;
-                        if (dayjs().add(30, 'minute').format('h:mm a') >= item.startTime) {
+                        form.isCheckInFirst = true;
+                        if (dayjs().isAfter(dayjs(item.startTime).add(-checkRuleMinute, 'minute'))) {
                             setIsCheckin(false);
                         } else {
                             setStateMes({
@@ -156,15 +243,17 @@ const Info = ({takePicture, setStateMes}) => {
                                 open: true,
                             })
                         }
-                    } else if (item.didCheckIn && item.didCheckout && dayjs().add(-30, 'minute').format('h:mm a') <= item.endTime) {
+                    } else if (item.didCheckIn && item.didCheckout && dayjs().isBefore(dayjs(item.endTime).add(checkRuleMinute, 'minute'))) {
                         // second, ... checkin
+                        form.Offset = OFFSET;
                         form.didCheckIn = true;
                         form.checkInTime = dayjs().add(-OFFSET, 'minute').toISOString();
                         form.didCheckout = false;
                         form.employeeId = parseInt(window.localStorage.getItem('user_id'));
                         form.workingShiftEventId = event.target.value;
-                        form.checkinFirst = false;
-                        if (dayjs().add(30, 'minute').format('h:mm a') >= item.startTime) {
+                        form.isCheckInFirst = false;
+                        form.isCheckOutLast = false;
+                        if (dayjs().isAfter(dayjs(item.startTime).add(-checkRuleMinute, 'minute'))) {
                             setIsCheckin(false);
                         } else {
                             setStateMes({
@@ -175,13 +264,15 @@ const Info = ({takePicture, setStateMes}) => {
                         }
                     } else if (!item.didCheckOut) {
                         // check out
+                        form.Offset = OFFSET;
                         form.didCheckIn = true;
                         form.checkoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
                         form.didCheckout = true;
                         form.employeeId = parseInt(window.localStorage.getItem('user_id'));
                         form.workingShiftEventId = event.target.value;
-                        form.checkoutLast = true;
-                        if (dayjs().add(-30, 'minute').format('h:mm a') <= item.endTime) {
+                        form.isCheckOutLast = true;
+                        form.isCheckInFirst = false;
+                        if (dayjs().isBefore(dayjs(item.endTime).add(checkRuleMinute, 'minute'))) {
                             setIsCheckout(false);
                         } else {
                             setStateMes({
@@ -197,63 +288,14 @@ const Info = ({takePicture, setStateMes}) => {
                 }
             });
         }
-        // if (data.length > 0 && currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD') && data[0].didCheckOut == false) {
-        //     //form = data[0];
-        //     form.id = data[0].id
-        //     form.CheckoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
-        //     form.DidCheckout = true;
-        //     setFormWorkShiftTimekeeping({...form});
-        //     setIsCheckout(false);
-        //     setIsCheckin(true);
-        // } else {
-        //     setIsCheckout(true);
-        //     setIsCheckin(false);
-        //     form = {
-        //         DidCheckIn : true,
-        //         CheckinTime : dayjs().add(-OFFSET, 'minute').toISOString(),
-        //         DidCheckout: false,
-        //         EmployeeId: parseInt(window.localStorage.getItem('user_id')),
-        //         WorkingShiftEventId: event.target.value,
-        //     };
-        //     setFormWorkShiftTimekeeping({...form});
-        // }
-        
     };
-    // useEffect(() => {
-    //     if (fetchListResponse?.data) {
-    //         const currentDate = dayjs().format('YYYY-MM-DD');
-    //         let data = fetchListResponse.data;
-    //         if (data.length > 0 && currentDate === dayjs(data[0].checkinTime).format('YYYY-MM-DD')) {
-    //             let form = data[0];
-    //             form = data[0];
-    //             form.CheckoutTime = dayjs().add(-OFFSET, 'minute').toISOString();
-    //             form.DidCheckout = true;
-    //             setFormWorkShiftTimekeeping({...form});
-    //             setIsCheckout(false);
-    //             setIsCheckin(true);
-    //         } else {
-    //             setIsCheckout(true);
-    //             setIsCheckin(false);
-    //             let form = {};
-    //             form = {
-    //                 DidCheckIn : true,
-    //                 CheckinTime : dayjs().add(-OFFSET, 'minute').toISOString(),
-    //                 DidCheckout: false,
-    //                 EmployeeId: parseInt(window.localStorage.getItem('user_id')),
-    //                 WorkingShiftEventId: value,
-    //             };
-    //             setFormWorkShiftTimekeeping({...form});
-    //         }
-    //     }
-    // }, [isFetchListSuccess])
 
     const groupButton = () => {
         return (
         <>
         <Grid container spacing={2} sx={{ p: 2}}>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
                 <FormControl sx={{ m: 3, minWidth: 200 }}>
-                    {/* <FormLabel id="demo-row-radio-buttons-group-label">Loại công</FormLabel>  */}
                     <Select
                         row
                         displayEmpty
@@ -265,14 +307,14 @@ const Info = ({takePicture, setStateMes}) => {
                         ))}
                     </Select>
                 </FormControl>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
                 <ButtonGroup sx={{
                     '& > *': {
                     m: 1,
                     },
                 }}>
-                    <Button variant="contained" 
+                    {/* <Button variant="contained" 
                         onClick={clickTakePicture}
                         disabled={isCheckin}
                         color="primary"
@@ -285,6 +327,12 @@ const Info = ({takePicture, setStateMes}) => {
                         color="secondary"
                         sx={{ display: 'flex-block', mt: 2, ml: 1, width: "auto" }}>
                         Chấm giờ ra
+                    </Button> */}
+                    <Button variant="contained" 
+                        onClick={clickTakePicture}
+                        color="primary"
+                        sx={{ display: 'flex-block', mt: 2, mr: 1, width: "auto" }}>
+                        Chấm công 
                     </Button>
                 </ButtonGroup>
             </Grid>

@@ -39,15 +39,15 @@ const getColumnConfig = (openEditCb, openDeleteCb) => [
         width: 150
     },
     {
-        field: "name",
+        field: "description",
         headerName: "Tên",
         width: 250,
     },
-    {
-        field: "description",
-        headerName: "Mô tả",
-        width: 250,
-    },
+    // {
+    //     field: "description",
+    //     headerName: "Mô tả",
+    //     width: 250,
+    // },
 
     {
         field: "date",

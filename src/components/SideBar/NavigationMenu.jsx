@@ -12,7 +12,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { grey, lightBlue } from '@mui/material/colors';
-import { AddAlarm, AttachMoney, Settings } from '@mui/icons-material';
+import { AddAlarm, AttachMoney, Settings, AlarmOff } from '@mui/icons-material';
 import NavigationItem from './NavigationItem';
 import { useLogOut } from '../../client/autheticationService';
 
@@ -274,6 +274,26 @@ const SideBar = (props) => {
                 },
             ]
         },
+        // {
+        //     text: "Ngày nghỉ",
+        //     icon: <AlarmOff style={{ color: textColor }} />,
+        //     onClick: () => { },
+        //     subItems: [
+        //         {
+        //             text: "Department quản lý",
+        //             onClick: () => {
+        //                 navigate("/leave-balance/members")
+        //             }
+        //         },
+        //         {
+        //             text: "Của tôi",
+        //             onClick: () => {
+        //                 navigate("/leave-balance/me")
+        //             }
+        //         }
+        //     ]
+        // },
+
     ];
 
     return (
