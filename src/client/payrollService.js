@@ -177,3 +177,11 @@ export const useGetReport = getPendingErrorSuccessApiPatternFunction(
         return fetchPayroll;
     })();
 
+
+const downloadPayslip = async (payrollId) => {
+    const response = await api.get(`/api/payroll/${payrollId}/download`)
+}
+
+const downloadPayroll = async (payslipId) => {
+    const response = await api.get(`/api/payslip/${payslipId}/download`)
+}

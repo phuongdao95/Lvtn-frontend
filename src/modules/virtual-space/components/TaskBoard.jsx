@@ -5,6 +5,9 @@ import TaskColumn from "./TaskColumn";
 import { useMoveTask } from "../../../client/taskService";
 import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 import { useParams } from "react-router";
+import Dialog from "../../../components/Dialog";
+import { Typography } from "@mui/material";
+import { lowerCase } from "lodash";
 
 const removeFromList = (list, index) => {
     const result = Array.from(list);
@@ -36,6 +39,8 @@ function TaskBoard({ taskId, taskColumns, reloadList, setShouldReload }) {
         method: moveTask
     } = useMoveTask();
 
+    const [showNotAbleToMoveDoneTask, setShowNotAbleToMoveDoneTask] = React.useState(false);
+
     const onDragEnd = (result) => {
         if (!result.destination) {
             return;
@@ -55,10 +60,14 @@ function TaskBoard({ taskId, taskColumns, reloadList, setShouldReload }) {
             removedElement
         );
 
-        moveTask(removedElement.id, boardId, result.source.droppableId,
-            result.destination.droppableId);
-
-        setElements(listCopy);
+        if (lowerCase(result.source.droppableId) === "done") {
+            setShowNotAbleToMoveDoneTask(true);
+        } else {
+            moveTask(removedElement.id, boardId, result.source.droppableId,
+                result.destination.droppableId);
+    
+            setElements(listCopy);
+        }
     };
 
     React.useEffect(() => {
@@ -75,6 +84,16 @@ function TaskBoard({ taskId, taskColumns, reloadList, setShouldReload }) {
             padding: 2,
             overflow: 'auto'
         }}>
+            {showNotAbleToMoveDoneTask &&
+                <Dialog title={"Ooops, có lỗi xảy ra"} primaryAction={{
+                    handler: () => {setShowNotAbleToMoveDoneTask(false)},
+                    text: "Cancel"
+                }}>
+                    <Typography>
+                        Bạn không thể move task từ cột Done sang cột khác. Nếu bạn muốn mở lại task này, hãy reopen task trong chi tiết task. 
+                    </Typography>
+                </Dialog>
+            }
             <LoadingOverlay isLoading={isPending} />
             <DragDropContext onDragEnd={onDragEnd}>
                 <Box sx={{ display: "flex", flexDirection: 'row', gap: 2 }}>

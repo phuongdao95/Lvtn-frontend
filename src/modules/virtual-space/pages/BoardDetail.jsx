@@ -31,6 +31,7 @@ export default function BoardDetail() {
         startDate: dayjs(),
         endDate: dayjs(),
         isDisabled: false,
+        options: [],
     });
 
     const [taskColumns, setTaskColumns] = React.useState();

@@ -52,7 +52,7 @@ export default function TaskBoardReport() {
 
         {<LoadingOverlay isLoading={isPending} />}
 
-        <Box sx={{ padding: 2 }}>
+        <Box sx={{ padding: 1 }}>
             <Box sx={{ maxWidth: 200, marginBottom: 2 }}>
                 <Select
                     menu={options}
@@ -69,35 +69,63 @@ export default function TaskBoardReport() {
                     <Box sx={{ display: 'flex', gap: 2 }}>
                         <ReportCard name={"Số thành viên"} value={reportData.totalEmployeeCount} />
                         <ReportCard name={"Số task hoàn thành"} value={reportData.totalTaskDone} />
-                        <ReportCard name={"Số task mới"} value={reportData.totalTaskNew} />
+                        <ReportCard name={"Số task được tạo mới"} value={reportData.totalTaskNew} />
+                        <ReportCard name={"Số task bị trễ hạn"} value={reportData.totalTaskNew} />
+                        <ReportCard name={"Số task có khả năng bị trễ hạn"} value={reportData.totalTaskNew} />
                         <ReportCard name={"Số point đã hoàn thành"} value={reportData.totalPointFinished} />
                     </Box>
 
                     <Box sx={{
                         display: 'flex',
-                        flexDirection: 'row',
+                        flexDirection: 'col',
                         rowGap: 0.8, marginTop: 3
                     }}>
-                        <Box sx={{ minWidth: 400 }}>
-                            <Typography variant='h6'>
-                                Số task hoàn thành theo ngày
-                            </Typography>
+                        <Box sx={{display: 'flex', flexDirection: 'row'}}>
+                            <Box sx={{ minWidth: 400 }}>
+                                <Typography variant='h6'>
+                                    Số task được tạo mới theo ngày
+                                </Typography>
 
-                            <CustomCharts labels={reportData.taskDoneByEightDays.map(item => dayjs(item.Date)
-                                .format('DD/MM'))}
-                                data={reportData.taskDoneByEightDays.map(item => item.TotalPoint)}
-                            />
+                                <CustomCharts labels={reportData.pointFinishedByEightDays.map(item => dayjs(item.Date)
+                                    .format('DD/MM'))}
+                                    data={reportData.taskDoneByEightDays.map(item => item.TotalPoint)}
+                                />
+                            </Box>
+
+                            <Box sx={{ minWidth: 400 }}>
+                                <Typography variant='h6'>
+                                    Số task hoàn thành theo ngày
+                                </Typography>
+
+                                <CustomCharts labels={reportData.taskDoneByEightDays.map(item => dayjs(item.Date)
+                                    .format('DD/MM'))}
+                                    data={reportData.taskDoneByEightDays.map(item => item.TotalPoint)}
+                                />
+                            </Box>
+
+                            <Box sx={{ minWidth: 400 }}>
+                                <Typography variant='h6'>
+                                    Số point hoàn thành theo ngày
+                                </Typography>
+
+                                <CustomCharts labels={reportData.pointFinishedByEightDays.map(item => dayjs(item.Date)
+                                    .format('DD/MM'))}
+                                    data={reportData.taskDoneByEightDays.map(item => item.TotalPoint)}
+                                />
+                            </Box>
                         </Box>
 
-                        <Box sx={{ minWidth: 400 }}>
-                            <Typography variant='h6'>
-                                Số point hoàn thành theo ngày
-                            </Typography>
+                        <Box sx={{display: 'flex', flexDirection: 'row'}}>
+                            <Box sx={{ minWidth: 400 }}>
+                                <Typography variant='h6'>
+                                    Số task trễ theo ngày
+                                </Typography>
 
-                            <CustomCharts labels={reportData.pointFinishedByEightDays.map(item => dayjs(item.Date)
-                                .format('DD/MM'))}
-                                data={reportData.taskDoneByEightDays.map(item => item.TotalPoint)}
-                            />
+                                <CustomCharts labels={reportData.pointFinishedByEightDays.map(item => dayjs(item.Date)
+                                    .format('DD/MM'))}
+                                    data={reportData.taskDoneByEightDays.map(item => item.TotalPoint)}
+                                />
+                            </Box>
                         </Box>
                     </Box>
                 </Box>

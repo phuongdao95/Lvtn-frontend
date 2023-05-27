@@ -5,7 +5,7 @@ import { Box } from "@mui/system";
 import { grey, lightBlue, purple } from "@mui/material/colors";
 import TaskDetail from "../pages/TaskDetail";
 
-const TaskColumnItem = ({ item, index, setShouldReload }) => {
+const TaskColumnItem = ({ item, index, setShouldReload, isDone }) => {
     const [isTaskDetailOpen, setIsTaskDetailOpen] = React.useState(false);
 
     return (

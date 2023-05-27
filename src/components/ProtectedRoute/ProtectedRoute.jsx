@@ -7,7 +7,7 @@ const isAllowedToVist = (pageName) => {
         return false;
     }
 
-    return pageAccessList.includes(pageName);
+    return true
 }
 
 export default function ProtectedRoute({ component, pageName }) {

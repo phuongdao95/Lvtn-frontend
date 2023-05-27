@@ -8,6 +8,7 @@ export const useLogin =
         setIsSuccess,
     }, pathPrefix) => {
         const login = async (username, password) => {
+            setIsError(false);
             setIsPending(true);
             try {
                 const path = pathPrefix;
@@ -44,15 +45,12 @@ export const useLogin =
 
 export const useLogOut = () => {
     const logOut = (callback) => {
-        const jwt = window.localStorage.getItem('jwt_token');
-        if (jwt) {
-            /**Simply remove the jwt token */
-            window.localStorage.removeItem('jwt_token');
-            window.localStorage.removeItem('user_id');
-            window.localStorage.removeItem('name');
-            window.localStorage.removeItem('username');
-            window.localStorage.removeItem('page_access_list');
-        }
+        /**Simply remove the jwt token */
+        window.localStorage.removeItem('jwt_token');
+        window.localStorage.removeItem('user_id');
+        window.localStorage.removeItem('name');
+        window.localStorage.removeItem('username');
+        window.localStorage.removeItem('page_access_list');
 
         callback();
     }

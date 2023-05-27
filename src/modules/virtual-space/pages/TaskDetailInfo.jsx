@@ -16,7 +16,9 @@ import TaskDetailEdit from "./TaskDetailEdit";
 import TaskDetailNewLabel from './TaskDetailNewLabel';
 import TaskSubCreate from './TaskSubCreate';
 import TaskDetail from './TaskDetail';
+import TaskReopen from './TaskReopen';
 import { blue, grey, red } from '@mui/material/colors';
+import { lowerCase } from 'lodash';
 
 const initialDialogState = {
     title: "",
@@ -36,6 +38,7 @@ export default function TaskDetailInfo({ taskId }) {
     const [activeSubtask, setActiveSubtask] = React.useState(null);
     const [isDeleteLinkTaskOpen, setIsDeleteLinkTaskOpen] = React.useState(false);
     const [subTaskToBeDeleted, setSubTaskToBeDeleted] = React.useState(null)
+    const [isReopenTaskOpen, setIsReopenTaskOpen] = React.useState(false);
 
     const [isInfoDialogOpen, setIsInfoDialogOpen] = React.useState(false);
     const [infoDialogMessage, setInfoDialogMessage] = React.useState({
@@ -140,6 +143,8 @@ export default function TaskDetailInfo({ taskId }) {
     React.useEffect(() => {
         if (isFetchDetailSuccess) {
             setDescription(JSON.parse(taskDetail.description));
+            
+            console.log(taskDetail.estimated)
 
             setDetail({
                 type: taskDetail.type,
@@ -150,7 +155,8 @@ export default function TaskDetailInfo({ taskId }) {
                 reportToName: taskDetail.reportToName,
                 inChargeName: taskDetail.inChargeName,
                 columnName: taskDetail.columnName,
-                taskType: taskDetail.taskType
+                taskType: taskDetail.taskType,
+                estimated: taskDetail.estimated
             })
         }
     }, [isFetchDetailSuccess])
@@ -184,6 +190,12 @@ export default function TaskDetailInfo({ taskId }) {
                 reload={() => { fetchTaskDetail(taskId) }}
                 taskId={taskId}
                 closeDialogCb={() => setIsTaskDetailEditOpen(false)} />}
+
+        {isReopenTaskOpen &&
+            <TaskReopen
+                reload={() => { fetchTaskDetail(taskId) }}
+                taskId={taskId}
+                closeDialogCb={() => setIsReopenTaskOpen(false)} />}
 
         {isAddLabelOpen &&
             <TaskDetailNewLabel
@@ -331,9 +343,18 @@ export default function TaskDetailInfo({ taskId }) {
                             Chi tiết
                         </TaskDetailHeader>
 
-                        <Button onClick={() => setIsTaskDetailEditOpen(true)}>
-                            Cập nhật task
-                        </Button>
+                        {
+                            taskDetail && lowerCase(taskDetail.columnName) !== "done" &&
+                            <Button onClick={() => setIsTaskDetailEditOpen(true)}>
+                                Cập nhật task
+                            </Button>
+                        }
+                        {
+                            taskDetail && lowerCase(taskDetail.columnName) === "done" &&
+                            <Button onClick={() => setIsReopenTaskOpen(true)}>
+                                Mở lại task
+                            </Button>
+                        }
                     </Box>
 
 
@@ -419,80 +440,104 @@ export default function TaskDetailInfo({ taskId }) {
                                         </Fragment>
                                     }
                                 />
+
+
+                                <TwoColumnBox
+                                    firstSlot={
+                                        <Fragment>
+                                            <Label text={"Dự kiến hoàn thành"} />
+                                            <Typography sx={{ fontSize: 15 }}>
+                                                { 
+                                                    dayjs(detail.fromDate).add(Math.round(Math.ceil(detail.estimated)), 'day').format('DD/MM/YYYY')
+                                                }
+                                            </Typography>
+                                        </Fragment>
+                                    }
+
+                                    secondSlot={
+                                        <Fragment>
+                                        </Fragment>
+                                    }
+                                />
                             </Box>
                         </Box>
                     </Fragment>
 
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        position: 'relative',
-                        justifyContent: 'space-between',
-                        marginTop: '10px',
-                        gap: 2,
-                    }}>
-
-                        <TaskDetailHeader>
-                            Task liên quan
-                        </TaskDetailHeader>
-                        {detail.type == 1 &&
-                            <Button onClick={() => setIsTaskCreateOpen(true)}>
-                                Liên kết subtask
-                            </Button>
-                        }
-
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Box sx={{
-                            display: 'flex', justifyContent: 'space-between', paddingY: 0.35,
-                            paddingX: 1,
-                        }}>
-                            <Box sx={{ fontWeight: 'bold', color: grey[700] }}>Id</Box>
-                            <Box sx={{ fontWeight: 'bold', color: grey[700] }}>Tên</Box>
-                        </Box>
-                        {subTasks && subTasks.map((item) => <Box
-                            onClick={() => {
-                                setActiveSubtask(item.id)
-                                setIsSubtaskOpen(true);
-                            }}
-                            sx={{
-                                position: 'relative',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                cursor: 'pointer',
-                                paddingY: 0.35,
-                                paddingX: 1,
-                                background: blue[50],
-                                '&:hover': {
-                                    background: blue[100],
-                                }
-                            }}
-                            key={item.id}>
-                            <Box>
-                                {item.id}
-                            </Box>
-                            <Box>
-                                {item.name}
-                            </Box>
+                    {
+                        subTasks && subTasks.length > 0 &&
+                        <Box>
                             <Box sx={{
-                                position: 'absolute',
-                                left: '100%',
-                                bottom: '0px',
-                                padding: '5px',
-                                fontSize: '14px',
-                                '&:hover': {
-                                    background: red[400]
-                                }
-                            }} onClick={(event) => {
-                                event.preventDefault();
-                                event.stopPropagation();
-                                setIsDeleteLinkTaskOpen(true);
-                                setSubTaskToBeDeleted(item.id)
+                                display: 'flex',
+                                flexDirection: 'row',
+                                position: 'relative',
+                                justifyContent: 'space-between',
+                                marginTop: '10px',
+                                gap: 2,
                             }}>
-                                x
+
+                                <TaskDetailHeader>
+                                    Task liên quan
+                                </TaskDetailHeader>
+                                {detail.type == 1 &&
+                                    <Button onClick={() => setIsTaskCreateOpen(true)}>
+                                        Liên kết subtask
+                                    </Button>
+                                }
+
                             </Box>
-                        </Box>)}
-                    </Box>
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                <Box sx={{
+                                    display: 'flex', justifyContent: 'space-between', paddingY: 0.35,
+                                    paddingX: 1,
+                                }}>
+                                    <Box sx={{ fontWeight: 'bold', color: grey[700] }}>Id</Box>
+                                    <Box sx={{ fontWeight: 'bold', color: grey[700] }}>Tên</Box>
+                                </Box>
+                                {subTasks && subTasks.map((item) => <Box
+                                    onClick={() => {
+                                        setActiveSubtask(item.id)
+                                        setIsSubtaskOpen(true);
+                                    }}
+                                    sx={{
+                                        position: 'relative',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        cursor: 'pointer',
+                                        paddingY: 0.35,
+                                        paddingX: 1,
+                                        background: blue[50],
+                                        '&:hover': {
+                                            background: blue[100],
+                                        }
+                                    }}
+                                    key={item.id}>
+                                    <Box>
+                                        {item.id}
+                                    </Box>
+                                    <Box>
+                                        {item.name}
+                                    </Box>
+                                    <Box sx={{
+                                        position: 'absolute',
+                                        left: '100%',
+                                        bottom: '0px',
+                                        padding: '5px',
+                                        fontSize: '14px',
+                                        '&:hover': {
+                                            background: red[400]
+                                        }
+                                    }} onClick={(event) => {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                        setIsDeleteLinkTaskOpen(true);
+                                        setSubTaskToBeDeleted(item.id)
+                                    }}>
+                                        x
+                                    </Box>
+                                </Box>)}
+                            </Box>
+                        </Box>
+                    }
                 </Box>
             </Box>
 

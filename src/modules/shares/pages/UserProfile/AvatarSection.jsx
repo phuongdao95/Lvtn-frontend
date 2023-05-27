@@ -42,7 +42,7 @@ export default function AvatarSection() {
         }} />}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: .7 }}>
 
-            <Avatar sx={{ width: 200, height: 200, border: `8px solid ${blue[400]}` }} src={fetchedUser?.urlImage}>
+            <Avatar sx={{ width: 200, height: 200, border: `8px solid ${blue[400]}` }} src={`https://localhost:7115/api/user/${getCurrentUserId()}/avatar`}>
             </Avatar>
 
             <Button size="small" variant="outlined" onClick={() => setIsUpdateAvatarOpen(true)}>

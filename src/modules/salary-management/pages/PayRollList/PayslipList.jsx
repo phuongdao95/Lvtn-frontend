@@ -8,6 +8,8 @@ import InfoDialog from "../../../../components/Dialog/InfoDialog";
 import SearchField from "../../../../components/DataGrid/SearchField";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
+import { Box, Button } from "@mui/material";
+import { BASE_URL } from "../../../../client/api";
 
 const getColumnConfig = (handleOpenDetail) => [
     {
@@ -136,9 +138,16 @@ export default function PayslipList({ }) {
                     />
                 }
                 secondaryButtonSection={
-                    <ActionButton onClick={() => navigate(-1)}>
-                        Quay lại
-                    </ActionButton>}
+                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+                        <ActionButton onClick={() => navigate(-1)}>
+                            Quay lại
+                        </ActionButton>
+
+                        <Button href={`${BASE_URL}/api/payroll/${id}/export`} target="_blank" variant="contained">
+                            Xuất Excel
+                        </Button>
+                    </Box>
+                }
                 searchSection={<SearchField />}
                 dropdownFilterSection={<Fragment></Fragment>}
                 searchButtonSection={<SearchButton />}

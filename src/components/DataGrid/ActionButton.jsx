@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 
-export default function ActionButton({ children, ...rest }) {
-    return <Button variant="outlined" color="primary" size="small" {...rest} >
+export default function ActionButton({ children, variant = "outlined", color = "primary", ...rest }) {
+    return <Button variant={variant} color={color} size="small" {...rest} >
         {children}
     </Button>
 }

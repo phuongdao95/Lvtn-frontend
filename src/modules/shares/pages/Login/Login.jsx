@@ -1,8 +1,6 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -13,6 +11,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useLogin } from '../../../../client/autheticationService';
 import { useNavigate } from 'react-router';
+import LoadingOverlay from '../../../../components/LoadingOverlay/LoadingOverlay';
 
 const validationSchema = yup.object({
     username: yup
@@ -43,6 +42,15 @@ export default function Login() {
             login(values.username, values.password);
         }
     })
+
+    React.useEffect(() => {
+        if (isError) {
+            formik.setErrors({
+                'username': ' ',
+                'password': 'Username or password is wrong'
+            })
+        }
+    }, [isError])
 
     React.useEffect(() => {
         if (isSuccess) {
@@ -108,8 +116,9 @@ export default function Login() {
                             onClick={(e) => { formik.handleSubmit(e); }}
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{ mt: 3, mb: 2, position: 'relative' }}
                         >
+                            <LoadingOverlay isLoading={isPending} />
                             Đăng nhập
                         </Button>
 

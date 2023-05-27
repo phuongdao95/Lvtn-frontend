@@ -108,13 +108,22 @@ export const useFetchTasksOfTaskColumns =
 
                 try {
                     const responses = await Promise.all(columnList.map((column) => {
-                        const { labels, inChargeds, reportTos } = formData;
+                        const { labels, inChargeds, reportTos, options } = formData;
                         const labelIds = labels?.map((label) => label.id);
                         const inChargeIds = inChargeds?.map((inCharged) => inCharged.id);
                         const reportToIds = reportTos?.map((reportTo) => reportTo.id);
+                        const optionIds = options?.map((option) => option.id);
 
                         return api.post(`/api/taskcolumn/${column.id}/task`,
-                            { ...formData, labelIds, inChargeIds, reportToIds, startDate: null, endDate: null })
+                            {
+                                ...formData,
+                                labelIds,
+                                inChargeIds,
+                                reportToIds,
+                                startDate: null,
+                                endDate: null,
+                                options: optionIds,
+                            })
                             .then((response) => {
                                 const taskInfo = response.data;
 
@@ -236,3 +245,4 @@ export const useFetchReportOfBoard
 
         return fetchReport;
     })()
+
