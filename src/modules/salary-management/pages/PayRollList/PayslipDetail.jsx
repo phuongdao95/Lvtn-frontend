@@ -6,6 +6,7 @@ import PayslipOverview from "./PayslipOverview";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
 import { useNavigate, useParams } from "react-router";
 import { Button, Link } from "@mui/material";
+import { BASE_URL } from "../../../../client/api";
 
 export default function PayslipDetail() {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function PayslipDetail() {
                         Quay lại
                     </ActionButton>
 
-                    <Button href={`/api/payslip/${payslipId}/export`} target="_blank" variant="contained">Xuất Excel</Button>;
+                    <Button href={`${BASE_URL}api/payslip/${payslipId}/export`} target="_blank" variant="contained">Xuất Excel</Button>;
                 </Fragment>
             }
             tabSections={

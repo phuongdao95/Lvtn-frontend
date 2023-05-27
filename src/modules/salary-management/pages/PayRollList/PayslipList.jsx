@@ -9,6 +9,7 @@ import SearchField from "../../../../components/DataGrid/SearchField";
 import SearchButton from "../../../../components/DataGrid/SearchButton";
 import ActionButton from "../../../../components/DataGrid/ActionButton";
 import { Box, Button } from "@mui/material";
+import { BASE_URL } from "../../../../client/api";
 
 const getColumnConfig = (handleOpenDetail) => [
     {
@@ -142,7 +143,7 @@ export default function PayslipList({ }) {
                             Quay lại
                         </ActionButton>
 
-                        <Button href={`/api/payroll/${id}/export`} target="_blank" variant="contained">
+                        <Button href={`${BASE_URL}/api/payroll/${id}/export`} target="_blank" variant="contained">
                             Xuất Excel
                         </Button>
                     </Box>

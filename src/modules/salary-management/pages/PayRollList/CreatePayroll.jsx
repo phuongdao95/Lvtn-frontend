@@ -17,7 +17,7 @@ import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay
 import * as yup from "yup";
 
 const validationSchema = yup.object().shape({
-    name: yup.string().required("Tên là một trường cần thiết"),
+    name: yup.string().required(),
     fromDate: yup.date().required(),
     toDate: yup.date().required(),
 });
