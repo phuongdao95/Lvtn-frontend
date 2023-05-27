@@ -189,11 +189,11 @@ export default function TimekeepingManage() {
                                     },
                                     {
                                         label: "Thiếu công",
-                                        handler: () => setWorkCount(-1)
+                                        handler: () => setWorkCount(1)
                                     },
                                     {
                                         label: "Dư công",
-                                        handler: () => setWorkCount(1)
+                                        handler: () => setWorkCount(-1)
                                     }
                                 ]
                             }

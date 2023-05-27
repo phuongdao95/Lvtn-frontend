@@ -39,11 +39,6 @@ const getPermissionColumnConfig = () => {
             size: "small",
         },
         {
-            field: "type",
-            headerName: "Loại ca",
-            size: "small",
-        },
-        {
             field: "action",
             headerName: "Thao tác",
             size: "small",
