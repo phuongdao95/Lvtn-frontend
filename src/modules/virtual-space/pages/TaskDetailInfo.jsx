@@ -115,6 +115,7 @@ export default function TaskDetailInfo({ taskId }) {
         inChargeName: "",
         columnName: "",
         taskType: null,
+        estimatedDate: '',
     });
 
     const [subTasks, setSubtasks] = React.useState([]);
@@ -144,8 +145,7 @@ export default function TaskDetailInfo({ taskId }) {
         if (isFetchDetailSuccess) {
             setDescription(JSON.parse(taskDetail.description));
             
-            console.log(taskDetail.estimated)
-
+            let ceiled = Math.ceil(taskDetail.estimated);
             setDetail({
                 type: taskDetail.type,
                 name: taskDetail.name,
@@ -156,7 +156,8 @@ export default function TaskDetailInfo({ taskId }) {
                 inChargeName: taskDetail.inChargeName,
                 columnName: taskDetail.columnName,
                 taskType: taskDetail.taskType,
-                estimated: taskDetail.estimated
+                estimated: taskDetail.estimated,
+                estimatedDate: dayjs(taskDetail.fromDate).add(ceiled, 'day').format('DD/MM/YYYY')
             })
         }
     }, [isFetchDetailSuccess])
@@ -447,9 +448,7 @@ export default function TaskDetailInfo({ taskId }) {
                                         <Fragment>
                                             <Label text={"Dự kiến hoàn thành"} />
                                             <Typography sx={{ fontSize: 15 }}>
-                                                { 
-                                                    dayjs(detail.fromDate).add(Math.round(Math.ceil(detail.estimated)), 'day').format('DD/MM/YYYY')
-                                                }
+                                                { detail.estimatedDate                                                }
                                             </Typography>
                                         </Fragment>
                                     }

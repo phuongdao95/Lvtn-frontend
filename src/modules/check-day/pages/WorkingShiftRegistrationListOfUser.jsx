@@ -156,7 +156,10 @@ export default function WorkingShiftRegistrationList() {
             createSuccessCb={() => {
                 setIsCreateShiftOpen(false);
                 fetchWorkingShifts()
-            }} />}
+            }}
+            reload={() => {
+            }}
+            />}
         {isEditShiftOpen &&
             <EditWorkingShift closeDialogCb={
                 () => setIsEditShiftOpen(false)}

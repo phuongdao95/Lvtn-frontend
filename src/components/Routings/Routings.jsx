@@ -58,6 +58,7 @@ const UserProfile = React.lazy(() => import("../../modules/shares/pages/UserProf
 const TaskBoardReport = React.lazy(() => import("../../modules/virtual-space/pages/TaskBoardReport"));
 const TaskEstimationReport = React.lazy(() => import("../../modules/virtual-space/pages/TaskEstimationReport"));
 
+const WorkingShiftRegistrationListOfUser = React.lazy(() => import("../../modules/check-day/pages/WorkingShiftRegistrationListOfUser"))
 export default function Routings() {
 
     return <React.Suspense fallback={<div>Loading...</div>}>
@@ -105,12 +106,15 @@ export default function Routings() {
             <Route path="/registe-image" element={<Registe />} pageName={"image_registration"} />
             <Route path="/timekeeping-schedule" element={<ProtectedRoute component={<TimekeepingSchedule />} pageName={"timekeeping_schedule"} />} />
             <Route path="/workingshift-registration" element={<ProtectedRoute component={<WorkingShiftRegistrationList />} pageName={"workingshift_registration"} />} />
+
+            <Route path="/workingshift-registration-of-user" element={<ProtectedRoute component=        {<WorkingShiftRegistrationListOfUser />} pageName={"workingshift_registration_of_user"} />} />
+
             <Route path="/workingshift" element={<ProtectedRoute component={<WorkingShiftList />} pageName={"workingshift"} />} />
             <Route path="/registered-workingshift" element={<ProtectedRoute component={<RegisteredWorkingShiftList />} pageName={"registered_workingshift"} />} />
             <Route path="/workingshiftdayconfig" element={<ProtectedRoute component={<WorkingShiftDayConfigList />} pageName={"workingshift_dayconfig"} />} />
             <Route path="/check-in" element={<ProtectedRoute component={<CheckIn />} pageName={"check_in"} />} />
             <Route path="/check-in/configs" element={<ProtectedRoute component={<CheckinConfig />} pageName={"check_in_config"} />} />
-            <Route path="/timekeeping-manage" element={<ProtectedRoute component={<TimekeepingManage />} pageName={"timekeeping_manage"} />} />
+            <Route path="/timekeeping-manage" element={<ProtectedRoute component={<TimekeepingManage />}    pageName={"timekeeping_manage"} />} />
             <Route path="/timekeeping-manage-schedule/:month/:year/:id" element={<ProtectedRoute component={<EmployeeScheduleManager />} pageName={"timekeeping_manage_schedule"} />} />
 
             {/* Salary Management */}

@@ -37,7 +37,7 @@ export default function NavigationItem({ icon, text, onClick, subItems }) {
                     logOut(() => navigate('/'));
                 }
 
-                if (processedList.includes(item.pageName)) {
+                if (processedList.includes(item.pageName) || 'workingshift_registration_of_user' === item.pageName) {
                     return <ListItem disablePadding onClick={item.onClick} key={item.text}>
                         <ListItemButton sx={{
                             paddingLeft: '30px',

@@ -173,7 +173,8 @@ export default function TimekeepingManage() {
                                 maxDate={dayjs()}
                                 value={monthYear}
                                 onChange={setMonthYear}
-                                renderInput={(params) => <TextField {...params} helperText={null} sx={{marginRight: 1}}/>}
+                                renderInput={(params) => <TextField {...params}  helperText={null} sx={{marginRight: 1}}/>}
+
                             />
                         </LocalizationProvider>
                         <Select sx={{
@@ -189,11 +190,11 @@ export default function TimekeepingManage() {
                                     },
                                     {
                                         label: "Thiếu công",
-                                        handler: () => setWorkCount(1)
+                                        handler: () => setWorkCount(-1)
                                     },
                                     {
                                         label: "Dư công",
-                                        handler: () => setWorkCount(-1)
+                                        handler: () => setWorkCount(1)
                                     }
                                 ]
                             }

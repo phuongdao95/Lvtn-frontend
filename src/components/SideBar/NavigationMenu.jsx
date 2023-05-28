@@ -274,8 +274,16 @@ const SideBar = (props) => {
                 },
                 {
                     text: "Thống kê chấm công",
+                    pageName: 'timekeeping_manage',
                     onClick: () => {
                         navigate("/timekeeping-manage")
+                    }
+                },
+                {
+                    text: "Quản lý ca làm",
+                    pageName: 'workingshift_registration_of_user',
+                    onClick: () => {
+                        navigate("/workingshift-registration-of-user")
                     }
                 },
             ]
@@ -338,7 +346,7 @@ const SideBar = (props) => {
 
                     const containsAtLeastOne = intersectioned.length !== 0;
 
-                    if (containsAtLeastOne || route.subItems.length === 0) {
+                    if (containsAtLeastOne || route.subItems.length === 0 ) {
                         return <NavigationItem
                             key={route.text}
                             icon={route.icon}

@@ -47,9 +47,17 @@ export default function CreateAddedCheck({ workingShiftTimekeeping, closeDialogC
             addCheckTime(values.id, values.time.hour(), 
                         values.time.minute(), 
                         Number(values.type.id));
-            closeAfterSubmit();
         }
     })
+
+    React.useEffect(() => {
+        if (isSuccess) {
+            closeAfterSubmit()
+        }
+    
+    }, [isSuccess])
+    
+
     return <Dialog
         primaryAction={{
             text: "Submit",
