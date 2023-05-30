@@ -344,6 +344,7 @@ const SideBar = (props) => {
                         return route.subItems.map((item) => item.pageName).indexOf(n) !== -1;
                     })
 
+
                     const containsAtLeastOne = intersectioned.length !== 0;
 
                     if (containsAtLeastOne || route.subItems.length === 0 ) {

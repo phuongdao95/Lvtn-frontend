@@ -89,6 +89,7 @@ export const managerAddCheckTime =
 export const useFetchTimekeepingsOfUser =
     getPendingErrorSuccessApiPatternFunction(({ setIsError, setIsSuccess, setIsPending, setData }, pathPrefix) => {
         const fetch = async (userId, query, queryType) => {
+            setIsSuccess(false);
             try {
                 const params = {
                     query: encodeURI(query),

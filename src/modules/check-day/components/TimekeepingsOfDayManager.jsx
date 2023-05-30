@@ -66,11 +66,12 @@ export default function TimekeepingsOfDayManager({
     } = useFetchTimekeepingsOfUser();
 
     React.useEffect(() => {
-        fetchWorkingShifts(id, date.format('DD/MM/YYYY'), 'date');
-    }, [])
+        if (!isCreateOpen) {
+            fetchWorkingShifts(id, date.format('DD/MM/YYYY'), 'date');
+        }
+    }, [isCreateOpen])
 
     React.useEffect(() => {
-        console.log(isSuccess);
         if (isSuccess) {
             const events = fetched.data.map((item) => ({
                 id: item.id,
@@ -82,7 +83,7 @@ export default function TimekeepingsOfDayManager({
             // console.log(events)
             setEvents(events);
         }
-    }, [isSuccess])
+    }, [isSuccess, fetched.data])
 
     return <Dialog
         sx={{ position: 'relative' }}
@@ -108,13 +109,11 @@ export default function TimekeepingsOfDayManager({
                 event.preventDefault();
                 event.stopPropagation();
                 setIsCreateOpen(false)
-                fetchWorkingShifts(id, date.format('DD/MM/YYYY'), 'date');
-            }} 
+            }}
             closeAfterSubmit={(event) => {
                 setIsCreateOpen(false)
-                fetchWorkingShifts(id, date.format('DD/MM/YYYY'), 'date');
             }}
-            />}
+        />}
 
         {events.length > 0 ?
             <BasicTable
@@ -129,28 +128,28 @@ export default function TimekeepingsOfDayManager({
                         {event.didCheckIn ? "Có" : "Không"}</p>,
                     didCheckout: <p style={{ textTransform: 'capitalize' }}>
                         {event.didCheckout ? "Có" : "Không"}</p>,
-                    action: 
-                    <MenuButton
-                        text={"Thao tác"}
-                        menu={
-                            [
-                                {
-                                    text: "Lịch sử",
-                                    handler: () => {
-                                        setIsHistoryOpen(true);
-                                        setTimekeepingId(event.id);
-                                    }
-                                },
-                                {
-                                    text: "Chấm công bù",
-                                    handler: () => {
-                                        setTimekeeping(event);
-                                        setIsCreateOpen(true);
-                                    }
-                                },
-                            ]
-                        }
-                    />
+                    action:
+                        <MenuButton
+                            text={"Thao tác"}
+                            menu={
+                                [
+                                    {
+                                        text: "Lịch sử",
+                                        handler: () => {
+                                            setIsHistoryOpen(true);
+                                            setTimekeepingId(event.id);
+                                        }
+                                    },
+                                    {
+                                        text: "Chấm công bù",
+                                        handler: () => {
+                                            setTimekeeping(event);
+                                            setIsCreateOpen(true);
+                                        }
+                                    },
+                                ]
+                            }
+                        />
                 })) ?? []}
                 columns={getPermissionColumnConfig()}
                 maxHeight={'250px'}
