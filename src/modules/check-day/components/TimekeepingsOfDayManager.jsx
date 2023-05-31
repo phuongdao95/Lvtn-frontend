@@ -83,7 +83,7 @@ export default function TimekeepingsOfDayManager({
             // console.log(events)
             setEvents(events);
         }
-    }, [isSuccess, fetched.data])
+    }, [isSuccess, fetched?.data])
 
     return <Dialog
         sx={{ position: 'relative' }}
