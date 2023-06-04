@@ -80,8 +80,8 @@ const schedulerReducer = (state, action) => {
 }
 
 export default function TimekeepingSchedule({params, setSwitchToSchedule}) {
-    // const { month, year, id } = useParams();
-    const { month, year, id } = params;
+    const { month, year, id, name } = params;
+    console.log(params);
     const initialMonth = {
         year: Number(year),
         month: Number(month),
@@ -107,7 +107,7 @@ export default function TimekeepingSchedule({params, setSwitchToSchedule}) {
                 fontWeight={500}
                 color={grey[800]}
             >
-                Lịch chấm công
+                Lịch chấm công {name}
             </Typography>
         </Box>
         <Box sx={{

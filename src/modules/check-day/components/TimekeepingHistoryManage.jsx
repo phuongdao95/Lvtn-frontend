@@ -57,7 +57,7 @@ export default function TimekeepingHistoryManage({ closeDialogCb, id }) {
             text: "Cancel",
             handler: closeDialogCb
         }}
-        title="Lịch sử chấm công ngày"
+        title="Lịch sử chấm công"
     >
         {histories.length > 0 ?
             <BasicTable

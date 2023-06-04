@@ -43,7 +43,6 @@ export default function SchedulerCardManager({
 
     React.useEffect(() => {
         if (isSuccess) {
-            console.log(day, month, year, id, fetchData);
             setIsCheckFullTime(fetchData.data);
             setStop(true);
         }
