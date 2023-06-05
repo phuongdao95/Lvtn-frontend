@@ -107,7 +107,7 @@ export default function TimekeepingSchedule({params, setSwitchToSchedule}) {
                 fontWeight={500}
                 color={grey[800]}
             >
-                Lịch chấm công {name}
+                Lịch chấm công: {name}
             </Typography>
         </Box>
         <Box sx={{

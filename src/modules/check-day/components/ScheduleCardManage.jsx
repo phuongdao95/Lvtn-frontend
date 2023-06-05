@@ -26,7 +26,7 @@ export default function SchedulerCardManager({
     const [isTimekeepingsOfDayShown, setIsTimekeepingsOfDayShown] = React.useState(false);
     const [hasChange, setHasChange] = React.useState(false);
     const [stop, setStop] = React.useState(false);
-    const [isCheckFullTime, setIsCheckFullTime] = React.useState(true);
+    const [isCheckFullTime, setIsCheckFullTime] = React.useState(0);
     const {
         isPending,
         isSuccess,
@@ -51,7 +51,7 @@ export default function SchedulerCardManager({
     return <Box
         onClick={() => setIsTimekeepingsOfDayShown(true)}
         sx={{
-            background: isCheckFullTime ? 'white' : 'orange',
+            background: isCheckFullTime == 1 ? '#B4F7B9' : isCheckFullTime == -1 ? 'orange' : 'white',
             position: 'relative',
             border: `2px solid ${grey[200]}`,
             padding: '5px',
