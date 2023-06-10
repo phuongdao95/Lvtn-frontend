@@ -246,7 +246,7 @@ const SideBar = (props) => {
                 },
                 {
                     text: "Danh sách ca làm",
-                    pageName: 'workingshift_list',
+                    pageName: 'workingshift',
                     onClick: () => {
                         navigate("/workingshift")
                     }
