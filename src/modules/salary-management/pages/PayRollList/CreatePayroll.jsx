@@ -26,7 +26,7 @@ function generateYears() {
     return Array.from({ length: 5 }, (_, i) => i + 2020)
 }
 
-export default function CreatePayroll({ reload, closeDialogCb }) {
+export default function CreateIssue({ reload, closeDialogCb }) {
     const {
         isPending,
         isSuccess,

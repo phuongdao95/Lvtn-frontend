@@ -6,6 +6,8 @@ import { Chart, CategoryScale, LinearScale, BarElement } from "chart.js"
 Chart.register(CategoryScale, LinearScale, BarElement)
 
 export default function CustomCharts({ labels = [], data = [] }) {
+
+    console.log(data);
     const [chartData, setChartData] = useState({
         labels: labels,
         datasets: [

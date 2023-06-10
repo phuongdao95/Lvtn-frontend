@@ -25,6 +25,7 @@ const TaskColumnItem = ({ item, index, setShouldReload, isDone }) => {
                             <Box sx={{
                                 padding: 2,
                                 minWidth: '220px',
+                                maxWidth: '280px',
                                 background: 'white',
                                 border: '1px solid black',
                                 borderLeft: `6px solid ${item.type == 0 ? lightBlue[500] : purple[500]}`

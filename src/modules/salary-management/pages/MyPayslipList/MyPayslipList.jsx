@@ -56,6 +56,7 @@ const getColumnConfig = (openDetailCb) => [
                 <ActionButton onClick={() => openDetailCb(id)}>
                     Chi tiết
                 </ActionButton>
+                
             </Box>
         }
     }
