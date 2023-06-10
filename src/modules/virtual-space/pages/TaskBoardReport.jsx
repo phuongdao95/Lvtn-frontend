@@ -45,6 +45,12 @@ export default function TaskBoardReport() {
         }
     }, [pickedOption])
 
+    React.useEffect(() => {
+        if (isSuccess) {
+            console.log(reportData);
+        }
+    }, [isFetchReportSuccess])
+
     return <Box sx={{ background: 'white', height: '80vh' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 5, padding: 2 }}>
             <Typography variant='h4'>Số liệu bảng công việc </Typography>
@@ -70,7 +76,7 @@ export default function TaskBoardReport() {
                         <ReportCard name={"Số thành viên"} value={reportData.totalEmployeeCount} />
                         <ReportCard name={"Số task hoàn thành"} value={reportData.totalTaskDone} />
                         <ReportCard name={"Số task được tạo mới"} value={reportData.totalTaskNew} />
-                        <ReportCard name={"Số task bị trễ hạn"} value={reportData.totalTaskNew} />
+                        <ReportCard name={"Số task bị trễ hạn"} value={reportData.totalTaskLate} />
                         <ReportCard name={"Số task có khả năng bị trễ hạn"} value={reportData.totalTaskNew} />
                         <ReportCard name={"Số point đã hoàn thành"} value={reportData.totalPointFinished} />
                     </Box>
@@ -86,9 +92,9 @@ export default function TaskBoardReport() {
                                     Số task được tạo mới theo ngày
                                 </Typography>
 
-                                <CustomCharts labels={reportData.pointFinishedByEightDays.map(item => dayjs(item.Date)
+                                <CustomCharts labels={reportData.totalTaskCreatedByEightDays.map(item => dayjs(item.Date)
                                     .format('DD/MM'))}
-                                    data={reportData.taskDoneByEightDays.map(item => item.TotalPoint)}
+                                    data={reportData.totalTaskCreatedByEightDays.map(item => item.TotalPoint)}
                                 />
                             </Box>
 
@@ -110,20 +116,7 @@ export default function TaskBoardReport() {
 
                                 <CustomCharts labels={reportData.pointFinishedByEightDays.map(item => dayjs(item.Date)
                                     .format('DD/MM'))}
-                                    data={reportData.taskDoneByEightDays.map(item => item.TotalPoint)}
-                                />
-                            </Box>
-                        </Box>
-
-                        <Box sx={{display: 'flex', flexDirection: 'row'}}>
-                            <Box sx={{ minWidth: 400 }}>
-                                <Typography variant='h6'>
-                                    Số task trễ theo ngày
-                                </Typography>
-
-                                <CustomCharts labels={reportData.pointFinishedByEightDays.map(item => dayjs(item.Date)
-                                    .format('DD/MM'))}
-                                    data={reportData.taskDoneByEightDays.map(item => item.TotalPoint)}
+                                    data={reportData.pointFinishedByEightDays.map(item => item.TotalPoint)}
                                 />
                             </Box>
                         </Box>

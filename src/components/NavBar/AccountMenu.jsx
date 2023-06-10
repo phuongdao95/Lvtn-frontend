@@ -86,7 +86,7 @@ export default function AccountMenu() {
                     Thông tin tài khoản
                 </MenuItem>
 
-                <MenuItem onClick={() => navigate("approve-workflows/configs")}>
+                {/* <MenuItem onClick={() => navigate("approve-workflows/configs")}>
                     <ListItemIcon>
                         <AccountTreeIcon fontSize="small" />
                     </ListItemIcon>
@@ -97,7 +97,7 @@ export default function AccountMenu() {
                         <ManageHistoryOutlinedIcon fontSize="small" />
                     </ListItemIcon>
                     Cài đặt chấm công 
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={() => {
                     logOut(() => navigate("/"));
                 }}>

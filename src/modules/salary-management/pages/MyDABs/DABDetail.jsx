@@ -53,10 +53,6 @@ export default function DABDetail({ dabId, closeDialogCb }) {
 
 
     return <Dialog
-        primaryAction={{
-            text: "Submit",
-            handler: () => { formik.handleSubmit() },
-        }}
         secondaryAction={{
             text: "Cancel",
             handler: closeDialogCb

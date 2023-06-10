@@ -10,18 +10,18 @@ export default function Dialog({
     primaryAction = DEFAULT_ACTION,
     secondaryAction = DEFAULT_ACTION,
     tertiaryAction = DEFAULT_ACTION,
+    maxWidth = '680px',
     children
 }) {
     return (
         <MuiDialog
             open={true}
             onClose={() => { }}
-            maxWidth={"md"}
             sx={{
                 "& .MuiDialog-container": {
                     "& .MuiPaper-root": {
                         width: "100%",
-                        maxWidth: "680px",
+                        maxWidth: maxWidth,
                         position: "relative"
                     },
                 },

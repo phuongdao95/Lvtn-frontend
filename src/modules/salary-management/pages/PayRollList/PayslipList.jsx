@@ -120,7 +120,7 @@ export default function PayslipList({ }) {
             />}
 
             <DataGridLayout
-                title={"Danh sách payslip"}
+                title={"Chi tiết payroll"}
                 datagridSection={
                     <DataGrid
                         rows={response?.data.map((row) => ({

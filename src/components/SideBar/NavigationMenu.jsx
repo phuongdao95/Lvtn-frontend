@@ -160,34 +160,34 @@ const SideBar = (props) => {
             ]
         },
 
-        {
-            text: "Quản lý phê duyệt",
-            icon: <FactCheckIcon style={{ color: textColor }} />,
-            onClick: () => { },
-            subItems: [
-                {
-                    text: "Tạo mới request",
-                    pageName: 'approve_workflow_list',
-                    onClick: () => {
-                        navigate("/approve-workflows")
-                    }
-                },
-                {
-                    text: "Danh sách request đã tạo",
-                    pageName: 'approve_workflow_config_list',
-                    onClick: () => {
-                        navigate("/approve-workflows/my-requests")
-                    }
-                },
-                {
-                    text: "Danh sách request cần xem xét",
-                    pageName: 'my_todo_request',
-                    onClick: () => {
-                        navigate("/approve-workflows/my-todo-requests")
-                    }
-                }
-            ]
-        },
+        // {
+        //     text: "Quản lý phê duyệt",
+        //     icon: <FactCheckIcon style={{ color: textColor }} />,
+        //     onClick: () => { },
+        //     subItems: [
+        //         {
+        //             text: "Tạo mới request",
+        //             pageName: 'approve_workflow_list',
+        //             onClick: () => {
+        //                 navigate("/approve-workflows")
+        //             }
+        //         },
+        //         {
+        //             text: "Danh sách request đã tạo",
+        //             pageName: 'approve_workflow_config_list',
+        //             onClick: () => {
+        //                 navigate("/approve-workflows/my-requests")
+        //             }
+        //         },
+        //         {
+        //             text: "Danh sách request cần xem xét",
+        //             pageName: 'my_todo_request',
+        //             onClick: () => {
+        //                 navigate("/approve-workflows/my-todo-requests")
+        //             }
+        //         }
+        //     ]
+        // },
 
         {
             text: "Môi trường ảo",
