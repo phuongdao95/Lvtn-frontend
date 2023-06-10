@@ -64,7 +64,7 @@ const getColumnConfig = (params, setParams, setSwitchToSchedule) => [
         field: "action",
         headerName: "Thao tác",
         width: 250,
-        renderCell: ({ id }) => {
+        renderCell: (e) => {
             return <Box sx={{ display: 'flex', gap: 1 }}>
                 {/* <ActionButton onClick={() => monthYear != null ? 
                     navigate(`/timekeeping-manage-schedule/${monthYear.month()}/${monthYear.year()}/${id}`) 
@@ -73,7 +73,8 @@ const getColumnConfig = (params, setParams, setSwitchToSchedule) => [
                 <ActionButton onClick={() => {
                     setParams({
                         ...params,
-                        id: id
+                        id: e.id,
+                        name: e.row.name
                     });
                     setSwitchToSchedule(true);
                 }}
@@ -98,7 +99,7 @@ export default function TimekeepingManage() {
     })
     const resetDialogState = () => setInfoDialogMessage(initialDialogState)
     const [monthYear, setMonthYear] = React.useState(null);
-    const [workCount, setWorkCount] = React.useState(0);
+    const [workCount, setWorkCount] = React.useState(1);
     const navigate = useNavigate();
 
     const [switchToSchedule, setSwitchToSchedule] = React.useState(false);
@@ -184,6 +185,11 @@ export default function TimekeepingManage() {
                             value={workCount == 0 ? "Đủ công" : workCount == 1 ? "Dư công" : "Thiếu công"}
                             options={
                                 [
+                                    
+                                    {
+                                        label: "Dư công",
+                                        handler: () => setWorkCount(1)
+                                    },
                                     {
                                         label: "Đủ công",
                                         handler: () => setWorkCount(0)
@@ -191,10 +197,6 @@ export default function TimekeepingManage() {
                                     {
                                         label: "Thiếu công",
                                         handler: () => setWorkCount(-1)
-                                    },
-                                    {
-                                        label: "Dư công",
-                                        handler: () => setWorkCount(1)
                                     }
                                 ]
                             }
