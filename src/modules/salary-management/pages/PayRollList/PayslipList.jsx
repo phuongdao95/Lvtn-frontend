@@ -226,7 +226,7 @@ export default function PayslipList(isPersonalView = false) {
                             Quay lại
                         </ActionButton>
 
-                        <Button href={`${BASE_URL}/api/payroll/${id}/export`} target="_blank" variant="contained">
+                        <Button href={`${BASE_URL}api/payroll/${id}/export`} target="_blank" variant="contained">
                             Xuất Excel
                         </Button>
                     </Box>
