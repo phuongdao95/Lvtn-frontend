@@ -4,7 +4,7 @@ import { Avatar, Box, Button, IconButton, Typography } from "@mui/material";
 import Dialog from "../../../../components/Dialog";
 import TextField from "../../../../components/DialogForm/TextField";
 import { AddComment } from "@mui/icons-material";
-import { getCurrentUserId } from "../../../../client/autheticationService";
+import { getCurrentUserId, getCurrentUserRole } from "../../../../client/autheticationService";
 import LoadingOverlay from "../../../../components/LoadingOverlay/LoadingOverlay";
 import dayjs from "dayjs";
 import { grey } from "@mui/material/colors";
@@ -75,18 +75,23 @@ const useFetchIssueComments = () => {
     }
 }
 
-const useResolveIssue = (issueId) => {
+const useResolveIssue = () => {
     const [isSuccess, setIsSuccess] = React.useState(false);
     const [isError, setIsError] = React.useState(false);
     const [isPending, setIsPending] = React.useState(false);
     const [data, setData] = React.useState({});
 
-    const method = async () => {
+    const method = async (issueId) => {
         try {
+            setIsError(false);
+            setIsSuccess(false);
             setIsPending(true);
-            const response = await api.get(`/api/issue/${issueId}/comment`);
+            const response = await api.put(`/api/issue/${issueId}/resolution`,
+                {
+                    userId: getCurrentUserId()
+                });
 
-            if (!response || !response.data) {
+            if (!response) {
                 throw response.err;
             }
 
@@ -181,7 +186,7 @@ const Comment = ({ comment }) => {
             </Avatar>
 
             <Box sx={{
-                display: 'flex', 
+                display: 'flex',
                 flex: 1,
                 flexDirection: 'column'
             }}>
@@ -194,7 +199,7 @@ const Comment = ({ comment }) => {
                         {comment.userName}
                     </Typography>
 
-                    <Typography sx={{ fontSize: 12,  padding: '2px' }}>
+                    <Typography sx={{ fontSize: 12, padding: '2px' }}>
                         {comment.createdAt ?
                             dayjs(comment.createdAt).format('HH:mm DD/MM/YYYY') : ''
                         }
@@ -228,6 +233,7 @@ const ResolveConfirm = ({ resolveCb, closeDialogCb }) => {
 
 const ResolveSuccess = ({ closeDialogCb }) => {
     return <Dialog
+        title={"Thành công!"}
         secondaryAction={{
             text: 'Hủy',
             handler: closeDialogCb
@@ -250,7 +256,6 @@ const ResolveError = ({ closeDialogCb }) => {
 
 
 export default function IssueDetail({ issueId, closeDialogCb, reloadCb }) {
-    console.log(issueId);
     const [detail, setDetail] = React.useState(null);
 
     const [content, setContent] = React.useState(null);
@@ -272,6 +277,7 @@ export default function IssueDetail({ issueId, closeDialogCb, reloadCb }) {
         () => {
             if (resolveIssueHook.isSuccess) {
                 setResolveSuccessOpen(true);
+                reloadCb();
             }
         },
         [resolveIssueHook.isSuccess]
@@ -282,9 +288,14 @@ export default function IssueDetail({ issueId, closeDialogCb, reloadCb }) {
             if (issueId) {
                 fetchDetailHook.method(issueId);
                 fetchCommentsHook.method(issueId);
+                reloadCb();
             }
         },
-        [issueId, createCommentHook.isSuccess]
+        [
+            issueId,
+            createCommentHook.isSuccess,
+            resolveIssueHook.isSuccess
+        ]
     )
 
     React.useEffect(
@@ -326,6 +337,7 @@ export default function IssueDetail({ issueId, closeDialogCb, reloadCb }) {
                 resolveCb={() => {
                     if (issueId) {
                         resolveIssueHook.method(issueId)
+                        setResolveConfirmOpen(false);
                     }
                 }}
             />
@@ -361,15 +373,24 @@ export default function IssueDetail({ issueId, closeDialogCb, reloadCb }) {
                 </Typography>
 
 
-                <Button size="small"
-                    variant="outlined"
-                    disabled={detail?.disabled ?? true}
-                    onClick={() => { setResolveConfirmOpen(true) }}
-                >
-                    {
-                        detail?.disabled ? "Đóng phản hồi" : "Phản hồi đã đóng"
-                    }
-                </Button>
+                {
+                    detail?.resolved === false ?
+                        (getCurrentUserRole().toLowerCase() === 'admin'
+                            || getCurrentUserRole().toLowerCase() === 'manager' ?
+                            <Button size="small"
+                                variant="outlined"
+                                disabled={detail?.resolved ?? false}
+                                onClick={() => { setResolveConfirmOpen(true) }}
+                            >
+                                Đóng phản hồi
+                            </Button> : <></>
+                        ) :
+                        <Typography sx={{ fontSize: 12, fontStyle: 'italic' }}>
+                            Phản hồi đã đóng bởi {detail?.resolvedBy}
+                        </Typography>
+                }
+
+
             </Box>
 
             <Typography>

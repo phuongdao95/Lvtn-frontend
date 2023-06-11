@@ -15,8 +15,11 @@ const useFetchIssues = () => {
     const [data, setData] = React.useState({});
 
     const method = async (payslipId) => {
+        
+        setIsPending(true);
+        setIsSuccess(false);
+        setIsError(false);
         try {
-            setIsPending(true);
             const response = await api.get(`/api/payslip/${payslipId}/issue`);
 
             if (!response) {
@@ -68,7 +71,7 @@ const buildColumnConfig = (openDetailCb) => {
         },
         {
             field: "resolved",
-            headerName: "Đã đóng",
+            headerName: "Tình trạng",
             width: 150,
         },
         {
@@ -96,7 +99,7 @@ const buildColumnConfig = (openDetailCb) => {
     ]
 }
 
-export default function PayslipIssueList(props) {
+export default function PayslipIssueList({shouldReloadIssue}) {
     const { payslipId } = useParams();
 
     const [currentOpenIssueId, setCurrentOpenIssueId] = React.useState(null);
@@ -105,16 +108,16 @@ export default function PayslipIssueList(props) {
 
     const [detailOpen, setDetailOpen] = React.useState(false);
 
-    const [shouldReload, setShouldReload] = React.useState(props.shouldReload);
+    const [shouldReload, setShouldReload] = React.useState();
 
     const fetchIssuesHook = useFetchIssues();
 
     React.useEffect(() => {
-        if (shouldReload) {
+        if (shouldReload || shouldReloadIssue) {
             fetchIssuesHook.method(payslipId);
             setShouldReload(false);
         }
-    }, [shouldReload])
+    }, [shouldReload, shouldReloadIssue])
 
     React.useEffect(() => {
         fetchIssuesHook.method(payslipId);
@@ -144,7 +147,7 @@ export default function PayslipIssueList(props) {
                 content: row.content,
                 createdBy: row.createdBy,
                 createdAt: dayjs(row.createdAt).format('DD/MM/YYYY HH:ss'),
-                resolved: row.resolved ? 'yes' : 'no',
+                resolved: row.resolved ? 'Đã giải quyết' : 'chưa giải quyết',
                 resolvedBy: row.resolvedBy,
                 resolvedAt: row.resolvedAt ? dayjs(row.resolvedAt).format('DD/MM/YYYY HH:ss') : null
             })) ?? []}

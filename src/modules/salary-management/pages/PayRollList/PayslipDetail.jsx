@@ -31,6 +31,15 @@ export default function PayslipDetail() {
 
     React.useEffect(
         () => {
+            if (shouldReloadIssue) {
+                setShouldReloadIssue(false);
+            }
+        },
+        [shouldReloadIssue]
+    );
+
+    React.useEffect(
+        () => {
             if (fetchOnePayslipHook.isSuccess) {
                 setName(fetchOnePayslipHook?.data?.name ?? '');
             }
@@ -43,7 +52,9 @@ export default function PayslipDetail() {
         {
             createIssueOpen &&
             <CreateIssue payslipId={payslipId}
-                reloadCb={() => { setShouldReloadIssue(true) }}
+                reloadCb={() => {
+                    setShouldReloadIssue(true);
+                }}
                 closeDialogCb={() => setCreateIssueOpen(false)}
             />
         }
@@ -86,7 +97,10 @@ export default function PayslipDetail() {
                     {
                         index: 3,
                         label: "Phản hồi",
-                        dataGrid: <PayslipIssueList shouldReload={shouldReloadIssue} />
+                        dataGrid: <PayslipIssueList
+                            shouldReloadIssue={shouldReloadIssue}
+                            setShouldReloadIssue={(boolean) => setShouldReloadIssue(boolean)}
+                        />
                     }
                 ]
             }

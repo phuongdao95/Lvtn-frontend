@@ -104,10 +104,10 @@ export default function CreateIssue({ payslipId, closeDialogCb, reloadCb = () =>
         () => {
             if (createIssueHook.isSuccess) {
                 setShowCreated(true);
-                reloadCb();
             } else if (createIssueHook.isError) {
                 setShowError(true);
             }
+            reloadCb();
         },
         [
             createIssueHook.isSuccess,
